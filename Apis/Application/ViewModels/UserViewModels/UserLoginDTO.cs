@@ -1,8 +1,11 @@
-﻿namespace Application.ViewModels.UserViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Application.ViewModels.UserViewModels
 {
     public class UserLoginDTO
     {
-        public string UserName { get; set; }
+        [EmailAddress]
+        public string Email { get; set; }
         public string Password { get; set; }
     }
 }

@@ -26,24 +26,25 @@ namespace Infrastructures.Services
 
         public async Task<string> LoginAsync(UserLoginDTO userObject)
         {
-            var user = await _unitOfWork.UserRepository.GetUserByUserNameAndPasswordHash(userObject.UserName, userObject.Password.Hash());
+            var user = await _unitOfWork.UserRepository.GetUserByUserNameAndPasswordHash(userObject.Email, userObject.Password.Hash());
             return user.GenerateJsonWebToken(_configuration.JWTSecretKey, _currentTime.GetCurrentTime());
         }
 
         public async Task RegisterAsync(UserLoginDTO userObject)
         {
             // check username exited
-            var isExited = await _unitOfWork.UserRepository.CheckUserNameExited(userObject.UserName);
+            var isExited = await _unitOfWork.UserRepository.CheckUserNameExited(userObject.Email);
 
             if(isExited)
             {
                 throw new Exception("Username exited please try again");
             }
 
-            var newUser = new BaseUser
+            var newUser = new CustomerUser
             {
-                UserName = userObject.UserName,
+                Email = userObject.Email,
                 PasswordHash = userObject.Password.Hash()
+                
             };
 
             await _unitOfWork.UserRepository.AddAsync(newUser);

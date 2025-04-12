@@ -2,7 +2,8 @@
 
 public interface IUserTracking
 {
-    public Guid? CreatedBy { get; set; }
-    public Guid? ModificationBy { get; set; }
+    public Guid? CreatedById { get; set; }
+    public Guid? ModificationById { get; set; }
+    public Guid? DeleteById { get; set; }
 
 }

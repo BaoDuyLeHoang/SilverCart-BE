@@ -14,7 +14,7 @@ namespace Application.Utils
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier ,baseUser.UserName),
+                new Claim(ClaimTypes.NameIdentifier ,baseUser.Email),
             };
             var token = new JwtSecurityToken(
                 claims: claims,
