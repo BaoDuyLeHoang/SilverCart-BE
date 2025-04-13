@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities;
+﻿using Domain.Enums;
+
+namespace Domain.Entities;
 
 public class Product:BaseFullEntity
 {
@@ -16,11 +18,4 @@ public class Product:BaseFullEntity
     public virtual ICollection<ProductImage> Images { get; set; }
     public virtual ICollection<ProductPromotion> Promotions { get; set; }
 
-    public enum ProductTypeEnum
-    {
-        Physical,
-        Digital,
-        Consumable,
-        Service,
-    }
 }

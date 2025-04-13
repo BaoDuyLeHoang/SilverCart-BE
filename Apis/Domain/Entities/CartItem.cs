@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities;
 
-public class CartItem : BaseEntity
+public class CartItem : BaseFullEntity
 {
     public int Quantity { get; set; }
     public decimal Price { get; set; }

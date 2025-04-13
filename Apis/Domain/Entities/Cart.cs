@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities;
 
-public class Cart : BaseEntity
+public class Cart : BaseFullEntity
 {
     public int UserId { get; set; }
     

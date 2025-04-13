@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities;
 
-public class CustomerPaymentMethod : BaseEntity
+public class CustomerPaymentMethod : BaseFullEntity
 {
     public string CustomerId { get; set; }
     public string PaymentMethodId { get; set; }

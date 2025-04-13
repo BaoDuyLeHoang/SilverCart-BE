@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities;
 
-public class UserTask
+public class BaseRole
 {
     
 }

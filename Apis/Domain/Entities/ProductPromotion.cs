@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities;
 
-public class ProductPromotion : BaseEntity
+public class ProductPromotion : BaseFullEntity
 {
     public int ProductId { get; set; }
     public int PromotionId { get; set; }

@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities;
+﻿using Domain.Enums;
+
+namespace Domain.Entities;
 
 public class Promotion : BaseFullEntity
 {
@@ -20,10 +22,5 @@ public class Promotion : BaseFullEntity
     // Navigation properties
     public virtual ICollection<ProductPromotion> ProductPromotions { get; set; } = new List<ProductPromotion>();
 
-    public enum PromotionDiscountTypeEnum
-    {
-        Percentage,
-        FixedAmount,
-        FreeShipping,
-    }
+    
 }

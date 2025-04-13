@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Domain.Enums;
 
 namespace Domain.Entities;
 
@@ -8,12 +9,7 @@ public class Category : BaseFullEntity
     public string Description { get; set; }
     public CategoryStatusEnum Status { get; set; }
 
-    public enum CategoryStatusEnum
-    {
-        Active,
-        Inactive,
-        Pending,
-    }
+    
 
     // Navigation properties
     public int ApprovedById { get; set; }

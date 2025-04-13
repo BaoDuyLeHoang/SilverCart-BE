@@ -4,15 +4,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructures.FluentAPIs
 {
-    public class ChemicalConfiguration : IEntityTypeConfiguration<Chemical>
+    public class CategoryConfiguration : IEntityTypeConfiguration<Category>
     {
-        public void Configure(EntityTypeBuilder<Chemical> builder)
+        public void Configure(EntityTypeBuilder<Category> builder)
         {
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-            builder.Property(x => x.ChemicalType).HasMaxLength(100);
         }
     }
 }
