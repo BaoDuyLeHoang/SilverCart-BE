@@ -4,11 +4,11 @@ using Domain.Entities;
 
 namespace Infrastructures.Repositories
 {
-    public class ChemicalRepository : GenericRepository<Chemical>, IChemicalRepository
+    public class CategoryRepository : GenericRepository<Category>, ICategoryRepository
     {
         private readonly AppDbContext _dbContext;
 
-        public ChemicalRepository(AppDbContext dbContext,
+        public CategoryRepository(AppDbContext dbContext,
             ICurrentTime timeService,
             IClaimsService claimsService)
             : base(dbContext,
@@ -18,11 +18,11 @@ namespace Infrastructures.Repositories
             _dbContext = dbContext;
         }
 
-        public List<Chemical> GetTop3LatestChemical()
+        public List<Category> GetTop3LatestCategory()
         {
             // this is how we create the custom method with repository pattern
 
-            return _dbContext.Chemicals.Take(3).OrderByDescending(x => x.CreationDate).ToList();
+            return _dbContext.Categorys.Take(3).OrderByDescending(x => x.CreationDate).ToList();
         }
     }
 }

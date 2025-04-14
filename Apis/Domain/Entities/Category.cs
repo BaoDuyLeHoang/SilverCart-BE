@@ -8,9 +8,7 @@ public class Category : BaseFullEntity
     public string Name { get; set; }
     public string Description { get; set; }
     public CategoryStatusEnum Status { get; set; }
-
     
-
     // Navigation properties
     public int ApprovedById { get; set; }
     public int ParentCategoryId { get; set; }

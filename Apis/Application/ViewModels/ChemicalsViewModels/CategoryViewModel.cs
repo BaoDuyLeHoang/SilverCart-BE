@@ -1,8 +1,11 @@
-﻿namespace Application.ViewModels.ChemicalsViewModels
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Application.ViewModels.ChemicalsViewModels
 {
     public class ChemicalViewModel
     {
-        public string _Id { get; set; }
+        public string Id { get; set; }
 
         public string ChemicalType { get; set; }
 
@@ -17,5 +20,11 @@
         public DateTime? ModificationDate { get; set; }
 
         public DateTime? DeletionDate { get; set; }
+    }
+
+    public abstract class BaseEntityViewModel : BaseEntity
+    {
+        public string Id { get; set; }
+        
     }
 }
