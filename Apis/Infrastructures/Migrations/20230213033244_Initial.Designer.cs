@@ -25,7 +25,7 @@ namespace Infrastructures.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Entities.Chemical", b =>
+            modelBuilder.Entity("Domain.Entities.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -35,7 +35,7 @@ namespace Infrastructures.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ChemicalType")
+                    b.Property<string>("CategoryType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -69,7 +69,7 @@ namespace Infrastructures.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Chemicals");
+                    b.ToTable("Categorys");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>

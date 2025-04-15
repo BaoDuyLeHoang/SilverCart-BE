@@ -12,11 +12,11 @@ namespace Infrastructures.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Chemicals",
+                name: "Categorys",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ChemicalType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PreHarvestIntervalInDays = table.Column<int>(type: "int", nullable: false),
                     ActiveIngredient = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -30,7 +30,7 @@ namespace Infrastructures.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Chemicals", x => x.Id);
+                    table.PrimaryKey("PK_Categorys", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -59,7 +59,7 @@ namespace Infrastructures.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Chemicals");
+                name: "Categorys");
 
             migrationBuilder.DropTable(
                 name: "Users");

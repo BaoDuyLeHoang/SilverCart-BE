@@ -9,22 +9,22 @@ namespace Infrastructures.Tests
     public class AppDbContextTests : SetupTest, IDisposable
     {
         [Fact]
-        public async Task AppDbContext_ChemicalsDbSetShouldReturnCorrectData()
+        public async Task AppDbContext_CategorysDbSetShouldReturnCorrectData()
         {
 
-            var mockData = _fixture.Build<Chemical>().CreateMany(10).ToList();
-            await _dbContext.Chemicals.AddRangeAsync(mockData);
+            var mockData = _fixture.Build<Category>().CreateMany(10).ToList();
+            await _dbContext.Categorys.AddRangeAsync(mockData);
             
             await _dbContext.SaveChangesAsync();
 
-            var result = await _dbContext.Chemicals.ToListAsync();
+            var result = await _dbContext.Categorys.ToListAsync();
             result.Should().BeEquivalentTo(mockData);
         }
 
         [Fact]
-        public async Task AppDbContext_ChemicalsDbSetShouldReturnEmptyListWhenNotHavingData()
+        public async Task AppDbContext_CategorysDbSetShouldReturnEmptyListWhenNotHavingData()
         {
-            var result = await _dbContext.Chemicals.ToListAsync();
+            var result = await _dbContext.Categorys.ToListAsync();
             result.Should().BeEmpty();
         }
     }

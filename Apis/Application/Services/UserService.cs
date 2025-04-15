@@ -7,7 +7,7 @@ using AutoMapper;
 using Domain.Entities;
 using Microsoft.Extensions.Configuration;
 
-namespace Infrastructures.Services
+namespace Application.Services
 {
     public class UserService : IUserService
     {

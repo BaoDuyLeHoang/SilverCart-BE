@@ -1,4 +1,4 @@
-﻿using Application.ViewModels.ChemicalsViewModels;
+﻿using Application.ViewModels.CategorysViewModels;
 using AutoFixture;
 using Application.Commons;
 using Domain.Tests;
@@ -8,28 +8,28 @@ using WebAPI.Controllers;
 
 namespace WebAPI.Tests.Controllers
 {
-    public class ChemicalControllerTests : SetupTest
+    public class CategoryControllerTests : SetupTest
     {
-        private readonly ChemicalController _chemicalController;
-        public ChemicalControllerTests()
+        private readonly CategoryController _categoryController;
+        public CategoryControllerTests()
         {
-            _chemicalController = new ChemicalController(_chemicalServiceMock.Object);
+            _categoryController = new CategoryController(_categoryServiceMock.Object);
         }
 
         [Fact]
-        public async Task GetChemicalPagingsion_ShouldReturnCorrectDataWithDefaultParametor()
+        public async Task GetCategoryPagingsion_ShouldReturnCorrectDataWithDefaultParametor()
         {
-            var mocks = _fixture.Build<Pagination<ChemicalViewModel>>().Create();
+            var mocks = _fixture.Build<Pagination<CategoryViewModel>>().Create();
             // arrange
-            _chemicalServiceMock.Setup(
-                x => x.GetChemicalPagingsionAsync(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(mocks);
+            _categoryServiceMock.Setup(
+                x => x.GetCategoryPagingsionAsync(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(mocks);
 
             // act
-            var result = await _chemicalController.GetChemicalPagingsion();
+            var result = await _categoryController.GetCategoryPagingsion();
 
             // assert
-            _chemicalServiceMock.Verify(
-                x => x.GetChemicalPagingsionAsync(
+            _categoryServiceMock.Verify(
+                x => x.GetCategoryPagingsionAsync(
                     It.Is<int>(x => x.Equals(0)),
                     It.Is<int>(x => x.Equals(10))), Times.Once());
 
@@ -37,19 +37,19 @@ namespace WebAPI.Tests.Controllers
         }
 
         [Fact]
-        public async Task GetChemicalPagingsion_ShouldReturnCorrectDataWithParametor()
+        public async Task GetCategoryPagingsion_ShouldReturnCorrectDataWithParametor()
         {
-            var mocks = _fixture.Build<Pagination<ChemicalViewModel>>().Create();
+            var mocks = _fixture.Build<Pagination<CategoryViewModel>>().Create();
             // arrange
-            _chemicalServiceMock.Setup(
-                x => x.GetChemicalPagingsionAsync(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(mocks);
+            _categoryServiceMock.Setup(
+                x => x.GetCategoryPagingsionAsync(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(mocks);
 
             // act
-            var result = await _chemicalController.GetChemicalPagingsion(1, 100);
+            var result = await _categoryController.GetCategoryPagingsion(1, 100);
 
             // assert
-            _chemicalServiceMock.Verify(
-                x => x.GetChemicalPagingsionAsync(
+            _categoryServiceMock.Verify(
+                x => x.GetCategoryPagingsionAsync(
                     It.Is<int>(x => x.Equals(1)),
                     It.Is<int>(x => x.Equals(100))), Times.Once());
 
@@ -57,21 +57,21 @@ namespace WebAPI.Tests.Controllers
         }
 
         [Fact]
-        public async Task CreateChemical_ShouldReturnCorrectData()
+        public async Task CreateCategory_ShouldReturnCorrectData()
         {
-            var mockModelRequest = _fixture.Build<CreateChemicalViewModel>().Create();
-            var mockModelResponse = _fixture.Build<ChemicalViewModel>().Create();
+            var mockModelRequest = _fixture.Build<CreateCategoryViewModel>().Create();
+            var mockModelResponse = _fixture.Build<CategoryViewModel>().Create();
             // arrange
-            _chemicalServiceMock.Setup(
-                x => x.CreateChemicalAsync(It.IsAny<CreateChemicalViewModel>()))
+            _categoryServiceMock.Setup(
+                x => x.CreateCategoryAsync(It.IsAny<CreateCategoryViewModel>()))
                         .ReturnsAsync(mockModelResponse);
 
             // act
-            var result = await _chemicalController.CreateChemical(mockModelRequest);
+            var result = await _categoryController.CreateCategory(mockModelRequest);
 
             // assert
-            _chemicalServiceMock.Verify(
-                x => x.CreateChemicalAsync(It.Is<CreateChemicalViewModel>(
+            _categoryServiceMock.Verify(
+                x => x.CreateCategoryAsync(It.Is<CreateCategoryViewModel>(
                     x => x.Equals(mockModelRequest))), Times.Once());
 
             result.Should().BeEquivalentTo(mockModelResponse);

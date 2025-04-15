@@ -1,12 +1,12 @@
 ﻿using Application.Commons;
-using Application.ViewModels.ChemicalsViewModels;
+using Application.ViewModels.CategorysViewModels;
 
 namespace Application.Interfaces
 {
-    public interface IChemicalService
+    public interface ICategoryService
     {
-        public Task<List<ChemicalViewModel>> GetChemicalAsync();
-        public Task<ChemicalViewModel?> CreateChemicalAsync(CreateChemicalViewModel chemical);
-        public Task<Pagination<ChemicalViewModel>> GetChemicalPagingsionAsync(int pageIndex = 0, int pageSize = 10);
+        public Task<List<CategoryViewModel>> GetCategoryAsync();
+        public Task<CategoryViewModel?> CreateCategoryAsync(CreateCategoryViewModel category);
+        public Task<Pagination<CategoryViewModel>> GetCategoryPagingsionAsync(int pageIndex = 0, int pageSize = 10);
     }
 }

@@ -2,7 +2,7 @@
 using Application.Commons;
 using Application.Interfaces;
 using Application.ViewModels.CategorysViewModels;
-using Application.ViewModels.ChemicalsViewModels;
+using Application.ViewModels.CategorysViewModels;
 using AutoMapper;
 using Domain.Entities;
 

@@ -1,29 +1,29 @@
 using Application.Interfaces;
-using Application.ViewModels.ChemicalsViewModels;
+using Application.ViewModels.CategorysViewModels;
 using Application.Commons;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
-    public class ChemicalController : BaseController
+    public class CategoryController : BaseController
     {
-        private readonly IChemicalService _chemicalService;
+        private readonly ICategoryService _categoryService;
 
-        public ChemicalController(IChemicalService chemicalService)
+        public CategoryController(ICategoryService categoryService)
         {
-            _chemicalService = chemicalService;
+            _categoryService = categoryService;
         }
 
         [HttpGet]
-        public async Task<Pagination<ChemicalViewModel>> GetChemicalPagingsion(int pageIndex = 0, int pageSize = 10)
+        public async Task<Pagination<CategoryViewModel>> GetCategoryPagingsion(int pageIndex = 0, int pageSize = 10)
         {
-            return await _chemicalService.GetChemicalPagingsionAsync(pageIndex, pageSize);
+            return await _categoryService.GetCategoryPagingsionAsync(pageIndex, pageSize);
         }
 
         [HttpPost]
-        public async Task<ChemicalViewModel?> CreateChemical(CreateChemicalViewModel chemical)
+        public async Task<CategoryViewModel?> CreateCategory(CreateCategoryViewModel category)
         {
-            return await _chemicalService.CreateChemicalAsync(chemical);
+            return await _categoryService.CreateCategoryAsync(category);
         }
     }
 }

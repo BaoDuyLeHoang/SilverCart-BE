@@ -1,4 +1,4 @@
-﻿using Application.ViewModels.ChemicalsViewModels;
+﻿using Application.ViewModels.CategorysViewModels;
 using AutoMapper;
 using Application.Commons;
 using Domain.Entities;
@@ -9,10 +9,10 @@ namespace Infrastructures.Mappers
     {
         public MapperConfigurationsProfile()
         {
-            CreateMap<CreateChemicalViewModel, Chemical>();
+            // CreateMap<CreateCategoryViewModel, Category>();
             CreateMap(typeof(Pagination<>), typeof(Pagination<>));
-            CreateMap<Chemical, ChemicalViewModel>()
-                .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));
+            CreateMap<Category, CategoryViewModel>();
+            // .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));
         }
     }
 }

@@ -34,16 +34,16 @@ namespace WebAPI.Tests
             var exceptionMiddlewareResolved = _serviceProvider.GetRequiredService<GlobalExceptionMiddleware>();
             var performanceMiddleware = _serviceProvider.GetRequiredService<PerformanceMiddleware>();
             var stopwatchResolved = _serviceProvider.GetRequiredService<Stopwatch>();
-            var chemicalServiceResolved = _serviceProvider.GetRequiredService<IChemicalService>();
-            var chemicalRepositoryResolved = _serviceProvider.GetRequiredService<IChemicalRepository>();
+            var categoryServiceResolved = _serviceProvider.GetRequiredService<ICategoryService>();
+            var categoryRepositoryResolved = _serviceProvider.GetRequiredService<ICategoryRepository>();
 
             currentTimeServiceResolved.GetType().Should().Be(typeof(CurrentTime));
             claimsServiceServiceResolved.GetType().Should().Be(typeof(ClaimsService));
             exceptionMiddlewareResolved.GetType().Should().Be(typeof(GlobalExceptionMiddleware));
             performanceMiddleware.GetType().Should().Be(typeof(PerformanceMiddleware));
             stopwatchResolved.GetType().Should().Be(typeof(Stopwatch));
-            chemicalServiceResolved.GetType().Should().Be(typeof(ChemicalService));
-            chemicalRepositoryResolved.GetType().Should().Be(typeof(ChemicalRepository));
+            categoryServiceResolved.GetType().Should().Be(typeof(CategoryService));
+            categoryRepositoryResolved.GetType().Should().Be(typeof(CategoryRepository));
         }
     }
 }

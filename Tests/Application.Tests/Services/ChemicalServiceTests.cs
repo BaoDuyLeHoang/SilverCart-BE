@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces;
-using Application.ViewModels.ChemicalsViewModels;
+using Application.ViewModels.CategorysViewModels;
 using AutoFixture;
 using Application.Commons;
 using Domain.Entities;
@@ -10,70 +10,70 @@ using Moq;
 
 namespace Application.Tests.Services
 {
-    public class ChemicalServiceTests : SetupTest
+    public class CategoryServiceTests : SetupTest
     {
-        private readonly IChemicalService _chemicalService;
+        private readonly ICategoryService _categoryService;
 
-        public ChemicalServiceTests()
+        public CategoryServiceTests()
         {
-            _chemicalService = new ChemicalService(_unitOfWorkMock.Object, _mapperConfig);
+            _categoryService = new CategoryService(_unitOfWorkMock.Object, _mapperConfig);
         }
 
         [Fact]
-        public async Task GetChemicalAsync_ShouldReturnCorrentData()
+        public async Task GetCategoryAsync_ShouldReturnCorrentData()
         {
             //arrange
-            var mocks = _fixture.Build<Chemical>().CreateMany(100).ToList();
-            var expectedResult = _mapperConfig.Map<List<ChemicalViewModel>>(mocks);
+            var mocks = _fixture.Build<Category>().CreateMany(100).ToList();
+            var expectedResult = _mapperConfig.Map<List<CategoryViewModel>>(mocks);
 
-            _unitOfWorkMock.Setup(x => x.ChemicalRepository.GetAllAsync()).ReturnsAsync(mocks);
+            _unitOfWorkMock.Setup(x => x.CategoryRepository.GetAllAsync()).ReturnsAsync(mocks);
 
             //act
-            var result = await _chemicalService.GetChemicalAsync();
+            var result = await _categoryService.GetCategoryAsync();
 
             //assert
-            _unitOfWorkMock.Verify(x => x.ChemicalRepository.GetAllAsync(), Times.Once());
+            _unitOfWorkMock.Verify(x => x.CategoryRepository.GetAllAsync(), Times.Once());
             result.Should().BeEquivalentTo(expectedResult);
         }
 
 
         [Fact]
-        public async Task CreateChemicalAsync_ShouldReturnCorrentData_WhenSuccessSaved()
+        public async Task CreateCategoryAsync_ShouldReturnCorrentData_WhenSuccessSaved()
         {
             //arrange
-            var mocks = _fixture.Build<CreateChemicalViewModel>().Create();
+            var mocks = _fixture.Build<CreateCategoryViewModel>().Create();
 
-            _unitOfWorkMock.Setup(x => x.ChemicalRepository.AddAsync(It.IsAny<Chemical>()))
+            _unitOfWorkMock.Setup(x => x.CategoryRepository.AddAsync(It.IsAny<Category>()))
                 .Returns(Task.CompletedTask);
 
             _unitOfWorkMock.Setup(x => x.SaveChangeAsync()).ReturnsAsync(1);
             //act
-            var result = await _chemicalService.CreateChemicalAsync(mocks);
+            var result = await _categoryService.CreateCategoryAsync(mocks);
 
             //assert
             _unitOfWorkMock.Verify(
-                x => x.ChemicalRepository.AddAsync(It.IsAny<Chemical>()), Times.Once());
+                x => x.CategoryRepository.AddAsync(It.IsAny<Category>()), Times.Once());
 
             _unitOfWorkMock.Verify(x => x.SaveChangeAsync(), Times.Once());
         }
 
         [Fact]
-        public async Task CreateChemicalAsync_ShouldReturnNull_WhenFailedSave()
+        public async Task CreateCategoryAsync_ShouldReturnNull_WhenFailedSave()
         {
             //arrange
-            var mocks = _fixture.Build<CreateChemicalViewModel>().Create();
+            var mocks = _fixture.Build<CreateCategoryViewModel>().Create();
 
             _unitOfWorkMock.Setup(
-                x => x.ChemicalRepository.AddAsync(It.IsAny<Chemical>())).Returns(Task.CompletedTask);
+                x => x.CategoryRepository.AddAsync(It.IsAny<Category>())).Returns(Task.CompletedTask);
 
             _unitOfWorkMock.Setup(x => x.SaveChangeAsync()).ReturnsAsync(0);
 
             //act
-            var result = await _chemicalService.CreateChemicalAsync(mocks);
+            var result = await _categoryService.CreateCategoryAsync(mocks);
 
             //assert
             _unitOfWorkMock.Verify(
-                x => x.ChemicalRepository.AddAsync(It.IsAny<Chemical>()), Times.Once());
+                x => x.CategoryRepository.AddAsync(It.IsAny<Category>()), Times.Once());
 
             _unitOfWorkMock.Verify(x => x.SaveChangeAsync(), Times.Once());
 
@@ -81,41 +81,41 @@ namespace Application.Tests.Services
         }
 
         [Fact]
-        public async Task GetChemicalPagingsionAsync_ShouldReturnCorrectDataWhenDidNotPassTheParameters()
+        public async Task GetCategoryPagingsionAsync_ShouldReturnCorrectDataWhenDidNotPassTheParameters()
         {
             //arrange
-            var mockData = new Pagination<Chemical>
+            var mockData = new Pagination<Category>
             {
-                Items = _fixture.Build<Chemical>().CreateMany(100).ToList(),
+                Items = _fixture.Build<Category>().CreateMany(100).ToList(),
                 PageIndex = 0,
                 PageSize = 100,
                 TotalItemsCount = 100
             };
-            var expectedResult = _mapperConfig.Map<Pagination<Chemical>>(mockData);
+            var expectedResult = _mapperConfig.Map<Pagination<Category>>(mockData);
 
-            _unitOfWorkMock.Setup(x => x.ChemicalRepository.ToPagination(0, 10)).ReturnsAsync(mockData);
+            _unitOfWorkMock.Setup(x => x.CategoryRepository.ToPagination(0, 10)).ReturnsAsync(mockData);
 
             //act
-            var result = await _chemicalService.GetChemicalPagingsionAsync();
+            var result = await _categoryService.GetCategoryPagingsionAsync();
 
             //assert
-            _unitOfWorkMock.Verify(x => x.ChemicalRepository.ToPagination(0, 10), Times.Once());
+            _unitOfWorkMock.Verify(x => x.CategoryRepository.ToPagination(0, 10), Times.Once());
         }
 
         [Fact]
-        public async Task GetChemicalAsync_ShouldReturnCorrectData()
+        public async Task GetCategoryAsync_ShouldReturnCorrectData()
         {
             //arrange
-            var mocks = _fixture.Build<Chemical>().CreateMany(100).ToList();
-            var expectedResult = _mapperConfig.Map<List<ChemicalViewModel>>(mocks);
+            var mocks = _fixture.Build<Category>().CreateMany(100).ToList();
+            var expectedResult = _mapperConfig.Map<List<CategoryViewModel>>(mocks);
 
-            _unitOfWorkMock.Setup(x => x.ChemicalRepository.GetAllAsync()).ReturnsAsync(mocks);
+            _unitOfWorkMock.Setup(x => x.CategoryRepository.GetAllAsync()).ReturnsAsync(mocks);
 
             //act
-            var result = await _chemicalService.GetChemicalAsync();
+            var result = await _categoryService.GetCategoryAsync();
 
             //assert
-            _unitOfWorkMock.Verify(x => x.ChemicalRepository.GetAllAsync(), Times.Once());
+            _unitOfWorkMock.Verify(x => x.CategoryRepository.GetAllAsync(), Times.Once());
             result.Should().BeEquivalentTo(expectedResult);
         }
     }

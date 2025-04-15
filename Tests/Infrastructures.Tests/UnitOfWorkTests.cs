@@ -14,7 +14,7 @@ namespace Infrastructures.Tests
         {
             _unitOfWork = new UnitOfWork(
                 _dbContext,
-                _chemicalRepositoryMock.Object,
+                _categoryRepositoryMock.Object,
                 _userRepository.Object
                 );
         }
@@ -23,12 +23,12 @@ namespace Infrastructures.Tests
         public async Task TestUnitOfWork()
         {
             // arrange
-            var mockData = _fixture.Build<Chemical>().CreateMany(10).ToList();
+            var mockData = _fixture.Build<Category>().CreateMany(10).ToList();
 
-            _chemicalRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(mockData);
+            _categoryRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(mockData);
 
             // act
-            var items = await _unitOfWork.ChemicalRepository.GetAllAsync();
+            var items = await _unitOfWork.CategoryRepository.GetAllAsync();
 
             // assert
             items.Should().BeEquivalentTo(mockData);

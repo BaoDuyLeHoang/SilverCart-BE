@@ -12,27 +12,27 @@ using System.Threading.Tasks;
 
 namespace Infrastructures.Tests.Repositories
 {
-    public class ChemicalRepositoryTests : SetupTest
+    public class CategoryRepositoryTests : SetupTest
     {
-        private readonly IChemicalRepository _chemicalRepository;
-        public ChemicalRepositoryTests()
+        private readonly ICategoryRepository _categoryRepository;
+        public CategoryRepositoryTests()
         {
-            _chemicalRepository = new ChemicalRepository(
+            _categoryRepository = new CategoryRepository(
                 _dbContext,
                 _currentTimeMock.Object,
                 _claimsServiceMock.Object);
         }
 
         [Fact]
-        public async Task ChemicalRepository_Should_ReturnCorrectData()
+        public async Task CategoryRepository_Should_ReturnCorrectData()
         {
             // arrange
-            var mockData = _fixture.Build<Chemical>().CreateMany(10).ToList();
-            await _dbContext.Chemicals.AddRangeAsync(mockData);
+            var mockData = _fixture.Build<Category>().CreateMany(10).ToList();
+            await _dbContext.Categorys.AddRangeAsync(mockData);
             await _dbContext.SaveChangesAsync();
 
             // act
-            var result = await _chemicalRepository.GetAllAsync();
+            var result = await _categoryRepository.GetAllAsync();
 
             // assert
             result.Should().BeEquivalentTo(mockData);

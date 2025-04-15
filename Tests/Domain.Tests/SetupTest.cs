@@ -15,10 +15,10 @@ namespace Domain.Tests
         protected readonly IMapper _mapperConfig;
         protected readonly Fixture _fixture;
         protected readonly Mock<IUnitOfWork> _unitOfWorkMock;
-        protected readonly Mock<IChemicalService> _chemicalServiceMock;
+        protected readonly Mock<ICategoryService> _categoryServiceMock;
         protected readonly Mock<IClaimsService> _claimsServiceMock;
         protected readonly Mock<ICurrentTime> _currentTimeMock;
-        protected readonly Mock<IChemicalRepository> _chemicalRepositoryMock;
+        protected readonly Mock<ICategoryRepository> _categoryRepositoryMock;
         protected readonly Mock<IUserRepository> _userRepository;
         protected readonly AppDbContext _dbContext;
 
@@ -31,10 +31,10 @@ namespace Domain.Tests
             _mapperConfig = mappingConfig.CreateMapper();
             _fixture = new Fixture();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _chemicalServiceMock = new Mock<IChemicalService>();
+            _categoryServiceMock = new Mock<ICategoryService>();
             _claimsServiceMock = new Mock<IClaimsService>();
             _currentTimeMock = new Mock<ICurrentTime>();
-            _chemicalRepositoryMock = new Mock<IChemicalRepository>();
+            _categoryRepositoryMock = new Mock<ICategoryRepository>();
             _userRepository = new Mock<IUserRepository>();
 
             var options = new DbContextOptionsBuilder<AppDbContext>()

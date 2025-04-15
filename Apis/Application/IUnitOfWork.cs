@@ -4,7 +4,7 @@ namespace Application
 {
     public interface IUnitOfWork
     {
-        public IChemicalRepository ChemicalRepository { get; }
+        public ICategoryRepository CategoryRepository { get; }
 
         public IUserRepository UserRepository { get; }
 

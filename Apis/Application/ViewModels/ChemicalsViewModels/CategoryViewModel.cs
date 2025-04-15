@@ -1,30 +1,15 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Application.ViewModels.ChemicalsViewModels
+namespace Application.ViewModels.CategorysViewModels
 {
-    public class ChemicalViewModel
+    public class CategoryViewModel : Category
     {
-        public string Id { get; set; }
-
-        public string ChemicalType { get; set; }
-
-        public int PreHarvestIntervalInDays { get; set; }
-
-        public string ActiveIngredient { get; set; }
-
-        public string Name { get; set; }
-
-        public DateTime CreationDate { get; set; }
-
-        public DateTime? ModificationDate { get; set; }
-
-        public DateTime? DeletionDate { get; set; }
+        
     }
 
     public abstract class BaseEntityViewModel : BaseEntity
     {
         public string Id { get; set; }
-        
     }
 }

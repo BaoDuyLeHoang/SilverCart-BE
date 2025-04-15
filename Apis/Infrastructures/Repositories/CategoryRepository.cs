@@ -22,7 +22,7 @@ namespace Infrastructures.Repositories
         {
             // this is how we create the custom method with repository pattern
 
-            return _dbContext.Categorys.Take(3).OrderByDescending(x => x.CreationDate).ToList();
+            return _dbContext.Categories.Take(3).OrderByDescending(x => x.CreationDate).ToList();
         }
     }
 }

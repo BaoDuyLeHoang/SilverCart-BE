@@ -9,10 +9,10 @@ namespace Infrastructures.Tests.Repositories
 {
     public class GenericRepositoryTests : SetupTest
     {
-        private readonly IGenericRepository<Chemical> _genericRepository;
+        private readonly IGenericRepository<Category> _genericRepository;
         public GenericRepositoryTests()
         {
-            _genericRepository = new GenericRepository<Chemical>(
+            _genericRepository = new GenericRepository<Category>(
                 _dbContext,
                 _currentTimeMock.Object,
                 _claimsServiceMock.Object);
@@ -21,8 +21,8 @@ namespace Infrastructures.Tests.Repositories
         [Fact]
         public async Task GenericRepository_GetAllAsync_ShouldReturnCorrectData()
         {
-            var mockData = _fixture.Build<Chemical>().CreateMany(10).ToList();
-            await _dbContext.Chemicals.AddRangeAsync(mockData);
+            var mockData = _fixture.Build<Category>().CreateMany(10).ToList();
+            await _dbContext.Categorys.AddRangeAsync(mockData);
 
             await _dbContext.SaveChangesAsync();
 
@@ -45,8 +45,8 @@ namespace Infrastructures.Tests.Repositories
         [Fact]
         public async Task GenericRepository_GetByIdAsync_ShouldReturnCorrectData()
         {
-            var mockData = _fixture.Build<Chemical>().Create();
-            await _dbContext.Chemicals.AddRangeAsync(mockData);
+            var mockData = _fixture.Build<Category>().Create();
+            await _dbContext.Categorys.AddRangeAsync(mockData);
 
             await _dbContext.SaveChangesAsync();
 
@@ -69,7 +69,7 @@ namespace Infrastructures.Tests.Repositories
         [Fact]
         public async Task GenericRepository_AddAsync_ShouldReturnCorrectData()
         {
-            var mockData = _fixture.Build<Chemical>().Create();
+            var mockData = _fixture.Build<Category>().Create();
 
 
             await _genericRepository.AddAsync(mockData);
@@ -81,7 +81,7 @@ namespace Infrastructures.Tests.Repositories
         [Fact]
         public async Task GenericRepository_AddRangeAsync_ShouldReturnCorrectData()
         {
-            var mockData = _fixture.Build<Chemical>().CreateMany(10).ToList();
+            var mockData = _fixture.Build<Category>().CreateMany(10).ToList();
 
 
             await _genericRepository.AddRangeAsync(mockData);
@@ -94,8 +94,8 @@ namespace Infrastructures.Tests.Repositories
         [Fact]
         public async Task GenericRepository_SoftRemove_ShouldReturnCorrectData()
         {
-            var mockData = _fixture.Build<Chemical>().Create();
-            _dbContext.Chemicals.Add(mockData);
+            var mockData = _fixture.Build<Category>().Create();
+            _dbContext.Categorys.Add(mockData);
             await _dbContext.SaveChangesAsync();
 
 
@@ -108,8 +108,8 @@ namespace Infrastructures.Tests.Repositories
         [Fact]
         public async Task GenericRepository_Update_ShouldReturnCorrectData()
         {
-            var mockData = _fixture.Build<Chemical>().Create();
-            _dbContext.Chemicals.Add(mockData);
+            var mockData = _fixture.Build<Category>().Create();
+            _dbContext.Categorys.Add(mockData);
             await _dbContext.SaveChangesAsync();
 
 
@@ -122,8 +122,8 @@ namespace Infrastructures.Tests.Repositories
         [Fact]
         public async Task GenericRepository_SoftRemoveRange_ShouldReturnCorrectData()
         {
-            var mockData = _fixture.Build<Chemical>().CreateMany(10).ToList();
-            await _dbContext.Chemicals.AddRangeAsync(mockData);
+            var mockData = _fixture.Build<Category>().CreateMany(10).ToList();
+            await _dbContext.Categorys.AddRangeAsync(mockData);
             await _dbContext.SaveChangesAsync();
 
 
@@ -136,8 +136,8 @@ namespace Infrastructures.Tests.Repositories
         [Fact]
         public async Task GenericRepository_UpdateRange_ShouldReturnCorrectData()
         {
-            var mockData = _fixture.Build<Chemical>().CreateMany(10).ToList();
-            await _dbContext.Chemicals.AddRangeAsync(mockData);
+            var mockData = _fixture.Build<Category>().CreateMany(10).ToList();
+            await _dbContext.Categorys.AddRangeAsync(mockData);
             await _dbContext.SaveChangesAsync();
 
 
@@ -150,8 +150,8 @@ namespace Infrastructures.Tests.Repositories
         [Fact]
         public async Task GenericRepository_ToPagination_ShouldReturnCorrectDataFirstsPage()
         {
-            var mockData = _fixture.Build<Chemical>().CreateMany(45).ToList();
-            await _dbContext.Chemicals.AddRangeAsync(mockData);
+            var mockData = _fixture.Build<Category>().CreateMany(45).ToList();
+            await _dbContext.Categorys.AddRangeAsync(mockData);
             await _dbContext.SaveChangesAsync();
 
 
@@ -170,8 +170,8 @@ namespace Infrastructures.Tests.Repositories
         [Fact]
         public async Task GenericRepository_ToPagination_ShouldReturnCorrectDataSecoundPage()
         {
-            var mockData = _fixture.Build<Chemical>().CreateMany(45).ToList();
-            await _dbContext.Chemicals.AddRangeAsync(mockData);
+            var mockData = _fixture.Build<Category>().CreateMany(45).ToList();
+            await _dbContext.Categorys.AddRangeAsync(mockData);
             await _dbContext.SaveChangesAsync();
 
 
@@ -190,8 +190,8 @@ namespace Infrastructures.Tests.Repositories
         [Fact]
         public async Task GenericRepository_ToPagination_ShouldReturnCorrectDataLastPage()
         {
-            var mockData = _fixture.Build<Chemical>().CreateMany(45).ToList();
-            await _dbContext.Chemicals.AddRangeAsync(mockData);
+            var mockData = _fixture.Build<Category>().CreateMany(45).ToList();
+            await _dbContext.Categorys.AddRangeAsync(mockData);
             await _dbContext.SaveChangesAsync();
 
 

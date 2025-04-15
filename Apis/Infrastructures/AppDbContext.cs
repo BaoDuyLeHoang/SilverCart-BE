@@ -43,8 +43,6 @@ namespace Infrastructures
         public DbSet<StoreUserRole> StoreUserRoles { get; set; }
         public DbSet<CustomerUser> CustomerUsers { get; set; }
         public DbSet<CustomerRank> CustomerRanks { get; set; }
-        public DbSet<CurrentRank> CurrentRanks { get; set; }
-        public DbSet<UserTask> UserTasks { get; set; }
         public DbSet<AdministratorUser> AdministratorUsers { get; set; }
         public DbSet<AdministratorUserRole> AdministratorUserRoles { get; set; }
         public DbSet<CategoryRecommendation> CategoryRecommendations { get; set; }
@@ -54,9 +52,14 @@ namespace Infrastructures
         public DbSet<ProductReport> ProductReports { get; set; }
 
         public DbSet<CustomerAddress> CustomerAddresses { get; set; }
-        public DbSet<BaseUser> Users { get; set; }
-
         public DbSet<StockHistory> StockHistories { get; set; }
+        public DbSet<PaymentMethodHistory> PaymentMethodHistories { get; set; }
+        public DbSet<ScheduledTask> ScheduledTasks { get; set; }
+        public DbSet<UserPromotion> UserPromotions { get; set; }
+
+        // Base entities
+        public DbSet<BaseUser> Users { get; set; }
+        public DbSet<BaseRole> Roles { get; set; }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
             CancellationToken cancellationToken = default)

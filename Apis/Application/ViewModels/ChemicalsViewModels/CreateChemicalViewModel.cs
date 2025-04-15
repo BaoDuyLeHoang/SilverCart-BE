@@ -1,8 +1,8 @@
-﻿namespace Application.ViewModels.ChemicalsViewModels
+﻿namespace Application.ViewModels.CategorysViewModels
 {
-    public class CreateChemicalViewModel
+    public class CreateCategoryViewModel
     {
-        public string ChemicalType { get; set; }
+        public string CategoryType { get; set; }
 
         public int PreHarvestIntervalInDays { get; set; }
 

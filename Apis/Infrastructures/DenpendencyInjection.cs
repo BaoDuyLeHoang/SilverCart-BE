@@ -4,7 +4,6 @@ using Application.Repositories;
 using Application.Services;
 using Infrastructures.Mappers;
 using Infrastructures.Repositories;
-using Infrastructures.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,8 +13,8 @@ namespace Infrastructures
     {
         public static IServiceCollection AddInfrastructuresService(this IServiceCollection services, string databaseConnection)
         {
-            services.AddScoped<IChemicalService, ChemicalService>();
-            services.AddScoped<IChemicalRepository, ChemicalRepository>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserService, UserService>();
