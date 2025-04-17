@@ -12,6 +12,7 @@ public class BaseEntitiesConfiguration : IEntityTypeConfiguration<BaseFullEntity
 {
     public void Configure(EntityTypeBuilder<BaseFullEntity> builder)
     {
+
         builder.Property(x => x.CreationDate).IsRequired(false);
         builder.Property(x => x.CreatedById).IsRequired(false);
         builder.Property(x => x.ModificationDate).IsRequired(false);
@@ -22,11 +23,13 @@ public class BaseEntitiesConfiguration : IEntityTypeConfiguration<BaseFullEntity
 
     public void Configure(EntityTypeBuilder<BaseEntity> builder)
     {
+        builder.UseTpcMappingStrategy();
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
         builder.Property(x => x.IsDeleted).HasDefaultValue(false);
+        builder.HasQueryFilter(x => !x.IsDeleted);
     }
 
     public void Configure(EntityTypeBuilder<BaseUser> builder)
@@ -44,5 +47,6 @@ public class BaseEntitiesConfiguration : IEntityTypeConfiguration<BaseFullEntity
         builder.Property(x => x.Name).IsRequired();
         builder.Property(x => x.NormalizedName).IsRequired(false);
         builder.Property(x => x.Description).IsRequired(false);
+
     }
 }

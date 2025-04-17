@@ -10,6 +10,6 @@ public class PaymentMethod : BaseFullEntity
     public string? AdditionalInfo { get; set; }
 
     // Navigation properties
-    public virtual AdministratorUser CreatedBy { get; set; } = null!;
+    // public virtual AdministratorUser CreatedBy { get; set; } = null!;
     public virtual ICollection<PaymentMethodHistory> PaymentMethodHistories { get; set; } = new List<PaymentMethodHistory>();
 }

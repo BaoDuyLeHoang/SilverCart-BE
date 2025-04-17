@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities;
 
-public class ProductItem
+public class ProductItem:BaseFullEntity
 {
     public string SKU { get; set; }
     public int Stock { get; set; }
@@ -11,6 +11,6 @@ public class ProductItem
     public Guid VariantId { get; set; }
     public ProductVariant Variant { get; set; }
     
-    public int ProductImageId { get; set; }
+    public Guid ProductImageId { get; set; }
     public ProductImage ProductImage { get; set; }
 }

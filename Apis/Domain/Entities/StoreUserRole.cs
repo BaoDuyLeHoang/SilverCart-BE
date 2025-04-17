@@ -1,10 +1,10 @@
 ﻿namespace Domain.Entities;
 
-public class StoreUserRole
+public class StoreUserRole : BaseFullEntity
 {
     // Navigation properties
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
     public virtual StoreUser StoreUser { get; set; } = null!;
-    public int RoleId { get; set; }
+    public Guid RoleId { get; set; }
     public virtual StoreRole Role { get; set; } = null!;
 }

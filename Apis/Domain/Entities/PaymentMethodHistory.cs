@@ -12,7 +12,7 @@ public class PaymentMethodHistory : BaseFullEntity
     public string? AdditionalInfo { get; set; }
 
     // Navigation properties
-    public CustomerUser CreatedBy { get; set; } = null!;
-    public int PaymentMethodId { get; set; }
+    // public CustomerUser CreatedBy { get; set; } = null!;
+    public Guid PaymentMethodId { get; set; }
     public virtual PaymentMethod PaymentMethod { get; set; } = null!;
 }

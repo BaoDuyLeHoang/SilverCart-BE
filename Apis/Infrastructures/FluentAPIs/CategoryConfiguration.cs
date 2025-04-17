@@ -8,10 +8,10 @@ namespace Infrastructures.FluentAPIs
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
-            builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.Id).ValueGeneratedOnAdd();
-
+            builder.HasOne(x => x.ParentCategory).WithMany(x => x.SubCategories);
+            builder.HasOne(x => x.ApprovedUser);
+            builder.HasMany(x => x.Products).WithMany(x=>x.Categories);
         }
     }
 }

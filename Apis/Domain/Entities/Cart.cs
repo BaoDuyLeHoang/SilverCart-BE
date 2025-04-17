@@ -2,7 +2,7 @@
 
 public class Cart : BaseFullEntity
 {
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
     
     public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
     

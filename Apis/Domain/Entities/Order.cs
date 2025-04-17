@@ -13,7 +13,7 @@ public class Order : BaseFullEntity
     public DateTime ArrivedDate { get; set; }
 
     // Navigation properties
-    public int? UserPromotionId { get; set; }
+    public Guid? UserPromotionId { get; set; }
     public virtual UserPromotion? UserPromotion { get; set; }
     public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 }

@@ -2,6 +2,7 @@ using Infrastructures;
 using WebAPI.Middlewares;
 using WebAPI;
 using Application.Commons;
+using Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,10 @@ builder.Services.AddSingleton(configuration);
 
 var app = builder.Build();
 
+// Initialize SuperAdmin
+using var scope = app.Services.CreateScope();
+var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
+await userService.CreateSuperAdminIfNotExists();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -26,6 +31,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ResponseModificationMiddleware>();
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseMiddleware<PerformanceMiddleware>();
 app.MapHealthChecks("/healthchecks");
@@ -39,4 +45,6 @@ app.Run();
 
 // this line tell intergrasion test
 // https://stackoverflow.com/questions/69991983/deps-file-missing-for-dotnet-6-integration-tests
-public partial class Program { }
+public partial class Program
+{
+}

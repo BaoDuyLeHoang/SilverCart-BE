@@ -6,9 +6,9 @@ public class ProductImage : BaseFullEntity
     public string ImageName { get; set; } = string.Empty;
 
     // Navigation Properties
-    public int? ProductId { get; set; }
+    public Guid? ProductId { get; set; }
     public virtual Product? Product { get; set; }
 
-    public int? ProductItemId { get; set; }
+    public Guid? ProductItemId { get; set; }
     public virtual ProductItem? ProductItem { get; set; }
 }

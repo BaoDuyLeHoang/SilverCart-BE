@@ -3,6 +3,7 @@ using System;
 using Infrastructures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructures.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250417141831_NewMigration_TPC")]
+    partial class NewMigration_TPC
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("ProductsId");
 
-                    b.ToTable("CategoryProduct", (string)null);
+                    b.ToTable("CategoryProduct");
                 });
 
             modelBuilder.Entity("Domain.Entities.BaseEntity", b =>
@@ -77,7 +80,7 @@ namespace Infrastructures.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.ToTable("BaseFullEntity", (string)null);
+                    b.ToTable("BaseFullEntity");
                 });
 
             modelBuilder.Entity("Domain.Entities.Address", b =>
@@ -121,7 +124,7 @@ namespace Infrastructures.Migrations
                     b.Property<string>("NormalizedName")
                         .HasColumnType("text");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Domain.Entities.BaseUser", b =>
@@ -820,7 +823,7 @@ namespace Infrastructures.Migrations
                     b.Property<Guid>("RankId")
                         .HasColumnType("uuid");
 
-                    b.ToTable("CustomerUsers", (string)null);
+                    b.ToTable("CustomerUsers");
                 });
 
             modelBuilder.Entity("Domain.Entities.StoreUser", b =>

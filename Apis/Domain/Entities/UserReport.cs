@@ -1,6 +1,5 @@
 ﻿namespace Domain.Entities;
 
-public class UserReport
+public class UserReport : Report
 {
-    
 }

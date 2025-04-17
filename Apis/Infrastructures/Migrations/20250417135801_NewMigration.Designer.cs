@@ -3,6 +3,7 @@ using System;
 using Infrastructures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructures.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250417135801_NewMigration")]
+    partial class NewMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("ProductsId");
 
-                    b.ToTable("CategoryProduct", (string)null);
+                    b.ToTable("CategoryProduct");
                 });
 
             modelBuilder.Entity("Domain.Entities.BaseEntity", b =>
@@ -50,9 +53,9 @@ namespace Infrastructures.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable((string)null);
+                    b.ToTable("BaseEntity");
 
-                    b.UseTpcMappingStrategy();
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("Domain.Entities.BaseFullEntity", b =>
@@ -77,7 +80,7 @@ namespace Infrastructures.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.ToTable("BaseFullEntity", (string)null);
+                    b.ToTable("BaseFullEntity");
                 });
 
             modelBuilder.Entity("Domain.Entities.Address", b =>
@@ -121,7 +124,7 @@ namespace Infrastructures.Migrations
                     b.Property<string>("NormalizedName")
                         .HasColumnType("text");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Domain.Entities.BaseUser", b =>
@@ -159,7 +162,7 @@ namespace Infrastructures.Migrations
                     b.Property<DateTime>("SignInTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.ToTable((string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Domain.Entities.Cart", b =>
@@ -820,7 +823,7 @@ namespace Infrastructures.Migrations
                     b.Property<Guid>("RankId")
                         .HasColumnType("uuid");
 
-                    b.ToTable("CustomerUsers", (string)null);
+                    b.ToTable("CustomerUsers");
                 });
 
             modelBuilder.Entity("Domain.Entities.StoreUser", b =>
@@ -864,8 +867,50 @@ namespace Infrastructures.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Entities.BaseFullEntity", b =>
+                {
+                    b.HasOne("Domain.Entities.BaseEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.BaseFullEntity", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.Address", b =>
+                {
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.Address", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.BaseRole", b =>
+                {
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.BaseRole", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.BaseUser", b =>
+                {
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.BaseUser", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.Cart", b =>
                 {
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.Cart", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.StoreUser", "StoreUser")
                         .WithMany()
                         .HasForeignKey("StoreUserId")
@@ -880,6 +925,12 @@ namespace Infrastructures.Migrations
                     b.HasOne("Domain.Entities.Cart", null)
                         .WithMany("CartItems")
                         .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.CartItem", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -916,6 +967,12 @@ namespace Infrastructures.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.Category", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Category", "ParentCategory")
                         .WithMany("SubCategories")
                         .HasForeignKey("ParentCategoryId")
@@ -941,6 +998,12 @@ namespace Infrastructures.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.CustomerAddress", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Address");
 
                     b.Navigation("Customer");
@@ -951,6 +1014,12 @@ namespace Infrastructures.Migrations
                     b.HasOne("Domain.Entities.CustomerUser", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.CustomerPaymentMethod", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -973,11 +1042,23 @@ namespace Infrastructures.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.CustomerRank", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Domain.Entities.Order", b =>
                 {
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.Order", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.OrderStatus", "OrderStatus")
                         .WithMany("Orders")
                         .HasForeignKey("OrderStatusId")
@@ -995,6 +1076,12 @@ namespace Infrastructures.Migrations
 
             modelBuilder.Entity("Domain.Entities.OrderItem", b =>
                 {
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.OrderItem", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
@@ -1020,6 +1107,12 @@ namespace Infrastructures.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.OrderReview", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Order", "Order")
                         .WithMany()
                         .HasForeignKey("OrderId")
@@ -1031,8 +1124,32 @@ namespace Infrastructures.Migrations
                     b.Navigation("Order");
                 });
 
+            modelBuilder.Entity("Domain.Entities.OrderStatus", b =>
+                {
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.OrderStatus", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.PaymentMethod", b =>
+                {
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.PaymentMethod", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.PaymentMethodHistory", b =>
                 {
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.PaymentMethodHistory", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.PaymentMethod", "PaymentMethod")
                         .WithMany("PaymentMethodHistories")
                         .HasForeignKey("PaymentMethodId")
@@ -1042,8 +1159,23 @@ namespace Infrastructures.Migrations
                     b.Navigation("PaymentMethod");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Product", b =>
+                {
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.Product", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.ProductImage", b =>
                 {
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.ProductImage", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Product", "Product")
                         .WithMany("Images")
                         .HasForeignKey("ProductId")
@@ -1061,6 +1193,12 @@ namespace Infrastructures.Migrations
 
             modelBuilder.Entity("Domain.Entities.ProductItem", b =>
                 {
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.ProductItem", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.ProductVariant", "Variant")
                         .WithMany("Items")
                         .HasForeignKey("VariantId")
@@ -1072,6 +1210,12 @@ namespace Infrastructures.Migrations
 
             modelBuilder.Entity("Domain.Entities.ProductPromotion", b =>
                 {
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.ProductPromotion", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
@@ -1099,6 +1243,12 @@ namespace Infrastructures.Migrations
 
             modelBuilder.Entity("Domain.Entities.ProductVariant", b =>
                 {
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.ProductVariant", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Product", "Product")
                         .WithMany("Variants")
                         .HasForeignKey("ProductId")
@@ -1108,15 +1258,36 @@ namespace Infrastructures.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Promotion", b =>
+                {
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.Promotion", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.Report", b =>
                 {
                     b.HasOne("Domain.Entities.AdministratorUser", null)
                         .WithMany("Reports")
                         .HasForeignKey("AdministratorUserId");
+
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.Report", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.ScheduledTask", b =>
                 {
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.ScheduledTask", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.StoreUser", "StoreUser")
                         .WithMany("ScheduledTasks")
                         .HasForeignKey("StoreUserId")
@@ -1128,6 +1299,12 @@ namespace Infrastructures.Migrations
 
             modelBuilder.Entity("Domain.Entities.StockHistory", b =>
                 {
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.StockHistory", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
@@ -1137,8 +1314,23 @@ namespace Infrastructures.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Store", b =>
+                {
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.Store", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.StoreUserRole", b =>
                 {
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.StoreUserRole", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.StoreRole", "Role")
                         .WithMany("StoreUserRoles")
                         .HasForeignKey("RoleId")
@@ -1158,6 +1350,12 @@ namespace Infrastructures.Migrations
 
             modelBuilder.Entity("Domain.Entities.UserPromotion", b =>
                 {
+                    b.HasOne("Domain.Entities.BaseFullEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.UserPromotion", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Promotion", "Promotion")
                         .WithMany()
                         .HasForeignKey("PromotionId")
@@ -1175,8 +1373,32 @@ namespace Infrastructures.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.Entities.AdministratorUserRole", b =>
+                {
+                    b.HasOne("Domain.Entities.BaseRole", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.AdministratorUserRole", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.StoreRole", b =>
+                {
+                    b.HasOne("Domain.Entities.BaseRole", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.StoreRole", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.AdministratorUser", b =>
                 {
+                    b.HasOne("Domain.Entities.BaseUser", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.AdministratorUser", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.AdministratorUserRole", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
@@ -1186,11 +1408,44 @@ namespace Infrastructures.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("Domain.Entities.CustomerUser", b =>
+                {
+                    b.HasOne("Domain.Entities.BaseUser", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.CustomerUser", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.StoreUser", b =>
                 {
+                    b.HasOne("Domain.Entities.BaseUser", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.StoreUser", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Store", null)
                         .WithMany("StoreUsers")
                         .HasForeignKey("StoreId");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ProductReport", b =>
+                {
+                    b.HasOne("Domain.Entities.Report", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.ProductReport", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.UserReport", b =>
+                {
+                    b.HasOne("Domain.Entities.Report", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.UserReport", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.Cart", b =>

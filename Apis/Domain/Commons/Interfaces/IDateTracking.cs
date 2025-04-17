@@ -2,7 +2,7 @@
 
 public interface IDateTracking
 {
-    public DateTime CreationDate { get; set; }
+    public DateTime? CreationDate { get; set; }
 
     public DateTime? ModificationDate { get; set; }
 

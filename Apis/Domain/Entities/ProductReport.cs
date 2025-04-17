@@ -1,6 +1,5 @@
 ﻿namespace Domain.Entities;
 
-public class ProductReport
+public class ProductReport : Report
 {
-    
 }

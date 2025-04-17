@@ -1,10 +1,8 @@
-﻿using System.Collections;
+﻿using System.Reflection;
 using Application.Interfaces;
 using Domain.Common.Interfaces;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Design;
 
 namespace Infrastructures
 {
@@ -45,12 +43,9 @@ namespace Infrastructures
         public DbSet<CustomerRank> CustomerRanks { get; set; }
         public DbSet<AdministratorUser> AdministratorUsers { get; set; }
         public DbSet<AdministratorUserRole> AdministratorUserRoles { get; set; }
-        public DbSet<CategoryRecommendation> CategoryRecommendations { get; set; }
-
         public DbSet<Report> Reports { get; set; }
         public DbSet<UserReport> UserReports { get; set; }
         public DbSet<ProductReport> ProductReports { get; set; }
-
         public DbSet<CustomerAddress> CustomerAddresses { get; set; }
         public DbSet<StockHistory> StockHistories { get; set; }
         public DbSet<PaymentMethodHistory> PaymentMethodHistories { get; set; }
@@ -68,7 +63,7 @@ namespace Infrastructures
             var now = _timeService.GetCurrentTime();
             var userId = _claimsService.GetCurrentUserId;
 
-            // Select entries that support IDateTracking (which also covers IUserTracking and soft deletion logic)
+            // Select entries that support IDateTracking
             var entries = ChangeTracker.Entries()
                 .Where(e => e.Entity is IDateTracking &&
                             (e.State == EntityState.Added ||
@@ -121,16 +116,23 @@ namespace Infrastructures
                     }
                 }
 
-                // Convert physical deletion to soft deletion (only if the entity type is a BaseEntity)
+                // Convert physical deletion to soft deletion
                 if (entry.Entity is BaseEntity baseEntity && entry.State == EntityState.Deleted)
                 {
                     baseEntity.IsDeleted = true;
-                    // Mark as Modified to persist the soft delete flags instead of deleting the row.
                     entry.State = EntityState.Modified;
                 }
             }
 
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Apply all other configurations from the assembly
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }

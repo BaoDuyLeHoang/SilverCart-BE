@@ -8,8 +8,8 @@ namespace WebAPI.Services
         public ClaimsService(IHttpContextAccessor httpContextAccessor)
         {
             // todo implementation to get the current userId
-            var Id = httpContextAccessor.HttpContext?.User?.FindFirstValue("userId");
-            GetCurrentUserId = string.IsNullOrEmpty(Id) ? Guid.Empty : Guid.Parse(Id);
+            var id = httpContextAccessor.HttpContext?.User?.FindFirstValue("userId");
+            GetCurrentUserId = string.IsNullOrEmpty(id) ? Guid.Empty : Guid.Parse(id);
         }
 
         public Guid GetCurrentUserId { get; }

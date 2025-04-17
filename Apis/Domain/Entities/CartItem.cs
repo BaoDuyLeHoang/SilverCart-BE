@@ -10,12 +10,12 @@ public class CartItem : BaseFullEntity
     public bool IsSelected { get; set; } = true;
 
     // Navigation properties
-    public int CartId { get; set; }
+    public Guid CartId { get; set; }
 
-    public int ProductId { get; set; }
+    public Guid ProductId { get; set; }
     public virtual Product Product { get; set; } = null!;
-    public int ProductItemId { get; set; }
+    public Guid ProductItemId { get; set; }
     public virtual ProductItem ProductItem { get; set; } = null!;
-    public int StoreId { get; set; }
+    public Guid StoreId { get; set; }
     public virtual Store Store { get; set; } = null!;
 }

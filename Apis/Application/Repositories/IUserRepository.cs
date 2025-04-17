@@ -15,5 +15,8 @@ namespace Application.Repositories
         Task<BaseUser> GetUserByUserNameAndPasswordHash(string email, string passwordHash);
 
         Task<bool> CheckUserNameExited(string username);
+        Task<BaseUser> GetUserByRefreshToken(string refreshToken);
+        Task<BaseUser> GetUserByEmail(string email);
+        Task<BaseUser> GetAdminUserByUsername(string superAdminUsername);
     }
 }
