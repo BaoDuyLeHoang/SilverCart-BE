@@ -48,7 +48,7 @@ namespace Infrastructures.FluentAPIs
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Promotions (One-to-Many with ProductPromotion)
-            builder.HasMany(x => x.Promotions)
+            builder.HasMany(x => x.ProductPromotions)
                 .WithOne(x => x.Product)
                 .HasForeignKey(x => x.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);

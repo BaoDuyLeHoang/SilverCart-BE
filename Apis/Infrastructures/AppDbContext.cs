@@ -1,8 +1,12 @@
 ﻿using System.Reflection;
+using Application.Commons;
 using Application.Interfaces;
+using Application.Utils;
 using Domain.Common.Interfaces;
 using Domain.Entities;
+using Infrastructures.FluentAPIs;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Infrastructures
 {
@@ -10,13 +14,15 @@ namespace Infrastructures
     {
         private readonly ICurrentTime _timeService;
         private readonly IClaimsService _claimsService;
+        private readonly AppConfiguration _configuration;
 
         public AppDbContext(DbContextOptions<AppDbContext> options,
             ICurrentTime timeService,
-            IClaimsService claimsService) : base(options)
+            IClaimsService claimsService, AppConfiguration configuration) : base(options)
         {
             _timeService = timeService;
             _claimsService = claimsService;
+            _configuration = configuration;
         }
 
         public DbSet<Product> Products { get; set; }
@@ -42,7 +48,7 @@ namespace Infrastructures
         public DbSet<CustomerUser> CustomerUsers { get; set; }
         public DbSet<CustomerRank> CustomerRanks { get; set; }
         public DbSet<AdministratorUser> AdministratorUsers { get; set; }
-        public DbSet<AdministratorUserRole> AdministratorUserRoles { get; set; }
+        public DbSet<AdministratorRole> AdministratorUserRoles { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<UserReport> UserReports { get; set; }
         public DbSet<ProductReport> ProductReports { get; set; }
@@ -129,6 +135,7 @@ namespace Infrastructures
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.SeedData(_configuration);
             base.OnModelCreating(modelBuilder);
 
             // Apply all other configurations from the assembly

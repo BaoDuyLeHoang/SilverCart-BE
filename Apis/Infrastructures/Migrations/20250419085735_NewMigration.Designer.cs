@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructures.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250417141831_NewMigration_TPC")]
-    partial class NewMigration_TPC
+    [Migration("20250419085735_NewMigration")]
+    partial class NewMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,7 +44,8 @@ namespace Infrastructures.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnOrder(0);
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -63,22 +64,28 @@ namespace Infrastructures.Migrations
                     b.HasBaseType("Domain.Entities.BaseEntity");
 
                     b.Property<Guid?>("CreatedById")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnOrder(96);
 
                     b.Property<DateTime?>("CreationDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnOrder(95);
 
                     b.Property<Guid?>("DeleteById")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnOrder(100);
 
                     b.Property<DateTime?>("DeletionDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnOrder(99);
 
                     b.Property<Guid?>("ModificationById")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnOrder(98);
 
                     b.Property<DateTime?>("ModificationDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnOrder(97);
 
                     b.ToTable("BaseFullEntity");
                 });
@@ -107,7 +114,7 @@ namespace Infrastructures.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.ToTable("Address", (string)null);
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.BaseRole", b =>
@@ -124,7 +131,7 @@ namespace Infrastructures.Migrations
                     b.Property<string>("NormalizedName")
                         .HasColumnType("text");
 
-                    b.ToTable("Roles");
+                    b.ToTable((string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.BaseUser", b =>
@@ -133,8 +140,7 @@ namespace Infrastructures.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("text");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -153,13 +159,13 @@ namespace Infrastructures.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("PhoneNumber")
+                    b.Property<string>("Phone")
                         .HasColumnType("text");
 
                     b.Property<string>("RefreshToken")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("SignInTime")
+                    b.Property<DateTime?>("SignInTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.ToTable((string)null);
@@ -256,7 +262,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("ParentCategoryId");
 
-                    b.ToTable("Category", (string)null);
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.CustomerAddress", b =>
@@ -273,35 +279,27 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("CustomerAddress", (string)null);
+                    b.ToTable("CustomerAddresses", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.CustomerPaymentMethod", b =>
                 {
                     b.HasBaseType("Domain.Entities.BaseFullEntity");
 
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("CustomerId1")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("uuid");
 
                     b.Property<bool>("IsDefault")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("PaymentMethodId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("PaymentMethodId1")
+                    b.Property<Guid>("PaymentMethodId")
                         .HasColumnType("uuid");
 
-                    b.HasIndex("CustomerId1");
+                    b.HasIndex("CustomerId");
 
-                    b.HasIndex("PaymentMethodId1");
+                    b.HasIndex("PaymentMethodId");
 
-                    b.ToTable("CustomerPaymentMethod", (string)null);
+                    b.ToTable("CustomerPaymentMethods", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.CustomerRank", b =>
@@ -317,7 +315,7 @@ namespace Infrastructures.Migrations
                     b.HasIndex("CustomerId")
                         .IsUnique();
 
-                    b.ToTable("CustomerRank", (string)null);
+                    b.ToTable("CustomerRanks", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Order", b =>
@@ -353,7 +351,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("UserPromotionId");
 
-                    b.ToTable("Order", (string)null);
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.OrderItem", b =>
@@ -376,7 +374,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("ProductItemId");
 
-                    b.ToTable("OrderItem", (string)null);
+                    b.ToTable("OrderItems", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.OrderReview", b =>
@@ -400,7 +398,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderReview", (string)null);
+                    b.ToTable("OrderReviews", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.OrderStatus", b =>
@@ -415,7 +413,7 @@ namespace Infrastructures.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.ToTable("OrderStatus", (string)null);
+                    b.ToTable("OrderStatuses", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.PaymentMethod", b =>
@@ -443,7 +441,7 @@ namespace Infrastructures.Migrations
                     b.Property<int>("Order")
                         .HasColumnType("integer");
 
-                    b.ToTable("PaymentMethod", (string)null);
+                    b.ToTable("PaymentMethods", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.PaymentMethodHistory", b =>
@@ -473,7 +471,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("PaymentMethodId");
 
-                    b.ToTable("PaymentMethodHistory", (string)null);
+                    b.ToTable("PaymentMethodHistories", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Product", b =>
@@ -498,7 +496,7 @@ namespace Infrastructures.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.ToTable("Product", (string)null);
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.ProductImage", b =>
@@ -526,7 +524,7 @@ namespace Infrastructures.Migrations
                     b.HasIndex("ProductItemId")
                         .IsUnique();
 
-                    b.ToTable("ProductImage", (string)null);
+                    b.ToTable("ProductImages", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.ProductItem", b =>
@@ -557,7 +555,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("VariantId");
 
-                    b.ToTable("ProductItem", (string)null);
+                    b.ToTable("ProductItems", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.ProductPromotion", b =>
@@ -567,24 +565,14 @@ namespace Infrastructures.Migrations
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ProductId1")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("PromotionId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("PromotionId1")
                         .HasColumnType("uuid");
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("ProductId1");
-
                     b.HasIndex("PromotionId");
 
-                    b.HasIndex("PromotionId1");
-
-                    b.ToTable("ProductPromotion", (string)null);
+                    b.ToTable("ProductPromotions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.ProductVariant", b =>
@@ -601,7 +589,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductVariant", (string)null);
+                    b.ToTable("ProductVariants", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Promotion", b =>
@@ -643,7 +631,7 @@ namespace Infrastructures.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.ToTable("Promotion", (string)null);
+                    b.ToTable("Promotions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Report", b =>
@@ -667,7 +655,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("AdministratorUserId");
 
-                    b.ToTable("Report", (string)null);
+                    b.ToTable("Reports", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.ScheduledTask", b =>
@@ -705,7 +693,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("StoreUserId");
 
-                    b.ToTable("ScheduledTask", (string)null);
+                    b.ToTable("ScheduledTasks", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.StockHistory", b =>
@@ -720,7 +708,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("StockHistory", (string)null);
+                    b.ToTable("StockHistories", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Store", b =>
@@ -750,7 +738,7 @@ namespace Infrastructures.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.ToTable("Store", (string)null);
+                    b.ToTable("Stores", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.StoreUserRole", b =>
@@ -770,7 +758,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("StoreUserId");
 
-                    b.ToTable("StoreUserRole", (string)null);
+                    b.ToTable("StoreUserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.UserPromotion", b =>
@@ -787,33 +775,56 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserPromotion", (string)null);
+                    b.ToTable("UserPromotions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.AdministratorUserRole", b =>
                 {
                     b.HasBaseType("Domain.Entities.BaseRole");
 
-                    b.ToTable("AdministratorUserRole", (string)null);
+                    b.ToTable("AdministratorUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("eae9874c-10dc-4f1a-b14f-d6cf70aba47a"),
+                            IsDeleted = false,
+                            Description = "Super Admin Role with all permissions",
+                            Name = "SuperAdmin",
+                            NormalizedName = "SUPERADMIN"
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.StoreRole", b =>
                 {
                     b.HasBaseType("Domain.Entities.BaseRole");
 
-                    b.ToTable("StoreRole", (string)null);
+                    b.ToTable("StoreRoles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.AdministratorUser", b =>
                 {
                     b.HasBaseType("Domain.Entities.BaseUser");
 
-                    b.Property<Guid>("RoleId")
+                    b.Property<Guid?>("RoleId")
                         .HasColumnType("uuid");
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AdministratorUser", (string)null);
+                    b.ToTable("AdministratorUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("c6e51106-4b1d-4f46-9206-2b23dfb6f5d1"),
+                            IsDeleted = false,
+                            Email = "admin@elderly.com",
+                            FirstName = "Super",
+                            IsVerified = true,
+                            LastName = "Admin",
+                            PasswordHash = "admin111",
+                            Phone = ""
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.CustomerUser", b =>
@@ -823,7 +834,7 @@ namespace Infrastructures.Migrations
                     b.Property<Guid>("RankId")
                         .HasColumnType("uuid");
 
-                    b.ToTable("CustomerUsers");
+                    b.ToTable("CustomerUsers", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.StoreUser", b =>
@@ -835,21 +846,21 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("StoreId");
 
-                    b.ToTable("StoreUser", (string)null);
+                    b.ToTable("StoreUsers", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.ProductReport", b =>
                 {
                     b.HasBaseType("Domain.Entities.Report");
 
-                    b.ToTable("ProductReport", (string)null);
+                    b.ToTable("ProductReports", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.UserReport", b =>
                 {
                     b.HasBaseType("Domain.Entities.Report");
 
-                    b.ToTable("UserReport", (string)null);
+                    b.ToTable("UserReports", (string)null);
                 });
 
             modelBuilder.Entity("CategoryProduct", b =>
@@ -953,13 +964,13 @@ namespace Infrastructures.Migrations
                 {
                     b.HasOne("Domain.Entities.CustomerUser", "Customer")
                         .WithMany()
-                        .HasForeignKey("CustomerId1")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.PaymentMethod", "PaymentMethod")
                         .WithMany()
-                        .HasForeignKey("PaymentMethodId1")
+                        .HasForeignKey("PaymentMethodId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1076,24 +1087,16 @@ namespace Infrastructures.Migrations
             modelBuilder.Entity("Domain.Entities.ProductPromotion", b =>
                 {
                     b.HasOne("Domain.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("ProductPromotions")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Product", null)
-                        .WithMany("Promotions")
-                        .HasForeignKey("ProductId1");
-
                     b.HasOne("Domain.Entities.Promotion", "Promotion")
-                        .WithMany()
+                        .WithMany("ProductPromotions")
                         .HasForeignKey("PromotionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Domain.Entities.Promotion", null)
-                        .WithMany("ProductPromotions")
-                        .HasForeignKey("PromotionId1");
 
                     b.Navigation("Product");
 
@@ -1182,11 +1185,62 @@ namespace Infrastructures.Migrations
                 {
                     b.HasOne("Domain.Entities.AdministratorUserRole", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoleId");
+
+                    b.OwnsOne("Domain.Entities.OTPData", "OTP", b1 =>
+                        {
+                            b1.Property<Guid>("AdministratorUserId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("Code")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<DateTime>("ExpirationTime")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.Property<bool>("IsUsed")
+                                .HasColumnType("boolean");
+
+                            b1.HasKey("AdministratorUserId");
+
+                            b1.ToTable("AdministratorUsers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AdministratorUserId");
+                        });
+
+                    b.Navigation("OTP");
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Domain.Entities.CustomerUser", b =>
+                {
+                    b.OwnsOne("Domain.Entities.OTPData", "OTP", b1 =>
+                        {
+                            b1.Property<Guid>("CustomerUserId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("Code")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<DateTime>("ExpirationTime")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.Property<bool>("IsUsed")
+                                .HasColumnType("boolean");
+
+                            b1.HasKey("CustomerUserId");
+
+                            b1.ToTable("CustomerUsers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CustomerUserId");
+                        });
+
+                    b.Navigation("OTP");
                 });
 
             modelBuilder.Entity("Domain.Entities.StoreUser", b =>
@@ -1194,6 +1248,31 @@ namespace Infrastructures.Migrations
                     b.HasOne("Domain.Entities.Store", null)
                         .WithMany("StoreUsers")
                         .HasForeignKey("StoreId");
+
+                    b.OwnsOne("Domain.Entities.OTPData", "OTP", b1 =>
+                        {
+                            b1.Property<Guid>("StoreUserId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("Code")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<DateTime>("ExpirationTime")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.Property<bool>("IsUsed")
+                                .HasColumnType("boolean");
+
+                            b1.HasKey("StoreUserId");
+
+                            b1.ToTable("StoreUsers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StoreUserId");
+                        });
+
+                    b.Navigation("OTP");
                 });
 
             modelBuilder.Entity("Domain.Entities.Cart", b =>
@@ -1225,7 +1304,7 @@ namespace Infrastructures.Migrations
                 {
                     b.Navigation("Images");
 
-                    b.Navigation("Promotions");
+                    b.Navigation("ProductPromotions");
 
                     b.Navigation("Variants");
                 });

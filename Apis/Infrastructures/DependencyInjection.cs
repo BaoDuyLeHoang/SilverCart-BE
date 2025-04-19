@@ -1,9 +1,12 @@
-﻿using Application;
+﻿using System.Runtime.CompilerServices;
+using Application;
 using Application.Interfaces;
 using Application.Repositories;
 using Application.Services;
+using Application.Utils;
 using Infrastructures.Mappers;
 using Infrastructures.Repositories;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +14,7 @@ using Serilog;
 
 namespace Infrastructures
 {
-    public static class DenpendencyInjection
+    public static class DependencyInjection
     {
         public static IServiceCollection AddInfrastructuresService(this IServiceCollection services,
             string databaseConnection)
@@ -23,6 +26,7 @@ namespace Infrastructures
             services.AddScoped<IUserService, UserService>();
             services.AddSingleton<ICurrentTime, CurrentTime>();
             services.AddSingleton<IEmailService, EmailService>();
+            services.AddSingleton<ISMSService, SMSService>();
 
             // ATTENTION: if you do migration please check file README.md
             services.AddDbContext<AppDbContext>(option => option.UseNpgsql(databaseConnection));
@@ -34,21 +38,5 @@ namespace Infrastructures
 
             return services;
         }
-
-        // public static IServiceCollection AddSeriLogConfiguration(this IServiceCollection services,
-        //     IConfiguration configuration)
-        // {
-        //     var logger = new LoggerConfiguration()
-        //         .ReadFrom.Configuration(configuration)
-        //         .Enrich.FromLogContext()
-        //         .CreateLogger();
-        //
-        //     Log.Logger = logger;
-        //
-        //     services.AddLogging(loggingBuilder =>
-        //         loggingBuilder.AddSerilog(Log.Logger, dispose: true));
-        //
-        //     return services;
-        // }
     }
 }

@@ -1,4 +1,5 @@
 ﻿// Infrastructures/Repositories/UserRepository.cs
+
 using Application.Interfaces;
 using Application.Repositories;
 using Domain.Entities;
@@ -20,7 +21,7 @@ namespace Infrastructures.Repositories
             _dbContext = dbContext;
         }
 
-        public Task<bool> CheckUserNameExited(string username) => 
+        public Task<bool> CheckUserNameExisted(string username) =>
             _dbContext.Users.AnyAsync(u => u.Email == username);
 
         public async Task<BaseUser> GetUserByUserNameAndPasswordHash(string email, string passwordHash)
@@ -28,30 +29,31 @@ namespace Infrastructures.Repositories
             var user = await _dbContext.Users
                 .FirstOrDefaultAsync(record => record.Email == email
                                                && record.PasswordHash == passwordHash);
-            if(user is null)
-            {
-                throw new Exception("Email or password is not correct");
-            }
-
             return user;
         }
-        
+
         public async Task<BaseUser> GetUserByEmail(string email)
         {
             return await _dbContext.Users
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
-        
+
         public async Task<BaseUser> GetUserByRefreshToken(string refreshToken)
         {
             return await _dbContext.Users
                 .FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
         }
-        
-        public async Task<BaseUser> GetAdminUserByUsername(string username)
+
+        public async Task<BaseUser> GetAdminUserByEmail(string username)
         {
             return await _dbContext.Set<AdministratorUser>()
                 .FirstOrDefaultAsync(u => u.Email == username);
+        }
+
+        public async Task<BaseUser> GetUserByPhone(string phoneNumber)
+        {
+            return await _dbContext.Users
+                .FirstOrDefaultAsync(u => u.Phone == phoneNumber);
         }
     }
 }

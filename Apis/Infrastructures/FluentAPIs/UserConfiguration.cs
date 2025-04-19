@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructures.FluentAPIs
 {
-    public class UserConfiguration : IEntityTypeConfiguration<BaseUser>, IEntityTypeConfiguration<CustomerUser>,
+    public class UserConfiguration : IEntityTypeConfiguration<CustomerUser>,
         IEntityTypeConfiguration<Product>,
         IEntityTypeConfiguration<ProductVariant>,
         IEntityTypeConfiguration<ProductItem>,
@@ -27,7 +27,7 @@ namespace Infrastructures.FluentAPIs
         IEntityTypeConfiguration<StoreUserRole>,
         IEntityTypeConfiguration<CustomerRank>,
         IEntityTypeConfiguration<AdministratorUser>,
-        IEntityTypeConfiguration<AdministratorUserRole>,
+        IEntityTypeConfiguration<AdministratorRole>,
         IEntityTypeConfiguration<Report>,
         IEntityTypeConfiguration<UserReport>,
         IEntityTypeConfiguration<ProductReport>,
@@ -37,87 +37,87 @@ namespace Infrastructures.FluentAPIs
         IEntityTypeConfiguration<ScheduledTask>,
         IEntityTypeConfiguration<UserPromotion>
     {
-        public void Configure(EntityTypeBuilder<BaseUser> builder)
-        {
-            builder.Property(x => x.Email).HasMaxLength(100);
-        }
-
         public void Configure(EntityTypeBuilder<CustomerUser> builder)
         {
+            builder.ToTable("CustomerUsers");
             builder.HasOne(x => x.Rank)
                 .WithOne(x => x.Customer)
                 .HasForeignKey<CustomerRank>(x => x.CustomerId);
             // .OnDelete(DeleteBehavior.Cascade);
+            builder.OwnsOne(x => x.OTP);
         }
 
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.ToTable("Product");
+            builder.ToTable("Products");
         }
 
         public void Configure(EntityTypeBuilder<ProductVariant> builder)
         {
-            builder.ToTable("ProductVariant");
+            builder.ToTable("ProductVariants");
         }
 
         public void Configure(EntityTypeBuilder<ProductItem> builder)
         {
-            builder.ToTable("ProductItem");
+            builder.ToTable("ProductItems");
         }
 
         public void Configure(EntityTypeBuilder<ProductImage> builder)
         {
-            builder.ToTable("ProductImage");
+            builder.ToTable("ProductImages");
         }
 
         public void Configure(EntityTypeBuilder<Order> builder)
         {
-            builder.ToTable("Order");
+            builder.ToTable("Orders");
         }
 
         public void Configure(EntityTypeBuilder<OrderItem> builder)
         {
-            builder.ToTable("OrderItem");
+            builder.ToTable("OrderItems");
         }
 
         public void Configure(EntityTypeBuilder<OrderStatus> builder)
         {
-            builder.ToTable("OrderStatus");
+            builder.ToTable("OrderStatuses");
         }
 
         public void Configure(EntityTypeBuilder<OrderReview> builder)
         {
-            builder.ToTable("OrderReview");
+            builder.ToTable("OrderReviews");
         }
 
         public void Configure(EntityTypeBuilder<PaymentMethod> builder)
         {
-            builder.ToTable("PaymentMethod");
+            builder.ToTable("PaymentMethods");
         }
 
         public void Configure(EntityTypeBuilder<Category> builder)
         {
-            builder.ToTable("Category");
+            builder.ToTable("Categories");
         }
 
         public void Configure(EntityTypeBuilder<Store> builder)
         {
-            builder.ToTable("Store");
+            builder.ToTable("Stores");
         }
 
         public void Configure(EntityTypeBuilder<StoreUser> builder)
         {
-            builder.ToTable("StoreUser");
+            builder.ToTable("StoreUsers");
+            builder.OwnsOne(x => x.OTP);
         }
 
         public void Configure(EntityTypeBuilder<Address> builder)
         {
-            builder.ToTable("Address");
+            builder.ToTable("Addresses");
         }
 
         public void Configure(EntityTypeBuilder<CustomerPaymentMethod> builder)
         {
-            builder.ToTable("CustomerPaymentMethod");
+            builder.ToTable("CustomerPaymentMethods");
+            builder.HasOne(x => x.Customer).WithMany().HasForeignKey(x => x.CustomerId);
+            builder.HasOne(x => x.PaymentMethod).WithMany().HasForeignKey(x => x.PaymentMethodId);
         }
 
         public void Configure(EntityTypeBuilder<CartItem> builder)
@@ -132,77 +132,80 @@ namespace Infrastructures.FluentAPIs
 
         public void Configure(EntityTypeBuilder<ProductPromotion> builder)
         {
-            builder.ToTable("ProductPromotion");
+            builder.ToTable("ProductPromotions");
+            builder.HasOne(x => x.Product).WithMany(x => x.ProductPromotions).HasForeignKey(x => x.ProductId);
+            builder.HasOne(x => x.Promotion).WithMany(x => x.ProductPromotions).HasForeignKey(x => x.PromotionId);
         }
 
         public void Configure(EntityTypeBuilder<Promotion> builder)
         {
-            builder.ToTable("Promotion");
+            builder.ToTable("Promotions");
         }
 
         public void Configure(EntityTypeBuilder<StoreRole> builder)
         {
-            builder.ToTable("StoreRole");
+            builder.ToTable("StoreRoles");
         }
 
         public void Configure(EntityTypeBuilder<StoreUserRole> builder)
         {
-            builder.ToTable("StoreUserRole");
+            builder.ToTable("StoreUserRoles");
         }
 
         public void Configure(EntityTypeBuilder<CustomerRank> builder)
         {
-            builder.ToTable("CustomerRank");
+            builder.ToTable("CustomerRanks");
         }
 
         public void Configure(EntityTypeBuilder<AdministratorUser> builder)
         {
-            builder.ToTable("AdministratorUser");
+            builder.ToTable("AdministratorUsers");
+            builder.OwnsOne(x => x.OTP);
         }
 
-        public void Configure(EntityTypeBuilder<AdministratorUserRole> builder)
+        public void Configure(EntityTypeBuilder<AdministratorRole> builder)
         {
-            builder.ToTable("AdministratorUserRole");
+            builder.ToTable("AdministratorUserRoles");
         }
 
         public void Configure(EntityTypeBuilder<Report> builder)
         {
-            builder.ToTable("Report");
+            builder.ToTable("Reports");
         }
 
         public void Configure(EntityTypeBuilder<UserReport> builder)
         {
-            builder.ToTable("UserReport");
+            builder.ToTable("UserReports");
         }
 
         public void Configure(EntityTypeBuilder<ProductReport> builder)
         {
-            builder.ToTable("ProductReport");
+            builder.ToTable("ProductReports");
         }
 
         public void Configure(EntityTypeBuilder<CustomerAddress> builder)
         {
-            builder.ToTable("CustomerAddress");
+            builder.ToTable("CustomerAddresses");
         }
 
         public void Configure(EntityTypeBuilder<StockHistory> builder)
         {
-            builder.ToTable("StockHistory");
+            builder.ToTable("StockHistories");
         }
 
         public void Configure(EntityTypeBuilder<PaymentMethodHistory> builder)
         {
-            builder.ToTable("PaymentMethodHistory");
+            builder.ToTable("PaymentMethodHistories");
         }
 
         public void Configure(EntityTypeBuilder<ScheduledTask> builder)
         {
-            builder.ToTable("ScheduledTask");
+            builder.ToTable("ScheduledTasks");
         }
 
         public void Configure(EntityTypeBuilder<UserPromotion> builder)
         {
-            builder.ToTable("UserPromotion");
+            builder.ToTable("UserPromotions");
         }
     }
 }
