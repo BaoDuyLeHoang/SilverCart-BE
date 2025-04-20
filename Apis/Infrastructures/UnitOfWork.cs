@@ -1,5 +1,7 @@
 ﻿using Application;
 using Application.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Infrastructures
 {
@@ -20,6 +22,12 @@ namespace Infrastructures
         public ICategoryRepository CategoryRepository => _categoryRepository;
 
         public IUserRepository UserRepository => _userRepository;
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _dbContext.Database.BeginTransactionAsync();
+        }
+
 
         public async Task<int> SaveChangeAsync()
         {

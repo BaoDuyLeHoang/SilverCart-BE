@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Application.Utils
 {
-    public static class GenerateJsonWebTokenString
+    public static class GeneratTokenString
     {
         public static string GenerateJsonWebToken(this BaseUser baseUser, string secretKey, DateTime now)
         {

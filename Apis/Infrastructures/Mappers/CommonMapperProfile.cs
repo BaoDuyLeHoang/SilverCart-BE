@@ -5,14 +5,12 @@ using Domain.Entities;
 
 namespace Infrastructures.Mappers
 {
-    public class MapperConfigurationsProfile : Profile
+    public class CommonMapperProfile : Profile
     {
-        public MapperConfigurationsProfile()
+        public CommonMapperProfile()
         {
-            // CreateMap<CreateCategoryViewModel, Category>();
             CreateMap(typeof(Pagination<>), typeof(Pagination<>));
             CreateMap<Category, CategoryViewModel>();
-            // .ForMember(dest => dest._Id, src => src.MapFrom(x => x.Id));
         }
     }
 }

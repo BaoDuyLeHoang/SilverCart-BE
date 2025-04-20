@@ -23,7 +23,10 @@ namespace Infrastructures
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
+            
             services.AddSingleton<ICurrentTime, CurrentTime>();
             services.AddSingleton<IEmailService, EmailService>();
             services.AddSingleton<ISMSService, SMSService>();
@@ -34,8 +37,9 @@ namespace Infrastructures
             // this configuration just use in-memory for fast develop
             //services.AddDbContext<AppDbContext>(option => option.UseInMemoryDatabase("test"));
 
-            services.AddAutoMapper(typeof(MapperConfigurationsProfile).Assembly);
+            services.AddAutoMapper(typeof(CommonMapperProfile).Assembly, typeof(UserMapperProfile).Assembly);
 
+            // Add Authentication jwt
             return services;
         }
     }

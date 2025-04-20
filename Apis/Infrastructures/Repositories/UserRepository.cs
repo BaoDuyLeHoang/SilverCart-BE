@@ -21,18 +21,13 @@ namespace Infrastructures.Repositories
             _dbContext = dbContext;
         }
 
-        public Task<bool> CheckUserNameExisted(string username) =>
-            _dbContext.Users.AnyAsync(u => u.Email == username);
+        public Task<bool> CheckEmailExisted(string email) =>
+            _dbContext.Users.AnyAsync(u => u.Email == email);
 
-        public async Task<BaseUser> GetUserByUserNameAndPasswordHash(string email, string passwordHash)
-        {
-            var user = await _dbContext.Users
-                .FirstOrDefaultAsync(record => record.Email == email
-                                               && record.PasswordHash == passwordHash);
-            return user;
-        }
+        public Task<bool> CheckPhoneExisted(string phone) =>
+                    _dbContext.Users.AnyAsync(u => u.Phone == phone);
 
-        public async Task<BaseUser> GetUserByEmail(string email)
+        public async Task<BaseUser?> GetUserByEmail(string email)
         {
             return await _dbContext.Users
                 .FirstOrDefaultAsync(u => u.Email == email);
@@ -50,7 +45,7 @@ namespace Infrastructures.Repositories
                 .FirstOrDefaultAsync(u => u.Email == username);
         }
 
-        public async Task<BaseUser> GetUserByPhone(string phoneNumber)
+        public async Task<BaseUser?> GetUserByPhone(string phoneNumber)
         {
             return await _dbContext.Users
                 .FirstOrDefaultAsync(u => u.Phone == phoneNumber);

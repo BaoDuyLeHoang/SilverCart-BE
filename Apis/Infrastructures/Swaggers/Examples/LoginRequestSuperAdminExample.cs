@@ -4,7 +4,7 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace Infrastructures.Swaggers.Examples;
 
-public class LoginRequestSuperAdminExample : IExamplesProvider<UserLoginDTO>
+public class LoginRequestSuperAdminExample : IExamplesProvider<LoginUserDTO>
 {
     private readonly AppConfiguration _configuration;
 
@@ -13,9 +13,9 @@ public class LoginRequestSuperAdminExample : IExamplesProvider<UserLoginDTO>
         _configuration = configuration;
     }
 
-    public UserLoginDTO GetExamples()
+    public LoginUserDTO GetExamples()
     {
-        return new UserLoginDTO()
+        return new LoginUserDTO()
         {
             Email = _configuration.SuperAdmin.Email,
             Password = _configuration.SuperAdmin.Password

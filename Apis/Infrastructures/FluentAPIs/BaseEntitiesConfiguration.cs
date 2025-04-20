@@ -15,11 +15,13 @@ public class BaseEntitiesConfiguration : IEntityTypeConfiguration<BaseFullEntity
         builder.UseTpcMappingStrategy();
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.Id).HasColumnOrder(0).ValueGeneratedOnAdd();
-
+        builder.Property(x => x.Id)
+            .HasColumnOrder(0).ValueGeneratedOnAdd()
+            .HasDefaultValueSql("uuid_generate_v4()");
         builder.Property(x => x.IsDeleted).HasDefaultValue(false);
         builder.HasQueryFilter(x => !x.IsDeleted);
     }
+
     public void Configure(EntityTypeBuilder<BaseFullEntity> builder)
     {
         builder.Property(x => x.CreationDate).IsRequired(false).HasColumnOrder(95);
@@ -29,7 +31,6 @@ public class BaseEntitiesConfiguration : IEntityTypeConfiguration<BaseFullEntity
         builder.Property(x => x.DeletionDate).IsRequired(false).HasColumnOrder(99);
         builder.Property(x => x.DeleteById).IsRequired(false).HasColumnOrder(100);
     }
-
 
 
     public void Configure(EntityTypeBuilder<BaseUser> builder)

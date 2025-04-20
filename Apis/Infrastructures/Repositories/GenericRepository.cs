@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using System.Linq.Expressions;
+using Application.Interfaces;
 using Application.Repositories;
 using Application.Commons;
 using Domain.Common.Interfaces;
@@ -20,11 +21,18 @@ namespace Infrastructures.Repositories
             _claimsService = claimsService;
         }
 
-        public Task<List<TEntity>> GetAllAsync() => _dbSet.ToListAsync();
-
-        public async Task<TEntity?> GetByIdAsync(Guid id)
+        public async Task<IQueryable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includes)
         {
-            var entity = await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
+            IQueryable<TEntity> query = _dbSet;
+            query = includes.Aggregate(query, (current, include) => current.Include(include));
+            return query;
+        }
+
+        public async Task<TEntity?> GetByIdAsync(Guid id, params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = _dbSet;
+            query = includes.Aggregate(query, (current, include) => current.Include(include));
+            var entity = await query.FirstOrDefaultAsync(x => x.Id == id);
             // Optional: throw custom NotFoundException
             return entity;
         }
@@ -62,7 +70,7 @@ namespace Infrastructures.Repositories
         public async Task<Pagination<TEntity>> ToPagination(int pageIndex = 0, int pageSize = 10)
         {
             var total = await _dbSet.CountAsync();
-            var items = await _dbSet.OrderByDescending(x =>  typeof(IDateTracking).IsAssignableFrom(x.GetType())
+            var items = await _dbSet.OrderByDescending(x => typeof(IDateTracking).IsAssignableFrom(x.GetType())
                     ? ((IDateTracking)x).CreationDate
                     : DateTime.MinValue)
                 .Skip(pageIndex * pageSize)
@@ -78,6 +86,5 @@ namespace Infrastructures.Repositories
                 Items = items
             };
         }
-
     }
 }

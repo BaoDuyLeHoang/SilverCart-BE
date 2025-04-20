@@ -59,7 +59,7 @@ namespace Infrastructures
         public DbSet<UserPromotion> UserPromotions { get; set; }
 
         // Base entities
-        public DbSet<BaseUser> Users { get; set; }
+        public DbSet<BaseUser?> Users { get; set; }
         public DbSet<BaseRole> Roles { get; set; }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
