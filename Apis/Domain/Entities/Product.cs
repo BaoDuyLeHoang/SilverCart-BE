@@ -14,5 +14,5 @@ public class Product : BaseFullEntity
     public virtual ICollection<Category> Categories { get; set; }
     public virtual ICollection<ProductVariant> Variants { get; set; }
     public virtual ICollection<ProductImage> Images { get; set; }
-    public virtual ICollection<ProductPromotion> Promotions { get; set; }
+    public virtual ICollection<ProductPromotion> ProductPromotions { get; set; }
 }

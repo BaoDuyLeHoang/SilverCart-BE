@@ -1,4 +1,5 @@
 ﻿// Application/Commons/AppConfiguration.cs
+
 namespace Application.Commons
 {
     public class AppConfiguration
@@ -8,14 +9,15 @@ namespace Application.Commons
         public SuperAdminConfig SuperAdmin { get; set; }
         public string ApplicationUrl { get; set; }
         public EmailSettings EmailSettings { get; set; }
+        public bool IsDevelopment { get; set; } 
     }
-    
+
     public class SuperAdminConfig
     {
-        public string Username { get; set; }
+        public string Email { get; set; }
         public string Password { get; set; }
     }
-    
+
     public class EmailSettings
     {
         public string SmtpServer { get; set; }

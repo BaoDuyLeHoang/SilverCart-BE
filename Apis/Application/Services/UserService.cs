@@ -1,6 +1,6 @@
-﻿// Application/Services/UserService.cs
-
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Linq.Expressions;
+using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -10,283 +10,109 @@ using Application.Utils;
 using Application.ViewModels.UserViewModels;
 using AutoMapper;
 using Domain.Entities;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualBasic;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
-namespace Application.Services
+namespace Application.Services;
+
+public class UserService : IUserService
 {
-    public class UserService : IUserService
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
+    private readonly IHostingEnvironment _hostingEnvironment;
+
+    public UserService(IUnitOfWork unitOfWork, IMapper mapper, IHostingEnvironment hostingEnvironment)
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        private readonly ICurrentTime _currentTime;
-        private readonly AppConfiguration _configuration;
-        private readonly IEmailService _emailService;
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+        _hostingEnvironment = hostingEnvironment;
+    }
 
-        public UserService(
-            IUnitOfWork unitOfWork,
-            IMapper mapper,
-            ICurrentTime currentTime,
-            AppConfiguration configuration,
-            IEmailService emailService)
+    public async Task<Result<Pagination<BaseUser>>> GetUsers(UserFilterDTO filter, int pageIndex, int pageSize)
+    {
+        var query = await _unitOfWork.UserRepository.GetAllAsync();
+        var totalCount = await query.CountAsync();
+        var filterExpressions = new List<Expression<Func<BaseUser, bool>>>();
+
+        if (filter.IsVerified.HasValue)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _currentTime = currentTime;
-            _configuration = configuration;
-            _emailService = emailService;
+            filterExpressions.Add(x => x.IsVerified == filter.IsVerified.Value);
         }
 
-        public async Task<TokenResponseDTO> LoginAsync(UserLoginDTO userObject)
+        if (filter.SignInDateFrom.HasValue)
         {
-            var user = await _unitOfWork.UserRepository.GetUserByUserNameAndPasswordHash(
-                userObject.Email, userObject.Password.Hash());
-
-            return await GenerateTokenResponse(user);
+            filterExpressions.Add(x => x.SignInTime >= filter.SignInDateFrom.Value);
         }
 
-        public async Task<TokenResponseDTO> LoginSuperAdmin(UserLoginDTO loginObject)
+        if (filter.SignInDateTo.HasValue)
         {
-            if (loginObject.Email != _configuration.SuperAdmin.Username ||
-                loginObject.Password != _configuration.SuperAdmin.Password)
-            {
-                throw new Exception("Invalid super admin credentials");
-            }
-
-            var user = await _unitOfWork.UserRepository.GetAdminUserByUsername(_configuration.SuperAdmin.Username);
-            if (user == null)
-            {
-                throw new Exception("Super admin does not exist");
-            }
-
-            return await GenerateTokenResponse(user);
+            filterExpressions.Add(x => x.SignInTime <= filter.SignInDateTo.Value);
         }
 
-        public async Task RegisterAsync(UserLoginDTO userObject)
+        if (filter.CreatedDateFrom.HasValue)
         {
-            var isExited = await _unitOfWork.UserRepository.CheckUserNameExited(userObject.Email);
-
-            if (isExited)
-            {
-                throw new Exception("Email already exists");
-            }
-
-            var newUser = new CustomerUser
-            {
-                Email = userObject.Email,
-                PasswordHash = userObject.Password.Hash(),
-                IsVerified = false,
-                SignInTime = _currentTime.GetCurrentTime(),
-                FirstName = string.Empty,
-                LastName = string.Empty,
-                PhoneNumber = string.Empty
-            };
-
-            // Generate verification token
-            var verificationToken = GenerateRandomToken();
-            newUser.RefreshToken = verificationToken;
-
-            await _unitOfWork.UserRepository.AddAsync(newUser);
-            await _unitOfWork.SaveChangeAsync();
-
-            // Send verification email (Implement IEmailService interface)
-            await _emailService.SendVerificationEmail(newUser.Email, verificationToken);
+            filterExpressions.Add(x => x.CreationDate >= filter.CreatedDateFrom.Value);
         }
 
-        public async Task<string> VerifyEmailAsync(string token, string email)
+        if (filter.CreatedDateTo.HasValue)
         {
-            var user = await _unitOfWork.UserRepository.GetUserByEmail(email);
-
-            if (user == null)
-            {
-                throw new Exception("User not found");
-            }
-
-            if (user.RefreshToken != token)
-            {
-                throw new Exception("Invalid verification token");
-            }
-
-            user.IsVerified = true;
-            user.RefreshToken = null;
-
-            await _unitOfWork.SaveChangeAsync();
-            return "Email verified successfully";
+            filterExpressions.Add(x => x.CreationDate <= filter.CreatedDateTo.Value);
         }
 
-        public async Task<TokenResponseDTO> RefreshTokenAsync(string refreshToken)
+        if (!string.IsNullOrEmpty(filter.SearchTerm))
         {
-            var user = await _unitOfWork.UserRepository.GetUserByRefreshToken(refreshToken);
-
-            if (user == null)
-            {
-                throw new Exception("Invalid refresh token");
-            }
-
-            return await GenerateTokenResponse(user);
+            filterExpressions.Add(x => x.Email.Contains(filter.SearchTerm));
         }
 
-        public async Task RevokeTokenAsync(string refreshToken)
+        // Combine the base query and filter expressions
+        var finalQuery = query;
+        foreach (var filterExpression in filterExpressions)
         {
-            var user = await _unitOfWork.UserRepository.GetUserByRefreshToken(refreshToken);
-
-            if (user == null)
-            {
-                throw new Exception("Invalid refresh token");
-            }
-
-            user.RefreshToken = null;
-            await _unitOfWork.SaveChangeAsync();
+            finalQuery = finalQuery.Where(filterExpression);
         }
 
-        public async Task<BaseUser> CreateUser(UserRegisterDTO userRegisterDTO, int roleId)
+        // Apply sorting, paging, and execute the query
+        var items = await finalQuery
+            .OrderByDescending(x => x.CreationDate)
+            .Skip((pageIndex - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+        return Result<Pagination<BaseUser>>.Success(new Pagination<BaseUser>
         {
-            var isExited = await _unitOfWork.UserRepository.CheckUserNameExited(userRegisterDTO.Email);
+            Items = items,
+            TotalItemsCount = totalCount,
+            PageIndex = pageIndex,
+            PageSize = pageSize
+        });
+    }
 
-            if (isExited)
-            {
-                throw new Exception("Email already exists");
-            }
+    public Task<Result<BaseUser>> GetUserById(Guid id)
+    {
+        throw new NotImplementedException();
+    }
 
-            BaseUser newUser;
+    public Task<Result<BaseUser>> CreateUser(RegisterUserDTO model)
+    {
+        throw new NotImplementedException();
+    }
 
-            switch (roleId)
-            {
-                case 1: // Admin
-                    newUser = new AdministratorUser
-                    {
-                        Email = userRegisterDTO.Email,
-                        PasswordHash = userRegisterDTO.Password.Hash(),
-                        FirstName = userRegisterDTO.FirstName,
-                        LastName = userRegisterDTO.LastName,
-                        PhoneNumber = userRegisterDTO.PhoneNumber,
-                        IsVerified = true,
-                        SignInTime = _currentTime.GetCurrentTime()
-                    };
-                    break;
-                case 2: // Store User
-                    newUser = new StoreUser
-                    {
-                        Email = userRegisterDTO.Email,
-                        PasswordHash = userRegisterDTO.Password.Hash(),
-                        FirstName = userRegisterDTO.FirstName,
-                        LastName = userRegisterDTO.LastName,
-                        PhoneNumber = userRegisterDTO.PhoneNumber,
-                        IsVerified = true,
-                        SignInTime = _currentTime.GetCurrentTime()
-                    };
-                    break;
-                default: // Customer
-                    newUser = new CustomerUser
-                    {
-                        Email = userRegisterDTO.Email,
-                        PasswordHash = userRegisterDTO.Password.Hash(),
-                        FirstName = userRegisterDTO.FirstName,
-                        LastName = userRegisterDTO.LastName,
-                        PhoneNumber = userRegisterDTO.PhoneNumber,
-                        IsVerified = true,
-                        SignInTime = _currentTime.GetCurrentTime()
-                    };
-                    break;
-            }
+    public Task<Result<BaseUser>> UpdateUser(UpdateUserDTO model)
+    {
+        throw new NotImplementedException();
+    }
 
-            await _unitOfWork.UserRepository.AddAsync(newUser);
-            await _unitOfWork.SaveChangeAsync();
+    public Task<Result<bool>> DeleteUser(Guid id)
+    {
+        throw new NotImplementedException();
+    }
 
-            return newUser;
-        }
-
-        public async Task CreateSuperAdminIfNotExists()
-        {
-            var superAdminExists =
-                await _unitOfWork.UserRepository.CheckUserNameExited(_configuration.SuperAdmin.Username);
-
-            if (!superAdminExists)
-            {
-                var superAdmin = new AdministratorUser
-                {
-                    Email = _configuration.SuperAdmin.Username,
-                    PasswordHash = _configuration.SuperAdmin.Password.Hash(),
-                    FirstName = "Super",
-                    LastName = "Admin",
-                    PhoneNumber = "",
-                    IsVerified = true,
-                    SignInTime = _currentTime.GetCurrentTime()
-                };
-
-                await _unitOfWork.UserRepository.AddAsync(superAdmin);
-                await _unitOfWork.SaveChangeAsync();
-            }
-        }
-
-        private async Task<TokenResponseDTO> GenerateTokenResponse(BaseUser user)
-        {
-            // Generate JWT token
-            var accessToken = GenerateJwtToken(user);
-
-            // Generate refresh token
-            var refreshToken = GenerateRandomToken();
-
-            // Save refresh token to user
-            user.RefreshToken = refreshToken;
-            user.SignInTime = _currentTime.GetCurrentTime();
-            await _unitOfWork.SaveChangeAsync();
-
-            return new TokenResponseDTO
-            {
-                AccessToken = accessToken,
-                RefreshToken = refreshToken,
-                Expiration = _currentTime.GetCurrentTime().AddMinutes(15) // Token expires in 15 minutes
-            };
-        }
-
-        private string GenerateJwtToken(BaseUser user)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration.JWTSecretKey);
-
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
-                new Claim(ClaimTypes.Role, DetermineUserRole(user))
-            };
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = _currentTime.GetCurrentTime().AddMinutes(15), // 15 minutes
-                SigningCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
-        }
-
-        private string GenerateRandomToken()
-        {
-            var randomBytes = new byte[64];
-            using var rng = RandomNumberGenerator.Create();
-            rng.GetBytes(randomBytes);
-            return Convert.ToBase64String(randomBytes);
-        }
-
-        private string DetermineUserRole(BaseUser user)
-        {
-            if (user is AdministratorUser)
-            {
-                if (user.Email == _configuration.SuperAdmin.Username)
-                    return "SuperAdmin";
-                return "Admin";
-            }
-            else if (user is StoreUser)
-                return "Store";
-            else if (user is CustomerUser)
-                return "Customer";
-
-            return "User";
-        }
+    public Task<Result<bool>> ChangePassword(ChangePasswordDTO model)
+    {
+        throw new NotImplementedException();
     }
 }

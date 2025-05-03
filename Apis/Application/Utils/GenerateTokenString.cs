@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Application.Utils
 {
-    public static class GeneratTokenString
+    public static class GenerateTokenString
     {
         public static string GenerateJsonWebToken(this BaseUser baseUser, string secretKey, DateTime now)
         {
@@ -15,10 +15,11 @@ namespace Application.Utils
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier ,baseUser.Email),
+                new Claim(ClaimTypes.Role ,"SuperAdmin"),
             };
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: now.AddMinutes(15),
+                expires: now.AddHours(15),
                 signingCredentials: credentials);
 
 

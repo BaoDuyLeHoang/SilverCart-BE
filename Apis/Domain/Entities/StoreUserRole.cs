@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities;
 
-public class StoreUserRole : BaseFullEntity
+public class StoreUserRole : BaseEntity
 {
     // Navigation properties
     public Guid UserId { get; set; }

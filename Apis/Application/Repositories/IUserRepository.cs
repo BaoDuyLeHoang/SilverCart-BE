@@ -12,11 +12,13 @@ namespace Application.Repositories
         /// <param name="passwordHash"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        Task<BaseUser> GetUserByUserNameAndPasswordHash(string email, string passwordHash);
 
-        Task<bool> CheckUserNameExited(string username);
+        Task<bool> CheckEmailExisted(string email);
+        Task<bool> CheckPhoneExisted(string? phone);
         Task<BaseUser> GetUserByRefreshToken(string refreshToken);
-        Task<BaseUser> GetUserByEmail(string email);
-        Task<BaseUser> GetAdminUserByUsername(string superAdminUsername);
+        Task<BaseUser?> GetUserByEmail(string email);
+        Task<BaseUser> GetAdminUserByEmail(string superAdminUsername);
+        Task<BaseUser?> GetUserByPhone(string phoneNumber);
+
     }
 }

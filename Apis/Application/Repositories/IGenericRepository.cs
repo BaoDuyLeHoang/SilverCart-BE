@@ -1,12 +1,13 @@
-﻿using Application.Commons;
+﻿using System.Linq.Expressions;
+using Application.Commons;
 using Domain.Entities;
 
 namespace Application.Repositories
 {
     public interface IGenericRepository<TEntity> where TEntity : BaseFullEntity
     {
-        Task<List<TEntity>> GetAllAsync();
-        Task<TEntity?> GetByIdAsync(Guid id);
+        Task<IQueryable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includes);
+        Task<TEntity?> GetByIdAsync(Guid id, params Expression<Func<TEntity, object>>[] includes);
         Task AddAsync(TEntity entity);
         void Update(TEntity entity);
         void UpdateRange(List<TEntity> entities);

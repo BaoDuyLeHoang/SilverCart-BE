@@ -10,6 +10,6 @@ namespace Application.ViewModels.CategorysViewModels
 
     public abstract class BaseEntityViewModel : BaseEntity
     {
-        public string Id { get; set; }
+        public Guid  Id { get; set; }
     }
 }

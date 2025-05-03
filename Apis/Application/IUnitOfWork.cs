@@ -1,4 +1,5 @@
 ﻿using Application.Repositories;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Application
 {
@@ -8,6 +9,7 @@ namespace Application
 
         public IUserRepository UserRepository { get; }
 
+        public Task<IDbContextTransaction> BeginTransactionAsync();
         public Task<int> SaveChangeAsync();
     }
 }

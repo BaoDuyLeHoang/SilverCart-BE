@@ -1,27 +1,48 @@
-﻿namespace Application.Utils;
+﻿using Application.Interfaces;
+using Application.Services;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
-public static class SMSUtils
+namespace Application.Utils;
+
+public class SMSService : ISMSService
 {
-    public static string GenerateRandomToken()
+    private readonly IEmailService? _emailService;
+    private readonly ILogger<SMSService> _logger;
+    private readonly IWebHostEnvironment _env;
+
+    public SMSService(IEmailService? emailService, ILogger<SMSService> logger, IWebHostEnvironment env)
     {
-        Random random = new Random();
-        string token = random.Next(100000, 999999).ToString();
-        return token;
+        // Use email service in development
+        _emailService = env.IsDevelopment() ? emailService : null;
+
+        _emailService = emailService;
+        _logger = logger;
+        _env = env;
     }
 
-    public static void SendSMS(string phoneNumber, string message)
+    public async Task SendOTPSMS(string phoneNumber, string otp)
     {
-        #region Development
-            
-        #endregion
+        if (_env.IsDevelopment())
+        {
+            _logger.LogInformation($"Sending emailed OTP to {phoneNumber}: {otp}");
+            _emailService?.SendEmailAsync(phoneNumber, "Your OTP Code", $"Your OTP code is: {otp}")
+                .ConfigureAwait(false);
+        }
 
         // Implement your SMS sending logic here
         // This is a placeholder for the actual SMS sending code
-
-        #region Production
-
-        Console.WriteLine($"Sending SMS to {phoneNumber}: {message}");
-
-        #endregion
+        if (_env.IsProduction())
+        {
+            Console.WriteLine($"Sending SMS to {phoneNumber}");
+        }
     }
+
+
+}
+
+public interface ISMSService
+{
+    Task SendOTPSMS(string phoneNumber, string otp);
 }

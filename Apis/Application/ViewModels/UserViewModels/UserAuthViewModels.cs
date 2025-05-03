@@ -1,4 +1,7 @@
 ﻿// Application/ViewModels/UserViewModels/AuthDTOs.cs
+
+using Domain.Entities;
+
 namespace Application.ViewModels.UserViewModels
 {
     public class TokenResponseDTO
@@ -7,7 +10,6 @@ namespace Application.ViewModels.UserViewModels
         public string RefreshToken { get; set; }
         public DateTime Expiration { get; set; }
     }
-
     public class RefreshTokenDTO
     {
         public string RefreshToken { get; set; }

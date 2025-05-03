@@ -1,5 +1,5 @@
 ﻿namespace Domain.Entities;
 
-public class AdministratorUserRole : BaseRole
+public class AdministratorRole : BaseRole
 {
 }

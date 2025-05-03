@@ -2,7 +2,7 @@
 
 namespace Domain.Entities;
 
-public class BaseFullEntity : BaseEntity, IDateTracking, IUserTracking
+public abstract class BaseFullEntity : BaseEntity, IDateTracking, IUserTracking
 {
     public DateTime? CreationDate { get; set; }
     public DateTime? ModificationDate { get; set; }

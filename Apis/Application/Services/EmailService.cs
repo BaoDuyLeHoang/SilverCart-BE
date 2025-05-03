@@ -26,7 +26,7 @@ namespace Application.Services
             var subject = "Verify Your Email";
             var body = $"Please verify your email by clicking this link: <a href='{verificationLink}'>Verify Email</a>";
 
-            await SendEmailAsync(email, subject, body);
+            SendEmailAsync(email, subject, body).ConfigureAwait(false);
         }
 
         public async Task SendPasswordResetEmail(string email, string token)
@@ -39,7 +39,7 @@ namespace Application.Services
             await SendEmailAsync(email, subject, body);
         }
 
-        private async Task SendEmailAsync(string to, string subject, string body)
+        public async Task SendEmailAsync(string to, string subject, string body)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace Application.Services
                         _configuration.EmailSettings.Password);
                     client.EnableSsl = true;
 
-                    await client.SendMailAsync(mailMessage);
+                    client.SendMailAsync(mailMessage).ConfigureAwait(false);
                 }
             }
             catch (Exception ex)
