@@ -11,7 +11,7 @@ cd to the ```apis``` folder run command below
 ```
 dotnet run --project WebAPI
 ```
-### run with VisualStudio
+### run with VisualStudio test
 open file ```hectre-challenge.sln``` and run
 
 ## EF migration
