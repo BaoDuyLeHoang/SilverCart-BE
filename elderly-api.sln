@@ -5,13 +5,13 @@ VisualStudioVersion = 17.0.32126.317
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apis", "Apis", "{0C2A538A-2D4D-4526-AAF4-CFE42E46C827}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "Apis\WebAPI\WebAPI.csproj", "{FCAF16BE-1A1A-4809-BE81-9183DC76AF1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SilverCart.WebAPI", "Apis\SilverCart.WebAPI\SilverCart.WebAPI.csproj", "{FCAF16BE-1A1A-4809-BE81-9183DC76AF1F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Apis\Application\Application.csproj", "{D4AB7D44-CE2B-4843-B2BB-1F85D69AF537}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SilverCart.Application", "Apis\SilverCart.Application\SilverCart.Application.csproj", "{D4AB7D44-CE2B-4843-B2BB-1F85D69AF537}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Apis\Domain\Domain.csproj", "{924FD787-05E8-471A-B9BE-DB650F04E84D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SilverCart.Domain", "Apis\SilverCart.Domain\SilverCart.Domain.csproj", "{924FD787-05E8-471A-B9BE-DB650F04E84D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructures", "Apis\Infrastructures\Infrastructures.csproj", "{7594A0B0-3986-488B-A984-F7BD7EFEFFCE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SilverCart.Infrastructure", "Apis\SilverCart.Infrastructure\SilverCart.Infrastructure.csproj", "{7594A0B0-3986-488B-A984-F7BD7EFEFFCE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{856555AB-FFC2-40A0-B95C-666CECE7ACC4}"
 EndProject

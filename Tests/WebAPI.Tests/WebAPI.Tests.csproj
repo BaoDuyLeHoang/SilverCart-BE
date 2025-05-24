@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Apis\WebAPI\WebAPI.csproj" />
+    <ProjectReference Include="..\..\Apis\SilverCart.WebAPI\SilverCart.WebAPI.csproj" />
     <ProjectReference Include="..\Domain.Tests\Domain.Tests.csproj" />
   </ItemGroup>
 
