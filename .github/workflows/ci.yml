@@ -1,0 +1,38 @@
+name: .NET CI/CD
+
+on:
+  push:
+    branches:
+      - '**'  # This will match all branches
+  pull_request:
+    branches:
+      - '**'  # This will match all branches
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --no-restore
+      
+    # - name: Test
+    #   continue-on-error: true  # This will allow the workflow to continue even if tests fail
+    #   run: dotnet test --no-build --verbosity normal
+      
+    - name: Check Build Status
+      run: |
+        if [ $? -ne 0 ]; then
+          echo "Build failed!"
+          exit 1
+        fi 
