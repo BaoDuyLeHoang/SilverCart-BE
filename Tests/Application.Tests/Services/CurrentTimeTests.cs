@@ -1,7 +1,7 @@
-﻿using Application.Interfaces;
-using Application.Services;
-using Domain.Tests;
+﻿using SilverCart.Application.Interfaces;
+using SilverCart.Application.Services;
 using FluentAssertions;
+using Domain.Tests;
 
 namespace Application.Tests.Services
 {
