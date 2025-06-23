@@ -1,4 +1,5 @@
 using Infrastructures.Commons.Exceptions;
+
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using SilverCart.Application.Interfaces;

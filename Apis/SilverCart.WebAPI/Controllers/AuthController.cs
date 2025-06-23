@@ -21,6 +21,8 @@ public class AuthController(IMediator mediator) : ControllerBase
         var result = await _mediator.Send(command);
         return Ok(result);
     }
+
+
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
     {
@@ -106,5 +108,5 @@ public class AuthController(IMediator mediator) : ControllerBase
     // {
     //     var result = await _authService.RegisterCustomerUserAsync(dto);
     //     return Ok(result);
-    // }
+    // }[Http
 }

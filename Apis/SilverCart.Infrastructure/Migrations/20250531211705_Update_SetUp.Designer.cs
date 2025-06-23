@@ -3,6 +3,7 @@ using System;
 using Infrastructures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructures.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250531211705_Update_SetUp")]
+    partial class Update_SetUp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -364,7 +367,7 @@ namespace Infrastructures.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("767b762c-120b-468a-acb9-111a06845b75"),
+                            Id = new Guid("c7a10210-a8b7-493d-8763-047758d38db7"),
                             Description = "",
                             IsDeleted = false,
                             Name = "SuperAdmin",
@@ -372,7 +375,7 @@ namespace Infrastructures.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e0117101-92d0-4dd3-afe4-a3326411c30c"),
+                            Id = new Guid("98618b13-3bf5-4322-b342-bb6f56783cfa"),
                             Description = "",
                             IsDeleted = false,
                             Name = "Admin",
@@ -380,7 +383,7 @@ namespace Infrastructures.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8354fca4-0dfd-4c9e-8e7b-220a9a53e2c1"),
+                            Id = new Guid("83c7e6ac-f998-42c6-ab42-f69fd15e1b90"),
                             Description = "",
                             IsDeleted = false,
                             Name = "Staff",
@@ -388,7 +391,7 @@ namespace Infrastructures.Migrations
                         },
                         new
                         {
-                            Id = new Guid("3d0f01df-3615-46a4-bedc-c4ba95df7235"),
+                            Id = new Guid("556742ac-cf63-4f40-b79a-78f46edc1dd7"),
                             Description = "",
                             IsDeleted = false,
                             Name = "Moderator",
@@ -396,7 +399,7 @@ namespace Infrastructures.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1a344170-fe93-4320-b1d3-0140a7d571a1"),
+                            Id = new Guid("b836d85b-d241-44c4-bf80-ba551eb1affd"),
                             Description = "",
                             IsDeleted = false,
                             Name = "CustomerSupport",
@@ -413,7 +416,7 @@ namespace Infrastructures.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("340e58a8-4605-4317-a18a-f2fc3e96940f"),
+                            Id = new Guid("95fe6213-81fa-4998-b821-47cebe9188b9"),
                             Description = "",
                             IsDeleted = false,
                             Name = "Guardian",
@@ -421,7 +424,7 @@ namespace Infrastructures.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0662e0a3-ae05-4d8f-b56c-c9528157e256"),
+                            Id = new Guid("d746c43d-3990-4e9f-810e-7ad7f90a4223"),
                             Description = "",
                             IsDeleted = false,
                             Name = "Customer",
@@ -429,7 +432,7 @@ namespace Infrastructures.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f23b2eb1-57ab-49be-9310-5321809d9339"),
+                            Id = new Guid("4ec19fdd-79fc-450d-92be-a7b53cf12c3b"),
                             Description = "",
                             IsDeleted = false,
                             Name = "DependentUser",
@@ -446,7 +449,7 @@ namespace Infrastructures.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a6f93435-b61f-4320-abf4-5551c1101e6f"),
+                            Id = new Guid("3786f7a7-6d05-449c-adcd-4271774db1a9"),
                             Description = "",
                             IsDeleted = false,
                             Name = "StoreOwner",
@@ -454,7 +457,7 @@ namespace Infrastructures.Migrations
                         },
                         new
                         {
-                            Id = new Guid("21380e35-8549-4229-a714-99e2ea5ca9c4"),
+                            Id = new Guid("7a2d35d9-aee0-492e-b117-50464c1ac2c6"),
                             Description = "",
                             IsDeleted = false,
                             Name = "StoreManager",
@@ -462,7 +465,7 @@ namespace Infrastructures.Migrations
                         },
                         new
                         {
-                            Id = new Guid("7cbc4362-00c7-4d29-9607-9523ac92d1de"),
+                            Id = new Guid("9a2e2107-28c9-4322-a77d-1b869226729e"),
                             Description = "",
                             IsDeleted = false,
                             Name = "StoreDelivery",
@@ -470,7 +473,7 @@ namespace Infrastructures.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6077bf32-6d29-41ce-af9d-abcd48266407"),
+                            Id = new Guid("16c81908-f9cb-441e-835a-a1546068b42a"),
                             Description = "",
                             IsDeleted = false,
                             Name = "StoreSupport",
@@ -1261,8 +1264,8 @@ namespace Infrastructures.Migrations
                         {
                             Id = new Guid("9878ee32-2ead-4165-9e44-e510ba1bae29"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e47288a8-97c2-49c4-841f-cc47ba2579d7",
-                            CreationDate = new DateTime(2025, 6, 7, 3, 12, 36, 257, DateTimeKind.Utc).AddTicks(2861),
+                            ConcurrencyStamp = "cee16f1a-1360-44e5-a12a-c17e4cdfb7bc",
+                            CreationDate = new DateTime(2025, 5, 31, 21, 17, 4, 367, DateTimeKind.Utc).AddTicks(9520),
                             Email = "admin@elderly.com",
                             EmailConfirmed = true,
                             FullName = "Super Admin",
@@ -1270,7 +1273,7 @@ namespace Infrastructures.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ELDERLY.COM",
                             NormalizedUserName = "SUPERADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHVIvA+Yep+a4JTQ9OlUyw6R5LORE+3S691mZIIn2JHrDZ4yPR/oLdq9qNu5A7usRA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEK5rTK3u3NIrmTv63K42oET5lojx/o0xDfeIsULtKHrmZyTSvO8hdlF0Wa8UWeX6NQ==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "superadmin"

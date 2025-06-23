@@ -7,11 +7,11 @@ using WebAPI;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using SilverCart.Application.Commons;
-using SilverCart.Infrastructure.Commons;
 using VNPAY.NET;
 using WebAPI.Extensions;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Infrastructures.Commons.Exceptions;
+using Application.Commons;
 
 var builder = WebApplication.CreateBuilder(args);
 

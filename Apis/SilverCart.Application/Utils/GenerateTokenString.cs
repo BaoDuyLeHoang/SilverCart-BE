@@ -16,13 +16,9 @@ namespace SilverCart.Application.Utils
             Debug.Assert(baseUser.Email != null, "baseUser.Email != null");
             var claims = new[]
             {
-<<<<<<< HEAD:Apis/Application/Utils/GenerateTokenString.cs
-                new Claim(ClaimTypes.NameIdentifier ,baseUser.Email),
-                new Claim(ClaimTypes.Role ,"SuperAdmin"),
-=======
+
                 new Claim(ClaimTypes.NameIdentifier, baseUser.Email),
                 new Claim(ClaimTypes.Role, "SuperAdmin"),
->>>>>>> main:Apis/SilverCart.Application/Utils/GenerateTokenString.cs
             };
             var token = new JwtSecurityToken(
                 claims: claims,
