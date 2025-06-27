@@ -1,5 +1,4 @@
-﻿using SilverCart.Domain.Commons.Enums;
-
+﻿
 namespace SilverCart.Domain.Entities;
 
 
