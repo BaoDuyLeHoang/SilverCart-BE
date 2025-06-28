@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Infrastructures.Commons.Exceptions;
 using Infrastructures.Features.Products.Commands.Create.CreateProduct;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,7 @@ namespace Infrastructures.Features.Products.Commands.Create.CreateProductVariant
 
             var product = products.FirstOrDefault();
             if (product is null)
-                throw new KeyNotFoundException($"Product with ID '{request.ProductId}' was not found.");
+                throw new AppExceptions($"Product with ID '{request.ProductId}' was not found.");
 
             var newVariant = _mapper.Map<ProductVariant>(request);
             newVariant.Id = Guid.NewGuid();

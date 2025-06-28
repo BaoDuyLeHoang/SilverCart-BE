@@ -17,7 +17,7 @@ public sealed record GetAllProductsCommand(PagingRequest? PagingRequest, Guid? I
 public record GetAllProductsResponse(Guid? Id, string ProductName, string? Description, string? VideoPath, string? ProductType, List<GetCategoryResponse>? Categories, DateTime? CreatedDate, List<GetProductVariantsResponse> ProductVariants);
 public record GetCategoryResponse(Guid Id, string CategoryName);
 public record GetProductVariantsResponse(Guid Id, string VariantName, decimal Price, List<GetProductItemsResponse> ProductItems);
-public record GetProductItemsResponse(Guid Id, string? SKU, decimal OriginalPrice, decimal DiscountedPrice, List<GetProductItemsImagesResponse> ProductImages, List<GetStoreProductItemsResponse> StoreProductItems);
+public record GetProductItemsResponse(Guid Id, string? SKU, decimal OriginalPrice, decimal DiscountedPrice, int Weight, List<GetProductItemsImagesResponse> ProductImages, List<GetStoreProductItemsResponse> StoreProductItems);
 public record GetProductItemsImagesResponse(Guid Id, string ImagePath, string ImageName);
 public record GetStoreProductItemsResponse(Guid Id, Guid? StoreId, string? StoreName, int Stock);
 public class GetAllProductHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetAllProductsCommand, PagedResult<GetAllProductsResponse>>
@@ -74,6 +74,7 @@ public class GetAllProductHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetA
                         item.SKU,
                         item.OriginalPrice,
                         item.DiscountedPrice,
+                        item.Weight,
                         item.ProductImages.Select(img => new GetProductItemsImagesResponse(
                             img.Id,
                             img.ImagePath,

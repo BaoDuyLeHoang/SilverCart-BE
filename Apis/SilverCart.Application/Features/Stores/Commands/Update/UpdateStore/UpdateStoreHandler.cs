@@ -1,3 +1,4 @@
+using Infrastructures.Commons.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SilverCart.Application.Interfaces;
@@ -31,13 +32,13 @@ namespace Infrastructures.Features.Stores.Commands.Update.UpdateStore
 
             if (storeUser == null)
             {
-                throw new Exception("You don't have permission to update this store");
+                throw new AppExceptions("You don't have permission to update this store");
             }
 
             var store = await _unitOfWork.StoreRepository.GetByIdAsync(request.Id);
             if (store == null)
             {
-                throw new Exception("Store not found");
+                throw new AppExceptions("Store not found");
             }
 
             // Check if name is already taken by another store
@@ -48,7 +49,7 @@ namespace Infrastructures.Features.Stores.Commands.Update.UpdateStore
 
                 if (await existedStoreQuery.AnyAsync(cancellationToken))
                 {
-                    throw new Exception("Store name already exists");
+                    throw new AppExceptions("Store name already exists");
                 }
             }
 
@@ -72,8 +73,9 @@ namespace Infrastructures.Features.Stores.Commands.Update.UpdateStore
                 storeAddress.StreetAddress = request.StreetAddress;
                 storeAddress.WardCode = request.WardCode;
                 storeAddress.DistrictId = request.DistrictId;
-                storeAddress.FromDistrictName = request.DistrictName;
-                storeAddress.FromProvinceName = request.ProvinceName;
+                storeAddress.WardName = request.WardName;
+                storeAddress.DistrictName = request.DistrictName;
+                storeAddress.ProvinceName = request.ProvinceName;
 
                 _unitOfWork.StoreAddressRepository.Update(storeAddress);
             }

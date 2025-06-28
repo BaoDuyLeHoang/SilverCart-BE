@@ -10,7 +10,6 @@ public class ScheduledTask : BaseEntity
     public DateTime AssignedAt { get; set; } = DateTime.UtcNow;
     public DateTime? CompletedAt { get; set; }
     public DateTime? Deadline { get; set; }
-
     // Navigation properties
     public virtual StoreUser StoreUser { get; set; } = null!;
 }

@@ -4,6 +4,7 @@ using SilverCart.Domain.Entities;
 using SilverCart.Domain.Enums;
 using SilverCart.Application.Interfaces;
 using Infrastructures.Services.System;
+using Infrastructures.Commons.Exceptions;
 
 namespace Infrastructures.Features.Products.Commands.Update.UpdateProduct;
 
@@ -30,11 +31,11 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, bool>
     {
         var currentUserId = _claimsService.CurrentUserId;
         if (currentUserId == Guid.Empty)
-            throw new UnauthorizedAccessException("User not authenticated.");
+            throw new AppExceptions("User not authenticated.");
 
         var product = await _unitOfWork.ProductRepository.GetByIdAsync(request.Id);
         if (product == null)
-            throw new Exception($"Product with ID {request.Id} not found.");
+            throw new AppExceptions($"Product with ID {request.Id} not found.");
 
         // Update basic product information only if new values are provided
         if (!string.IsNullOrWhiteSpace(request.Name))

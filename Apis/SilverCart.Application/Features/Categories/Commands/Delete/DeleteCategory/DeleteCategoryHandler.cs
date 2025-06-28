@@ -1,3 +1,4 @@
+using Infrastructures.Commons.Exceptions;
 using MediatR;
 using SilverCart.Application.Interfaces;
 using SilverCart.Domain.Entities;
@@ -20,12 +21,12 @@ namespace Infrastructures.Features.Categories.Commands.Delete.DeleteCategory
             var category = await _unitOfWork.CategoryRepository.GetByIdAsync(request.Id);
             if (category == null)
             {
-                throw new Exception("Category not found");
+                throw new AppExceptions("Category not found");
             }
 
             var currentUserId = _claimsService.CurrentUserId;
             if (currentUserId == Guid.Empty)
-                throw new UnauthorizedAccessException("User not authenticated.");
+                throw new AppExceptions("User not authenticated.");
 
             category.IsDeleted = true;
 

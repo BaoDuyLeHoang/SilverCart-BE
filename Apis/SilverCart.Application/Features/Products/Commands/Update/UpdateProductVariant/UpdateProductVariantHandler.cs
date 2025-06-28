@@ -1,4 +1,5 @@
 using System;
+using Infrastructures.Commons.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,12 +18,12 @@ public class UpdateProductVariantHandler(IUnitOfWork unitOfWork) : IRequestHandl
 
         var product = products.FirstOrDefault();
         if (product == null)
-            throw new KeyNotFoundException($"Product with ID '{request.ProductId}' not found.");
+            throw new AppExceptions($"Product with ID '{request.ProductId}' not found.");
 
         var variant = product.Variants.FirstOrDefault(x => x.Id == request.VariantId);
 
         if (variant == null)
-            throw new KeyNotFoundException($"Variant with ID '{request.VariantId}' not found in product '{request.ProductId}'.");
+            throw new AppExceptions($"Variant with ID '{request.VariantId}' not found in product '{request.ProductId}'.");
 
         variant.VariantName = request.ProductVariant.VariantName;
         variant.Price = request.ProductVariant.Price;

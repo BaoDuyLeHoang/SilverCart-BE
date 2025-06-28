@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Infrastructures.Commons.Exceptions;
 using MediatR;
 using SilverCart.Application.Interfaces;
 using SilverCart.Domain.Entities;
@@ -21,7 +22,7 @@ namespace Infrastructures.Features.Products.Commands.Add.AddProductItems.AddProd
         {
             var currentUserId = _claimsService.CurrentUserId;
             if (currentUserId == Guid.Empty)
-                throw new UnauthorizedAccessException("User not authenticated.");
+                throw new AppExceptions("User not authenticated.");
 
             var storeUser = (await _unitOfWork.StoreUserRepository
                 .GetAllAsync(x => x.Id == currentUserId))

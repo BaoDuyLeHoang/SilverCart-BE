@@ -18,11 +18,12 @@ namespace Infrastructures
         public IStoreProductItemRepository StoreProductItemRepository { get; }
         public IStoreAddressRepository StoreAddressRepository { get; }
         public ICustomerUserRepository CustomerUserRepository { get; }
-        public IOrderItemRepository OrderItemRepository { get; }
         public IDependentUserRepository DependentUserRepository { get; }
         public IGuardianUserRepository GuardianUserRepository { get; }
         public IConversationRepository ConversationRepository { get; }
         public IMessageRepository MessageRepository { get; }
+        public IStoreOrderRepository StoreOrderRepository { get; }
+        public IStoreProductItemOrderRepository StoreProductItemOrderRepository { get; }
         public Task<IDbContextTransaction> BeginTransactionAsync();
         public Task<int> SaveChangeAsync();
     }

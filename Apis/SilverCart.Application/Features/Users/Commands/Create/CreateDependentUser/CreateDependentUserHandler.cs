@@ -8,8 +8,7 @@ using SilverCart.Domain.Entities.Auth;
 namespace Infrastructures;
 
 public sealed record CreateDependentUserCommand(List<CreateDependentUser> DependentUsers) : IRequest<List<Guid>>;
-public record CreateDependentUser(string Email, string Password, string Phone, string FullName, RegisterUserAddress Address);
-
+public record CreateDependentUser(string Phone, string FullName, RegisterUserAddress Address);
 public class CreateDependentUserHandler(IUnitOfWork unitOfWork, UserManager<BaseUser> userManager, ICurrentTime currentTime, IClaimsService claimsService) : IRequestHandler<CreateDependentUserCommand, List<Guid>>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
@@ -34,27 +33,31 @@ public class CreateDependentUserHandler(IUnitOfWork unitOfWork, UserManager<Base
         {
             var user = new BaseUser
             {
-                Email = dependentUser.Email,
+                UserName = Guid.NewGuid().ToString(),
                 PhoneNumber = dependentUser.Phone,
                 FullName = dependentUser.FullName,
-                UserName = dependentUser.Email,
-                CreationDate = _currentTime.GetCurrentTime()
+                CreationDate = _currentTime.GetCurrentTime(),
+                Email = null,
+                Addresses = new List<Address>
+                {
+                    new Address
+                    {
+                        StreetAddress = dependentUser.Address.StreetAddress,
+                        WardCode = dependentUser.Address.WardCode,
+                        DistrictId = dependentUser.Address.DistrictId
+                    }
+                }
             };
 
-            var address = new Address
-            {
-                StreetAddress = dependentUser.Address.StreetAddress,
-                WardCode = dependentUser.Address.WardCode,
-                DistrictId = dependentUser.Address.DistrictId,
-            };
-            user.Addresses.Add(address);
+            var tempPassword = Guid.NewGuid().ToString("N");
 
-            var result = await _userManager.CreateAsync(user, dependentUser.Password);
+            var result = await _userManager.CreateAsync(user, tempPassword);
             if (!result.Succeeded)
                 throw new AppExceptions(result.Errors.FirstOrDefault()?.Description ?? "Failed to create dependent user");
 
             await _userManager.AddToRoleAsync(user, "DependentUser");
             createdUserIds.Add(user.Id);
+
             var dependentUserEntity = new DependentUser
             {
                 Id = user.Id,
@@ -63,7 +66,6 @@ public class CreateDependentUserHandler(IUnitOfWork unitOfWork, UserManager<Base
             };
             await _unitOfWork.DependentUserRepository.AddAsync(dependentUserEntity);
         }
-
         await _unitOfWork.SaveChangeAsync();
 
         return createdUserIds;

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Infrastructures.Commons.Exceptions;
 using MediatR;
 using SilverCart.Application.Interfaces;
 using SilverCart.Domain.Entities;
@@ -13,7 +14,7 @@ namespace Infrastructures.Features.Products.Commands.Create.CreateProduct
 {
     public sealed record CreateProductCommand(string Name, string Description, string VideoPath, ProductTypeEnum ProductType, List<Guid> CategoryIds, List<CreateProductVariants> ProductVariants) : IRequest<Guid>;
     public sealed record CreateProductVariants(string VariantName, decimal Price, List<CreateProductItemsRequest> ProductItems);
-    public record CreateProductItemsRequest(string SKU, int Stock, decimal OriginalPrice, decimal DiscountedPrice, List<CreateProductItemsImages> ProductImages);
+    public record CreateProductItemsRequest(string SKU, int Stock, decimal OriginalPrice, int Weight, decimal DiscountedPrice, List<CreateProductItemsImages> ProductImages);
     public sealed record CreateProductItemsImages(string ImagePath, string ImageName);
     public class CreateProductHandler(IUnitOfWork unitOfWork, IClaimsService claimsService, IMapper mapper) : IRequestHandler<CreateProductCommand, Guid>
     {
@@ -24,14 +25,14 @@ namespace Infrastructures.Features.Products.Commands.Create.CreateProduct
         {
             var currentUserId = _claimsService.CurrentUserId;
             if (currentUserId == Guid.Empty)
-                throw new UnauthorizedAccessException("User not authenticated.");
+                throw new AppExceptions("User not authenticated.");
 
             var storeUser = (await _unitOfWork.StoreUserRepository
                 .GetAllAsync(x => x.Id == currentUserId))
                 .FirstOrDefault();
 
             if (storeUser == null)
-                throw new Exception("StoreUser not found for the current user.");
+                throw new AppExceptions("StoreUser not found for the current user.");
 
             var storeId = storeUser.StoreId;
 

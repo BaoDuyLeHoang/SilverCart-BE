@@ -52,6 +52,7 @@ public class GetProductByIdHandler(IUnitOfWork unitOfWork) : IRequestHandler<Get
                     SKU: item.SKU,
                     OriginalPrice: item.OriginalPrice,
                     DiscountedPrice: item.DiscountedPrice,
+                    Weight: item.Weight,
                     ProductImages: item.ProductImages.Select(img => new Infrastructures.Features.Products.Queries.GetAll.GetProductItemsImagesResponse(
                         img.Id,
                         img.ImagePath,

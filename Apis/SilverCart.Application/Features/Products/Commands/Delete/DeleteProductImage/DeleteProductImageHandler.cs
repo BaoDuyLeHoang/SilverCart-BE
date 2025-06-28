@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Infrastructures.Commons.Exceptions;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SilverCart.Domain.Entities;
 using System;
@@ -23,7 +24,7 @@ namespace Infrastructures.Features.Products.Commands.Delete.DeleteProductImage
             var productItem = productItems.FirstOrDefault();
 
             if (productItem == null)
-                throw new KeyNotFoundException($"Product with ID '{request.ProductItemId}' not found.");
+                throw new AppExceptions($"Product with ID '{request.ProductItemId}' not found.");
 
             foreach (var imageId in request.ImageIds)
             {
@@ -35,7 +36,7 @@ namespace Infrastructures.Features.Products.Commands.Delete.DeleteProductImage
                 }
                 else
                 {
-                    throw new KeyNotFoundException($"Image with ID '{imageId}' not found for Product with ID '{request.ProductItemId}'.");
+                    throw new AppExceptions($"Image with ID '{imageId}' not found for Product with ID '{request.ProductItemId}'.");
                 }
             }
 

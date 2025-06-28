@@ -9,4 +9,5 @@ namespace Infrastructures.Interfaces.System;
 public interface IGhnService
 {
     Task<int> RegisterStoreAsync(CreateStoreGhnRequest command);
+    Task<string> CreateOrderShippingAsync(CreateOrderShippingGhnRequest command);
 }

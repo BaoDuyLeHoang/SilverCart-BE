@@ -1,4 +1,6 @@
 ﻿using Infrastructures;
+using Infrastructures.Features.Auth.GenerateQrLoginToken;
+using Infrastructures.Features.Auth.Login;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -44,6 +46,18 @@ public class AuthController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand command)
     {
         var result = await _mediator.Send(command);
+        return Ok(result);
+    }
+    [HttpGet("generate-qr-login-token")]
+    public async Task<IActionResult> GenerateQrLoginToken([FromQuery] Guid dependentUserId)
+    {
+        var result = await _mediator.Send(new GenerateQrLoginTokenCommand(dependentUserId));
+        return Ok(result);
+    }
+    [HttpGet("elder-login")]
+    public async Task<IActionResult> ElderLogin([FromQuery] string token)
+    {
+        var result = await _mediator.Send(new ElderLoginCommand(token));
         return Ok(result);
     }
 

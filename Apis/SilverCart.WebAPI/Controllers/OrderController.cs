@@ -39,19 +39,19 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
         [HttpPut("guardian-confirm")]
-        public async Task<IActionResult> ChangeOrderItemsToGuardianConfirm([FromQuery] ChangeOrderItemsStateProductOfGuardianCommand command)
+        public async Task<IActionResult> ChangeOrderItemsToGuardianConfirm([FromBody] ChangeOrderItemsStateProductOfGuardianCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
         }
         [HttpPut("store-confirm")]
-        public async Task<IActionResult> ChangeOrderItemsToStoreConfirm([FromQuery] ChangeOrderItemsToStoreConfirmCommand command)
+        public async Task<IActionResult> ChangeOrderItemsToStoreConfirm([FromBody] ChangeOrderItemsToStoreConfirmCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
         }
         [HttpPut("ship")]
-        public async Task<IActionResult> ChangeOrderItemsToShip([FromQuery] ChangeOrderItemsStatusToShipCommand command)
+        public async Task<IActionResult> ChangeOrderItemsToShip([FromBody] ChangeOrderItemsStatusToShipCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);

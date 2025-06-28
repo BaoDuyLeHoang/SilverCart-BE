@@ -15,6 +15,7 @@ namespace Infrastructures.Features.Stores.Commands.Update.UpdateStore
         public string StreetAddress { get; init; } = null!;
         public string WardCode { get; init; } = null!;
         public int DistrictId { get; init; }
+        public string WardName { get; init; } = null!;
         public string DistrictName { get; init; } = null!;
         public string ProvinceName { get; init; } = null!;
         // Status

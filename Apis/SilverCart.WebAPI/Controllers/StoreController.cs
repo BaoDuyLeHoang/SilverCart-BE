@@ -25,7 +25,6 @@ namespace WebAPI.Controllers
             _mediator = mediator;
         }
 
-        [Authorize(Roles = "StoreStaff")]
         [HttpPost]
         public async Task<IActionResult> CreateStore([FromBody] CreateStoreCommand request)
         {
@@ -47,7 +46,6 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = "StoreStaff")]
         [HttpPut]
         public async Task<IActionResult> UpdateStore([FromBody] UpdateStoreCommand request)
         {
@@ -55,7 +53,6 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = "StoreStaff")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStore(Guid id)
         {
@@ -63,7 +60,6 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = "StoreStaff")]
         [HttpPost("employees")]
         public async Task<IActionResult> CreateStoreEmployee([FromBody] CreateStoreEmployeeCommand request)
         {
@@ -71,14 +67,12 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = "StoreStaff")]
         [HttpGet("employees")]
         public async Task<IActionResult> GetStoreEmployees([FromQuery] GetStoreUserQuery request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
         }
-        [Authorize(Roles = "StoreStaff")]
         [HttpGet("order-items")]
         public async Task<IActionResult> GetShopOrderItems([FromQuery] GetShopOrderItemsCommand request)
         {

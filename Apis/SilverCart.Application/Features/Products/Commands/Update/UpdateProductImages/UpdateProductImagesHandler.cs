@@ -1,5 +1,6 @@
 using System;
 using AutoMapper;
+using Infrastructures.Commons.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,7 +21,7 @@ public class UpdateProductImagesHandler(IUnitOfWork unitOfWork, IMapper mapper) 
         var productItem = productItems.FirstOrDefault();
 
         if (productItem == null)
-            throw new KeyNotFoundException($"Product with ID '{request.ProductItemId}' not found.");
+            throw new AppExceptions($"Product with ID '{request.ProductItemId}' not found.");
 
         foreach (var imageRequest in request.ProductImages)
         {
@@ -28,7 +29,7 @@ public class UpdateProductImagesHandler(IUnitOfWork unitOfWork, IMapper mapper) 
             if (productImage != null)
                 _mapper.Map(imageRequest, productImage);
             else
-                throw new KeyNotFoundException($"Image with ID '{imageRequest.Id}' not found.");
+                throw new AppExceptions($"Image with ID '{imageRequest.Id}' not found.");
         }
         await _unitOfWork.SaveChangeAsync();
         return productItem.Id;
