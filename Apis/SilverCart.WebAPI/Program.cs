@@ -61,7 +61,7 @@ var app = builder.Build();
 app.Services.GetService<IVnpay>()?.Initialize(configuration.Vnpay.TmnCode,
     configuration.Vnpay.HashSecret, configuration.Vnpay.BaseUrl, configuration.Vnpay.ReturnUrl);
 // Configure the HTTP request pipeline.
-if (IsDevelopment)
+if (true)
 {
     configuration.IsDevelopment = true;
     app.UseSwagger();
