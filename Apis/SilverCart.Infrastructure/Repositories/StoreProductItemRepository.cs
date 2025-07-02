@@ -14,32 +14,34 @@ namespace Infrastructures.Repositories
         {
         }
 
-        public async Task<bool> CheckStock(List<OrderItem> orderItems)
-        {
-            var storeProductItems = await GetAllAsync();
-            foreach (var orderItem in orderItems)
-            {
-                var storeProductItem = storeProductItems.FirstOrDefault(item => item.Id == orderItem.StoreProductItemId);
-                if (storeProductItem == null)
-                    return false;
-                if (storeProductItem.Stock < orderItem.Quantity)
-                    return false;
-            }
-            return true;
-        }
+        // public async Task<bool> CheckStock(List<OrderItem> orderItems)
+        // {
+        //     var ids = orderItems.Select(x => x.StoreProductItemId).ToList();
+        //     var storeProductItems = await GetAllAsync(sp => ids.Contains(sp.Id));
 
-        public async Task<bool> ReduceStock(List<OrderItem> orderItems)
-        {
-            var storeProductItems = await GetAllAsync();
-            foreach (var orderItem in orderItems)
-            {
-                var storeProductItem = storeProductItems.FirstOrDefault(item => item.Id == orderItem.StoreProductItemId);
-                if (storeProductItem == null)
-                    return false;
-                storeProductItem.Stock -= orderItem.Quantity;
-                Update(storeProductItem);
-            }
-            return true;
-        }
+        //     foreach (var orderItem in orderItems)
+        //     {
+        //         var storeProductItem = storeProductItems.FirstOrDefault(sp => sp.Id == orderItem.StoreProductItemId);
+        //         if (storeProductItem == null || storeProductItem.Stock < orderItem.Quantity)
+        //             return false;
+        //     }
+        //     return true;
+        // }
+
+        // public async Task<bool> ReduceStock(List<OrderItem> orderItems)
+        // {
+        //     var ids = orderItems.Select(x => x.StoreProductItemId).ToList();
+        //     var storeProductItems = await GetAllAsync(sp => ids.Contains(sp.Id));
+
+        //     foreach (var orderItem in orderItems)
+        //     {
+        //         var storeProductItem = storeProductItems.FirstOrDefault(sp => sp.Id == orderItem.StoreProductItemId);
+        //         if (storeProductItem == null || storeProductItem.Stock < orderItem.Quantity)
+        //             return false;
+        //         storeProductItem.Stock -= orderItem.Quantity;
+        //         Update(storeProductItem);
+        //     }
+        //     return true;
+        // }
     }
 }

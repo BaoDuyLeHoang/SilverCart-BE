@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Infrastructures.Commons.Exceptions;
 using Infrastructures.Features.Products.Commands.Create.CreateProduct;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,7 @@ namespace Infrastructures.Features.Products.Commands.Add.AddProductImages
 
             var productItem = productItems.FirstOrDefault();
             if (productItem == null)
-                throw new KeyNotFoundException($"Product with ID '{request.ProductItemId}' not found.");
+                throw new AppExceptions($"Product with ID '{request.ProductItemId}' not found.");
 
             var newImages = _mapper.Map<List<ProductImage>>(request);
             foreach (var newImage in newImages)

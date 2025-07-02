@@ -50,5 +50,29 @@ namespace Infrastructures.Services.Entities
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+        public string GenerateQrLoginToken(Guid dependentUserId, int expiresInMinutes = 2)
+        {
+            var key = _configuration["JwtSettings:Key"];
+            var issuer = _configuration["JwtSettings:Issuer"];
+            var audience = _configuration["JwtSettings:Audience"];
+
+            var claims = new List<Claim>
+            {
+                new Claim("DependentUserId", dependentUserId.ToString())
+            };
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: issuer,
+                audience: audience,
+                claims: claims,
+                expires: _currentTime.GetCurrentTime().AddMinutes(expiresInMinutes),
+                signingCredentials: credentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
     }
 }

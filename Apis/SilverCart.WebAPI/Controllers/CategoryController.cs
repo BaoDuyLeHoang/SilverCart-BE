@@ -4,6 +4,7 @@ using Infrastructures.Features.Categories.Commands.Update.UpdateCategory;
 using Infrastructures.Features.Categories.Queries.GetAll;
 using Infrastructures.Features.Categories.Queries.GetById;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -19,6 +20,7 @@ namespace WebAPI.Controllers
             _mediator = mediator;
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         [HttpPost]
         public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryCommand request)
         {
@@ -26,13 +28,14 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         [HttpPut]
         public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryCommand request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
         }
-
+        [Authorize(Roles = "SuperAdmin")]
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteCategory(Guid id)
         {

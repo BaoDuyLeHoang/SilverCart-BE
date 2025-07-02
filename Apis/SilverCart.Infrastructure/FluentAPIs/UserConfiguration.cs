@@ -13,7 +13,6 @@ namespace Infrastructures.FluentAPIs
         IEntityTypeConfiguration<ProductItem>,
         IEntityTypeConfiguration<ProductImage>,
         IEntityTypeConfiguration<Order>,
-        IEntityTypeConfiguration<OrderItem>,
         IEntityTypeConfiguration<OrderStatus>,
         IEntityTypeConfiguration<OrderReview>,
         IEntityTypeConfiguration<PaymentMethod>,
@@ -73,11 +72,6 @@ namespace Infrastructures.FluentAPIs
         public void Configure(EntityTypeBuilder<Order> builder)
         {
             builder.ToTable("Orders");
-        }
-
-        public void Configure(EntityTypeBuilder<OrderItem> builder)
-        {
-            builder.ToTable("OrderItems");
         }
 
         public void Configure(EntityTypeBuilder<OrderStatus> builder)

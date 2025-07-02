@@ -54,8 +54,9 @@ namespace Infrastructures.Features.Stores.Queries.GetAll
                     StreetAddress = store.StoreAddress.StreetAddress,
                     WardCode = store.StoreAddress.WardCode,
                     DistrictId = store.StoreAddress.DistrictId,
-                    DistrictName = store.StoreAddress.FromDistrictName,
-                    ProvinceName = store.StoreAddress.FromProvinceName
+                    WardName = store.StoreAddress.WardName,
+                    DistrictName = store.StoreAddress.DistrictName,
+                    ProvinceName = store.StoreAddress.ProvinceName
                 } : null
             }).ToList();
 

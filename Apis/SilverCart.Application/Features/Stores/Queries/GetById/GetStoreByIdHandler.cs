@@ -1,3 +1,4 @@
+using Infrastructures.Commons.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SilverCart.Domain.Entities;
@@ -29,7 +30,7 @@ namespace Infrastructures.Features.Stores.Queries.GetById
             var store = await storeQuery.FirstOrDefaultAsync(cancellationToken);
             if (store == null)
             {
-                throw new Exception("Store not found");
+                throw new AppExceptions("Store not found");
             }
 
             // Get users associated with this store
@@ -61,8 +62,9 @@ namespace Infrastructures.Features.Stores.Queries.GetById
                     StreetAddress = store.StoreAddress.StreetAddress,
                     WardCode = store.StoreAddress.WardCode,
                     DistrictId = store.StoreAddress.DistrictId,
-                    DistrictName = store.StoreAddress.FromDistrictName,
-                    ProvinceName = store.StoreAddress.FromProvinceName
+                    WardName = store.StoreAddress.WardName,
+                    DistrictName = store.StoreAddress.DistrictName,
+                    ProvinceName = store.StoreAddress.ProvinceName
                 } : null,
                 StoreUsers = storeUsersList
                     .Join(users,

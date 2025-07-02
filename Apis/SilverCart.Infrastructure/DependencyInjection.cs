@@ -47,12 +47,12 @@ namespace Infrastructures
             services.AddScoped<IStoreProductItemRepository, StoreProductItemRepository>();
             services.AddScoped<IStoreAddressRepository, StoreAddressRepository>();
             services.AddScoped<ICustomerUserRepository, CustomerUserRepository>();
-            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<IDependentUserRepository, DependentUserRepository>();
             services.AddScoped<IGuardianUserRepository, GuardianUserRepository>();
             services.AddScoped<IConversationRepository, ConversationRepository>();
             services.AddScoped<IMessageRepository, MessageRepository>();
-
+            services.AddScoped<IStoreOrderRepository, StoreOrderRepository>();
+            services.AddScoped<IStoreProductItemOrderRepository, StoreProductItemOrderRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             #endregion
 
@@ -65,6 +65,7 @@ namespace Infrastructures
             services.AddHttpClient<IGhnService, GhnService>();
             services.AddSingleton<ILockingService, LockingService>();
             services.AddSingleton<ICalculateService, CalculateService>();
+            services.AddSingleton<IGenerateQRCodeGeneratorService, GenerateQRCodeGeneratorService>();
 
             // Add Payments service to the container.
             services.AddSingleton<IVnpay, Vnpay>();

@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Infrastructures.Commons.Exceptions;
+using MediatR;
 using SilverCart.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace Infrastructures.Features.Products.Commands.Add.AddProductToCategories
         {
             var product = await _unitOfWork.ProductRepository.GetByIdAsync(request.ProductId);
             if (product == null)
-                throw new Exception("Product not found");
+                throw new AppExceptions("Product not found");
 
             var existingCategories = await _unitOfWork.CategoryRepository
                 .GetAllAsync(c => request.CategoryIds.Contains(c.Id));

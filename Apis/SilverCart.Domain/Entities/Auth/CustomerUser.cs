@@ -11,7 +11,6 @@ public sealed class CustomerUser : BaseUser
             Rank = RankEnum.Bronze
         };
     }
-    public ICollection<Address> Addresses { get; set; } = new List<Address>();
     public ICollection<Order> Orders { get; set; } = new List<Order>();
     public Guid RankId { get; set; }
     public CustomerRank Rank { get; set; } = null!;

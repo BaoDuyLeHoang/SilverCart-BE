@@ -10,7 +10,7 @@ namespace Infrastructures.Interfaces.Repositories
 {
     public interface IStoreProductItemRepository : IGenericRepository<StoreProductItem>
     {
-        Task<bool> CheckStock(List<OrderItem> orderItems);
-        Task<bool> ReduceStock(List<OrderItem> orderItems);
+        //Task<bool> CheckStock(List<OrderItem> orderItems);
+        //Task<bool> ReduceStock(List<OrderItem> orderItems);
     }
 }

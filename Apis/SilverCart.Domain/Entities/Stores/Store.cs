@@ -10,7 +10,7 @@ public class Store : BaseEntity
 
     public int? GhnShopId { get; set; }
     public bool IsGhnSynced { get; set; } = false;
-
+    public string Phone { get; set; }
     public bool IsBanned { get; set; }
     public bool IsActive { get; set; }
     public int IsVerified { get; set; }
@@ -19,4 +19,5 @@ public class Store : BaseEntity
     // Navigation properties
     public virtual ICollection<StoreUser> StoreUsers { get; set; } = new List<StoreUser>(); //Employees
     public virtual ICollection<StoreProductItem> StoreProductItems { get; set; } = new List<StoreProductItem>();
+    public virtual ICollection<StoreOrder> StoreOrders { get; set; } = new List<StoreOrder>();
 }

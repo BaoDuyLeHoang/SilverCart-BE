@@ -19,11 +19,12 @@ namespace Infrastructures
         private readonly IStoreProductItemRepository _storeProductItemRepository;
         private readonly IStoreAddressRepository _storeAddressRepository;
         private readonly ICustomerUserRepository _customerUserRepository;
-        private readonly IOrderItemRepository _orderItemRepository;
         private readonly IDependentUserRepository _dependentUserRepository;
         private readonly IGuardianUserRepository _guardianUserRepository;
         private readonly IConversationRepository _conversationRepository;
         private readonly IMessageRepository _messageRepository;
+        private readonly IStoreOrderRepository _storeOrderRepository;
+        private readonly IStoreProductItemOrderRepository _storeProductItemOrderRepository;
         public UnitOfWork(AppDbContext dbContext,
             ICategoryRepository categoryRepository,
             IOrderRepository orderRepository,
@@ -39,7 +40,9 @@ namespace Infrastructures
             IDependentUserRepository dependentUserRepository,
             IGuardianUserRepository guardianUserRepository,
             IConversationRepository conversationRepository,
-            IMessageRepository messageRepository)
+            IMessageRepository messageRepository,
+            IStoreOrderRepository storeOrderRepository,
+            IStoreProductItemOrderRepository storeProductItemOrderRepository)
         {
             _dbContext = dbContext;
             _categoryRepository = categoryRepository;
@@ -57,6 +60,8 @@ namespace Infrastructures
             _guardianUserRepository = guardianUserRepository;
             _conversationRepository = conversationRepository;
             _messageRepository = messageRepository;
+            _storeOrderRepository = storeOrderRepository;
+            _storeProductItemOrderRepository = storeProductItemOrderRepository;
         }
 
         public ICategoryRepository CategoryRepository => _categoryRepository;
@@ -70,13 +75,16 @@ namespace Infrastructures
         public IStoreProductItemRepository StoreProductItemRepository => _storeProductItemRepository;
         public IStoreAddressRepository StoreAddressRepository => _storeAddressRepository;
         public ICustomerUserRepository CustomerUserRepository => _customerUserRepository;
-        public IOrderItemRepository OrderItemRepository => _orderItemRepository;
         public IDependentUserRepository DependentUserRepository => _dependentUserRepository;
         public IGuardianUserRepository GuardianUserRepository => _guardianUserRepository;
 
         public IConversationRepository ConversationRepository => _conversationRepository;
 
         public IMessageRepository MessageRepository => _messageRepository;
+
+        public IStoreOrderRepository StoreOrderRepository => _storeOrderRepository;
+
+        public IStoreProductItemOrderRepository StoreProductItemOrderRepository => _storeProductItemOrderRepository;
 
         public async Task<IDbContextTransaction> BeginTransactionAsync()
         {

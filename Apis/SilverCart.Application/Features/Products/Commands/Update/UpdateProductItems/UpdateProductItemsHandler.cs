@@ -1,5 +1,6 @@
 using System;
 using AutoMapper;
+using Infrastructures.Commons.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,15 +21,15 @@ public class UpdateProductItemsHandler(IUnitOfWork unitOfWork, IMapper mapper) :
             );
         var product = products.FirstOrDefault();
         if (product == null)
-            throw new KeyNotFoundException($"Product with ID '{request.ProductId}' not found.");
+            throw new AppExceptions($"Product with ID '{request.ProductId}' not found.");
 
         var variant = product.Variants.FirstOrDefault(v => v.Id == request.VariantId);
         if (variant == null)
-            throw new KeyNotFoundException($"Variant with ID '{request.VariantId}' not found in product '{request.ProductId}'.");
+            throw new AppExceptions($"Variant with ID '{request.VariantId}' not found in product '{request.ProductId}'.");
 
         var item = variant.Items.FirstOrDefault(i => i.Id == request.ItemId);
         if (item == null)
-            throw new KeyNotFoundException($"Item with ID '{request.ItemId}' not found.");
+            throw new AppExceptions($"Item with ID '{request.ItemId}' not found.");
 
         _mapper.Map(request, item);
 

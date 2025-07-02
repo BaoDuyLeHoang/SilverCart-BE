@@ -54,8 +54,9 @@ namespace Infrastructures.Features.Stores.Commands.Create.CreateStore
                 StreetAddress = request.StreetAddress,
                 WardCode = request.WardCode,
                 DistrictId = request.DistrictId,
-                FromDistrictName = request.DistrictName,
-                FromProvinceName = request.ProvinceName
+                WardName = request.WardName,
+                DistrictName = request.DistrictName,
+                ProvinceName = request.ProvinceName
             };
 
             store.StoreAddress = address;

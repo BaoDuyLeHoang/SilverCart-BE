@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Infrastructures.Commons.Exceptions;
+using MediatR;
 using SilverCart.Application.Interfaces;
 using SilverCart.Domain.Entities;
 using System;
@@ -18,13 +19,13 @@ namespace Infrastructures.Features.Products.Commands.Add.AddStockToStoreProductI
         {
             var currentUserId = _claimsService.CurrentUserId;
             if (currentUserId == Guid.Empty)
-                throw new UnauthorizedAccessException("User not authenticated.");
+                throw new AppExceptions("User not authenticated.");
 
             var storeUser = (await _unitOfWork.StoreUserRepository
                 .GetAllAsync(x => x.Id == currentUserId))
                 .FirstOrDefault();
             if (storeUser == null)
-                throw new Exception("StoreUser not found for the current user.");
+                throw new AppExceptions("StoreUser not found for the current user.");
 
             var storeId = storeUser.StoreId;
 
@@ -33,7 +34,7 @@ namespace Infrastructures.Features.Products.Commands.Add.AddStockToStoreProductI
                 .FirstOrDefault();
 
             if (storeProductItem == null)
-                throw new KeyNotFoundException($"StoreProductItem not found or access denied.");
+                throw new AppExceptions($"StoreProductItem not found or access denied.");
 
             storeProductItem.Stock += request.stock;
 

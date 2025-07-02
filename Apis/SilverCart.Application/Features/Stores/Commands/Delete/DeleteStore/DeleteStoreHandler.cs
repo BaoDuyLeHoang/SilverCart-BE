@@ -1,3 +1,4 @@
+using Infrastructures.Commons.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SilverCart.Application.Interfaces;
@@ -30,13 +31,13 @@ namespace Infrastructures.Features.Stores.Commands.Delete.DeleteStore
 
             if (storeUser == null)
             {
-                throw new Exception("You don't have permission to delete this store");
+                throw new AppExceptions("You don't have permission to delete this store");
             }
 
             var store = await _unitOfWork.StoreRepository.GetByIdAsync(request.Id);
             if (store == null)
             {
-                throw new Exception("Store not found");
+                throw new AppExceptions("Store not found");
             }
 
             // Soft delete store

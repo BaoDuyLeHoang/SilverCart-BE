@@ -26,7 +26,6 @@ namespace Infrastructures
         public DbSet<ProductItem> ProductItems { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<OrderStatus> OrderStatuses { get; set; }
         public DbSet<OrderReview> OrderReviews { get; set; }
         public DbSet<PaymentMethod> PaymentMethods { get; set; }
@@ -72,11 +71,11 @@ namespace Infrastructures
                     .HasForeignKey(c => c.User1Id)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                modelBuilder.Entity<Conversation>()
-                    .HasOne(c => c.User2)
-                    .WithMany(u => u.ConversationsAsUser2)
-                    .HasForeignKey(c => c.User2Id)
-                    .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Conversation>()
+                .HasOne(c => c.User2)
+                .WithMany(u => u.ConversationsAsUser2)
+                .HasForeignKey(c => c.User2Id)
+                .OnDelete(DeleteBehavior.Restrict);
             // Apply all other configurations from the assembly
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }

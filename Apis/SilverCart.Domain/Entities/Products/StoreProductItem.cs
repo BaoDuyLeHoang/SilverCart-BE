@@ -13,7 +13,8 @@ namespace SilverCart.Domain.Entities
         public Guid ProductItemId { get; set; }
         public ProductItem ProductItem { get; set; } = null!;
         public int Stock { get; set; }
-        public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public virtual ICollection<StoreProductItemsOrder> StoreProductItemsOrders { get; set; } = new List<StoreProductItemsOrder>();
+        // public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public virtual ICollection<StockHistory> StockHistories { get; set; } = new List<StockHistory>();
     }
 }

@@ -13,4 +13,4 @@ namespace SilverCart.Domain.Entities.Chat
         public bool IsRead { get; set; } = false;
         public bool IsModified { get; set; } = false;
     }
-} 
+}

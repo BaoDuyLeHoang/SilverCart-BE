@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using Infrastructures;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -12,6 +12,7 @@ using VNPAY.NET;
 using WebAPI.Extensions;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Infrastructures.Commons.Exceptions;
+using SilverCart.WebAPI.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,23 @@ builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration.GetConnectionString("Redis");
 });
+
+// Add SignalR services
+builder.Services.AddSignalR();
+
+// Configure CORS for SignalR
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ChatPolicy", builder =>
+    {
+        builder
+            .WithOrigins("http://localhost:3000")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+});
+
 //builder.Services.AddJwtAuthentication(builder.Configuration);
 
 /*
@@ -37,12 +55,13 @@ builder.Services.AddStackExchangeRedisCache(options =>
 */
 var IsDevelopment = builder.Environment.IsDevelopment();
 builder.Services.AddSingleton(configuration);
+
 var app = builder.Build();
 
 app.Services.GetService<IVnpay>()?.Initialize(configuration.Vnpay.TmnCode,
     configuration.Vnpay.HashSecret, configuration.Vnpay.BaseUrl, configuration.Vnpay.ReturnUrl);
 // Configure the HTTP request pipeline.
-if (IsDevelopment)
+if (true)
 {
     configuration.IsDevelopment = true;
     app.UseSwagger();
@@ -50,6 +69,9 @@ if (IsDevelopment)
 }
 
 app.UseHttpsRedirection();
+
+// Use CORS
+app.UseCors("ChatPolicy");
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
 app.UseMiddleware<ExceptionMiddleware>();
@@ -61,6 +83,9 @@ app.UseOutputCache();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+// Map SignalR hub
+app.MapHub<ChatHub>("/chatHub");
 
 await app.SeedDatabaseAsync();
 

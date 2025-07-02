@@ -6,12 +6,13 @@ using SilverCart.Application.Interfaces;
 using Swashbuckle.AspNetCore.Filters;
 using WebAPI.Filters;
 using WebAPI.Middlewares;
-using WebAPI.Services;
 using WebAPI.SilverCart.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Infrastructures;
+using System.Security.Claims;
+using WebAPI.Services;
 
 namespace WebAPI
 {
@@ -57,7 +58,6 @@ namespace WebAPI
                     ValidAudience = builder.Configuration["JwtSettings:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"])),
                     ClockSkew = TimeSpan.FromSeconds(1)
-
                 };
                 options.Events = new JwtBearerEvents
                 {
@@ -72,13 +72,22 @@ namespace WebAPI
                             message = "You need to log in to access this resource."
                         });
                         return context.Response.WriteAsync(result);
+                    },
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/chatHub"))
+                        {
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
                     }
                 };
             });
-            //services.AddSwaggerExamplesFromAssemblyOf<LoginRequestSuperAdminExample>();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "FOV API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Elderly", Version = "v1" });
                 c.EnableAnnotations();
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
