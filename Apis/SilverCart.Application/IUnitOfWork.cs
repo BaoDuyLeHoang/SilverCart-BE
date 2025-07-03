@@ -22,8 +22,12 @@ namespace Infrastructures
         public IGuardianUserRepository GuardianUserRepository { get; }
         public IConversationRepository ConversationRepository { get; }
         public IMessageRepository MessageRepository { get; }
+<<<<<<< HEAD
         public IStoreOrderRepository StoreOrderRepository { get; }
         public IStoreProductItemOrderRepository StoreProductItemOrderRepository { get; }
+=======
+        public IConsultantUserRepository ConsultantUserRepository { get; }
+>>>>>>> 08100d9ea883582f8846708ab0c287d4985ba1ba
         public Task<IDbContextTransaction> BeginTransactionAsync();
         public Task<int> SaveChangeAsync();
     }

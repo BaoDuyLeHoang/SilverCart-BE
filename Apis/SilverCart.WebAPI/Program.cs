@@ -1,18 +1,23 @@
-﻿using System.Text;
+using System.Text;
 using Infrastructures;
+using Infrastructures.Commons.Exceptions;
+using Infrastructures.Interfaces.System;
+using Infrastructures.Services.System;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using WebAPI.Middlewares;
-using WebAPI;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using SilverCart.Application.Commons;
-using SilverCart.Infrastructure.Commons;
+using System.Text;
 using VNPAY.NET;
+using WebAPI;
 using WebAPI.Extensions;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Infrastructures.Commons.Exceptions;
 using SilverCart.WebAPI.Hubs;
+using WebAPI.Middlewares;
+using SilverCart.Infrastructure.Commons;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +51,7 @@ builder.Services.AddCors(options =>
             .AllowCredentials();
     });
 });
+builder.Services.AddScoped<IStringeeService, StringeeService>();
 
 //builder.Services.AddJwtAuthentication(builder.Configuration);
 

@@ -1,4 +1,4 @@
-﻿// SilverCart.ApplicationCommons/AppConfiguration.cs
+// SilverCart.ApplicationCommons/AppConfiguration.cs
 
 namespace SilverCart.Infrastructure.Commons
 {
@@ -10,7 +10,6 @@ namespace SilverCart.Infrastructure.Commons
         public string ApplicationUrl { get; set; }
         public EmailSettings EmailSettings { get; set; }
         public bool IsDevelopment { get; set; }
-
         public VNPAYSettings Vnpay { get; set; }
     }
 

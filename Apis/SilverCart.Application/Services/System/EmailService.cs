@@ -3,8 +3,7 @@ using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Mail;
 using SilverCart.Application.Interfaces;
-using SilverCart.Application.Commons;
-using SilverCart.Infrastructure.Commons;
+using Application.Commons;
 
 namespace SilverCart.Application.Services
 {

@@ -364,7 +364,7 @@ namespace Infrastructures.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("5c2cb3f3-d9b1-4d5f-8a9c-1e6f689ee0f4"),
+                            Id = new Guid("767b762c-120b-468a-acb9-111a06845b75"),
                             Description = "",
                             IsDeleted = false,
                             Name = "SuperAdmin",
@@ -372,11 +372,35 @@ namespace Infrastructures.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0e61cc83-d3c4-43b1-9334-8dd0c9d22833"),
+                            Id = new Guid("e0117101-92d0-4dd3-afe4-a3326411c30c"),
                             Description = "",
                             IsDeleted = false,
                             Name = "Admin",
                             NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = new Guid("8354fca4-0dfd-4c9e-8e7b-220a9a53e2c1"),
+                            Description = "",
+                            IsDeleted = false,
+                            Name = "Staff",
+                            NormalizedName = "STAFF"
+                        },
+                        new
+                        {
+                            Id = new Guid("3d0f01df-3615-46a4-bedc-c4ba95df7235"),
+                            Description = "",
+                            IsDeleted = false,
+                            Name = "Moderator",
+                            NormalizedName = "MODERATOR"
+                        },
+                        new
+                        {
+                            Id = new Guid("1a344170-fe93-4320-b1d3-0140a7d571a1"),
+                            Description = "",
+                            IsDeleted = false,
+                            Name = "CustomerSupport",
+                            NormalizedName = "CUSTOMERSUPPORT"
                         });
                 });
 
@@ -389,7 +413,7 @@ namespace Infrastructures.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0c09b112-baf9-4ec3-bc79-cce452219d60"),
+                            Id = new Guid("340e58a8-4605-4317-a18a-f2fc3e96940f"),
                             Description = "",
                             IsDeleted = false,
                             Name = "Guardian",
@@ -397,7 +421,7 @@ namespace Infrastructures.Migrations
                         },
                         new
                         {
-                            Id = new Guid("2c8499d3-6ec2-4745-b2f7-6e33182f6f6f"),
+                            Id = new Guid("0662e0a3-ae05-4d8f-b56c-c9528157e256"),
                             Description = "",
                             IsDeleted = false,
                             Name = "Customer",
@@ -405,7 +429,7 @@ namespace Infrastructures.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c66a403b-e1f9-47f3-9f6b-d8c3913b7a1b"),
+                            Id = new Guid("f23b2eb1-57ab-49be-9310-5321809d9339"),
                             Description = "",
                             IsDeleted = false,
                             Name = "DependentUser",
@@ -422,7 +446,7 @@ namespace Infrastructures.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("60cb3e42-0903-4c3f-8e9c-bfdc6f6a1a01"),
+                            Id = new Guid("a6f93435-b61f-4320-abf4-5551c1101e6f"),
                             Description = "",
                             IsDeleted = false,
                             Name = "StoreOwner",
@@ -430,7 +454,23 @@ namespace Infrastructures.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a2a02247-2a41-4a38-8804-4be8038fa78b"),
+                            Id = new Guid("21380e35-8549-4229-a714-99e2ea5ca9c4"),
+                            Description = "",
+                            IsDeleted = false,
+                            Name = "StoreManager",
+                            NormalizedName = "STOREMANAGER"
+                        },
+                        new
+                        {
+                            Id = new Guid("7cbc4362-00c7-4d29-9607-9523ac92d1de"),
+                            Description = "",
+                            IsDeleted = false,
+                            Name = "StoreDelivery",
+                            NormalizedName = "STOREDELIVERY"
+                        },
+                        new
+                        {
+                            Id = new Guid("6077bf32-6d29-41ce-af9d-abcd48266407"),
                             Description = "",
                             IsDeleted = false,
                             Name = "StoreSupport",
@@ -1253,8 +1293,8 @@ namespace Infrastructures.Migrations
                         {
                             Id = new Guid("9878ee32-2ead-4165-9e44-e510ba1bae29"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b949dcaa-1cf9-4e76-930d-c75726ffda0a",
-                            CreationDate = new DateTime(2025, 6, 3, 3, 49, 5, 382, DateTimeKind.Utc).AddTicks(7807),
+                            ConcurrencyStamp = "e47288a8-97c2-49c4-841f-cc47ba2579d7",
+                            CreationDate = new DateTime(2025, 6, 7, 3, 12, 36, 257, DateTimeKind.Utc).AddTicks(2861),
                             Email = "admin@elderly.com",
                             EmailConfirmed = true,
                             FullName = "Super Admin",
@@ -1262,7 +1302,7 @@ namespace Infrastructures.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ELDERLY.COM",
                             NormalizedUserName = "SUPERADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEG3p50UbJ4qAoiZH/inAmvmxpwQ74fWKbDgyKpt0Yt2DCIYlOZANGDEGAFkhI9aptA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHVIvA+Yep+a4JTQ9OlUyw6R5LORE+3S691mZIIn2JHrDZ4yPR/oLdq9qNu5A7usRA==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "superadmin"

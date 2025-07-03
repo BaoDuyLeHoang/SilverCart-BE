@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using Infrastructures.Interfaces.Repositories;
 using Infrastructures.Interfaces.Entities;
+using Infrastructures.Interfaces.System;
 
 namespace Infrastructures
 {
@@ -25,6 +26,7 @@ namespace Infrastructures
         private readonly IMessageRepository _messageRepository;
         private readonly IStoreOrderRepository _storeOrderRepository;
         private readonly IStoreProductItemOrderRepository _storeProductItemOrderRepository;
+        private readonly IConsultantUserRepository _consultantUserRepository;
         public UnitOfWork(AppDbContext dbContext,
             ICategoryRepository categoryRepository,
             IOrderRepository orderRepository,
@@ -42,7 +44,8 @@ namespace Infrastructures
             IConversationRepository conversationRepository,
             IMessageRepository messageRepository,
             IStoreOrderRepository storeOrderRepository,
-            IStoreProductItemOrderRepository storeProductItemOrderRepository)
+            IStoreProductItemOrderRepository storeProductItemOrderRepository,
+            IConsultantUserRepository consultantUserRepository)
         {
             _dbContext = dbContext;
             _categoryRepository = categoryRepository;
@@ -62,6 +65,7 @@ namespace Infrastructures
             _messageRepository = messageRepository;
             _storeOrderRepository = storeOrderRepository;
             _storeProductItemOrderRepository = storeProductItemOrderRepository;
+            _consultantUserRepository = consultantUserRepository;
         }
 
         public ICategoryRepository CategoryRepository => _categoryRepository;
@@ -86,6 +90,7 @@ namespace Infrastructures
 
         public IStoreProductItemOrderRepository StoreProductItemOrderRepository => _storeProductItemOrderRepository;
 
+        public IConsultantUserRepository ConsultantUserRepository => _consultantUserRepository;
         public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
             return await _dbContext.Database.BeginTransactionAsync();
