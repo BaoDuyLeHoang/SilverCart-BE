@@ -51,5 +51,6 @@ namespace WebAPI.Controllers
             var result = await _mediator.Send(request);
             return Ok(result);
         }
+
     }
 }

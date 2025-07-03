@@ -1,17 +1,19 @@
-using System.Text;
+using Application.Commons;
 using Infrastructures;
+using Infrastructures.Commons.Exceptions;
+using Infrastructures.Interfaces.System;
+using Infrastructures.Services.System;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using WebAPI.Middlewares;
-using WebAPI;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using SilverCart.Application.Commons;
+using System.Text;
 using VNPAY.NET;
+using WebAPI;
 using WebAPI.Extensions;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Infrastructures.Commons.Exceptions;
-using Application.Commons;
+using WebAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +31,8 @@ builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration.GetConnectionString("Redis");
 });
+builder.Services.AddScoped<IStringeeService, StringeeService>();
+
 //builder.Services.AddJwtAuthentication(builder.Configuration);
 
 /*

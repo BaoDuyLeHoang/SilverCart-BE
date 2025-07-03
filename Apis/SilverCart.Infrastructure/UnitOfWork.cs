@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using Infrastructures.Interfaces.Repositories;
 using Infrastructures.Interfaces.Entities;
+using Infrastructures.Interfaces.System;
 
 namespace Infrastructures
 {
@@ -24,6 +25,7 @@ namespace Infrastructures
         private readonly IGuardianUserRepository _guardianUserRepository;
         private readonly IConversationRepository _conversationRepository;
         private readonly IMessageRepository _messageRepository;
+        private readonly IConsultantUserRepository _consultantUserRepository;
         public UnitOfWork(AppDbContext dbContext,
             ICategoryRepository categoryRepository,
             IOrderRepository orderRepository,
@@ -39,7 +41,8 @@ namespace Infrastructures
             IDependentUserRepository dependentUserRepository,
             IGuardianUserRepository guardianUserRepository,
             IConversationRepository conversationRepository,
-            IMessageRepository messageRepository)
+            IMessageRepository messageRepository,
+            IConsultantUserRepository consultantUserRepository)
         {
             _dbContext = dbContext;
             _categoryRepository = categoryRepository;
@@ -57,6 +60,7 @@ namespace Infrastructures
             _guardianUserRepository = guardianUserRepository;
             _conversationRepository = conversationRepository;
             _messageRepository = messageRepository;
+            _consultantUserRepository = consultantUserRepository;
         }
 
         public ICategoryRepository CategoryRepository => _categoryRepository;
@@ -77,7 +81,7 @@ namespace Infrastructures
         public IConversationRepository ConversationRepository => _conversationRepository;
 
         public IMessageRepository MessageRepository => _messageRepository;
-
+        public IConsultantUserRepository ConsultantUserRepository => _consultantUserRepository;
         public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
             return await _dbContext.Database.BeginTransactionAsync();
