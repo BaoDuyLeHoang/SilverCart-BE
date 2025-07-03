@@ -2,12 +2,13 @@ using Infrastructures.Commons.Exceptions;
 using Infrastructures.Interfaces.System;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SilverCart.Application.Interfaces;
 using SilverCart.Domain.Entities;
 
 namespace Infrastructures;
 
-public sealed record LoginUserCommand(string Email, string Password) : IRequest<LoginUserResponse>;
+public sealed record LoginUserCommand(string EmailOrPhone, string Password) : IRequest<LoginUserResponse>;
 public record LoginUserResponse(Guid UserId, string Role, string AccessToken, string RefreshToken, DateTime Expiration);
 public class LoginHandler(UserManager<BaseUser> userManager, IJwtTokenGenerator jwtTokenGenerator, ICurrentTime currentTime) : IRequestHandler<LoginUserCommand, LoginUserResponse>
 {
@@ -16,7 +17,8 @@ public class LoginHandler(UserManager<BaseUser> userManager, IJwtTokenGenerator 
     private readonly ICurrentTime _currentTime = currentTime;
     public async Task<LoginUserResponse> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
+        var user = await _userManager.FindByEmailAsync(request.EmailOrPhone) 
+        ?? await _userManager.Users.FirstOrDefaultAsync(u => u.PhoneNumber == request.EmailOrPhone);
         if (user == null)
         {
             throw new AppExceptions("User not found");

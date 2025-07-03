@@ -95,7 +95,7 @@ services:
       - Redis__ConnectionString=redis:6379
     networks:
       - app-net
-
+    command: dotnet watch run --no-launch-profile
 networks:
   app-net:
     driver: bridge

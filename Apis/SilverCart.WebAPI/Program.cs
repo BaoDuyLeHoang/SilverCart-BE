@@ -37,7 +37,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 
 // Add SignalR services
-builder.Services.AddSignalR();
+builder.Services.AddSignalR();  
 
 // Configure CORS for SignalR
 builder.Services.AddCors(options =>
@@ -61,7 +61,6 @@ builder.Services.AddScoped<IStringeeService, StringeeService>();
 */
 var IsDevelopment = builder.Environment.IsDevelopment();
 builder.Services.AddSingleton(configuration);
-Console.WriteLine(builder.Environment.EnvironmentName);
 
 var app = builder.Build();
 
