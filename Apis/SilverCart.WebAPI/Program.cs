@@ -55,13 +55,14 @@ builder.Services.AddCors(options =>
 */
 var IsDevelopment = builder.Environment.IsDevelopment();
 builder.Services.AddSingleton(configuration);
+Console.WriteLine(builder.Environment.EnvironmentName);
 
 var app = builder.Build();
 
 app.Services.GetService<IVnpay>()?.Initialize(configuration.Vnpay.TmnCode,
     configuration.Vnpay.HashSecret, configuration.Vnpay.BaseUrl, configuration.Vnpay.ReturnUrl);
 // Configure the HTTP request pipeline.
-if (IsDevelopment)
+if (true)
 {
     configuration.IsDevelopment = true;
     app.UseSwagger();
