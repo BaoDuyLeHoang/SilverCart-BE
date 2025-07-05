@@ -10,6 +10,7 @@ namespace WebAPI.Extensions
     {
         public static async Task SeedDatabaseAsync(this IApplicationBuilder applicationBuilder)
         {
+            
             using var scope = applicationBuilder.ApplicationServices.CreateScope();
             var services = scope.ServiceProvider;
 

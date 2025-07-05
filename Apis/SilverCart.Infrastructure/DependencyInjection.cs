@@ -39,7 +39,7 @@ namespace Infrastructures
             services.AddScoped<IProductRepository, ProductRepository>();
 
             services.AddScoped<IStoreRepository, StoreRepository>();
-
+            services.AddScoped<IConsultantUserRepository, ConsultantUserRepository>();
             services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
             services.AddScoped<IStoreUserRepository, StoreUserRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
