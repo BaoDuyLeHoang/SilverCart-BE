@@ -55,6 +55,7 @@ builder.Services.AddCors(options =>
 */
 var IsDevelopment = builder.Environment.IsDevelopment();
 builder.Services.AddSingleton(configuration);
+Console.WriteLine(builder.Environment.EnvironmentName);
 
 var app = builder.Build();
 
