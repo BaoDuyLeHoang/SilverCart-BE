@@ -22,4 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SilverCart.Domain\SilverCart.Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Features\Consultation\ProductPropose\" />
+  </ItemGroup>
 </Project>

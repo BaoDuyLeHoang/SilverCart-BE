@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructures.Features.Consultation.CreateConsulationReport
+namespace Infrastructures.Features.Consultation.Consultant.Create
 {
     public sealed record CreateConsultantCommand(
        string Email,

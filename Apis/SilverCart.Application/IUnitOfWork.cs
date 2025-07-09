@@ -24,6 +24,7 @@ namespace Infrastructures
         public IConversationRepository ConversationRepository { get; }
         public IMessageRepository MessageRepository { get; }
         public IConsultantUserRepository ConsultantUserRepository { get; }
+        public IConsultationRepository ConsultationRepository { get; }
         public Task<IDbContextTransaction> BeginTransactionAsync();
         public Task<int> SaveChangeAsync();
     }
