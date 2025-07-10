@@ -9,55 +9,21 @@ using System.Threading.Tasks;
 
 namespace Infrastructures.Features.Stores.Commands.Update.UpdateStore
 {
-    public class UpdateStoreHandler : IRequestHandler<UpdateStoreCommand, Guid>
+    public class UpdateStoreHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateStoreCommand, Guid>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IClaimsService _claimsService;
-
-        public UpdateStoreHandler(
-            IUnitOfWork unitOfWork,
-            IClaimsService claimsService)
-        {
-            _unitOfWork = unitOfWork;
-            _claimsService = claimsService;
-        }
-
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
         public async Task<Guid> Handle(UpdateStoreCommand request, CancellationToken cancellationToken)
         {
-            var userId = _claimsService.CurrentUserId;
-            var storeUserQuery = await _unitOfWork.StoreUserRepository
-                .GetAllAsync(x => x.Id == userId && x.StoreId == request.Id);
-
-            var storeUser = await storeUserQuery.FirstOrDefaultAsync(cancellationToken);
-
-            if (storeUser == null)
-            {
-                throw new AppExceptions("You don't have permission to update this store");
-            }
-
-            var store = await _unitOfWork.StoreRepository.GetByIdAsync(request.Id);
+            var store = await _unitOfWork.StoreRepository.GetByIdAsync(Guid.Parse("c4f31cea-14f3-45cd-98ad-39d68e78e0e7"));
             if (store == null)
             {
                 throw new AppExceptions("Store not found");
             }
-
-            // Check if name is already taken by another store
-            if (store.Name != request.StoreName)
-            {
-                var existedStoreQuery = await _unitOfWork.StoreRepository
-                    .GetAllAsync(x => x.Name == request.StoreName && x.Id != request.Id);
-
-                if (await existedStoreQuery.AnyAsync(cancellationToken))
-                {
-                    throw new AppExceptions("Store name already exists");
-                }
-            }
-
             // Update store
             store.Name = request.StoreName;
             store.Infomation = request.Information;
             store.AdditionalInfo = request.AdditionalInfo;
-            store.IsActive = request.IsActive;
+            store.Phone = request.Phone;
 
             if (!string.IsNullOrEmpty(request.AvatarPath))
             {

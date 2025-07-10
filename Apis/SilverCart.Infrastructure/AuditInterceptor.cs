@@ -47,6 +47,9 @@ public class AuditInterceptor : SaveChangesInterceptor
         foreach (var entry in entries)
         {
             var entity = (IAuditableEntity)entry.Entity;
+            // Skipping Hard Deleted Entities
+            // if (entity is IBaseEntity baseEntity && baseEntity.IsHardDelete) continue;
+
             switch (entry.State)
             {
                 case EntityState.Added:

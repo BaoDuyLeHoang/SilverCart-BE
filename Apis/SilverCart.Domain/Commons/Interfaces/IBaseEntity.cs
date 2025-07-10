@@ -4,4 +4,5 @@ public interface IBaseEntity
 {
     public Guid Id { get; set; }
     public bool IsDeleted { get; set; }
+    // public bool IsHardDelete { get; set; }
 }

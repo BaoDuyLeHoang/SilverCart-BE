@@ -33,11 +33,7 @@ public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTy
     public void Configure(EntityTypeBuilder<AdministratorRole> builder)
     {
         builder.ToTable("AdministratorRoles");
-<<<<<<< HEAD
-
-=======
         List<string> roles = ["SuperAdmin", "Admin", "Staff", "Moderator", "CustomerSupport", "Consultant"];
->>>>>>> 8f1555a34ed75f6ac7854bab98b248deb8824077
         builder.HasData(
             new AdministratorRole
             {

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Infrastructures.Commons.Exceptions;
-using Infrastructures.Features.Products.Commands.Create.CreateProduct;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SilverCart.Domain.Entities;

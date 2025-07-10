@@ -84,21 +84,6 @@ namespace Infrastructures.Features.Products.Commands.Create.CreateProduct
 
             await _unitOfWork.ProductRepository.AddAsync(newProduct);
             await _unitOfWork.SaveChangeAsync();
-
-            if (itemMappings.Count > 0)
-            {
-                var storeProductItems = itemMappings.Select(pair => new StoreProductItem
-                {
-                    Id = Guid.NewGuid(),
-                    StoreId = storeId,
-                    ProductItemId = pair.Item.Id,
-                    Stock = pair.ItemVM.Stock
-                }).ToList();
-
-                await _unitOfWork.StoreRepository.AddStoreProductItemsAsync(storeProductItems);
-                await _unitOfWork.SaveChangeAsync();
-            }
-
             return newProduct.Id;
         }
     }

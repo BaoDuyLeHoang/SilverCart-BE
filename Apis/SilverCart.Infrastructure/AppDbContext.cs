@@ -69,6 +69,10 @@ namespace Infrastructures
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            
+            // Configure all enums as strings
+            modelBuilder.ConvertAllEnumsToStrings();
+            
             modelBuilder.Entity<Conversation>()
                     .HasOne(c => c.User1)
                     .WithMany(u => u.ConversationsAsUser1)
@@ -80,10 +84,6 @@ namespace Infrastructures
                 .WithMany(u => u.ConversationsAsUser2)
                 .HasForeignKey(c => c.User2Id)
                 .OnDelete(DeleteBehavior.Restrict);
-<<<<<<< HEAD
-=======
-
->>>>>>> 8f1555a34ed75f6ac7854bab98b248deb8824077
             // Apply all other configurations from the assembly
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }

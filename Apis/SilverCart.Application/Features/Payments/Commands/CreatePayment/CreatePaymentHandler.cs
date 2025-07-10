@@ -66,7 +66,7 @@ public class CreatePaymentHandler : IRequestHandler<CreatePaymentCommand, string
         var paymentRequest = new PaymentRequest
         {
             PaymentId = currentTime.Ticks,
-            Money = order.TotalPrice * 100, // Convert to smallest currency unit
+            Money = (double)order.TotalPrice * 100, // Convert to smallest currency unit
             Description = description,
             BankCode = request.BankCode,
             CreatedDate = currentTime,

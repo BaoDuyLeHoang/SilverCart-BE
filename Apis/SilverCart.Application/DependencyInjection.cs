@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using StackExchange.Redis;
 namespace Infrastructures
 {
     public static class DependencyInjection
@@ -22,6 +22,7 @@ namespace Infrastructures
                             ServiceLifetime.Scoped);
             });
             return services;
+            
         }
     }
 }

@@ -17,12 +17,27 @@ namespace Infrastructures.Repositories
             _context = context;
         }
 
-        public async Task AddStoreProductItemsAsync(List<StoreProductItem> storeProductItems)
-        {
-            if (storeProductItems == null || !storeProductItems.Any())
-                return;
+        //public Task<Store?> GetActiveStoreAsync()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-            await _context.Set<StoreProductItem>().AddRangeAsync(storeProductItems);
-        }
+        //public Task<Store?> GetByNameAsync(string name)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task<bool> IsStoreActiveAsync(Guid storeId)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public async Task AddStoreProductItemsAsync(List<StoreProductItem> storeProductItems)
+        //{
+        //    if (storeProductItems == null || !storeProductItems.Any())
+        //        return;
+
+        //    await _context.Set<StoreProductItem>().AddRangeAsync(storeProductItems);
+        //}
     }
 }
