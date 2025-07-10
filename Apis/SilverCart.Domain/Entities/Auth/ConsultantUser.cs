@@ -8,6 +8,7 @@ namespace SilverCart.Domain.Entities.Auth
 {
     public class ConsultantUser : BaseUser
     {
+<<<<<<< HEAD
         public Guid? ConsultantId { get; set; } // Unique identifier for the consultant
         public Guid RoleId { get; set; }
         public ConsultantRole Role { get; set; } = null!;
@@ -26,5 +27,22 @@ namespace SilverCart.Domain.Entities.Auth
         public string? StringeeAccessToken { get; set; }
         public ICollection<Consultation> Consultations { get; set; } = new List<Consultation>();
         // Navigation property to the consultant entity
+=======
+        public ConsultantUser()
+        {
+        }
+
+
+
+        public string Specialization { get; set; } = null!;
+
+        public Guid RoleId { get; set; }
+        public ConsultantRole Role { get; set; } = null!;
+
+        public Guid? ConsultantId { get; set; } // Unique identifier for the consultant
+        public ConsultantUser? Consultant { get; set; } // Navigation property to the consultant user
+        public string? StringeeAccessToken { get; set; }
+        public ICollection<Consultant> Consultants { get; set; } = new List<Consultant>(); // Collection of consultations associated with the consultant user
+>>>>>>> eb0f747c192c596902f4aee1c240179f2f298304
     }
 }

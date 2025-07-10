@@ -1,9 +1,12 @@
-﻿using Infrastructures.Features.Consultation.Consultant.Create;
+using Infrastructures.Features.Consultation.Consultant.Create;
 using Infrastructures.Features.Consultation.ConsultationReport;
 using Infrastructures.Features.Consultation.ConsultationReport.Update;
 using Infrastructures.Interfaces.System;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Infrastructures.Features.Consultation.CreateConsulationReport;
+using Infrastructures.Interfaces.System;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
