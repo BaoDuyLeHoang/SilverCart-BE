@@ -26,7 +26,7 @@ namespace WebAPI.Controllers
 
         [Authorize(Roles = "Consultant")]
         [HttpPost]
-        public async Task<IActionResult> CreateConsultant([FromBody] CreateConsultantCommand command)
+        public async Task<IActionResult> CreateConsultant([FromBody] Infrastructures.Features.Consultation.Consultant.Create.CreateConsultantCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(new { ConsultantId = result });
@@ -34,7 +34,7 @@ namespace WebAPI.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost("create-consultant")]
-        public async Task<IActionResult> CreateConsultantReport([FromBody] CreateConsultantCommand command)
+        public async Task<IActionResult> CreateConsultantReport([FromBody] Infrastructures.Features.Consultation.CreateConsulationReport.CreateConsultantCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(new { ReportId = result });

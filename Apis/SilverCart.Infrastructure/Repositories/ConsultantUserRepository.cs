@@ -11,6 +11,7 @@ namespace Infrastructures.Repositories
 {
     public class ConsultantUserRepository : GenericRepository<ConsultantUser>, IConsultantUserRepository
     {
+        private readonly AppDbContext _context;
         public ConsultantUserRepository(AppDbContext context) : base(context) { }
 
         public async Task<ConsultantUser?> GetByEmailAsync(string email)
