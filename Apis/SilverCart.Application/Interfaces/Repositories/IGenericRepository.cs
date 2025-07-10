@@ -5,7 +5,7 @@ using SilverCart.Domain.Entities;
 
 namespace SilverCart.Application.Repositories
 {
-    public interface IGenericRepository<TEntity> where TEntity : class, IAuditableEntity, IBaseEntity
+    public interface IGenericRepository<TEntity> where TEntity : class, IBaseEntity
     {
         Task<IQueryable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includes);
         Task<IQueryable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes);

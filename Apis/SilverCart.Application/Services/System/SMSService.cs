@@ -1,4 +1,5 @@
-﻿using SilverCart.Application.Services;
+﻿using Infrastructures.Interfaces;
+using SilverCart.Application.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -6,7 +7,7 @@ using SilverCart.Application.Interfaces;
 
 namespace SilverCart.Application.Utils;
 
-public class SMSService : ISMSService
+public class SMSService : ISmsService
 {
     private readonly IEmailService? _emailService;
     private readonly ILogger<SMSService> _logger;
@@ -16,18 +17,16 @@ public class SMSService : ISMSService
     {
         // Use email service in development
         _emailService = env.IsDevelopment() ? emailService : null;
-
-        _emailService = emailService;
         _logger = logger;
         _env = env;
     }
 
-    public async Task SendOTPSMS(string phoneNumber, string otp)
+    public async Task SendSMS(string phoneNumber, string message)
     {
         if (_env.IsDevelopment())
         {
-            _logger.LogInformation($"Sending emailed OTP to {phoneNumber}: {otp}");
-            _emailService?.SendEmailAsync(phoneNumber, "Your OTP Code", $"Your OTP code is: {otp}")
+            _logger.LogInformation($"Sending email message to {phoneNumber}");
+            _emailService?.SendEmailAsync(phoneNumber, $"SMS Message {phoneNumber}", message)
                 .ConfigureAwait(false);
         }
 
@@ -35,14 +34,16 @@ public class SMSService : ISMSService
         // This is a placeholder for the actual SMS sending code
         if (_env.IsProduction())
         {
-            Console.WriteLine($"Sending SMS to {phoneNumber}");
+            try
+            {
+                // // Assuming stringeeService is injected and available
+                // await stringeeService.SendSmsAsync(phoneNumber, message);
+                _logger.LogInformation($"SMS sent successfully to {phoneNumber}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Failed to send SMS to {phoneNumber}");
+            }
         }
     }
-
-
-}
-
-public interface ISMSService
-{
-    Task SendOTPSMS(string phoneNumber, string otp);
 }

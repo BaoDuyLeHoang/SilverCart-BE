@@ -1,5 +1,6 @@
 ﻿using Infrastructures;
 using Infrastructures.Features.Auth.GenerateQrLoginToken;
+using Infrastructures.Features.Auth.GenerateTokenBaseOnDependentId;
 using Infrastructures.Features.Auth.Login;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -23,6 +24,8 @@ public class AuthController(IMediator mediator) : ControllerBase
         var result = await _mediator.Send(command);
         return Ok(result);
     }
+
+
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
     {
@@ -60,65 +63,10 @@ public class AuthController(IMediator mediator) : ControllerBase
         var result = await _mediator.Send(new ElderLoginCommand(token));
         return Ok(result);
     }
-
-    // private readonly UserManager<BaseUser> _userManager;
-    // private readonly SignInManager<BaseUser> _signInManager;
-    // private readonly RoleManager<BaseRole> _roleManager;
-    // private readonly IAuthService _authService;
-
-    // public AuthController(
-    //     UserManager<BaseUser> userManager,
-    //     SignInManager<BaseUser> signInManager,
-    //     RoleManager<BaseRole> roleManager,
-    //     IAuthService authService)
-    // {
-    //     _userManager = userManager;
-    //     _signInManager = signInManager;
-    //     _roleManager = roleManager;
-    //     _authService = authService;
-    // }
-
-    // [HttpPost("register")]
-    // public async Task<IActionResult> Register(RegisterUserDTO model)
-    // {
-    //     var user = new CustomerUser()
-    //     {
-    //         UserName = model.Email,
-    //         Email = model.Email,
-    //         FullName = model.FullName
-    //     };
-
-    //     var result = await _userManager.CreateAsync(user, model.Password);
-
-    //     if (!result.Succeeded)
-    //         return BadRequest(result.Errors);
-
-    //     // Optional: assign default role
-    //     await _userManager.AddToRoleAsync(user, "Customer");
-
-    //     return Ok("Registered successfully.");
-    // }
-
-    // [HttpPost("login")]
-    // public async Task<IActionResult> Login(LoginUserDTO model)
-    // {
-    //     var result = await _authService.LoginAsync(model);
-    //     if (result.IsSuccess)
-    //     {
-    //         return Ok(result.Value);
-    //     }
-    //     return BadRequest(result);
-    // }
-    // [HttpPost("register/store-user")]
-    // public async Task<IActionResult> RegisterStore([FromBody] RegisterUserDTO dto)
-    // {
-    //     var result = await _authService.RegisterStoreUserAsync(dto);
-    //     return Ok(result);
-    // }
-    // [HttpPost("register/customer-user")]
-    // public async Task<IActionResult> RegisterCustomer([FromBody] RegisterUserDTO dto)
-    // {
-    //     var result = await _authService.RegisterCustomerUserAsync(dto);
-    //     return Ok(result);
-    // }
+    [HttpGet("generate-token-base-on-dependentId")]
+    public async Task<IActionResult> GenerateTokenBaseOnDependentId([FromQuery] GenerateTokenBaseOnDependentIdCommand command)
+    {
+        var result = await _mediator.Send(command);
+        return Ok(result);
+    }
 }

@@ -57,7 +57,11 @@ namespace Infrastructures
         public DbSet<DependentUser> DependentUsers { get; set; }
         public DbSet<Conversation> Conversations { get; set; }
         public DbSet<Message> Messages { get; set; }
-
+        // Consultant
+        public DbSet<Consultation> Consultants { get; set; }
+        public DbSet<ConsultantUser> ConsultantUsers { get; set; }
+        public DbSet<ConsultantRole> ConsultantRoles { get; set; }
+        public DbSet<Consultation> Consultations { get; set; }
         // Base entities
         public DbSet<BaseUser> Users { get; set; }
         public DbSet<BaseRole> Roles { get; set; }
@@ -65,6 +69,10 @@ namespace Infrastructures
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            
+            // Configure all enums as strings
+            modelBuilder.ConvertAllEnumsToStrings();
+            
             modelBuilder.Entity<Conversation>()
                     .HasOne(c => c.User1)
                     .WithMany(u => u.ConversationsAsUser1)

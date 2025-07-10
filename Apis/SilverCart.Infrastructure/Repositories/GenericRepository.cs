@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Infrastructures.Repositories
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity>
-        where TEntity : class, IAuditableEntity, IBaseEntity
+        where TEntity : class, IBaseEntity
     {
         protected readonly DbSet<TEntity> _dbSet;
 

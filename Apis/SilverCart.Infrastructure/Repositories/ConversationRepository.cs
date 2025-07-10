@@ -10,7 +10,7 @@ public class ConversationRepository(AppDbContext context, ICurrentTime currentTi
     private readonly ICurrentTime _currentTime = currentTime;
     public async Task<ConversationResponse> CreateConversationAsync(Guid user1Id, Guid user2Id)
     {
-        var user1 = await _context.Users.FindAsync(user1Id) 
+        var user1 = await _context.Users.FindAsync(user1Id)
             ?? throw new AppExceptions("User1 not found");
         var user2 = await _context.Users.FindAsync(user2Id)
             ?? throw new AppExceptions("User2 not found");
@@ -60,7 +60,7 @@ public class ConversationRepository(AppDbContext context, ICurrentTime currentTi
             .Include(c => c.User1)
             .Include(c => c.User2)
             .FirstOrDefaultAsync(c => c.Id == conversationId);
-            
+
         return conversation == null ? null : new ConversationResponse(
             conversation.Id,
             conversation.User1Id,

@@ -1,16 +1,16 @@
-﻿// SilverCart.ApplicationCommons/AppConfiguration.cs
+// SilverCart.ApplicationCommons/AppConfiguration.cs
 
 namespace SilverCart.Infrastructure.Commons
 {
     public class AppConfiguration
     {
         public string DatabaseConnection { get; set; }
+        public string RedisConnection { get; set; }
         public string JWTSecretKey { get; set; }
         public SuperAdminConfig SuperAdmin { get; set; }
         public string ApplicationUrl { get; set; }
         public EmailSettings EmailSettings { get; set; }
         public bool IsDevelopment { get; set; }
-
         public VNPAYSettings Vnpay { get; set; }
     }
 

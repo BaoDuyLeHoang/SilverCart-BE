@@ -1,4 +1,5 @@
 using Infrastructures.Commons.Exceptions;
+
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using SilverCart.Application.Interfaces;
@@ -49,7 +50,7 @@ public class CreateDependentUserHandler(IUnitOfWork unitOfWork, UserManager<Base
                 }
             };
 
-            var tempPassword = Guid.NewGuid().ToString("N");
+            var tempPassword = "SilverCart2025@";
 
             var result = await _userManager.CreateAsync(user, tempPassword);
             if (!result.Succeeded)

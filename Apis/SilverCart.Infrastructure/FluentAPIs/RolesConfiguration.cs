@@ -6,7 +6,7 @@ using SilverCart.Domain.Entities.Auth;
 namespace Infrastructures.FluentAPIs;
 
 public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTypeConfiguration<AdministratorRole>,
-    IEntityTypeConfiguration<CustomerRole>, IEntityTypeConfiguration<StoreUserRole>
+    IEntityTypeConfiguration<CustomerRole>, IEntityTypeConfiguration<StoreUserRole>, IEntityTypeConfiguration<ConsultantRole>
 {
     public void Configure(EntityTypeBuilder<StoreRole> builder)
     {
@@ -33,7 +33,7 @@ public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTy
     public void Configure(EntityTypeBuilder<AdministratorRole> builder)
     {
         builder.ToTable("AdministratorRoles");
-
+        List<string> roles = ["SuperAdmin", "Admin", "Staff", "Moderator", "CustomerSupport", "Consultant"];
         builder.HasData(
             new AdministratorRole
             {
@@ -86,5 +86,11 @@ public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTy
         builder.ToTable("StoreUserRoles");
 
         builder.HasKey(x => new { x.UserId, x.RoleId });
+    }
+
+    public void Configure(EntityTypeBuilder<ConsultantRole> builder)
+    {
+        builder.ToTable("ConsultantRoles");
+
     }
 }

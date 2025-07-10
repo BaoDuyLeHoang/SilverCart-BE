@@ -10,6 +10,8 @@ namespace Infrastructures.Interfaces.Repositories
 {
     public interface IStoreRepository : IGenericRepository<Store>
     {
-        Task AddStoreProductItemsAsync(List<StoreProductItem> storeProductItems);
+        //Task<Store?> GetActiveStoreAsync();
+        //Task<Store?> GetByNameAsync(string name);
+        //Task<bool> IsStoreActiveAsync(Guid storeId);
     }
 }

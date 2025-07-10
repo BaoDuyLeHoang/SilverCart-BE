@@ -17,7 +17,6 @@ public class Store : BaseEntity
     public Guid StoreAddressId { get; set; }
     public virtual StoreAddress StoreAddress { get; set; } = null!;
     // Navigation properties
-    public virtual ICollection<StoreUser> StoreUsers { get; set; } = new List<StoreUser>(); //Employees
-    public virtual ICollection<StoreProductItem> StoreProductItems { get; set; } = new List<StoreProductItem>();
-    public virtual ICollection<StoreOrder> StoreOrders { get; set; } = new List<StoreOrder>();
+    public virtual ICollection<BaseUser> StoreUsers { get; set; } = new List<BaseUser>();
+    //Employees
 }

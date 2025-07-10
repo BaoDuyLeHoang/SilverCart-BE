@@ -10,7 +10,7 @@ namespace Infrastructures.Features.Conversations.Queries.GetByUserId
     public sealed record GetConversationByUserIdQuery(Guid UserId) : IRequest<GetConversationByUserIdResponse>;
     public record GetConversationByUserIdResponse(List<ConversationDto> Conversations);
     public record ConversationDto(Guid Id, string Name, string LastMessage, DateTime LastMessageTime);
-    public class GetConversationByUserIdQueryHandler(IUnitOfWork unitOfWork): IRequestHandler<GetConversationByUserIdQuery, GetConversationByUserIdResponse>
+    public class GetConversationByUserIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetConversationByUserIdQuery, GetConversationByUserIdResponse>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         public async Task<GetConversationByUserIdResponse> Handle(GetConversationByUserIdQuery request, CancellationToken cancellationToken)

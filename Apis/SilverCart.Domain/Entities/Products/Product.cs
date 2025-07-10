@@ -8,8 +8,8 @@ public class Product : BaseEntity
     public string? Description { get; set; }
     public string? VideoPath { get; set; }
     public ProductTypeEnum ProductType { get; set; }
-    // Navigation properties
     public virtual ICollection<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
-    public virtual ICollection<ProductVariant>? Variants { get; set; }
-    public virtual ICollection<ProductPromotion>? ProductPromotions { get; set; }
+    public virtual ICollection<ProductPromotion> ProductPromotions { get; set; } = new List<ProductPromotion>();
+    public virtual ICollection<ProductVariant> Variants { get; set; } = new List<ProductVariant>();
+    public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
 }

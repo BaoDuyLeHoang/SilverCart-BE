@@ -17,23 +17,12 @@ namespace SilverCart.Domain.Entities
         public Guid? CreatedById { get; set; }
         public Guid? ModificationById { get; set; }
         public Guid? DeleteById { get; set; }
+        public Guid? StoreId { get; set; }
+        public Store? Store { get; set; }
         public virtual ICollection<Conversation> ConversationsAsUser1 { get; set; } = new List<Conversation>();
         public virtual ICollection<Conversation> ConversationsAsUser2 { get; set; } = new List<Conversation>();
-        public virtual ICollection<StoreUser> StoreUsers { get; set; } = new List<StoreUser>();
+        //public virtual ICollection<StoreUser> StoreUsers { get; set; } = new List<StoreUser>();
         public ICollection<Address> Addresses { get; set; } = new List<Address>();
         public string? RefreshToken { get; set; }
-    }
-    public class OTPData
-    {
-        public string Code { get; set; } = string.Empty;
-        public DateTime ExpirationTime { get; set; }
-        public bool IsUsed { get; set; } = false;
-
-        public static OTPData Init(string code, int days) => new OTPData()
-        {
-            Code = code,
-            ExpirationTime = DateTime.UtcNow.AddDays(days),
-            IsUsed = false
-        };
     }
 }

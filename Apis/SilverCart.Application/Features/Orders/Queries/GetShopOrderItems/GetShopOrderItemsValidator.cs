@@ -29,18 +29,11 @@ namespace SilverCart.Application.Features.Orders.Queries.GetShopOrderItems
                     .WithMessage("Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu");
             });
 
-            When(x => x.StoreOrderStatus.HasValue, () =>
+            When(x => x.OrderStatus.HasValue, () =>
             {
-                RuleFor(x => x.StoreOrderStatus)
-                    .IsInEnum().WithMessage("Trạng thái đơn hàng cửa hàng không hợp lệ")
-                    .NotEqual(StoreOrderStatus.All).WithMessage("Trạng thái đơn hàng cửa hàng không thể là 'All'");
-            });
-
-            When(x => x.ShippingStatus.HasValue, () =>
-            {
-                RuleFor(x => x.ShippingStatus)
-                    .IsInEnum().WithMessage("Trạng thái vận chuyển không hợp lệ")
-                    .NotEqual(StoreOrderShippingGhnStatusEnum.All).WithMessage("Trạng thái vận chuyển không thể là 'All'");
+                RuleFor(x => x.OrderStatus)
+                    .IsInEnum().WithMessage("Trạng thái đơn hàng không hợp lệ")
+                    .NotEqual(OrderStatusEnums.All).WithMessage("Trạng thái đơn hàng không thể là 'All'");
             });
         }
     }

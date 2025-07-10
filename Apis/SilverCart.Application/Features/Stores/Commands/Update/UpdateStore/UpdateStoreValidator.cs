@@ -7,9 +7,6 @@ namespace Infrastructures.Features.Stores.Commands.Update.UpdateStore
     {
         public UpdateStoreValidator()
         {
-            RuleFor(x => x.Id)
-                .NotEqual(Guid.Empty).WithMessage("ID cửa hàng không hợp lệ.");
-
             RuleFor(x => x.StoreName)
                 .NotEmpty().WithMessage("Tên cửa hàng không được để trống.")
                 .MaximumLength(100).WithMessage("Tên cửa hàng không được vượt quá 100 ký tự.");

@@ -14,17 +14,9 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : BaseController
+    public class UserController(IMediator mediator) : BaseController
     {
-        private readonly ILogger<UserController> _logger;
-        private readonly IMediator _mediator;
-
-        public UserController(ILogger<UserController> logger, IMediator mediator)
-        {
-            _logger = logger;
-            _mediator = mediator;
-        }
-
+        private readonly IMediator _mediator = mediator;
         [HttpGet]
         public async Task<IActionResult> GetAllUsers([FromQuery] GetAllUsersQuery request)
         {
@@ -51,5 +43,6 @@ namespace WebAPI.Controllers
             var result = await _mediator.Send(request);
             return Ok(result);
         }
+
     }
 }

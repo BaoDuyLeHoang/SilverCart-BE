@@ -3,7 +3,7 @@ using System.Diagnostics;
 //using Infrastructures.Swaggers.Examples;
 using Microsoft.OpenApi.Models;
 using SilverCart.Application.Interfaces;
-using Swashbuckle.AspNetCore.Filters;
+using System.Text.Json.Serialization;
 using WebAPI.Filters;
 using WebAPI.Middlewares;
 using WebAPI.SilverCart.Infrastructure;
@@ -20,14 +20,18 @@ namespace WebAPI
     {
         public static IServiceCollection AddWebAPIService(this IServiceCollection services)
         {
-            services.AddControllers(options =>
-            {
-                options.Filters.Add<ResponseMappingFilter>();
-            });
+            services.AddControllers(options => { options.Filters.Add<ResponseMappingFilter>(); })
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
 
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
-            services.AddHealthChecks();
+            services.AddSwaggerGen(c =>
+            {
+                c.SchemaFilter<EnumSchemaFilter>();
+            });
+
             services.AddApplicationDI();
             services.AddSingleton<GlobalExceptionMiddleware>();
             services.AddSingleton<PerformanceMiddleware>();
@@ -39,56 +43,63 @@ namespace WebAPI
             return services;
         }
 
-        public static IServiceCollection AddSwaggerGeneration(this IServiceCollection services, WebApplicationBuilder builder)
+        public static IServiceCollection AddSwaggerGeneration(this IServiceCollection services,
+            WebApplicationBuilder builder)
         {
             services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
-                    ValidAudience = builder.Configuration["JwtSettings:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"])),
-                    ClockSkew = TimeSpan.FromSeconds(1)
-                };
-                options.Events = new JwtBearerEvents
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
                 {
-                    OnChallenge = context =>
+                    options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        context.HandleResponse();
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+                        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+                        IssuerSigningKey =
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"])),
+                        ClockSkew = TimeSpan.FromSeconds(1)
+                    };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnChallenge = context =>
+                        {
+                            context.HandleResponse();
 
-                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                        context.Response.ContentType = "application/json";
-                        var result = Newtonsoft.Json.JsonConvert.SerializeObject(new
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            context.Response.ContentType = "application/json";
+                            var result = Newtonsoft.Json.JsonConvert.SerializeObject(new
+                            {
+                                message = "You need to log in to access this resource."
+                            });
+                            return context.Response.WriteAsync(result);
+                        },
+                        OnMessageReceived = context =>
                         {
-                            message = "You need to log in to access this resource."
-                        });
-                        return context.Response.WriteAsync(result);
-                    },
-                    OnMessageReceived = context =>
-                    {
-                        var accessToken = context.Request.Query["access_token"];
-                        var path = context.HttpContext.Request.Path;
-                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/chatHub"))
-                        {
-                            context.Token = accessToken;
+                            var accessToken = context.Request.Query["access_token"];
+                            var path = context.HttpContext.Request.Path;
+                            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/chatHub"))
+                            {
+                                context.Token = accessToken;
+                            }
+
+                            return Task.CompletedTask;
                         }
-                        return Task.CompletedTask;
-                    }
-                };
-            });
+                    };
+                });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Elderly", Version = "v1" });
                 c.EnableAnnotations();
+
+                // Add enum schema filter to show enum values in documentation
+                c.SchemaFilter<EnumSchemaFilter>();
+
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
@@ -101,22 +112,23 @@ namespace WebAPI
                 c.OperationFilter<AuthorizeOperationFilter>();
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
                 {
-                    new OpenApiSecurityScheme
                     {
-                        Reference = new OpenApiReference
+                        new OpenApiSecurityScheme
                         {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    },
-                    Array.Empty<string>()
-                }
-            });
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             });
 
             return services;
         }
+
     }
 }
