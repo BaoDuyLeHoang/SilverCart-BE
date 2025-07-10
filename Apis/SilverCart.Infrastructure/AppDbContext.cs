@@ -58,16 +58,10 @@ namespace Infrastructures
         public DbSet<Conversation> Conversations { get; set; }
         public DbSet<Message> Messages { get; set; }
         // Consultant
-<<<<<<< HEAD
         public DbSet<Consultation> Consultants { get; set; }
         public DbSet<ConsultantUser> ConsultantUsers { get; set; }
         public DbSet<ConsultantRole> ConsultantRoles { get; set; }
         public DbSet<Consultation> Consultations { get; set; }
-=======
-        public DbSet<Consultant> Consultants { get; set; }
-        public DbSet<ConsultantUser> ConsultantUsers { get; set; }
-        public DbSet<ConsultantRole> ConsultantRoles { get; set; }
->>>>>>> eb0f747c192c596902f4aee1c240179f2f298304
         // Base entities
         public DbSet<BaseUser> Users { get; set; }
         public DbSet<BaseRole> Roles { get; set; }

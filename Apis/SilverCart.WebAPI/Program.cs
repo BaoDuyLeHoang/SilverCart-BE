@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 ﻿using System.Text;
 using HealthChecks.UI.Client;
-=======
->>>>>>> eb0f747c192c596902f4aee1c240179f2f298304
 using System.Text;
 using Infrastructures;
 using Infrastructures.Commons.Exceptions;
@@ -41,14 +38,11 @@ builder.Services.AddOutputCache();
 
 // Add SignalR services
 builder.Services.AddSignalR();  
-<<<<<<< HEAD
 
 // Configure HealthChecks
 builder.Services.AddHealthChecks()
     .AddRedis(configuration.RedisConnection, name: "redis")
     .AddNpgSql(configuration.DatabaseConnection, name: "postgres");
-=======
->>>>>>> eb0f747c192c596902f4aee1c240179f2f298304
 
 // Configure CORS for SignalR
 builder.Services.AddCors(options =>
