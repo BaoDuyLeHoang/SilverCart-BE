@@ -76,35 +76,7 @@ namespace Infrastructures.FluentAPIs
                 .WithOne(x => x.ConsultantUser)
                 .HasForeignKey(x => x.ConsultantId)
                 .OnDelete(DeleteBehavior.Restrict);
-        }
-        //public void Configure(EntityTypeBuilder<ConsultantUser> builder)
-        //{
 
-
-        //    builder.ToTable("ConsultantUsers");
-        //    builder.HasMany(x => x.Consulations)
-        //        .WithOne(x => x.ConsultantUser)
-        //        .HasForeignKey(x => x.ConsultantId)
-        //        .OnDelete(DeleteBehavior.Restrict);
-        //    builder.OwnsOne(x => x.OTP);
-        //}
-
-        //public void Configure(EntityTypeBuilder<Consultation> builder)
-        //{
-        //    builder.ToTable("Consultations");
-        //    builder.HasOne(x => x.Consultant).WithMany(x => x.Consultations).HasForeignKey(x => x.ConsultantId);
-        //    builder.HasOne(x => x.Customer).WithMany().HasForeignKey(x => x.CustomerId);
-        //}
-
-        public void Configure(EntityTypeBuilder<ConsultantUser> builder)
-        {
-            builder.ToTable("ConsultantUsers");
-            builder.HasMany(x => x.Consultations)
-                .WithOne(x => x.ConsultantUser)
-                .HasForeignKey(x => x.ConsultantId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.OwnsOne(x => x.OTP);
         }
 
         public void Configure(EntityTypeBuilder<Consultation> builder)

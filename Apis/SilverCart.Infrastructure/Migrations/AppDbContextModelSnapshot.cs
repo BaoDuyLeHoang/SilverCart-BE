@@ -428,7 +428,7 @@ namespace Infrastructures.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("173fc708-aea2-4bcd-9861-8fb19eb612a3"),
+                            Id = new Guid("5c2cb3f3-d9b1-4d5f-8a9c-1e6f689ee0f4"),
                             Description = "",
                             IsDeleted = false,
                             Name = "SuperAdmin",
@@ -436,35 +436,11 @@ namespace Infrastructures.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8f3ba28d-9ad7-4c94-88d2-f4b4e064cfb5"),
+                            Id = new Guid("0e61cc83-d3c4-43b1-9334-8dd0c9d22833"),
                             Description = "",
                             IsDeleted = false,
                             Name = "Admin",
                             NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = new Guid("cd0ecebd-943b-480c-a83a-b3c1c2d9d212"),
-                            Description = "",
-                            IsDeleted = false,
-                            Name = "Staff",
-                            NormalizedName = "STAFF"
-                        },
-                        new
-                        {
-                            Id = new Guid("5a567d6b-1620-473f-b24a-6a5a3f5408a1"),
-                            Description = "",
-                            IsDeleted = false,
-                            Name = "Moderator",
-                            NormalizedName = "MODERATOR"
-                        },
-                        new
-                        {
-                            Id = new Guid("f6e24425-af70-4185-b8d4-02276e34f898"),
-                            Description = "",
-                            IsDeleted = false,
-                            Name = "CustomerSupport",
-                            NormalizedName = "CUSTOMERSUPPORT"
                         });
                 });
 
@@ -477,7 +453,7 @@ namespace Infrastructures.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("93d7f3b0-cc71-4c16-bbd1-5e358d164044"),
+                            Id = new Guid("0c09b112-baf9-4ec3-bc79-cce452219d60"),
                             Description = "",
                             IsDeleted = false,
                             Name = "Guardian",
@@ -485,7 +461,7 @@ namespace Infrastructures.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ae0686e5-ce21-4e1e-948e-ac6f87f90223"),
+                            Id = new Guid("2c8499d3-6ec2-4745-b2f7-6e33182f6f6f"),
                             Description = "",
                             IsDeleted = false,
                             Name = "Customer",
@@ -493,7 +469,7 @@ namespace Infrastructures.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e11161bb-7a83-42ce-a3d5-e126f14d083b"),
+                            Id = new Guid("c66a403b-e1f9-47f3-9f6b-d8c3913b7a1b"),
                             Description = "",
                             IsDeleted = false,
                             Name = "DependentUser",
@@ -510,7 +486,7 @@ namespace Infrastructures.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("6a72b987-691f-49fc-a910-6aa44932ae4c"),
+                            Id = new Guid("60cb3e42-0903-4c3f-8e9c-bfdc6f6a1a01"),
                             Description = "",
                             IsDeleted = false,
                             Name = "StoreOwner",
@@ -518,23 +494,7 @@ namespace Infrastructures.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a6cbb423-6c15-4c76-9c20-63405639fbd1"),
-                            Description = "",
-                            IsDeleted = false,
-                            Name = "StoreManager",
-                            NormalizedName = "STOREMANAGER"
-                        },
-                        new
-                        {
-                            Id = new Guid("d3334862-46a7-4530-913a-ef9c09b9c9e0"),
-                            Description = "",
-                            IsDeleted = false,
-                            Name = "StoreDelivery",
-                            NormalizedName = "STOREDELIVERY"
-                        },
-                        new
-                        {
-                            Id = new Guid("203ad3a0-11b2-47c5-8b98-78ff0a16a01d"),
+                            Id = new Guid("a2a02247-2a41-4a38-8804-4be8038fa78b"),
                             Description = "",
                             IsDeleted = false,
                             Name = "StoreSupport",
@@ -1416,8 +1376,8 @@ namespace Infrastructures.Migrations
                         {
                             Id = new Guid("9878ee32-2ead-4165-9e44-e510ba1bae29"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "32db2eaa-aebe-41e2-93ba-c9d526a90537",
-                            CreationDate = new DateTime(2025, 7, 10, 15, 2, 40, 94, DateTimeKind.Utc).AddTicks(3276),
+                            ConcurrencyStamp = "3c285a15-e68e-498b-b75c-480d6a3c8910",
+                            CreationDate = new DateTime(2025, 7, 10, 16, 9, 38, 196, DateTimeKind.Utc).AddTicks(778),
                             Email = "admin@elderly.com",
                             EmailConfirmed = true,
                             FullName = "Super Admin",
@@ -1425,7 +1385,7 @@ namespace Infrastructures.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ELDERLY.COM",
                             NormalizedUserName = "SUPERADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAECkAGcXJtMUNFiOJn0avbpwKGczH/ySpYAHnqBYR+2Kd7qN0GAOg7ZWzpTKl60ryNA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPdXm00IAqQWFjdhDlAXHrBatKhYmkbOvfJofX3fLfsFg0Ion0jid+b+jqJFbHEndw==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "superadmin"
@@ -2079,48 +2039,6 @@ namespace Infrastructures.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("SilverCart.Domain.Entities.Auth.ConsultantUser", b =>
-                {
-                    b.HasOne("SilverCart.Domain.Entities.BaseUser", null)
-                        .WithOne()
-                        .HasForeignKey("SilverCart.Domain.Entities.Auth.ConsultantUser", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SilverCart.Domain.Entities.Auth.ConsultantRole", "Role")
-                        .WithMany("Consultants")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.OwnsOne("SilverCart.Domain.Entities.OTPData", "OTP", b1 =>
-                        {
-                            b1.Property<Guid>("ConsultantUserId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<string>("Code")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<DateTime>("ExpirationTime")
-                                .HasColumnType("timestamp with time zone");
-
-                            b1.Property<bool>("IsUsed")
-                                .HasColumnType("boolean");
-
-                            b1.HasKey("ConsultantUserId");
-
-                            b1.ToTable("ConsultantUsers");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ConsultantUserId");
-                        });
-
-                    b.Navigation("OTP");
-
-                    b.Navigation("Role");
-                });
-
             modelBuilder.Entity("SilverCart.Domain.Entities.Auth.CustomerUser", b =>
                 {
                     b.HasOne("SilverCart.Domain.Entities.Auth.CustomerRole", null)
@@ -2167,11 +2085,6 @@ namespace Infrastructures.Migrations
                         .HasForeignKey("SilverCart.Domain.Entities.StoreUser", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("SilverCart.Domain.Entities.Auth.ConsultantRole", b =>
-                {
-                    b.Navigation("Consultants");
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.Auth.ConsultantRole", b =>
