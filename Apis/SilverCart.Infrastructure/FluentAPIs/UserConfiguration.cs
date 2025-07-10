@@ -36,7 +36,9 @@ namespace Infrastructures.FluentAPIs
         IEntityTypeConfiguration<ScheduledTask>,
         IEntityTypeConfiguration<UserPromotion>,
         IEntityTypeConfiguration<GuardianUser>,
-        IEntityTypeConfiguration<DependentUser>
+        IEntityTypeConfiguration<DependentUser>,
+        IEntityTypeConfiguration<ConsultantUser>,
+        IEntityTypeConfiguration<Consultation>
     {
         public void Configure(EntityTypeBuilder<CustomerUser> builder)
         {
@@ -230,6 +232,55 @@ namespace Infrastructures.FluentAPIs
             builder.ToTable("GuardianUsers");
             builder.HasMany(x => x.Dependents).WithOne(x => x.Guardian).HasForeignKey(x => x.GuardianId);
             builder.OwnsOne(x => x.OTP);
+        }
+        //public void Configure(EntityTypeBuilder<ConsultantUser> builder)
+        //{
+
+
+        //    builder.ToTable("ConsultantUsers");
+        //    builder.HasMany(x => x.Consulations)
+        //        .WithOne(x => x.ConsultantUser)
+        //        .HasForeignKey(x => x.ConsultantId)
+        //        .OnDelete(DeleteBehavior.Restrict);
+        //    builder.OwnsOne(x => x.OTP);
+        //}
+
+        //public void Configure(EntityTypeBuilder<Consultation> builder)
+        //{
+        //    builder.ToTable("Consultations");
+        //    builder.HasOne(x => x.Consultant).WithMany(x => x.Consultations).HasForeignKey(x => x.ConsultantId);
+        //    builder.HasOne(x => x.Customer).WithMany().HasForeignKey(x => x.CustomerId);
+        //}
+
+        public void Configure(EntityTypeBuilder<ConsultantUser> builder)
+        {
+            builder.ToTable("ConsultantUsers");
+            builder.HasMany(x => x.Consultations)
+                .WithOne(x => x.ConsultantUser)
+                .HasForeignKey(x => x.ConsultantId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.OwnsOne(x => x.OTP);
+        }
+
+        public void Configure(EntityTypeBuilder<Consultation> builder)
+        {
+            builder.ToTable("Consultations");
+
+
+            builder.HasOne(x => x.ConsultantUser)
+                .WithMany(x => x.Consultations)
+                .HasForeignKey(x => x.ConsultantId);
+
+            builder.HasOne(x => x.DependentUser)
+                .WithMany()  // assuming not bi-directional
+                .HasForeignKey(x => x.CustomerId);
+        }
+        public void Configure(EntityTypeBuilder<ConsultantRole> builder)
+        {
+            builder.ToTable("ConsultantRoles");
+            builder.HasKey(x => x.Id); // ✅ Explicitly set primary key
+            builder.Property(x => x.RoleName).HasMaxLength(100);
         }
     }
 }

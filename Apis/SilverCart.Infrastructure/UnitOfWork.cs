@@ -27,6 +27,7 @@ namespace Infrastructures
         private readonly IStoreOrderRepository _storeOrderRepository;
         private readonly IStoreProductItemOrderRepository _storeProductItemOrderRepository;
         private readonly IConsultantUserRepository _consultantUserRepository;
+        private readonly IConsultationRepository _consultationRepository;
         public UnitOfWork(AppDbContext dbContext,
             ICategoryRepository categoryRepository,
             IOrderRepository orderRepository,
@@ -45,7 +46,8 @@ namespace Infrastructures
             IMessageRepository messageRepository,
             IStoreOrderRepository storeOrderRepository,
             IStoreProductItemOrderRepository storeProductItemOrderRepository,
-            IConsultantUserRepository consultantUserRepository)
+            IConsultantUserRepository consultantUserRepository,
+            IConsultationRepository consultationRepository)
         {
             _dbContext = dbContext;
             _categoryRepository = categoryRepository;
@@ -66,6 +68,7 @@ namespace Infrastructures
             _storeOrderRepository = storeOrderRepository;
             _storeProductItemOrderRepository = storeProductItemOrderRepository;
             _consultantUserRepository = consultantUserRepository;
+            _consultationRepository = consultationRepository;
         }
 
         public ICategoryRepository CategoryRepository => _categoryRepository;
@@ -91,6 +94,7 @@ namespace Infrastructures
         public IStoreProductItemOrderRepository StoreProductItemOrderRepository => _storeProductItemOrderRepository;
 
         public IConsultantUserRepository ConsultantUserRepository => _consultantUserRepository;
+        public IConsultationRepository ConsultationRepository => _consultationRepository;
         public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
             return await _dbContext.Database.BeginTransactionAsync();

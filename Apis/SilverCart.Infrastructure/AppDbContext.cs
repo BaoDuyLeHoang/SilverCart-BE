@@ -58,9 +58,10 @@ namespace Infrastructures
         public DbSet<Conversation> Conversations { get; set; }
         public DbSet<Message> Messages { get; set; }
         // Consultant
-        public DbSet<Consultant> Consultants { get; set; }
+        public DbSet<Consultation> Consultants { get; set; }
         public DbSet<ConsultantUser> ConsultantUsers { get; set; }
         public DbSet<ConsultantRole> ConsultantRoles { get; set; }
+        public DbSet<Consultation> Consultations { get; set; }
         // Base entities
         public DbSet<BaseUser> Users { get; set; }
         public DbSet<BaseRole> Roles { get; set; }
@@ -79,6 +80,10 @@ namespace Infrastructures
                 .WithMany(u => u.ConversationsAsUser2)
                 .HasForeignKey(c => c.User2Id)
                 .OnDelete(DeleteBehavior.Restrict);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8f1555a34ed75f6ac7854bab98b248deb8824077
             // Apply all other configurations from the assembly
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }

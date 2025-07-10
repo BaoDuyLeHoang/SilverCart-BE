@@ -3,6 +3,7 @@ using System;
 using Infrastructures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructures.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250706080125_AddConsultantUserIntoDB")]
+    partial class AddConsultantUserIntoDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -699,10 +702,6 @@ namespace Infrastructures.Migrations
                 {
                     b.HasBaseType("SilverCart.Domain.Entities.BaseEntity");
 
-                    b.Property<string>("LastMessage")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<DateTime?>("LastMessageAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -803,8 +802,17 @@ namespace Infrastructures.Migrations
                 {
                     b.HasBaseType("SilverCart.Domain.Entities.BaseEntity");
 
+                    b.Property<DateTime?>("ArrivedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeadlineDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("EstimatedArrivedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("OrderStatus")
                         .HasColumnType("integer");
@@ -828,6 +836,32 @@ namespace Infrastructures.Migrations
                     b.HasIndex("UserPromotionId");
 
                     b.ToTable("Orders", (string)null);
+                });
+
+            modelBuilder.Entity("SilverCart.Domain.Entities.OrderItem", b =>
+                {
+                    b.HasBaseType("SilverCart.Domain.Entities.BaseEntity");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("StoreProductItemId")
+                        .HasColumnType("uuid");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("StoreProductItemId");
+
+                    b.ToTable("OrderItems", (string)null);
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.OrderReview", b =>
@@ -1008,9 +1042,6 @@ namespace Infrastructures.Migrations
 
                     b.Property<Guid>("VariantId")
                         .HasColumnType("uuid");
-
-                    b.Property<int>("Weight")
-                        .HasColumnType("integer");
 
                     b.HasIndex("VariantId");
 
@@ -1215,10 +1246,6 @@ namespace Infrastructures.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<Guid>("StoreAddressId")
                         .HasColumnType("uuid");
 
@@ -1234,11 +1261,11 @@ namespace Infrastructures.Migrations
                     b.Property<int>("DistrictId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("DistrictName")
+                    b.Property<string>("FromDistrictName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("ProvinceName")
+                    b.Property<string>("FromProvinceName")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -1250,37 +1277,7 @@ namespace Infrastructures.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("WardName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.ToTable("StoreAddresses");
-                });
-
-            modelBuilder.Entity("SilverCart.Domain.Entities.StoreOrder", b =>
-                {
-                    b.HasBaseType("SilverCart.Domain.Entities.BaseEntity");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("ShippingStatus")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("StoreId")
-                        .HasColumnType("uuid");
-
-                    b.Property<double>("TotalPrice")
-                        .HasColumnType("double precision");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("StoreId");
-
-                    b.ToTable("StoreOrder");
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.StoreProductItem", b =>
@@ -1301,32 +1298,6 @@ namespace Infrastructures.Migrations
                     b.HasIndex("StoreId");
 
                     b.ToTable("StoreProductItem");
-                });
-
-            modelBuilder.Entity("SilverCart.Domain.Entities.StoreProductItemsOrder", b =>
-                {
-                    b.HasBaseType("SilverCart.Domain.Entities.BaseEntity");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("double precision");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("StoreOrderId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("StoreProductItemId")
-                        .HasColumnType("uuid");
-
-                    b.HasIndex("StoreOrderId");
-
-                    b.HasIndex("StoreProductItemId");
-
-                    b.ToTable("StoreProductItemsOrder");
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.UserPromotion", b =>
@@ -1789,6 +1760,25 @@ namespace Infrastructures.Migrations
                     b.Navigation("UserPromotion");
                 });
 
+            modelBuilder.Entity("SilverCart.Domain.Entities.OrderItem", b =>
+                {
+                    b.HasOne("SilverCart.Domain.Entities.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SilverCart.Domain.Entities.StoreProductItem", "StoreProductItem")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("StoreProductItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("StoreProductItem");
+                });
+
             modelBuilder.Entity("SilverCart.Domain.Entities.OrderReview", b =>
                 {
                     b.HasOne("SilverCart.Domain.Entities.Auth.CustomerUser", "Customer")
@@ -1928,25 +1918,6 @@ namespace Infrastructures.Migrations
                     b.Navigation("StoreAddress");
                 });
 
-            modelBuilder.Entity("SilverCart.Domain.Entities.StoreOrder", b =>
-                {
-                    b.HasOne("SilverCart.Domain.Entities.Order", "Order")
-                        .WithMany("StoreOrders")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SilverCart.Domain.Entities.Store", "Store")
-                        .WithMany("StoreOrders")
-                        .HasForeignKey("StoreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Store");
-                });
-
             modelBuilder.Entity("SilverCart.Domain.Entities.StoreProductItem", b =>
                 {
                     b.HasOne("SilverCart.Domain.Entities.ProductItem", "ProductItem")
@@ -1962,25 +1933,6 @@ namespace Infrastructures.Migrations
                     b.Navigation("ProductItem");
 
                     b.Navigation("Store");
-                });
-
-            modelBuilder.Entity("SilverCart.Domain.Entities.StoreProductItemsOrder", b =>
-                {
-                    b.HasOne("SilverCart.Domain.Entities.StoreOrder", "StoreOrder")
-                        .WithMany("StoreProductItemsOrders")
-                        .HasForeignKey("StoreOrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SilverCart.Domain.Entities.StoreProductItem", "StoreProductItem")
-                        .WithMany("StoreProductItemsOrders")
-                        .HasForeignKey("StoreProductItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("StoreOrder");
-
-                    b.Navigation("StoreProductItem");
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.UserPromotion", b =>
@@ -2285,7 +2237,7 @@ namespace Infrastructures.Migrations
 
             modelBuilder.Entity("SilverCart.Domain.Entities.Order", b =>
                 {
-                    b.Navigation("StoreOrders");
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.OrderStatus", b =>
@@ -2326,23 +2278,16 @@ namespace Infrastructures.Migrations
 
             modelBuilder.Entity("SilverCart.Domain.Entities.Store", b =>
                 {
-                    b.Navigation("StoreOrders");
-
                     b.Navigation("StoreProductItems");
 
                     b.Navigation("StoreUsers");
                 });
 
-            modelBuilder.Entity("SilverCart.Domain.Entities.StoreOrder", b =>
-                {
-                    b.Navigation("StoreProductItemsOrders");
-                });
-
             modelBuilder.Entity("SilverCart.Domain.Entities.StoreProductItem", b =>
                 {
-                    b.Navigation("StockHistories");
+                    b.Navigation("OrderItems");
 
-                    b.Navigation("StoreProductItemsOrders");
+                    b.Navigation("StockHistories");
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.AdministratorUser", b =>

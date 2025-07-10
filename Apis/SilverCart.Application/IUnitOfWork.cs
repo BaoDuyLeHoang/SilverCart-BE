@@ -25,6 +25,7 @@ namespace Infrastructures
         public IStoreOrderRepository StoreOrderRepository { get; }
         public IStoreProductItemOrderRepository StoreProductItemOrderRepository { get; }
         public IConsultantUserRepository ConsultantUserRepository { get; }
+        public IConsultationRepository ConsultationRepository { get; }
         public Task<IDbContextTransaction> BeginTransactionAsync();
         public Task<int> SaveChangeAsync();
     }

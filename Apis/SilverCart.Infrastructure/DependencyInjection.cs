@@ -51,8 +51,13 @@ namespace Infrastructures
             services.AddScoped<IGuardianUserRepository, GuardianUserRepository>();
             services.AddScoped<IConversationRepository, ConversationRepository>();
             services.AddScoped<IMessageRepository, MessageRepository>();
+<<<<<<< HEAD
             services.AddScoped<IStoreOrderRepository, StoreOrderRepository>();
             services.AddScoped<IStoreProductItemOrderRepository, StoreProductItemOrderRepository>();
+=======
+            services.AddScoped<IConsultantUserRepository, ConsultantUserRepository>();
+            services.AddScoped<IConsultationRepository, ConsultationRepository>();
+>>>>>>> 8f1555a34ed75f6ac7854bab98b248deb8824077
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             #endregion
 
@@ -65,10 +70,15 @@ namespace Infrastructures
             services.AddHttpClient<IGhnService, GhnService>();
             services.AddSingleton<ILockingService, LockingService>();
             services.AddSingleton<ICalculateService, CalculateService>();
+<<<<<<< HEAD
             services.AddSingleton<IGenerateQRCodeGeneratorService, GenerateQRCodeGeneratorService>();
 
+=======
+>>>>>>> 8f1555a34ed75f6ac7854bab98b248deb8824077
             // Add Payments service to the container.
             services.AddSingleton<IVnpay, Vnpay>();
+            // Add service that supports consultant users for call video...
+            services.AddSingleton<IStringeeService, StringeeService>();
 
             // ATTENTION: if you do migration please check file README.md
             services.AddDbContext<AppDbContext>((service, option) =>
