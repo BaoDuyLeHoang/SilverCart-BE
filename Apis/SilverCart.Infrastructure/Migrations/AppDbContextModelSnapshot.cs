@@ -378,7 +378,7 @@ namespace Infrastructures.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OTPData");
+                    b.ToTable("OTPData", (string)null);
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.StoreUserRole", b =>
@@ -653,7 +653,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("ParentCategoryId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.Chat.Conversation", b =>
@@ -677,7 +677,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("User2Id");
 
-                    b.ToTable("Conversations");
+                    b.ToTable("Conversations", (string)null);
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.Chat.Message", b =>
@@ -704,7 +704,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.Consultation", b =>
@@ -928,7 +928,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("ProductItemId");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.PaymentMethod", b =>
@@ -1024,7 +1024,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductCategory");
+                    b.ToTable("ProductCategory", (string)null);
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.ProductImage", b =>
@@ -1340,7 +1340,7 @@ namespace Infrastructures.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.ToTable("StoreAddresses");
+                    b.ToTable("StoreAddresses", (string)null);
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.UserPromotion", b =>
@@ -1376,8 +1376,8 @@ namespace Infrastructures.Migrations
                         {
                             Id = new Guid("9878ee32-2ead-4165-9e44-e510ba1bae29"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3c285a15-e68e-498b-b75c-480d6a3c8910",
-                            CreationDate = new DateTime(2025, 7, 10, 16, 9, 38, 196, DateTimeKind.Utc).AddTicks(778),
+                            ConcurrencyStamp = "305193f4-ffdb-4335-bd41-8197e5a0b1c2",
+                            CreationDate = new DateTime(2025, 7, 10, 15, 50, 55, 509, DateTimeKind.Utc).AddTicks(7145),
                             Email = "admin@elderly.com",
                             EmailConfirmed = true,
                             FullName = "Super Admin",
@@ -1385,7 +1385,7 @@ namespace Infrastructures.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ELDERLY.COM",
                             NormalizedUserName = "SUPERADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPdXm00IAqQWFjdhDlAXHrBatKhYmkbOvfJofX3fLfsFg0Ion0jid+b+jqJFbHEndw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBMIJ7DmIzhO/9HZUqMNGNJo7yigDjHNfcLRsT1Fh1I5iUiu0jV3dPwYEuLOFJowsQ==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "superadmin"
