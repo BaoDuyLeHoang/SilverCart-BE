@@ -14,7 +14,6 @@ namespace Infrastructures.Repositories
         private readonly AppDbContext _context;
         public ConsultantUserRepository(AppDbContext context) : base(context) { }
 
-
         public async Task<ConsultantUser?> GetByEmailAsync(string email)
         {
             return await _context.ConsultantUsers
