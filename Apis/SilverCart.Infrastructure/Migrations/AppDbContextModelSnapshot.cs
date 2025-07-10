@@ -378,7 +378,7 @@ namespace Infrastructures.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OTPData");
+                    b.ToTable("OTPData", (string)null);
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.StoreUserRole", b =>
@@ -653,7 +653,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("ParentCategoryId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.Chat.Conversation", b =>
@@ -677,7 +677,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("User2Id");
 
-                    b.ToTable("Conversations");
+                    b.ToTable("Conversations", (string)null);
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.Chat.Message", b =>
@@ -704,7 +704,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.Consultation", b =>
@@ -928,7 +928,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("ProductItemId");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.PaymentMethod", b =>
@@ -1024,7 +1024,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductCategory");
+                    b.ToTable("ProductCategory", (string)null);
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.ProductImage", b =>
@@ -1340,7 +1340,7 @@ namespace Infrastructures.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.ToTable("StoreAddresses");
+                    b.ToTable("StoreAddresses", (string)null);
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.UserPromotion", b =>

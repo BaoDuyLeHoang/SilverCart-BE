@@ -48,6 +48,8 @@ namespace Infrastructures
             services.AddScoped<IGuardianUserRepository, GuardianUserRepository>();
             services.AddScoped<IConversationRepository, ConversationRepository>();
             services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddScoped<IConsultantUserRepository, ConsultantUserRepository>();
+            services.AddScoped<IConsultationRepository, ConsultationRepository>();
             services.AddScoped<IOrderDetailsRepository, OrderDetailsRepository>();
             services.AddScoped<IProductVariantRepository, ProductVariantsRepository>();
             //services.AddScoped<IStoreOrderRepository, StoreOrderRepository>();
@@ -66,6 +68,9 @@ namespace Infrastructures
             services.AddScoped<ISmsService, SMSService>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddHttpClient<IGhnService, GhnService>();
+            services.AddSingleton<ILockingService, LockingService>();
+            services.AddSingleton<ICalculateService, CalculateService>();
+            services.AddSingleton<IGenerateQRCodeGeneratorService, GenerateQRCodeGeneratorService>();
             services.AddScoped<IRedisService, RedisService>();
             services.AddScoped<ILockingService, LockingService>();
             services.AddScoped<ICalculateService, CalculateService>();

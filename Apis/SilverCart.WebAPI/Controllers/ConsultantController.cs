@@ -4,9 +4,6 @@ using Infrastructures.Features.Consultation.ConsultationReport.Update;
 using Infrastructures.Interfaces.System;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Infrastructures.Features.Consultation.CreateConsulationReport;
-using Infrastructures.Interfaces.System;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -26,7 +23,7 @@ namespace WebAPI.Controllers
 
         [Authorize(Roles = "Consultant")]
         [HttpPost]
-        public async Task<IActionResult> CreateConsultant([FromBody] Infrastructures.Features.Consultation.Consultant.Create.CreateConsultantCommand command)
+        public async Task<IActionResult> CreateConsultant([FromBody] CreateConsultantCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(new { ConsultantId = result });
@@ -34,7 +31,7 @@ namespace WebAPI.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost("create-consultant")]
-        public async Task<IActionResult> CreateConsultantReport([FromBody] Infrastructures.Features.Consultation.CreateConsulationReport.CreateConsultantCommand command)
+        public async Task<IActionResult> CreateConsultantReport([FromBody] CreateConsultantCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(new { ReportId = result });
