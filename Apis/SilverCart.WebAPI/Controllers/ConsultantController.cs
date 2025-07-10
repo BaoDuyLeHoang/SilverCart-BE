@@ -4,12 +4,9 @@ using Infrastructures.Features.Consultation.ConsultationReport.Update;
 using Infrastructures.Interfaces.System;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-<<<<<<< HEAD
-=======
 using Infrastructures.Features.Consultation.CreateConsulationReport;
 using Infrastructures.Interfaces.System;
 using MediatR;
->>>>>>> 5206121e8a06e53f0fae7d179eaeaed89efa9237
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
