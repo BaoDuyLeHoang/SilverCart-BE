@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructures.Features.Consultation.ConsultationReport
 {
-    internal class CreateConsultationReportValidation
+    public class CreateConsultationReportValidation
     {
     }
 }
