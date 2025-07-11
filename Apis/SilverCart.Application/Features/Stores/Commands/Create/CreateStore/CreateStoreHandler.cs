@@ -58,7 +58,7 @@ namespace Infrastructures.Features.Stores.Commands.Create.CreateStore
             // Create address
             var address = new StoreAddress
             {
-                StreetAddress = request.StreetAddress,
+                Address = request.StreetAddress,
                 WardCode = request.WardCode,
                 DistrictId = request.DistrictId,
                 WardName = request.WardName,

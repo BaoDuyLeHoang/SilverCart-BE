@@ -33,7 +33,7 @@ namespace Infrastructures.Features.Stores.Queries.GetMyStore
                     store.GhnShopId,
                     store.Phone,
                     new GetStoreAddressResponse(
-                        store.StoreAddress.StreetAddress,
+                        store.StoreAddress.Address,
                         store.StoreAddress.WardCode,
                         store.StoreAddress.DistrictId,
                         store.StoreAddress.DistrictName,

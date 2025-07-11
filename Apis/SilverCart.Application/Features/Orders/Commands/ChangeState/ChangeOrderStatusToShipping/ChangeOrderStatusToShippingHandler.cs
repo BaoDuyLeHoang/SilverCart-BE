@@ -61,7 +61,7 @@ namespace Infrastructures.Features.Orders.Commands.ChangeState.ChangeOrderStatus
                 ToName = user.FullName,
                 FromName = store.Name,
                 FromPhone = store.Phone,
-                FromAddress = store.StoreAddress.StreetAddress,
+                FromAddress = store.StoreAddress.Address,
                 FromWardName = store.StoreAddress.WardName,
                 FromDistrictName = store.StoreAddress.DistrictName,
                 FromProvinceName = store.StoreAddress.ProvinceName,

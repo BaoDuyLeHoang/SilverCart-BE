@@ -1,0 +1,21 @@
+{
+  "name": "elderly-api",
+  "version": "1.0.0",
+  "description": "Elderly Care API with Husky pre-push hooks",
+  "scripts": {
+    "prepare": "husky install",
+    "test": "dotnet test",
+    "test:coverage": "dotnet test --collect:\"XPlat Code Coverage\"",
+    "build": "dotnet build",
+    "clean": "dotnet clean",
+    "format": "dotnet format",
+    "lint": "dotnet format --verify-no-changes",
+    "pre-push": "npm run build && npm run test && npm run lint"
+  },
+  "devDependencies": {
+    "husky": "^8.0.3"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+} 
