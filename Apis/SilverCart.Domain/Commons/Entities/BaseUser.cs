@@ -10,6 +10,7 @@ namespace SilverCart.Domain.Entities
     {
         public string FullName { get; set; }
         public OTPData? OTP { get; set; }
+        public string Gender { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime? CreationDate { get; set; }
         public DateTime? ModificationDate { get; set; }
