@@ -660,6 +660,114 @@ namespace Infrastructures.Migrations
                     b.HasIndex("ParentCategoryId");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(1107),
+                            IsDeleted = false,
+                            Description = "Các thiết bị y tế hỗ trợ chăm sóc sức khỏe người cao tuổi",
+                            Name = "Thiết bị y tế",
+                            Status = "Active"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(1113),
+                            IsDeleted = false,
+                            Description = "Thực phẩm bổ sung dinh dưỡng cho người cao tuổi",
+                            Name = "Thực phẩm dinh dưỡng",
+                            Status = "Active"
+                        },
+                        new
+                        {
+                            Id = new Guid("33333333-3333-3333-3333-333333333333"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(1115),
+                            IsDeleted = false,
+                            Description = "Các dụng cụ hỗ trợ sinh hoạt hàng ngày",
+                            Name = "Dụng cụ hỗ trợ",
+                            Status = "Active"
+                        },
+                        new
+                        {
+                            Id = new Guid("44444444-4444-4444-4444-444444444444"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(1118),
+                            IsDeleted = false,
+                            Description = "Các dịch vụ tư vấn chăm sóc sức khỏe",
+                            Name = "Dịch vụ tư vấn",
+                            Status = "Active"
+                        },
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111112"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(1121),
+                            IsDeleted = false,
+                            Description = "Các loại máy đo huyết áp điện tử",
+                            Name = "Máy đo huyết áp",
+                            ParentCategoryId = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Status = "Active"
+                        },
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111113"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(1124),
+                            IsDeleted = false,
+                            Description = "Thiết bị đo đường huyết tại nhà",
+                            Name = "Máy đo đường huyết",
+                            ParentCategoryId = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Status = "Active"
+                        },
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111114"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(1134),
+                            IsDeleted = false,
+                            Description = "Thiết bị xông mũi họng tại nhà",
+                            Name = "Máy xông mũi họng",
+                            ParentCategoryId = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Status = "Active"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222223"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(1137),
+                            IsDeleted = false,
+                            Description = "Các loại sữa bổ sung dinh dưỡng",
+                            Name = "Sữa dinh dưỡng",
+                            ParentCategoryId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            Status = "Active"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222224"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(1139),
+                            IsDeleted = false,
+                            Description = "Thực phẩm chức năng bổ sung vitamin",
+                            Name = "Vitamin và khoáng chất",
+                            ParentCategoryId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            Status = "Active"
+                        },
+                        new
+                        {
+                            Id = new Guid("33333333-3333-3333-3333-333333333334"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(1142),
+                            IsDeleted = false,
+                            Description = "Các loại gậy hỗ trợ đi lại",
+                            Name = "Gậy chống",
+                            ParentCategoryId = new Guid("33333333-3333-3333-3333-333333333333"),
+                            Status = "Active"
+                        },
+                        new
+                        {
+                            Id = new Guid("33333333-3333-3333-3333-333333333335"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(1144),
+                            IsDeleted = false,
+                            Description = "Xe lăn hỗ trợ di chuyển",
+                            Name = "Xe lăn",
+                            ParentCategoryId = new Guid("33333333-3333-3333-3333-333333333333"),
+                            Status = "Active"
+                        });
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.Chat.Conversation", b =>
@@ -1014,6 +1122,98 @@ namespace Infrastructures.Migrations
                         .HasColumnType("text");
 
                     b.ToTable("Products", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111121"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2735),
+                            IsDeleted = false,
+                            Description = "Máy đo huyết áp điện tử tự động, dễ sử dụng cho người cao tuổi",
+                            Name = "Máy đo huyết áp Omron HEM-7130",
+                            ProductType = "Physical",
+                            VideoPath = "/videos/products/omron-hem-7130.mp4"
+                        },
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111122"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2742),
+                            IsDeleted = false,
+                            Description = "Máy đo đường huyết chính xác, ít đau khi lấy máu",
+                            Name = "Máy đo đường huyết Accu-Chek Guide",
+                            ProductType = "Physical",
+                            VideoPath = "/videos/products/accu-chek-guide.mp4"
+                        },
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111123"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2746),
+                            IsDeleted = false,
+                            Description = "Máy xông mũi họng siêu âm, hiệu quả cao",
+                            Name = "Máy xông mũi họng Omron NE-C28",
+                            ProductType = "Physical",
+                            VideoPath = "/videos/products/omron-ne-c28.mp4"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222225"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2749),
+                            IsDeleted = false,
+                            Description = "Sữa dinh dưỡng bổ sung protein và vitamin cho người cao tuổi",
+                            Name = "Sữa Ensure Gold",
+                            ProductType = "Consumable",
+                            VideoPath = "/videos/products/ensure-gold.mp4"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222226"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2751),
+                            IsDeleted = false,
+                            Description = "Bổ sung vitamin D3 và K2 cho xương khớp",
+                            Name = "Vitamin D3 + K2",
+                            ProductType = "Consumable",
+                            VideoPath = "/videos/products/vitamin-d3-k2.mp4"
+                        },
+                        new
+                        {
+                            Id = new Guid("33333333-3333-3333-3333-333333333336"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2754),
+                            IsDeleted = false,
+                            Description = "Gậy chống 4 chân chống trượt, an toàn cho người cao tuổi",
+                            Name = "Gậy chống 4 chân",
+                            ProductType = "Physical",
+                            VideoPath = "/videos/products/gay-chong-4-chan.mp4"
+                        },
+                        new
+                        {
+                            Id = new Guid("33333333-3333-3333-3333-333333333337"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2756),
+                            IsDeleted = false,
+                            Description = "Xe lăn tay gấp gọn, nhẹ và dễ di chuyển",
+                            Name = "Xe lăn tay gấp gọn",
+                            ProductType = "Physical",
+                            VideoPath = "/videos/products/xe-lan-tay.mp4"
+                        },
+                        new
+                        {
+                            Id = new Guid("44444444-4444-4444-4444-444444444445"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2758),
+                            IsDeleted = false,
+                            Description = "Dịch vụ tư vấn dinh dưỡng trực tuyến với chuyên gia",
+                            Name = "Tư vấn dinh dưỡng online",
+                            ProductType = "Service",
+                            VideoPath = "/videos/services/tu-van-dinh-duong.mp4"
+                        },
+                        new
+                        {
+                            Id = new Guid("44444444-4444-4444-4444-444444444446"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2772),
+                            IsDeleted = false,
+                            Description = "Gói khám sức khỏe định kỳ cho người cao tuổi",
+                            Name = "Khám sức khỏe định kỳ",
+                            ProductType = "Service",
+                            VideoPath = "/videos/services/kham-suc-khoe.mp4"
+                        });
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.ProductCategory", b =>
@@ -1031,6 +1231,80 @@ namespace Infrastructures.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductCategory");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111161"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(3968),
+                            IsDeleted = false,
+                            CategoryId = new Guid("11111111-1111-1111-1111-111111111112"),
+                            ProductId = new Guid("11111111-1111-1111-1111-111111111121")
+                        },
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111162"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(3974),
+                            IsDeleted = false,
+                            CategoryId = new Guid("11111111-1111-1111-1111-111111111113"),
+                            ProductId = new Guid("11111111-1111-1111-1111-111111111122")
+                        },
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111163"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(3977),
+                            IsDeleted = false,
+                            CategoryId = new Guid("11111111-1111-1111-1111-111111111114"),
+                            ProductId = new Guid("11111111-1111-1111-1111-111111111123")
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222233"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(3979),
+                            IsDeleted = false,
+                            CategoryId = new Guid("22222222-2222-2222-2222-222222222223"),
+                            ProductId = new Guid("22222222-2222-2222-2222-222222222225")
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222234"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(3981),
+                            IsDeleted = false,
+                            CategoryId = new Guid("22222222-2222-2222-2222-222222222224"),
+                            ProductId = new Guid("22222222-2222-2222-2222-222222222226")
+                        },
+                        new
+                        {
+                            Id = new Guid("33333333-3333-3333-3333-333333333345"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(3984),
+                            IsDeleted = false,
+                            CategoryId = new Guid("33333333-3333-3333-3333-333333333334"),
+                            ProductId = new Guid("33333333-3333-3333-3333-333333333336")
+                        },
+                        new
+                        {
+                            Id = new Guid("33333333-3333-3333-3333-333333333346"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(4033),
+                            IsDeleted = false,
+                            CategoryId = new Guid("33333333-3333-3333-3333-333333333335"),
+                            ProductId = new Guid("33333333-3333-3333-3333-333333333337")
+                        },
+                        new
+                        {
+                            Id = new Guid("44444444-4444-4444-4444-444444444449"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(4036),
+                            IsDeleted = false,
+                            CategoryId = new Guid("44444444-4444-4444-4444-444444444444"),
+                            ProductId = new Guid("44444444-4444-4444-4444-444444444445")
+                        },
+                        new
+                        {
+                            Id = new Guid("44444444-4444-4444-4444-444444444450"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(4038),
+                            IsDeleted = false,
+                            CategoryId = new Guid("44444444-4444-4444-4444-444444444444"),
+                            ProductId = new Guid("44444444-4444-4444-4444-444444444446")
+                        });
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.ProductImage", b =>
@@ -1056,6 +1330,53 @@ namespace Infrastructures.Migrations
                     b.HasIndex("ProductItemId");
 
                     b.ToTable("ProductImages", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111151"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(3212),
+                            IsDeleted = false,
+                            ImageName = "Máy đo huyết áp Omron HEM-7130 - Ảnh 1",
+                            ImagePath = "/images/products/omron-hem-7130-white-1.jpg",
+                            ProductItemId = new Guid("11111111-1111-1111-1111-111111111141")
+                        },
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111152"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(3214),
+                            IsDeleted = false,
+                            ImageName = "Máy đo huyết áp Omron HEM-7130 - Ảnh 2",
+                            ImagePath = "/images/products/omron-hem-7130-white-2.jpg",
+                            ProductItemId = new Guid("11111111-1111-1111-1111-111111111141")
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222232"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(3217),
+                            IsDeleted = false,
+                            ImageName = "Sữa Ensure Gold 400g - Ảnh 1",
+                            ImagePath = "/images/products/ensure-gold-400g-1.jpg",
+                            ProductItemId = new Guid("22222222-2222-2222-2222-222222222230")
+                        },
+                        new
+                        {
+                            Id = new Guid("33333333-3333-3333-3333-333333333343"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(3219),
+                            IsDeleted = false,
+                            ImageName = "Gậy chống 4 chân đen - Ảnh 1",
+                            ImagePath = "/images/products/gay-chong-4-chan-black-1.jpg",
+                            ProductItemId = new Guid("33333333-3333-3333-3333-333333333341")
+                        },
+                        new
+                        {
+                            Id = new Guid("33333333-3333-3333-3333-333333333344"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(3221),
+                            IsDeleted = false,
+                            ImageName = "Xe lăn tay xanh - Ảnh 1",
+                            ImagePath = "/images/products/xe-lan-tay-xanh-1.jpg",
+                            ProductItemId = new Guid("33333333-3333-3333-3333-333333333342")
+                        });
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.ProductItem", b =>
@@ -1101,6 +1422,110 @@ namespace Infrastructures.Migrations
                     b.HasIndex("VariantId");
 
                     b.ToTable("ProductItems", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111141"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(3063),
+                            IsDeleted = false,
+                            DiscountedPrice = 800000m,
+                            Height = 10,
+                            IsActive = true,
+                            Length = 20,
+                            OriginalPrice = 850000m,
+                            SKU = "OMRON-HEM-7130-WHITE-DL",
+                            Stock = 25,
+                            StoreId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaab"),
+                            VariantId = new Guid("11111111-1111-1111-1111-111111111131"),
+                            Weight = 500,
+                            Width = 15
+                        },
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111142"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(3068),
+                            IsDeleted = false,
+                            DiscountedPrice = 1100000m,
+                            Height = 5,
+                            IsActive = true,
+                            Length = 15,
+                            OriginalPrice = 1200000m,
+                            SKU = "ACCU-CHEK-GUIDE-BASIC-DL",
+                            Stock = 15,
+                            StoreId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaab"),
+                            VariantId = new Guid("11111111-1111-1111-1111-111111111133"),
+                            Weight = 300,
+                            Width = 10
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222230"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(3072),
+                            IsDeleted = false,
+                            DiscountedPrice = 250000m,
+                            Height = 6,
+                            IsActive = true,
+                            Length = 12,
+                            OriginalPrice = 280000m,
+                            SKU = "ENSURE-GOLD-400G-DL",
+                            Stock = 50,
+                            StoreId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaab"),
+                            VariantId = new Guid("22222222-2222-2222-2222-222222222227"),
+                            Weight = 400,
+                            Width = 8
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222231"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(3076),
+                            IsDeleted = false,
+                            DiscountedPrice = 160000m,
+                            Height = 3,
+                            IsActive = true,
+                            Length = 8,
+                            OriginalPrice = 180000m,
+                            SKU = "VITAMIN-D3-K2-60-DL",
+                            Stock = 75,
+                            StoreId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaab"),
+                            VariantId = new Guid("22222222-2222-2222-2222-222222222229"),
+                            Weight = 100,
+                            Width = 5
+                        },
+                        new
+                        {
+                            Id = new Guid("33333333-3333-3333-3333-333333333341"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(3081),
+                            IsDeleted = false,
+                            DiscountedPrice = 420000m,
+                            Height = 5,
+                            IsActive = true,
+                            Length = 120,
+                            OriginalPrice = 450000m,
+                            SKU = "GAY-CHONG-4-CHAN-BLACK-DL",
+                            Stock = 20,
+                            StoreId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaab"),
+                            VariantId = new Guid("33333333-3333-3333-3333-333333333338"),
+                            Weight = 800,
+                            Width = 5
+                        },
+                        new
+                        {
+                            Id = new Guid("33333333-3333-3333-3333-333333333342"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(3085),
+                            IsDeleted = false,
+                            DiscountedPrice = 2600000m,
+                            Height = 90,
+                            IsActive = true,
+                            Length = 100,
+                            OriginalPrice = 2800000m,
+                            SKU = "XE-LAN-TAY-XANH-DL",
+                            Stock = 8,
+                            StoreId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaab"),
+                            VariantId = new Guid("33333333-3333-3333-3333-333333333340"),
+                            Weight = 15000,
+                            Width = 60
+                        });
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.ProductPromotion", b =>
@@ -1143,6 +1568,140 @@ namespace Infrastructures.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductVariants", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111131"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2871),
+                            IsDeleted = false,
+                            IsActive = true,
+                            Price = 850000m,
+                            ProductId = new Guid("11111111-1111-1111-1111-111111111121"),
+                            Stock = 50,
+                            VariantName = "Máy đo huyết áp Omron HEM-7130 - Màu trắng"
+                        },
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111132"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2875),
+                            IsDeleted = false,
+                            IsActive = true,
+                            Price = 850000m,
+                            ProductId = new Guid("11111111-1111-1111-1111-111111111121"),
+                            Stock = 30,
+                            VariantName = "Máy đo huyết áp Omron HEM-7130 - Màu xanh"
+                        },
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111133"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2878),
+                            IsDeleted = false,
+                            IsActive = true,
+                            Price = 1200000m,
+                            ProductId = new Guid("11111111-1111-1111-1111-111111111122"),
+                            Stock = 25,
+                            VariantName = "Máy đo đường huyết Accu-Chek Guide - Bộ cơ bản"
+                        },
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111134"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2880),
+                            IsDeleted = false,
+                            IsActive = true,
+                            Price = 1500000m,
+                            ProductId = new Guid("11111111-1111-1111-1111-111111111122"),
+                            Stock = 20,
+                            VariantName = "Máy đo đường huyết Accu-Chek Guide - Bộ đầy đủ"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222227"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2883),
+                            IsDeleted = false,
+                            IsActive = true,
+                            Price = 280000m,
+                            ProductId = new Guid("22222222-2222-2222-2222-222222222225"),
+                            Stock = 100,
+                            VariantName = "Sữa Ensure Gold - Hộp 400g"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222228"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2885),
+                            IsDeleted = false,
+                            IsActive = true,
+                            Price = 520000m,
+                            ProductId = new Guid("22222222-2222-2222-2222-222222222225"),
+                            Stock = 80,
+                            VariantName = "Sữa Ensure Gold - Hộp 850g"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222229"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2889),
+                            IsDeleted = false,
+                            IsActive = true,
+                            Price = 180000m,
+                            ProductId = new Guid("22222222-2222-2222-2222-222222222226"),
+                            Stock = 150,
+                            VariantName = "Vitamin D3+K2 - Lọ 60 viên"
+                        },
+                        new
+                        {
+                            Id = new Guid("33333333-3333-3333-3333-333333333338"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2900),
+                            IsDeleted = false,
+                            IsActive = true,
+                            Price = 450000m,
+                            ProductId = new Guid("33333333-3333-3333-3333-333333333336"),
+                            Stock = 40,
+                            VariantName = "Gậy chống 4 chân - Màu đen"
+                        },
+                        new
+                        {
+                            Id = new Guid("33333333-3333-3333-3333-333333333339"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2907),
+                            IsDeleted = false,
+                            IsActive = true,
+                            Price = 450000m,
+                            ProductId = new Guid("33333333-3333-3333-3333-333333333336"),
+                            Stock = 35,
+                            VariantName = "Gậy chống 4 chân - Màu xanh"
+                        },
+                        new
+                        {
+                            Id = new Guid("33333333-3333-3333-3333-333333333340"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2909),
+                            IsDeleted = false,
+                            IsActive = true,
+                            Price = 2800000m,
+                            ProductId = new Guid("33333333-3333-3333-3333-333333333337"),
+                            Stock = 15,
+                            VariantName = "Xe lăn tay gấp gọn - Màu xanh"
+                        },
+                        new
+                        {
+                            Id = new Guid("44444444-4444-4444-4444-444444444447"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2912),
+                            IsDeleted = false,
+                            IsActive = true,
+                            Price = 500000m,
+                            ProductId = new Guid("44444444-4444-4444-4444-444444444445"),
+                            Stock = 999,
+                            VariantName = "Tư vấn dinh dưỡng - 1 buổi"
+                        },
+                        new
+                        {
+                            Id = new Guid("44444444-4444-4444-4444-444444444448"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2915),
+                            IsDeleted = false,
+                            IsActive = true,
+                            Price = 2000000m,
+                            ProductId = new Guid("44444444-4444-4444-4444-444444444445"),
+                            Stock = 999,
+                            VariantName = "Tư vấn dinh dưỡng - Gói 5 buổi"
+                        });
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.Promotion", b =>
@@ -1317,11 +1876,32 @@ namespace Infrastructures.Migrations
                     b.HasIndex("StoreAddressId");
 
                     b.ToTable("Stores", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaab"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(1527),
+                            IsDeleted = false,
+                            AvatarPath = "/images/stores/doc-lap.jpg",
+                            Infomation = "Cửa hàng độc lập chuyên cung cấp thiết bị y tế và thuốc cho người cao tuổi",
+                            IsActive = true,
+                            IsBanned = false,
+                            IsGhnSynced = false,
+                            IsVerified = 1,
+                            Name = "Nhà thuốc Độc Lập",
+                            Phone = "028-1234-5678",
+                            StoreAddressId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+                        });
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.StoreAddress", b =>
                 {
                     b.HasBaseType("SilverCart.Domain.Entities.BaseEntity");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("DistrictId")
                         .HasColumnType("integer");
@@ -1334,10 +1914,6 @@ namespace Infrastructures.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("StreetAddress")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("WardCode")
                         .IsRequired()
                         .HasColumnType("text");
@@ -1347,6 +1923,20 @@ namespace Infrastructures.Migrations
                         .HasColumnType("text");
 
                     b.ToTable("StoreAddresses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 15, 989, DateTimeKind.Utc).AddTicks(2622),
+                            IsDeleted = false,
+                            Address = "123 Đường Lê Lợi",
+                            DistrictId = 7601,
+                            DistrictName = "Quận 1",
+                            ProvinceName = "TP. Hồ Chí Minh",
+                            WardCode = "7601001",
+                            WardName = "Bến Nghé"
+                        });
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.UserPromotion", b =>
@@ -1382,8 +1972,8 @@ namespace Infrastructures.Migrations
                         {
                             Id = new Guid("9878ee32-2ead-4165-9e44-e510ba1bae29"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5f840fb6-e6e8-4ecd-a644-5205e85182f8",
-                            CreationDate = new DateTime(2025, 7, 11, 7, 19, 7, 977, DateTimeKind.Utc).AddTicks(704),
+                            ConcurrencyStamp = "3a11c200-bcb4-49a2-86f6-2872a12bd3ac",
+                            CreationDate = new DateTime(2025, 7, 11, 17, 7, 16, 33, DateTimeKind.Utc).AddTicks(166),
                             Email = "admin@elderly.com",
                             EmailConfirmed = true,
                             FullName = "Super Admin",
@@ -1392,7 +1982,7 @@ namespace Infrastructures.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ELDERLY.COM",
                             NormalizedUserName = "SUPERADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAlsSfIbg+PwNBbUdqZ6CU2X4+KgsWCI4GG9FPgUngGmGM/ToWxj7ziYrlOGnWPVXA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELnpiK3mQBKNyxLpFXvZaSaPJNw8Ka2byPrhxXDnVavWg7HSQchY+VDE/+6SEqCFcQ==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "superadmin"

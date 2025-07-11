@@ -36,7 +36,7 @@ namespace Infrastructures.Features.Stores.Commands.Update.UpdateStore
             var storeAddress = await _unitOfWork.StoreAddressRepository.GetByIdAsync(store.StoreAddressId);
             if (storeAddress != null)
             {
-                storeAddress.StreetAddress = request.StreetAddress;
+                storeAddress.Address = request.StreetAddress;
                 storeAddress.WardCode = request.WardCode;
                 storeAddress.DistrictId = request.DistrictId;
                 storeAddress.WardName = request.WardName;

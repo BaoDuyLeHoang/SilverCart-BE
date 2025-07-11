@@ -8,7 +8,7 @@ namespace SilverCart.Domain.Entities
 {
     public class StoreAddress : BaseEntity
     {
-        public required string StreetAddress { get; set; }
+        public required string Address { get; set; }
         public string WardCode { get; set; }
         public int DistrictId { get; set; }
         public string WardName { get; set; }
