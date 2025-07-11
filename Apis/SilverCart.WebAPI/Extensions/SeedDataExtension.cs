@@ -12,13 +12,19 @@ namespace WebAPI.Extensions
         public static async Task SeedDatabaseAsync(this IApplicationBuilder applicationBuilder,
             AppConfiguration configuration)
         {
-            
+
             using var scope = applicationBuilder.ApplicationServices.CreateScope();
             var services = scope.ServiceProvider;
             var dbContext = services.GetRequiredService<AppDbContext>();
             await dbContext.Database.MigrateAsync();
-            
+
             var _userManager = services.GetRequiredService<UserManager<BaseUser>>();
+            await AddSuperAdmin(configuration, _userManager);
+
+        }
+
+        private static async Task AddSuperAdmin(AppConfiguration configuration, UserManager<BaseUser> _userManager)
+        {
             if (await _userManager.FindByEmailAsync(configuration.SuperAdmin.Email) == null)
             {
                 var superAdmin = new AdministratorUser()
@@ -37,8 +43,7 @@ namespace WebAPI.Extensions
 
                 await _userManager.AddToRoleAsync(superAdmin, "SuperAdmin");
             }
-
-
+            
         }
     }
 }
