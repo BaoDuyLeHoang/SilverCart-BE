@@ -9,7 +9,7 @@ using SilverCart.Domain.Entities.Auth;
 namespace Infrastructures;
 
 public sealed record CreateDependentUserCommand(List<CreateDependentUser> DependentUsers) : IRequest<List<Guid>>;
-public record CreateDependentUser(string Phone, string FullName, RegisterUserAddress Address);
+public record CreateDependentUser(string Phone, string FullName, string Gender, RegisterUserAddress Address);
 public class CreateDependentUserHandler(IUnitOfWork unitOfWork, UserManager<BaseUser> userManager, ICurrentTime currentTime, IClaimsService claimsService) : IRequestHandler<CreateDependentUserCommand, List<Guid>>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
@@ -37,6 +37,7 @@ public class CreateDependentUserHandler(IUnitOfWork unitOfWork, UserManager<Base
                 UserName = Guid.NewGuid().ToString(),
                 PhoneNumber = dependentUser.Phone,
                 FullName = dependentUser.FullName,
+                Gender = dependentUser.Gender,
                 CreationDate = _currentTime.GetCurrentTime(),
                 Email = null,
                 Addresses = new List<Address>

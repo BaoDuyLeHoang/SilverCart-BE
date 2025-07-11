@@ -19,6 +19,7 @@ namespace Infrastructures.Features.Consultation.Consultant.Create
        string Password,
        string Phone,
        string FullName,
+       string Gender,
        RegisterUserAddress Address,
        string Specialization,
        string? CertificationDocumentLink = null
@@ -51,6 +52,7 @@ namespace Infrastructures.Features.Consultation.Consultant.Create
                 Email = request.Email,
                 PhoneNumber = request.Phone,
                 UserName = request.Email,
+                Gender = request.Gender,
                 CreationDate = _currentTime.GetCurrentTime(),
                 Specialization = request.Specialization,
             };

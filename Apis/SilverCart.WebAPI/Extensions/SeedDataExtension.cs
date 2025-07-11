@@ -32,6 +32,7 @@ namespace WebAPI.Extensions
                     UserName = configuration.SuperAdmin.Email,
                     Email = configuration.SuperAdmin.Email,
                     FullName = "Siêu Admin",
+                    Gender = "Other",
                     EmailConfirmed = true
                 };
                 var result = await _userManager.CreateAsync(superAdmin, configuration.SuperAdmin.Password);

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructures.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateUser : Migration
+    public partial class CheckDbUser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,14 +16,14 @@ namespace Infrastructures.Migrations
                 table: "AspNetUsers",
                 type: "text",
                 nullable: false,
-                defaultValue: "");
+                defaultValue: "Other");
 
             migrationBuilder.UpdateData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
                 keyValue: new Guid("9878ee32-2ead-4165-9e44-e510ba1bae29"),
                 columns: new[] { "ConcurrencyStamp", "CreationDate", "Gender", "PasswordHash" },
-                values: new object[] { "f15d45d7-fcf5-4aab-b9db-1c0902ee6969", new DateTime(2025, 7, 11, 5, 26, 57, 684, DateTimeKind.Utc).AddTicks(2522), "Other", "AQAAAAIAAYagAAAAEAcy8sYVHTIoIStQ7t26ZWkWJey4k5ZjI+p63AKd7Tde5J51GRUd3uXk0qboES0Cng==" });
+                values: new object[] { "5f840fb6-e6e8-4ecd-a644-5205e85182f8", new DateTime(2025, 7, 11, 7, 19, 7, 977, DateTimeKind.Utc).AddTicks(704), "Other", "AQAAAAIAAYagAAAAEAlsSfIbg+PwNBbUdqZ6CU2X4+KgsWCI4GG9FPgUngGmGM/ToWxj7ziYrlOGnWPVXA==" });
         }
 
         /// <inheritdoc />

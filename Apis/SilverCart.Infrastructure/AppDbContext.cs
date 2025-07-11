@@ -69,7 +69,9 @@ namespace Infrastructures
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
+            modelBuilder.Entity<BaseUser>()
+    .Property(b => b.Gender)
+    .HasDefaultValue("Other");
             // Configure all enums as strings
             modelBuilder.ConvertAllEnumsToStrings();
             

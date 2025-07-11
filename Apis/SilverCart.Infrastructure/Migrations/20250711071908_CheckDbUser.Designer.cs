@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructures.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250711052658_UpdateUser")]
-    partial class UpdateUser
+    [Migration("20250711071908_CheckDbUser")]
+    partial class CheckDbUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -282,7 +282,9 @@ namespace Infrastructures.Migrations
 
                     b.Property<string>("Gender")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("Other");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -1383,8 +1385,8 @@ namespace Infrastructures.Migrations
                         {
                             Id = new Guid("9878ee32-2ead-4165-9e44-e510ba1bae29"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f15d45d7-fcf5-4aab-b9db-1c0902ee6969",
-                            CreationDate = new DateTime(2025, 7, 11, 5, 26, 57, 684, DateTimeKind.Utc).AddTicks(2522),
+                            ConcurrencyStamp = "5f840fb6-e6e8-4ecd-a644-5205e85182f8",
+                            CreationDate = new DateTime(2025, 7, 11, 7, 19, 7, 977, DateTimeKind.Utc).AddTicks(704),
                             Email = "admin@elderly.com",
                             EmailConfirmed = true,
                             FullName = "Super Admin",
@@ -1393,7 +1395,7 @@ namespace Infrastructures.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ELDERLY.COM",
                             NormalizedUserName = "SUPERADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAcy8sYVHTIoIStQ7t26ZWkWJey4k5ZjI+p63AKd7Tde5J51GRUd3uXk0qboES0Cng==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAlsSfIbg+PwNBbUdqZ6CU2X4+KgsWCI4GG9FPgUngGmGM/ToWxj7ziYrlOGnWPVXA==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "superadmin"

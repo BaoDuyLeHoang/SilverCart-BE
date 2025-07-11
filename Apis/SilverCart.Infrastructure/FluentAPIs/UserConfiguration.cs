@@ -1,9 +1,10 @@
-﻿using SilverCart.Domain.Entities;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SilverCart.Domain.Entities;
 using SilverCart.Domain.Entities.Auth;
 using SilverCart.Domain.Enums;
-using Microsoft.AspNetCore.Identity;
+using System.Reflection.Emit;
 
 namespace Infrastructures.FluentAPIs
 {
