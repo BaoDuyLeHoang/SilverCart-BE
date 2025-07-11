@@ -49,6 +49,7 @@ namespace Infrastructures.FluentAPIs
                 Email = "admin@elderly.com",
                 NormalizedEmail = "ADMIN@ELDERLY.COM",
                 UserName = "superadmin",
+                Gender = "Other",
                 NormalizedUserName = "SUPERADMIN",
                 PasswordHash = new PasswordHasher<AdministratorUser>().HashPassword(null!, "SuperAdmin123!"),
                 EmailConfirmed = true,
