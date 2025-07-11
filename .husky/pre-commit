@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks..."
+
+# Format code automatically
+echo "🎨 Formatting code..."
+dotnet format
+
+# Build the project
+echo "📦 Building project..."
+dotnet build --no-restore
+if [ $? -ne 0 ]; then
+    echo "❌ Build failed. Please fix build errors before committing."
+    exit 1
+fi
+
+echo "✅ Pre-commit checks passed!" 
