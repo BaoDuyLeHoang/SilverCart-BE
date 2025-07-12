@@ -14,12 +14,12 @@ namespace Infrastructures.Features.Orders.Queries.GetShopOrderItems
     public record GetShopOrderDetailsResponse(Guid Id, Guid ProductItemId, int Quantity, double Price, string OrderItemStatus, GetShopProductItemResponse ProductItem);
     public record GetShopProductItemResponse(Guid Id, string SKU, double OriginalPrice, double DiscountedPrice, int Stock, bool IsActive, List<GetProductItemsImagesResponse> ProductImages);
     public record GetProductItemsImagesResponse(Guid Id, string ImagePath, string ImageName);
-    
+
     public class GetShopOrderItemsQuery(IUnitOfWork unitOfWork, IClaimsService claimsService) : IRequestHandler<GetShopOrderItemsCommand, PagedResult<GetShopOrderResponse>>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IClaimsService _claimsService = claimsService;
-        
+
         public async Task<PagedResult<GetShopOrderResponse>> Handle(GetShopOrderItemsCommand request, CancellationToken cancellationToken)
         {
             // Get orders that have order details with product items from the specified store
@@ -31,22 +31,22 @@ namespace Infrastructures.Features.Orders.Queries.GetShopOrderItems
             );
 
             var filteredOrders = orders.AsQueryable();
-            
+
             if (request.OrderId.HasValue)
             {
                 filteredOrders = filteredOrders.Where(x => x.Id == request.OrderId.Value);
             }
-            
+
             if (request.FromDate.HasValue)
             {
                 filteredOrders = filteredOrders.Where(x => x.CreationDate >= request.FromDate.Value.ToDateTime(TimeOnly.MinValue));
             }
-            
+
             if (request.ToDate.HasValue)
             {
                 filteredOrders = filteredOrders.Where(x => x.CreationDate <= request.ToDate.Value.ToDateTime(TimeOnly.MaxValue));
             }
-            
+
             if (request.OrderStatus.HasValue)
             {
                 filteredOrders = filteredOrders.Where(x => x.OrderStatus == request.OrderStatus.Value);

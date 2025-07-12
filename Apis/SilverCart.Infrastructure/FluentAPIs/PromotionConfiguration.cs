@@ -17,4 +17,4 @@ namespace Infrastructures.FluentAPIs
             builder.ToTable("UserPromotions");
         }
     }
-} 
+}

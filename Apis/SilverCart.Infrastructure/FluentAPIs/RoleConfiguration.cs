@@ -20,4 +20,4 @@ namespace Infrastructures.FluentAPIs
             builder.Property(x => x.RoleName).HasMaxLength(100);
         }
     }
-} 
+}

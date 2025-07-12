@@ -37,4 +37,4 @@ namespace SilverCart.Application.Features.Orders.Queries.GetShopOrderItems
             });
         }
     }
-} 
+}

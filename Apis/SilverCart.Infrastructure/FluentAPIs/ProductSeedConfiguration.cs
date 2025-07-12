@@ -5,8 +5,8 @@ using SilverCart.Domain.Enums;
 
 namespace Infrastructures.FluentAPIs
 {
-    public class ProductSeedConfiguration : IEntityTypeConfiguration<Category>, 
-        IEntityTypeConfiguration<Store>, 
+    public class ProductSeedConfiguration : IEntityTypeConfiguration<Category>,
+        IEntityTypeConfiguration<Store>,
         IEntityTypeConfiguration<StoreAddress>,
         IEntityTypeConfiguration<Product>,
         IEntityTypeConfiguration<ProductVariant>,
@@ -656,4 +656,4 @@ namespace Infrastructures.FluentAPIs
             );
         }
     }
-} 
+}

@@ -19,4 +19,4 @@ namespace Infrastructures.FluentAPIs
                 .HasForeignKey(x => x.CustomerId);
         }
     }
-} 
+}

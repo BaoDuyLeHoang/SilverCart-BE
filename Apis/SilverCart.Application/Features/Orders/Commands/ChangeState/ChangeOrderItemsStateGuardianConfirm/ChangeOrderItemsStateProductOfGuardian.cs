@@ -31,7 +31,7 @@ public class ChangeOrderItemsStateProductOfGuardian(IUnitOfWork unitOfWork) : IR
         orderDetails.OrderItemStatus = OrderItemStatusEnums.ConfirmedByGuardian;
         _unitOfWork.OrderDetailsRepository.Update(orderDetails);
         //await _unitOfWork.SaveChangeAsync();
-        
+
         if (order.OrderDetails.All(x => x.OrderItemStatus == OrderItemStatusEnums.ConfirmedByGuardian))
         {
             order.OrderStatus = OrderStatusEnums.GuardianConfirmed;

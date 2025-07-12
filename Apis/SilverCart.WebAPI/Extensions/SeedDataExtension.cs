@@ -44,7 +44,7 @@ namespace WebAPI.Extensions
 
                 await _userManager.AddToRoleAsync(superAdmin, "SuperAdmin");
             }
-            
+
         }
     }
 }

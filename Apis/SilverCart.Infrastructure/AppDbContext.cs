@@ -74,7 +74,7 @@ namespace Infrastructures
     .HasDefaultValue("Other");
             // Configure all enums as strings
             modelBuilder.ConvertAllEnumsToStrings();
-            
+
             modelBuilder.Entity<Conversation>()
                     .HasOne(c => c.User1)
                     .WithMany(u => u.ConversationsAsUser1)

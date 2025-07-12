@@ -2,7 +2,7 @@
 
 namespace SilverCart.Application.Repositories;
 
-public interface IOTPRepository 
+public interface IOTPRepository
 {
     Task<OTPData?> GetByCodeAsync(string code);
     Task<OTPData?> GetActiveOTPAsync(string code, OTPTypeEnum type);

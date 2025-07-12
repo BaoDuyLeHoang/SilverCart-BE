@@ -25,4 +25,4 @@ namespace Infrastructures.FluentAPIs
             builder.ToTable("PaymentMethodHistories");
         }
     }
-} 
+}

@@ -17,7 +17,7 @@ public class LoginHandler(UserManager<BaseUser> userManager, IJwtTokenGenerator 
     private readonly ICurrentTime _currentTime = currentTime;
     public async Task<LoginUserResponse> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByEmailAsync(request.EmailOrPhone) 
+        var user = await _userManager.FindByEmailAsync(request.EmailOrPhone)
         ?? await _userManager.Users.FirstOrDefaultAsync(u => u.PhoneNumber == request.EmailOrPhone);
         if (user == null)
         {

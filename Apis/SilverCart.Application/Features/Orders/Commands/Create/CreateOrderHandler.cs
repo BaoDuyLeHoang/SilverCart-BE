@@ -20,7 +20,7 @@ public class CreateOrderHandler(IUnitOfWork unitOfWork, IClaimsService claimsSer
             throw new AppExceptions("User not authenticated");
         }
         var currentUserRole = _claimService.CurrentRole;
-        
+
         if (currentUserRole != "Guardian" && currentUserRole != "DependentUser")
         {
             throw new AppExceptions("Only Guardian and DependentUser roles can create orders");
@@ -105,9 +105,9 @@ public class CreateOrderHandler(IUnitOfWork unitOfWork, IClaimsService claimsSer
         {
             order.GuardianId = currentUserId;
             order.DependentUserID = null;
-            
+
             order.OrderStatus = OrderStatusEnums.GuardianConfirmed;
-            
+
             foreach (var orderDetail in orderDetails)
             {
                 orderDetail.OrderItemStatus = OrderItemStatusEnums.ConfirmedByGuardian;
@@ -118,9 +118,9 @@ public class CreateOrderHandler(IUnitOfWork unitOfWork, IClaimsService claimsSer
             var dependentUser = await _unitOfWork.DependentUserRepository.GetByIdAsync(currentUserId);
             order.DependentUserID = currentUserId;
             order.GuardianId = dependentUser.GuardianId;
-            
+
             order.OrderStatus = OrderStatusEnums.Pending;
-            
+
             foreach (var orderDetail in orderDetails)
             {
                 orderDetail.OrderItemStatus = OrderItemStatusEnums.Pending;

@@ -42,7 +42,7 @@ namespace Infrastructures.FluentAPIs
         public void Configure(EntityTypeBuilder<AdministratorUser> builder)
         {
             builder.ToTable("AdministratorUsers");
-            
+
             builder.HasData(new AdministratorUser
             {
                 Id = Guid.Parse("9878ee32-2ead-4165-9e44-e510ba1bae29"),
