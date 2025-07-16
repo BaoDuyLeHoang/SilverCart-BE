@@ -1,11 +1,11 @@
-using Microsoft.EntityFrameworkCore;    
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SilverCart.Domain.Entities;
 using SilverCart.Domain.Entities.Payments;
 
 namespace Infrastructures.FluentAPIs
 {
-    public class PaymentConfiguration : 
+    public class PaymentConfiguration :
         IEntityTypeConfiguration<PaymentMethod>,
         IEntityTypeConfiguration<CustomerPaymentMethod>,
         IEntityTypeConfiguration<PaymentHistory>
@@ -13,7 +13,7 @@ namespace Infrastructures.FluentAPIs
         public void Configure(EntityTypeBuilder<PaymentMethod> builder)
         {
             builder.ToTable("PaymentMethods");
-            
+
             builder.HasMany(pm => pm.CustomerPaymentMethods)
                 .WithOne(cpm => cpm.PaymentMethod)
                 .HasForeignKey(cpm => cpm.PaymentMethodId)
@@ -25,7 +25,7 @@ namespace Infrastructures.FluentAPIs
         public void Configure(EntityTypeBuilder<CustomerPaymentMethod> builder)
         {
             builder.ToTable("CustomerPaymentMethods");
-            
+
             // Configure relationships
             builder.HasOne(cpm => cpm.Customer)
                 .WithMany(c => c.CustomerPaymentMethods)

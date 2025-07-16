@@ -11,7 +11,7 @@ namespace Infrastructures.FluentAPIs
         public void Configure(EntityTypeBuilder<Promotion> builder)
         {
             builder.ToTable("Promotions");
-            
+
             builder.HasMany(p => p.ProductPromotions)
                 .WithOne(pp => pp.Promotion)
                 .HasForeignKey(pp => pp.PromotionId)
@@ -24,12 +24,12 @@ namespace Infrastructures.FluentAPIs
         public void Configure(EntityTypeBuilder<UserPromotion> builder)
         {
             builder.ToTable("UserPromotions");
-            
+
             builder.HasOne(up => up.User)
                 .WithMany()
                 .HasForeignKey(up => up.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-                
+
             builder.HasOne(up => up.Promotion)
                 .WithMany()
                 .HasForeignKey(up => up.PromotionId)
