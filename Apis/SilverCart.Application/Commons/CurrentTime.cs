@@ -4,6 +4,12 @@ namespace SilverCart.Application.Services
 {
     public class CurrentTime : ICurrentTime
     {
-        public DateTime GetCurrentTime() => DateTime.UtcNow.AddHours(7);
+        private DateTime? _currentTime;
+        public DateTime GetCurrentTime()
+        {
+            //DateTime.UtcNow produce utc time, so we need to add 7 hours to get vietnam time
+            _currentTime ??= DateTime.UtcNow.AddDays(7);
+            return _currentTime.Value;
+        }
     }
 }

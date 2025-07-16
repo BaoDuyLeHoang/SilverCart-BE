@@ -1,6 +1,7 @@
 ﻿using SilverCart.Domain.Entities;
 using SilverCart.Application.Interfaces;
 using SilverCart.Application.Repositories;
+using SilverCart.Domain.Entities.Categories;
 
 namespace Infrastructures.Repositories
 {

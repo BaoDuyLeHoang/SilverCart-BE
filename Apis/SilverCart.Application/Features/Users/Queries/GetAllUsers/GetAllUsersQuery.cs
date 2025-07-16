@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace Infrastructures.Features.Users.Queries.GetAllUsers
 {
     public sealed record GetAllUsersQuery(PagingRequest? PagingRequest, Guid? Id, string? FullName, string? Email, string? Phone) : IRequest<PagedResult<GetAllUsersResponse>>;
-    public record GetAllUsersResponse(Guid Id, string FullName, string Email, string Phone, string Role, DateTime CreatedDate);
+    public record GetAllUsersResponse(Guid Id, string FullName, string Email, string Phone, string Role, DateTime CreationDate);
     public class GetAllUsersHandler(IUnitOfWork unitOfWork, UserManager<BaseUser> userManager) : IRequestHandler<GetAllUsersQuery, PagedResult<GetAllUsersResponse>>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;

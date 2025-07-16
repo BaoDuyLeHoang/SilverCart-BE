@@ -27,7 +27,7 @@ namespace Infrastructures.Features.Stores.Queries.GetMyStore
                 ? throw new AppExceptions("Store not found")
                 : new GetMyStoreQueryResponse(
                     store.Name,
-                    store.Infomation,
+                    store.Description,
                     store.AvatarPath,
                     store.AdditionalInfo,
                     store.GhnShopId,

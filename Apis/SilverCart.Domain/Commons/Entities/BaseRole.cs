@@ -8,6 +8,7 @@ public abstract class BaseRole : IdentityRole<Guid>, IBaseEntity, IAuditableEnti
 {
     [StringLength(1000)]
     public string Description { get; set; } = string.Empty;
+    public bool IsHardDelete { get; set; } = false;
     public bool IsDeleted { get; set; }
     public DateTime? CreationDate { get; set; }
     public DateTime? ModificationDate { get; set; }

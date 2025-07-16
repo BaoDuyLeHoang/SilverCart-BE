@@ -33,7 +33,7 @@ namespace Infrastructures.Features.Consultation.ConsultationReport
             consultation.ReportContent = request.ReportContent;
             consultation.VideoRecordingUrl = request.VideoRecordingUrl;
             consultation.Notes = request.Notes;
-            consultation.UpdatedAt = _currentTime.GetCurrentTime();
+            consultation.ModificationDate = _currentTime.GetCurrentTime();
             consultation.IsCompleted = !request.IsDraft;
 
             _unitOfWork.ConsultationRepository.Update(consultation);

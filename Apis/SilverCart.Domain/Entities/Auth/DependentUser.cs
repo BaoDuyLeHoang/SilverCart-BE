@@ -11,6 +11,7 @@ namespace SilverCart.Domain.Entities.Auth
         {
         }
         public Guid GuardianId { get; set; }
-        public GuardianUser Guardian { get; set; } = null!;
+        public virtual GuardianUser Guardian { get; set; } = null!;
+        public virtual ICollection<Consultation> Consultations { get; set; } = new List<Consultation>();
     }
 }

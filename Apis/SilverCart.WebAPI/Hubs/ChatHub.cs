@@ -173,7 +173,7 @@ namespace SilverCart.WebAPI.Hubs
             var userId = _claimsService.CurrentUserId;
             var conversation = await _unitOfWork.ConversationRepository.GetByIdAsync(conversationId);
 
-            if (conversation != null && (conversation.User1Id == userId || conversation.User2Id == userId))
+            if (conversation != null && (conversation.Members.Any(m => m.UserId == userId)))
             {
                 await _unitOfWork.ConversationRepository.DeleteConversationAsync(conversationId);
 

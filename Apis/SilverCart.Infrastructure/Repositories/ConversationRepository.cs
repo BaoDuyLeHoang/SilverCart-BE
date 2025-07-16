@@ -4,91 +4,75 @@ using Microsoft.EntityFrameworkCore;
 using SilverCart.Application.Interfaces;
 using SilverCart.Domain.Entities.Chat;
 
-public class ConversationRepository(AppDbContext context, ICurrentTime currentTime) : IConversationRepository
+namespace Infrastructures.Repositories;
+
+public class ConversationRepository : GenericRepository<Conversation>, IConversationRepository
 {
-    private readonly AppDbContext _context = context;
-    private readonly ICurrentTime _currentTime = currentTime;
-    public async Task<ConversationResponse> CreateConversationAsync(Guid user1Id, Guid user2Id)
+    private readonly AppDbContext _context;
+    public ConversationRepository(AppDbContext context) : base(context)
     {
-        var user1 = await _context.Users.FindAsync(user1Id)
-            ?? throw new AppExceptions("User1 not found");
-        var user2 = await _context.Users.FindAsync(user2Id)
-            ?? throw new AppExceptions("User2 not found");
+        _context = context;
+    }
 
-        var conversation = new Conversation
-        {
-            User1Id = user1Id,
-            User2Id = user2Id,
-            LastMessage = "",
-        };
-
+    // Create a new conversation with members
+    public async Task<Conversation> CreateConversationAsync(Guid userId, Guid otherUserId)
+    {
+        return await CreateConversationAsync(new List<Guid> { userId, otherUserId });
+    }
+    public async Task<Conversation> CreateConversationAsync(List<Guid> memberUserIds)
+    {
+        var conversation = new Conversation();
         await _context.Conversations.AddAsync(conversation);
         await _context.SaveChangesAsync();
-        return new ConversationResponse(
-            conversation.Id,
-            conversation.User1Id,
-            user1.FullName,
-            conversation.User2Id,
-            user2.FullName,
-            conversation.LastMessageAt,
-            conversation.LastMessage
-        );
+
+        foreach (var userId in memberUserIds)
+        {
+            var member = new ConversationMember
+            {
+                ConversationId = conversation.Id,
+                UserId = userId
+            };
+            await _context.ConversationMembers.AddAsync(member);
+        }
+        await _context.SaveChangesAsync();
+        return conversation;
     }
 
+    // Get all conversations for a user
+    public async Task<List<Conversation>> GetConversationsByUserIdAsync(Guid userId)
+    {
+        return await _context.ConversationMembers
+            .Where(cm => cm.UserId == userId)
+            .Include(cm => cm.Conversation)
+            .Select(cm => cm.Conversation)
+            .Distinct()
+            .ToListAsync();
+    }
+
+    // Delete a conversation
     public async Task DeleteConversationAsync(Guid conversationId)
     {
-        var existedConversation = await _context.Conversations.FindAsync(conversationId);
-        if (existedConversation == null)
-        {
+        var conversation = await _context.Conversations.FindAsync(conversationId);
+        if (conversation == null)
             throw new AppExceptions("Conversation not found");
-        }
-        existedConversation.IsDeleted = true;
-        existedConversation.DeletionDate = _currentTime.GetCurrentTime();
+        _context.Conversations.Remove(conversation);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<bool> ExistsAsync(Guid user1Id, Guid user2Id)
-    {
-        return await _context.Conversations.AnyAsync(c =>
-            (c.User1Id == user1Id && c.User2Id == user2Id) ||
-            (c.User1Id == user2Id && c.User2Id == user1Id));
-    }
-
-    public async Task<ConversationResponse?> GetByIdAsync(Guid conversationId)
-    {
-        var conversation = await _context.Conversations
-            .Include(c => c.User1)
-            .Include(c => c.User2)
-            .FirstOrDefaultAsync(c => c.Id == conversationId);
-
-        return conversation == null ? null : new ConversationResponse(
-            conversation.Id,
-            conversation.User1Id,
-            conversation.User1.FullName,
-            conversation.User2Id,
-            conversation.User2.FullName,
-            conversation.LastMessageAt,
-            conversation.LastMessage
-        );
-    }
-
-    public async Task<List<ConversationResponse>> GetConversationsByUserIdAsync(Guid userId)
+    // Get conversation by Id (with members)
+    public async Task<Conversation?> GetByIdAsync(Guid conversationId)
     {
         return await _context.Conversations
-            .Include(c => c.User1)
-            .Include(c => c.User2)
-            .Where(c => c.User1Id == userId || c.User2Id == userId)
-            .Select(c => new ConversationResponse(
-                c.Id,
-                c.User1Id,
-                c.User1.FullName,
-                c.User2Id,
-                c.User2.FullName,
-                c.LastMessageAt,
-                c.LastMessage
-            ))
-            .ToListAsync();
+            .Include(c => c.Members)
+            .Include(c => c.Messages)
+            .FirstOrDefaultAsync(c => c.Id == conversationId);
     }
+
+    public async Task<bool> ExistsAsync(Guid userId, Guid otherUserId)
+    {
+        return await _context.ConversationMembers
+            .AnyAsync(cm => cm.UserId == userId && cm.ConversationId == otherUserId);
+    }
+
+
 }
-
-

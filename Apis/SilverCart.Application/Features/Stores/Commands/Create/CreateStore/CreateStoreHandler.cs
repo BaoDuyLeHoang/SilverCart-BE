@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using SilverCart.Application.Interfaces;
 using SilverCart.Domain.Commons.Enums;
 using SilverCart.Domain.Entities;
+using SilverCart.Domain.Entities.Stores;
 using System;
 using System.Linq;
 using System.Threading;
@@ -24,13 +25,9 @@ namespace Infrastructures.Features.Stores.Commands.Create.CreateStore
         public async Task<Guid> Handle(CreateStoreCommand request, CancellationToken cancellationToken)
         {
             var currentUserId = _claimsService.CurrentUserId;
-            var currentUser = await _unitOfWork.UserRepository.GetByIdAsync(currentUserId);
+            var currentUser = await _unitOfWork.AdministratorUserRepository.GetByIdAsync(currentUserId);
             if (currentUser == null)
-                throw new AppExceptions("User not found");
-
-            // Check if user already has a store
-            if (currentUser.StoreId != null)
-                throw new AppExceptions("User already owns a store");
+                throw new AppExceptions("Không tìm thấy người dùng");
 
             // Register store with GHN
             var shopId = await _ghnService.RegisterStoreAsync(new CreateStoreGhnRequest
@@ -47,7 +44,7 @@ namespace Infrastructures.Features.Stores.Commands.Create.CreateStore
             {
                 Id = Guid.NewGuid(),
                 Name = request.StoreName,
-                Infomation = request.Information,
+                Description = request.Information,
                 AdditionalInfo = request.AdditionalInfo,
                 AvatarPath = request.AvatarPath ?? string.Empty,
                 Phone = currentUser.PhoneNumber,
@@ -68,8 +65,8 @@ namespace Infrastructures.Features.Stores.Commands.Create.CreateStore
             store.StoreAddress = address;
 
             // Assign store to current user
-            currentUser.StoreId = store.Id;
-            _unitOfWork.UserRepository.Update(currentUser);
+            currentUser.Stores.Add(store);
+            _unitOfWork.AdministratorUserRepository.Update(currentUser);
 
             // Save all
             await _unitOfWork.StoreRepository.AddAsync(store);

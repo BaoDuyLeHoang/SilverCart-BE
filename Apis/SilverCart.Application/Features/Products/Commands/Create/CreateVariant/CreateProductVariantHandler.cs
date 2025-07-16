@@ -25,8 +25,6 @@ public class CreateProductVariantHandler : IRequestHandler<CreateProductVariantC
         {
             ProductId = request.ProductId,
             VariantName = request.VariantName,
-            Price = request.Price,
-            Stock = request.Stock,
             IsActive = request.IsActive
         };
 
@@ -37,10 +35,8 @@ public class CreateProductVariantHandler : IRequestHandler<CreateProductVariantC
             variant.Id,
             variant.ProductId,
             variant.VariantName,
-            variant.Price,
-            variant.Stock,
             variant.IsActive,
-            variant.CreationDate ?? DateTime.UtcNow
+            variant.CreationDate!.Value
         );
     }
 }

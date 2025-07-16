@@ -2,7 +2,7 @@
 
 public enum PaymentMethodEnum
 {
-    VNPAY,  // only VNPAY work
-    ZALOPAY,
-    MOMO
+    Cash,
+    BankTransfer,
+    Other
 }

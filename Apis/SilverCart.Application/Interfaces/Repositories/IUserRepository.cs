@@ -6,9 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructures.Interfaces.Entities
+namespace Infrastructures.Interfaces.Repositories;
+
+public interface IUserRepository : IGenericRepository<BaseUser>
 {
-    public interface IUserRepository : IGenericRepository<BaseUser>
-    {
-    }
 }

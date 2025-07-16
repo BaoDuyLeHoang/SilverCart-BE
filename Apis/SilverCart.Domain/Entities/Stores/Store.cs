@@ -1,22 +1,18 @@
-﻿namespace SilverCart.Domain.Entities;
+﻿namespace SilverCart.Domain.Entities.Stores;
 
 public class Store : BaseEntity
 {
-    public string Name { get; set; } = null!;
-    public string? Infomation { get; set; }
-    public string AvatarPath { get; set; }
+    public required string Name { get; set; } = null!;
+    public string? Description { get; set; }
+    public string? AvatarPath { get; set; }
     public string? AdditionalInfo { get; set; }
     //For GHN
-
     public int? GhnShopId { get; set; }
     public bool IsGhnSynced { get; set; } = false;
-    public string Phone { get; set; }
-    public bool IsBanned { get; set; }
-    public bool IsActive { get; set; }
-    public int IsVerified { get; set; }
-    public Guid StoreAddressId { get; set; }
-    public virtual StoreAddress StoreAddress { get; set; } = null!;
+    public string? Phone { get; set; }
     // Navigation properties
-    public virtual ICollection<BaseUser> StoreUsers { get; set; } = new List<BaseUser>();
-    //Employees
+    public Guid StoreAddressId { get; set; }
+    public StoreAddress StoreAddress { get; set; } = null!;
+    public virtual ICollection<StoreUser> StoreUsers { get; set; } = [];
+    public virtual ICollection<Product> Products { get; set; } = [];
 }

@@ -1,4 +1,4 @@
-﻿namespace SilverCart.Domain.Entities;
+﻿namespace SilverCart.Domain.Entities.Payments;
 
 public sealed class PaymentMethod : BaseEntity
 {
@@ -7,9 +7,8 @@ public sealed class PaymentMethod : BaseEntity
     public string IconPath { get; set; } = null!;
     public bool IsActive { get; set; }
     public int Order { get; set; }
-    public string? AdditionalInfo { get; set; }
 
     // Navigation properties
-    // public virtual AdministratorUser CreatedBy { get; set; } = null!;
-    public ICollection<PaymentMethodHistory> PaymentMethodHistories { get; set; } = new List<PaymentMethodHistory>();
+    public ICollection<CustomerPaymentMethod> CustomerPaymentMethods { get; set; } = new List<CustomerPaymentMethod>();
+    public ICollection<PaymentHistory> PaymentHistories { get; set; } = new List<PaymentHistory>();
 }

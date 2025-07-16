@@ -30,7 +30,7 @@ namespace Infrastructures.Features.Orders.Commands.ChangeState.ChangeOrderStatus
                 throw new AppExceptions($"Order with ID {request.OrderId} not found");
 
             var order = orders.FirstOrDefault();
-            if (order.OrderStatus != OrderStatusEnums.StoreConfirmed)
+            if (order.OrderStatus != OrderStatusEnum.StoreConfirmed)
                 throw new AppExceptions("Order is not in a state that can be changed to shipping");
 
             var store = await _unitOfWork.StoreRepository.GetByIdAsync(Guid.Parse("c4f31cea-14f3-45cd-98ad-39d68e78e0e7"));
@@ -89,7 +89,7 @@ namespace Infrastructures.Features.Orders.Commands.ChangeState.ChangeOrderStatus
             if (ghnOrder.IsNullOrEmpty())
                 throw new AppExceptions("Failed to create GHN order");
 
-            order.OrderStatus = OrderStatusEnums.Shipping;
+            order.OrderStatus = OrderStatusEnum.Shipping;
             order.OrderGhnCode = ghnOrder;
 
             foreach (var orderDetail in order.OrderDetails)

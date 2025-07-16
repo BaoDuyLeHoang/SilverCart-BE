@@ -18,7 +18,7 @@ namespace Infrastructures.Features.Conversations.Commands.Create
             var check = await _unitOfWork.ConversationRepository.ExistsAsync(currentUserId, request.PartnerId);
             if (check)
             {
-                throw new Exception("Conversation already exists");
+                throw new Exception("Cuộc trò chuyện đã tồn tại");
             }
             var conversation = await _unitOfWork.ConversationRepository.CreateConversationAsync(currentUserId, request.PartnerId);
             return conversation.Id;

@@ -1,5 +1,6 @@
 ﻿using SilverCart.Application.Repositories;
 using SilverCart.Domain.Entities;
+using SilverCart.Domain.Entities.Stores;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -40,7 +40,7 @@ namespace SilverCart.Application.Utils
         public static string GenerateOTPCode()
         {
             Random random = new Random();
-            string token = random.Next(100000, 999999).ToString();
+            string token = random.Next(100000, 999999).ToString("D6");
             return token;
         }
     }

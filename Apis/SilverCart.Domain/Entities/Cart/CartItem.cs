@@ -1,4 +1,8 @@
-﻿namespace SilverCart.Domain.Entities;
+﻿global using SilverCart.Domain.Entities.Products;
+global using SilverCart.Domain.Entities.Stores;
+using SilverCart.Domain.Entities.Products;
+
+namespace SilverCart.Domain.Entities.Cart;
 
 public class CartItem : BaseEntity
 {

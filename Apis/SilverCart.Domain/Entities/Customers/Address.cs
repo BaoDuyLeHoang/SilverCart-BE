@@ -3,6 +3,9 @@ using SilverCart.Domain.Entities.Auth;
 
 namespace SilverCart.Domain.Entities;
 
+/// <summary>
+/// <see cref="AddressConfiguration.cs"/>
+/// </summary>
 public class Address : BaseEntity
 {
     public required string StreetAddress { get; set; }
@@ -12,4 +15,5 @@ public class Address : BaseEntity
     public string ToProvinceName { get; set; }
     public Guid? CustomerId { get; set; }
     public virtual CustomerUser? Customer { get; set; }
+    public string FullAddress => $"{StreetAddress}, {WardCode}, {DistrictId}, {ToDistrictName}, {ToProvinceName}";
 }

@@ -19,7 +19,7 @@ namespace Infrastructures.Features.Conversations.Queries.GetByUserId
 
             var conversationDtos = conversations.Select(c =>
             {
-                var partnerName = c.User1Id == request.UserId ? c.User2Name : c.User1Name;
+                var partnerName = c.Members.FirstOrDefault(m => m.UserId != request.UserId)?.User.FullName;
 
                 return new ConversationDto(
                     c.Id,

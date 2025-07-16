@@ -10,7 +10,7 @@ using SilverCart.Domain.Entities;
 namespace Infrastructures.Features.Users.Queries.GetDetailsUser
 {
     public sealed record GetDetailUserQuery(Guid Id) : IRequest<GetDetailUserResponse>;
-    public record GetDetailUserResponse(Guid Id, string FullName, string Email, string Phone, string Role, DateTime CreatedDate);
+    public record GetDetailUserResponse(Guid Id, string FullName, string Email, string Phone, string Role, DateTime CreationDate);
     public class GetDetailUserQueryHandler(IUnitOfWork unitOfWork, UserManager<BaseUser> userManager) : IRequestHandler<GetDetailUserQuery, GetDetailUserResponse>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;

@@ -3,6 +3,7 @@ using Infrastructures.Features.Products.Commands.Create.CreateProduct;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SilverCart.Domain.Entities;
+using SilverCart.Domain.Entities.Products;
 
 namespace Infrastructures.Features.Products.Commands.AddProductItems
 {
@@ -16,7 +17,7 @@ namespace Infrastructures.Features.Products.Commands.AddProductItems
             var products = await _unitOfWork.ProductRepository.GetAllAsync(
                 predicate: x => x.Id == request.ProductId,
                 include: source => source.Include(x => x.Variants!)
-                                          .ThenInclude(v => v.Items!)
+                                          .ThenInclude(v => v.ProductItems!)
             );
 
             var product = products.FirstOrDefault();
@@ -30,7 +31,7 @@ namespace Infrastructures.Features.Products.Commands.AddProductItems
             var newItem = _mapper.Map<ProductItem>(request);
             newItem.Id = Guid.NewGuid();
             newItem.VariantId = request.VariantId;
-            variant.Items.Add(newItem);
+            variant.ProductItems.Add(newItem);
 
             _unitOfWork.ProductRepository.Update(product);
             await _unitOfWork.SaveChangeAsync();

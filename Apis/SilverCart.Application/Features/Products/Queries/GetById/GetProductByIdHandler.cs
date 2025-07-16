@@ -17,10 +17,10 @@ public class GetProductByIdHandler(IUnitOfWork unitOfWork) : IRequestHandler<Get
                     .Include(x => x.ProductCategories)
                         .ThenInclude(pc => pc.Category)
                     .Include(x => x.Variants!)
-                        .ThenInclude(v => v.Items!)
+                        .ThenInclude(v => v.ProductItems!)
                             .ThenInclude(i => i.ProductImages)
                     .Include(x => x.Variants!)
-                        .ThenInclude(v => v.Items!)
+                        .ThenInclude(v => v.ProductItems!)
                             .ThenInclude(spi => spi.Store)
             );
 
@@ -39,21 +39,20 @@ public class GetProductByIdHandler(IUnitOfWork unitOfWork) : IRequestHandler<Get
                     pc.CategoryId,
                     pc.Category.Name
                 )).ToList(),
-            CreatedDate: product.CreationDate,
+            CreationDate: product.CreationDate,
             Variants: product.Variants.Select(variant => new GetProductVariantsResponse
             (
                 Id: variant.Id,
                 VariantName: variant.VariantName,
-                Price: variant.Price,
                 IsActive: variant.IsActive,
-                ProductItems: variant.Items.Select(item => new GetProductItemsResponse
+                ProductItems: variant.ProductItems.Select(item => new GetProductItemsResponse
                 (
                     Id: item.Id,
                     SKU: item.SKU,
                     OriginalPrice: item.OriginalPrice,
                     DiscountedPrice: item.DiscountedPrice,
                     Weight: item.Weight,
-                    Stock: item.Stock,
+                    Stock: item.Stock.Quantity,
                     IsActive: item.IsActive,
                     ProductImages: item.ProductImages.Select(img => new Infrastructures.Features.Products.Queries.GetAll.GetProductImagesResponse(
                         img.Id,

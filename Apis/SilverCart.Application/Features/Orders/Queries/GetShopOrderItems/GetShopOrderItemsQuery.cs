@@ -9,8 +9,8 @@ using SilverCart.Domain.Enums;
 
 namespace Infrastructures.Features.Orders.Queries.GetShopOrderItems
 {
-    public sealed record GetShopOrderItemsCommand(Guid StoreId, Guid? OrderId, PagingRequest? PagingRequest, DateOnly? FromDate, DateOnly? ToDate, OrderStatusEnums? OrderStatus) : IRequest<PagedResult<GetShopOrderResponse>>;
-    public record GetShopOrderResponse(Guid Id, Guid OrderId, DateTime CreatedDate, string OrderStatus, List<GetShopOrderDetailsResponse> OrderDetails);
+    public sealed record GetShopOrderItemsCommand(Guid StoreId, Guid? OrderId, PagingRequest? PagingRequest, DateOnly? FromDate, DateOnly? ToDate, OrderStatusEnum? OrderStatus) : IRequest<PagedResult<GetShopOrderResponse>>;
+    public record GetShopOrderResponse(Guid Id, Guid OrderId, DateTime CreationDate, string OrderStatus, List<GetShopOrderDetailsResponse> OrderDetails);
     public record GetShopOrderDetailsResponse(Guid Id, Guid ProductItemId, int Quantity, double Price, string OrderItemStatus, GetShopProductItemResponse ProductItem);
     public record GetShopProductItemResponse(Guid Id, string SKU, double OriginalPrice, double DiscountedPrice, int Stock, bool IsActive, List<GetProductItemsImagesResponse> ProductImages);
     public record GetProductItemsImagesResponse(Guid Id, string ImagePath, string ImageName);
@@ -69,7 +69,7 @@ namespace Infrastructures.Features.Orders.Queries.GetShopOrderItems
                             orderDetail.ProductItem.SKU,
                             (double)orderDetail.ProductItem.OriginalPrice,
                             (double)orderDetail.ProductItem.DiscountedPrice,
-                            orderDetail.ProductItem.Stock,
+                            orderDetail.ProductItem.Stock.Quantity,
                             orderDetail.ProductItem.IsActive,
                             orderDetail.ProductItem.ProductImages.Select(
                                 img => new GetProductItemsImagesResponse(

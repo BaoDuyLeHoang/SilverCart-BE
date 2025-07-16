@@ -3,6 +3,7 @@ using Infrastructures.FluentAPIs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SilverCart.Domain.Entities;
+using SilverCart.Domain.Entities.Auth;
 using SilverCart.Infrastructure.Commons;
 
 namespace WebAPI.Extensions

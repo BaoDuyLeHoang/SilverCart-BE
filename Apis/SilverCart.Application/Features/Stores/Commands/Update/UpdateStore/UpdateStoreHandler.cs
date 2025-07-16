@@ -14,14 +14,14 @@ namespace Infrastructures.Features.Stores.Commands.Update.UpdateStore
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         public async Task<Guid> Handle(UpdateStoreCommand request, CancellationToken cancellationToken)
         {
-            var store = await _unitOfWork.StoreRepository.GetByIdAsync(Guid.Parse("c4f31cea-14f3-45cd-98ad-39d68e78e0e7"));
+            var store = await _unitOfWork.StoreRepository.GetByIdAsync(Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaab"), x => x.StoreAddress);
             if (store == null)
             {
-                throw new AppExceptions("Store not found");
+                throw new AppExceptions("Không tìm thấy cửa hàng");
             }
             // Update store
             store.Name = request.StoreName;
-            store.Infomation = request.Information;
+            store.Description = request.Information;
             store.AdditionalInfo = request.AdditionalInfo;
             store.Phone = request.Phone;
 
@@ -33,7 +33,7 @@ namespace Infrastructures.Features.Stores.Commands.Update.UpdateStore
             _unitOfWork.StoreRepository.Update(store);
 
             // Update store address
-            var storeAddress = await _unitOfWork.StoreAddressRepository.GetByIdAsync(store.StoreAddressId);
+            var storeAddress = store.StoreAddress;
             if (storeAddress != null)
             {
                 storeAddress.Address = request.StreetAddress;

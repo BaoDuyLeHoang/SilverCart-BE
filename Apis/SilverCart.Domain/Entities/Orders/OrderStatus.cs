@@ -1,8 +1,10 @@
-﻿namespace SilverCart.Domain.Entities;
+﻿using SilverCart.Domain.Enums;
+
+namespace SilverCart.Domain.Entities;
 
 public class OrderStatus : BaseEntity
 {
-    public string Status { get; set; } = string.Empty;
+    public OrderStatusEnum Status { get; set; }
     public string Description { get; set; } = string.Empty;
 
     // Navigation property

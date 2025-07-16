@@ -12,11 +12,11 @@ public class AuditableEntityConfiguration<T> : IEntityTypeConfiguration<T>
     {
         builder.Property(x => x.IsDeleted).HasDefaultValue(false);
         builder.HasQueryFilter(x => !x.IsDeleted);
-        builder.Property(x => x.CreationDate).IsRequired(false).HasColumnOrder(95);
-        builder.Property(x => x.CreatedById).IsRequired(false).HasColumnOrder(96);
-        builder.Property(x => x.ModificationDate).IsRequired(false).HasColumnOrder(97);
-        builder.Property(x => x.ModificationById).IsRequired(false).HasColumnOrder(98);
-        builder.Property(x => x.DeletionDate).IsRequired(false).HasColumnOrder(99);
-        builder.Property(x => x.DeleteById).IsRequired(false).HasColumnOrder(100);
+        builder.Property(x => x.CreationDate).IsRequired(false);
+        builder.Property(x => x.CreatedById).IsRequired(false);
+        builder.Property(x => x.ModificationDate).IsRequired(false);
+        builder.Property(x => x.ModificationById).IsRequired(false);
+        builder.Property(x => x.DeletionDate).IsRequired(false);
+        builder.Property(x => x.DeleteById).IsRequired(false);
     }
 }

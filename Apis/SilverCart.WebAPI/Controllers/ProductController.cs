@@ -1,5 +1,7 @@
-﻿using Infrastructures.Features.Products.Commands.Add.AddProductImages;
+﻿using Infrastructures.Commons;
+using Infrastructures.Features.Products.Commands.Add.AddProductImages;
 using Infrastructures.Features.Products.Commands.Add.AddProductToCategories;
+using Infrastructures.Features.Products.Commands.Add.AddStockToStoreProductItems;
 using Infrastructures.Features.Products.Commands.AddProductItems;
 using Infrastructures.Features.Products.Commands.Create.CreateItem;
 using Infrastructures.Features.Products.Commands.Create.CreateProduct;
@@ -28,9 +30,9 @@ namespace WebAPI.Controllers
             _mediator = mediator;
         }
         [HttpPost]
-        public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommand productCreateDTO)
+        public async Task<ActionResult<Guid>> CreateProduct([FromBody] CreateProductCommand command)
         {
-            var result = await _mediator.Send(productCreateDTO);
+            var result = await _mediator.Send(command);
             return Ok(result);
         }
         [HttpGet]

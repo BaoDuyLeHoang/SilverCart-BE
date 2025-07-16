@@ -2,6 +2,7 @@ using Infrastructures.Commons.Exceptions;
 using MediatR;
 using SilverCart.Application.Interfaces;
 using SilverCart.Domain.Entities;
+using SilverCart.Domain.Entities.Categories;
 using SilverCart.Domain.Enums;
 
 namespace Infrastructures.Features.Categories.Commands.Create.CreateCategory
@@ -40,7 +41,6 @@ namespace Infrastructures.Features.Categories.Commands.Create.CreateCategory
 
             var category = new Category
             {
-                Id = Guid.NewGuid(),
                 ParentCategoryId = request.ParentCategoryId,
                 Name = request.Name,
                 Description = request.Description,

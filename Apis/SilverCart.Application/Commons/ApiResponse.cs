@@ -2,26 +2,25 @@
 
 namespace SilverCart.Application.Commons;
 
-public class ApiResponse
+public interface IApiResponse
 {
     public int StatusCode { get; set; }
     public string? Message { get; set; }
-    public object? Data { get; set; }
+    public dynamic? Data { get; set; }
 }
 
-[JsonConverter(typeof(JsonStringEnumConverter))]
-public enum ApiResponseStatus
-{
-    Success,
-    Error,
-    Warning
-}
-
-public class ApiExceptionResponse
+public class ApiResponse : IApiResponse
 {
     public int StatusCode { get; set; }
     public string? Message { get; set; }
-    public string? Type { get; set; }
-    public string? TraceId { get; set; }
-    public object? Data { get; set; }
+    public dynamic? Data { get; set; }
+}
+
+public class ErrorResponse : IApiResponse
+{
+    public int StatusCode { get; set; } = 500;
+    public string? Message { get; set; } = "Internal server error";
+    public string? Type { get; set; } = "Exception";
+    public string TraceId { get; set; } = string.Empty;
+    public dynamic? Data { get; set; } = default;
 }
