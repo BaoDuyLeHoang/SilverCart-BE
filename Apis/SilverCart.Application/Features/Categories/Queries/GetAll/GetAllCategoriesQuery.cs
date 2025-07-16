@@ -14,6 +14,6 @@ namespace Infrastructures.Features.Categories.Queries.GetAll
         string Status,
         Guid? ParentCategoryId,
         string? ParentCategoryName,
-        DateTime? CreatedDate,
+        DateTime? CreationDate,
         int ProductCount);
 }

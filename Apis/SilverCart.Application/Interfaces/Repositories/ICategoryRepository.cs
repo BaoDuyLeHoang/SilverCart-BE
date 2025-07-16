@@ -1,4 +1,4 @@
-﻿using SilverCart.Domain.Entities;
+﻿using SilverCart.Domain.Entities.Categories;
 
 namespace SilverCart.Application.Repositories
 {

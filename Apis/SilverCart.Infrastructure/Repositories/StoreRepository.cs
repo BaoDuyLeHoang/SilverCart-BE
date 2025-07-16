@@ -5,17 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SilverCart.Domain.Entities.Stores;
 
 namespace Infrastructures.Repositories
 {
     public class StoreRepository : GenericRepository<Store>, IStoreRepository
     {
-        private readonly AppDbContext _context;
-
-        public StoreRepository(AppDbContext context) : base(context)
-        {
-            _context = context;
-        }
 
         //public Task<Store?> GetActiveStoreAsync()
         //{
@@ -39,5 +34,8 @@ namespace Infrastructures.Repositories
 
         //    await _context.Set<StoreProductItem>().AddRangeAsync(storeProductItems);
         //}
+        public StoreRepository(AppDbContext context) : base(context)
+        {
+        }
     }
 }

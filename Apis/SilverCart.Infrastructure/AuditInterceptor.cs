@@ -66,6 +66,11 @@ public class AuditInterceptor : SaveChangesInterceptor
                     }
                 case EntityState.Deleted:
                     {
+                        if (entity.IsHardDelete)
+                        {
+                            entry.State = EntityState.Deleted;//not sure if this works
+                            continue;
+                        }
                         entity.DeletionDate = now;
                         entity.DeleteById = userId;
                         entry.State = EntityState.Modified;

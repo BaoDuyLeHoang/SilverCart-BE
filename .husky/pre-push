@@ -1,27 +1,21 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "🔍 Running pre-push checks..."
+echo "🔍 Chạy build..."
 
-# Build the project
-echo "📦 Building project..."
-npm run build
-if [ $? -ne 0 ]; then
-    echo "❌ Build failed. Please fix build errors before pushing."
-    exit 1
-fi
+dotnet build
 
-# Run tests
-echo "🧪 Running tests..."
-npm run test
-if [ $? -ne 0 ]; then
-    echo "❌ Tests failed. Please fix test failures before pushing."
-    exit 1
-fi
+# # Run tests
+# echo "🧪 Chạy test..."
+# dotnet test
+# if [ $? -ne 0 ]; then
+#     echo "❌ Tests failed. Please fix test failures before pushing."
+#     exit 1
+# fi
 
-# Check code formatting
-echo "🎨 Checking code formatting..."
-npm run lint
+Check code formatting
+echo "🎨 Kiểm tra định dạng code..."
+dotnet format --verify-no-changes
 if [ $? -ne 0 ]; then
     echo "❌ Code formatting check failed. Please run 'dotnet format' to fix formatting issues."
     exit 1

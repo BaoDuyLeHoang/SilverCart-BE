@@ -1,10 +1,5 @@
 ﻿using Infrastructures.Interfaces.Repositories;
-using SilverCart.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SilverCart.Domain.Entities.Stores;
 
 namespace Infrastructures.Repositories
 {

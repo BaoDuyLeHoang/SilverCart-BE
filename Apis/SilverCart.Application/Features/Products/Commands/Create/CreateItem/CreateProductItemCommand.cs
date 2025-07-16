@@ -16,12 +16,11 @@ public sealed record CreateProductItemCommand(
 public record CreateProductItemResponse(
     Guid Id,
     Guid VariantId,
-    Guid StoreId,
     string SKU,
     decimal OriginalPrice,
     decimal DiscountedPrice,
     int Weight,
     int Stock,
     bool IsActive,
-    DateTime CreatedDate
+    DateTime CreationDate
 );

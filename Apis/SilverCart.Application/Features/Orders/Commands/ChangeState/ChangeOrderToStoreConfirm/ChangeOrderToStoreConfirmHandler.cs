@@ -30,7 +30,7 @@ namespace Infrastructures.Features.Orders.Commands.ChangeState.ChangeOrderToStor
             {
                 throw new ArgumentException($"Order with ID {request.OrderId} not found");
             }
-            order.OrderStatus = OrderStatusEnums.StoreConfirmed;
+            order.OrderStatus = OrderStatusEnum.StoreConfirmed;
             _unitOfWork.OrderRepository.Update(order);
             await _unitOfWork.SaveChangeAsync();
             return order.Id;

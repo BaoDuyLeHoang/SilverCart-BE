@@ -51,7 +51,7 @@ namespace Infrastructures.Features.Orders.Commands.ChangeState.ChangeOrderItemsT
 
             if (order.OrderDetails.All(x => x.OrderItemStatus == OrderItemStatusEnums.ConfirmedByStore || x.OrderItemStatus == OrderItemStatusEnums.Cancelled))
             {
-                order.OrderStatus = OrderStatusEnums.StoreConfirmed;
+                order.OrderStatus = OrderStatusEnum.StoreConfirmed;
                 _unitOfWork.OrderRepository.Update(order);
             }
             await _unitOfWork.SaveChangeAsync();

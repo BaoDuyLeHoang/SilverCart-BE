@@ -42,21 +42,6 @@ namespace Infrastructures.FluentAPIs
         public void Configure(EntityTypeBuilder<AdministratorUser> builder)
         {
             builder.ToTable("AdministratorUsers");
-            
-            builder.HasData(new AdministratorUser
-            {
-                Id = Guid.Parse("9878ee32-2ead-4165-9e44-e510ba1bae29"),
-                FullName = "Super Admin",
-                Email = "admin@elderly.com",
-                NormalizedEmail = "ADMIN@ELDERLY.COM",
-                UserName = "superadmin",
-                Gender = "Other",
-                NormalizedUserName = "SUPERADMIN",
-                PasswordHash = new PasswordHasher<AdministratorUser>().HashPassword(null!, "SuperAdmin123!"),
-                EmailConfirmed = true,
-                IsDeleted = false,
-                CreationDate = DateTime.UtcNow
-            });
         }
 
         public void Configure(EntityTypeBuilder<DependentUser> builder)
@@ -76,29 +61,7 @@ namespace Infrastructures.FluentAPIs
             builder.ToTable("ConsultantUsers");
             builder.HasMany(x => x.Consultations)
                 .WithOne(x => x.ConsultantUser)
-                .HasForeignKey(x => x.ConsultantId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-        }
-
-        public void Configure(EntityTypeBuilder<Consultation> builder)
-        {
-            builder.ToTable("Consultations");
-
-
-            builder.HasOne(x => x.ConsultantUser)
-                .WithMany(x => x.Consultations)
                 .HasForeignKey(x => x.ConsultantId);
-
-            builder.HasOne(x => x.DependentUser)
-                .WithMany()  // assuming not bi-directional
-                .HasForeignKey(x => x.CustomerId);
-        }
-        public void Configure(EntityTypeBuilder<ConsultantRole> builder)
-        {
-            builder.ToTable("ConsultantRoles");
-            builder.HasKey(x => x.Id); // ✅ Explicitly set primary key
-            builder.Property(x => x.RoleName).HasMaxLength(100);
         }
     }
 }

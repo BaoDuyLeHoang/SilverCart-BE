@@ -1,17 +1,19 @@
 // SilverCart.ApplicationCommons/AppConfiguration.cs
 
+using Confluent.Kafka;
+
 namespace SilverCart.Infrastructure.Commons
 {
     public class AppConfiguration
     {
-        public string DatabaseConnection { get; set; }
-        public string RedisConnection { get; set; }
-        public string JWTSecretKey { get; set; }
-        public SuperAdminConfig SuperAdmin { get; set; }
-        public string ApplicationUrl { get; set; }
-        public EmailSettings EmailSettings { get; set; }
-        public bool IsDevelopment { get; set; }
-        public VNPAYSettings Vnpay { get; set; }
+        public string DatabaseConnection { get; set; } = string.Empty;
+        public string RedisConnection { get; set; } = string.Empty;
+        public string JWTSecretKey { get; set; } = string.Empty;
+        public SuperAdminConfig SuperAdmin { get; set; } = new SuperAdminConfig();
+        public string ApplicationUrl { get; set; } = string.Empty;
+        public EmailSettings EmailSettings { get; set; } = null!;
+        public bool IsDevelopment { get; set; } = false;
+        public VNPAYSettings Vnpay { get; set; } = null!;
     }
 
     public class VNPAYSettings
@@ -35,5 +37,14 @@ namespace SilverCart.Infrastructure.Commons
         public string Username { get; set; }
         public string Password { get; set; }
         public string From { get; set; }
+    }
+
+
+    public class JwtSettings
+    {
+        public string Issuer { get; set; }
+        public string Audience { get; set; }
+        public string Key { get; set; }
+        public int ExpiresInMinutes { get; set; } = 30;
     }
 }

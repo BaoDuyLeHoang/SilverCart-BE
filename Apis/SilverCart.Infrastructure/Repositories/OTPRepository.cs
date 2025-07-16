@@ -22,7 +22,7 @@ public class OTPRepository : IOTPRepository
         var otpJson = await _redis.GetAsync($"{OTP_PREFIX}{code}");
         if (string.IsNullOrEmpty(otpJson))
             return null;
-            
+
         return JsonSerializer.Deserialize<OTPData>(otpJson);
     }
 
@@ -31,7 +31,7 @@ public class OTPRepository : IOTPRepository
         var otp = await GetByCodeAsync(code);
         if (otp == null || otp.Type != type || otp.IsUsed || otp.ExpirationTime <= DateTime.UtcNow)
             return null;
-            
+
         return otp;
     }
 
@@ -41,7 +41,7 @@ public class OTPRepository : IOTPRepository
         var otpCode = await _redis.GetAsync(key);
         if (string.IsNullOrEmpty(otpCode))
             return null;
-            
+
         return await GetByCodeAsync(otpCode);
     }
 
@@ -51,17 +51,17 @@ public class OTPRepository : IOTPRepository
         var otpCodesJson = await _redis.GetAsync(key);
         if (string.IsNullOrEmpty(otpCodesJson))
             return Enumerable.Empty<OTPData>();
-            
+
         var otpCodes = JsonSerializer.Deserialize<List<string>>(otpCodesJson) ?? new List<string>();
         var result = new List<OTPData>();
-        
+
         foreach (var code in otpCodes)
         {
             var otp = await GetByCodeAsync(code);
             if (otp != null)
                 result.Add(otp);
         }
-        
+
         return result;
     }
 
@@ -73,11 +73,11 @@ public class OTPRepository : IOTPRepository
 
         otp.IsUsed = true;
         await _redis.SetAsync(
-            $"{OTP_PREFIX}{code}", 
+            $"{OTP_PREFIX}{code}",
             JsonSerializer.Serialize(otp),
             TimeSpan.FromMinutes(5) // Keep used OTPs for a short time
         );
-        
+
         return true;
     }
 
@@ -86,7 +86,7 @@ public class OTPRepository : IOTPRepository
         var otp = await GetActiveOTPAsync(code, type);
         return otp != null;
     }
-    
+
     // Helper method to store a new OTP in Redis
     public async Task CreateOTPAsync(OTPData otp)
     {
@@ -94,27 +94,27 @@ public class OTPRepository : IOTPRepository
         var expiryTime = otp.ExpirationTime - DateTime.UtcNow;
         if (expiryTime <= TimeSpan.Zero)
             return;
-            
+
         await _redis.SetAsync(
-            $"{OTP_PREFIX}{otp.Code}", 
+            $"{OTP_PREFIX}{otp.Code}",
             JsonSerializer.Serialize(otp),
             expiryTime
         );
-        
+
         // Store verification ID reference
         await _redis.SetAsync(
-            $"{OTP_VERIFICATION_PREFIX}{otp.VerificationToId}", 
+            $"{OTP_VERIFICATION_PREFIX}{otp.VerificationToId}",
             otp.Code,
             expiryTime
         );
-        
+
         // Add to user's OTP list
         var userKey = $"{OTP_USER_PREFIX}{otp.UserId}";
         var existingCodesJson = await _redis.GetAsync(userKey);
-        var codes = string.IsNullOrEmpty(existingCodesJson) 
-            ? new List<string>() 
+        var codes = string.IsNullOrEmpty(existingCodesJson)
+            ? new List<string>()
             : JsonSerializer.Deserialize<List<string>>(existingCodesJson) ?? new List<string>();
-        
+
         codes.Add(otp.Code);
         await _redis.SetAsync(
             userKey,

@@ -26,7 +26,6 @@ public class UpdateProductVariantHandler(IUnitOfWork unitOfWork) : IRequestHandl
             throw new AppExceptions($"Variant with ID '{request.VariantId}' not found in product '{request.ProductId}'.");
 
         variant.VariantName = request.ProductVariant.VariantName;
-        variant.Price = request.ProductVariant.Price;
 
         await _unitOfWork.SaveChangeAsync();
         return product.Id;

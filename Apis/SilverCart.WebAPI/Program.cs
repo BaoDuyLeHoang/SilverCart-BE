@@ -37,7 +37,7 @@ builder.Services.AddStackExchangeRedisCache(options => { options.Configuration =
 builder.Services.AddOutputCache();
 
 // Add SignalR services
-builder.Services.AddSignalR();  
+builder.Services.AddSignalR();
 
 // Configure HealthChecks
 builder.Services.AddHealthChecks()

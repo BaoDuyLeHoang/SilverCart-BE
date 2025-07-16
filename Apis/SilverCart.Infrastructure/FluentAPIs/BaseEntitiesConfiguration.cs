@@ -12,7 +12,7 @@ public class BaseEntitiesConfiguration : IEntityTypeConfiguration<BaseEntity>,
 {
     public void Configure(EntityTypeBuilder<BaseEntity> builder)
     {
-        builder.UseTpcMappingStrategy();
+        builder.UseTptMappingStrategy();
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
@@ -25,12 +25,17 @@ public class BaseEntitiesConfiguration : IEntityTypeConfiguration<BaseEntity>,
         builder.Property(x => x.ModificationById).IsRequired(false).HasColumnOrder(98);
         builder.Property(x => x.DeletionDate).IsRequired(false).HasColumnOrder(99);
         builder.Property(x => x.DeleteById).IsRequired(false).HasColumnOrder(100);
+        builder.Property(x => x.IsHardDelete).HasDefaultValue(false);
+        builder.HasQueryFilter(x => !x.IsDeleted && !x.IsHardDelete);
     }
 
 
     public void Configure(EntityTypeBuilder<BaseUser> builder)
     {
         builder.Property(x => x.FullName).IsRequired();
+        builder.Property(b => b.Gender)
+            .HasDefaultValue("Unknown");
+
     }
 
 

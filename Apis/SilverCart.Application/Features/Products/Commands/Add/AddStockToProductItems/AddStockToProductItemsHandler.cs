@@ -36,7 +36,7 @@ namespace Infrastructures.Features.Products.Commands.Add.AddStockToStoreProductI
             if (storeProductItem == null)
                 throw new AppExceptions($"StoreProductItem not found or access denied.");
 
-            storeProductItem.Stock += request.Stock;
+            storeProductItem.Stock.Quantity += request.Stock;
 
             await _unitOfWork.SaveChangeAsync();
             return true;

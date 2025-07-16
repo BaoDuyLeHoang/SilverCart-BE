@@ -6,7 +6,7 @@ using SilverCart.Domain.Entities;
 namespace Infrastructures;
 
 public sealed record GetOrderByIdQuery(Guid Id) : IRequest<GetOrderByIdResponse>;
-public record GetOrderByIdResponse(Guid Id, double TotalPrice, DateTime CreatedDate, string OrderStatus, string Address, List<GetOrderDetailsResponse> OrderDetails);
+public record GetOrderByIdResponse(Guid Id, double TotalPrice, DateTime CreationDate, string OrderStatus, string Address, List<GetOrderDetailsResponse> OrderDetails);
 public record GetOrderDetailsResponse(Guid Id, Guid ProductItemId, int Quantity, double Price, string OrderItemStatus, GetProductItemResponse ProductItem);
 public record GetProductItemResponse(Guid Id, string SKU, double OriginalPrice, double DiscountedPrice, int Stock, bool IsActive, List<GetProductItemsImagesResponse> ProductImages);
 public class GetOrderByIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetOrderByIdQuery, GetOrderByIdResponse>
@@ -31,7 +31,7 @@ public class GetOrderByIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<
         (
             Id: order.Id,
             TotalPrice: (double)order.TotalPrice,
-            CreatedDate: order.CreationDate.Value,
+            CreationDate: order.CreationDate.Value,
             OrderStatus: order.OrderStatus.ToString(),
             Address: order.DependentUser.Addresses.FirstOrDefault()?.StreetAddress ?? "",
             OrderDetails: order.OrderDetails.Select(orderDetail => new GetOrderDetailsResponse
@@ -47,7 +47,7 @@ public class GetOrderByIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<
                     SKU: orderDetail.ProductItem.SKU,
                     OriginalPrice: (double)orderDetail.ProductItem.OriginalPrice,
                     DiscountedPrice: (double)orderDetail.ProductItem.DiscountedPrice,
-                    Stock: orderDetail.ProductItem.Stock,
+                    Stock: orderDetail.ProductItem.Stock.Quantity,
                     IsActive: orderDetail.ProductItem.IsActive,
                     ProductImages: orderDetail.ProductItem.ProductImages.Select(img => new GetProductItemsImagesResponse
                     (

@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SilverCart.Domain.Entities;
+using SilverCart.Domain.Entities.Products;
 using SilverCart.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,9 @@ using System.Threading.Tasks;
 namespace Infrastructures.Features.Products.Queries.GetAll;
 
 public sealed record GetAllProductsCommand(PagingRequest? PagingRequest, Guid? Id, string? ProductName, string? Description, ProductTypeEnum? ProductType) : IRequest<PagedResult<GetAllProductsResponse>>;
-public record GetAllProductsResponse(Guid Id, string ProductName, string? Description, string? VideoPath, string ProductType, DateTime? CreatedDate, List<GetProductCategoriesResponse> ProductCategories, List<GetProductVariantsResponse> Variants);
+public record GetAllProductsResponse(Guid Id, string ProductName, string? Description, string? VideoPath, string ProductType, DateTime? CreationDate, List<GetProductCategoriesResponse> ProductCategories, List<GetProductVariantsResponse> Variants);
 public record GetProductCategoriesResponse(Guid Id, string CategoryName);
-public record GetProductVariantsResponse(Guid Id, string VariantName, decimal Price, bool IsActive, List<GetProductItemsResponse> ProductItems);
+public record GetProductVariantsResponse(Guid Id, string VariantName, bool IsActive, List<GetProductItemsResponse> ProductItems);
 public record GetProductItemsResponse(Guid Id, string SKU, decimal OriginalPrice, decimal DiscountedPrice, int Weight, int Stock, bool IsActive, List<GetProductImagesResponse> ProductImages);
 public record GetProductImagesResponse(Guid Id, string ImagePath, string ImageName);
 public record GetCategoryProductResponse(Guid Id, string CategoryName);
@@ -30,7 +31,7 @@ public class GetAllProductHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetA
             predicate: _ => true,
             include: source => source
                 .Include(x => x.Variants)
-                    .ThenInclude(v => v.Items)
+                    .ThenInclude(v => v.ProductItems)
                         .ThenInclude(i => i.ProductImages)
                 .Include(x => x.ProductImages)
         );
@@ -54,21 +55,20 @@ public class GetAllProductHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetA
                 product.ProductType.ToString(),
                 product.CreationDate,
                 product.ProductCategories.Select(category => new GetProductCategoriesResponse(
-                    category.Id,
+                    category.CategoryId,
                     category.Category.Name
                 )).ToList(),
                 product.Variants.Select(variant => new GetProductVariantsResponse(
                     variant.Id,
                     variant.VariantName,
-                    variant.Price,
                     variant.IsActive,
-                    variant.Items.Select(item => new GetProductItemsResponse(
+                    variant.ProductItems.Select(item => new GetProductItemsResponse(
                         item.Id,
                         item.SKU,
                         item.OriginalPrice,
                         item.DiscountedPrice,
                         item.Weight,
-                        item.Stock,
+                        item.Stock.Quantity,
                         item.IsActive,
                         item.ProductImages.Select(img => new GetProductImagesResponse(
                             img.Id,

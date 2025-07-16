@@ -22,7 +22,7 @@ namespace Infrastructures
                             ServiceLifetime.Scoped);
             });
             return services;
-            
+
         }
     }
 }

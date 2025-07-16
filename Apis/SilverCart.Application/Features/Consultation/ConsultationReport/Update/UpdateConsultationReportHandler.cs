@@ -30,10 +30,10 @@ namespace Infrastructures.Features.Consultation.ConsultationReport.Update
             if (consultation is null)
             {
                 throw new KeyNotFoundException($"Order item with ID '{request.ConsultationId}' not found.");
-             }
+            }
 
             consultation.Notes = request.Notes;
-            consultation.UpdatedAt = _currentTime.GetCurrentTime();
+            consultation.ModificationDate = _currentTime.GetCurrentTime();
             consultation.IsCompleted = request.IsComplete;
             _unitOfWork.ConsultationRepository.Update(consultation);
             await _unitOfWork.SaveChangeAsync();

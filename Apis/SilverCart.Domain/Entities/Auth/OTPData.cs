@@ -4,18 +4,15 @@ using SilverCart.Domain.Common.Interfaces;
 
 namespace SilverCart.Domain.Entities;
 
-public class OTPData : IBaseEntity
+public class OTPData : BaseEntity
 {
-    public Guid Id { get; set; }
 
-    [StringLength(10)]
+    [StringLength(10, MinimumLength = 6)]
     public string Code { get; set; } = string.Empty;
-    [Required]
     public Guid VerificationToId { get; set; }
     public DateTime ExpirationTime { get; set; }
     public OTPTypeEnum Type { get; set; }
     public bool IsUsed { get; set; } = false;
-    public bool IsDeleted { get; set; }
 
     public static OTPData Init(string code, int days) => new OTPData()
     {

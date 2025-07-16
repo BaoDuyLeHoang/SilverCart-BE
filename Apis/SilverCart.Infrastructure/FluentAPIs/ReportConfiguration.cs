@@ -23,4 +23,4 @@ namespace Infrastructures.FluentAPIs
             builder.ToTable("ProductReports");
         }
     }
-} 
+}

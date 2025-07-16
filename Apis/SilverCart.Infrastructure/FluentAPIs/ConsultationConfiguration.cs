@@ -1,6 +1,7 @@
 using SilverCart.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SilverCart.Domain.Entities.Auth;
 
 namespace Infrastructures.FluentAPIs
 {
@@ -15,8 +16,8 @@ namespace Infrastructures.FluentAPIs
                 .HasForeignKey(x => x.ConsultantId);
 
             builder.HasOne(x => x.DependentUser)
-                .WithMany()
-                .HasForeignKey(x => x.CustomerId);
+                .WithMany(x => x.Consultations)
+                .HasForeignKey(x => x.DependentUserId);
         }
     }
-} 
+}

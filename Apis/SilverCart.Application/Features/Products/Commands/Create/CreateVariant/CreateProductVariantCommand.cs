@@ -14,8 +14,6 @@ public record CreateProductVariantResponse(
     Guid Id,
     Guid ProductId,
     string VariantName,
-    decimal Price,
-    int Stock,
     bool IsActive,
-    DateTime CreatedDate
+    DateTime CreationDate
 );

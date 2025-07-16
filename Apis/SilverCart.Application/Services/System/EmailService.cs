@@ -23,8 +23,8 @@ namespace SilverCart.Application.Services
         {
             var verificationLink =
                 $"{_configuration.ApplicationUrl}/auth/verify-email?token={WebUtility.UrlEncode(token)}&email={WebUtility.UrlEncode(email)}";
-            var subject = "Verify Your Email";
-            var body = $"Please verify your email by clicking this link: <a href='{verificationLink}'>Verify Email</a>";
+            var subject = "Xác thực email";
+            var body = $"Xác thực email bằng cách nhấp vào liên kết này: <a href='{verificationLink}'>Xác thực email</a>";
 
             SendEmailAsync(email, subject, body).ConfigureAwait(false);
         }
@@ -33,8 +33,8 @@ namespace SilverCart.Application.Services
         {
             var resetLink =
                 $"{_configuration.ApplicationUrl}/auth/reset-password?token={WebUtility.UrlEncode(token)}&email={WebUtility.UrlEncode(email)}";
-            var subject = "Reset Your Password";
-            var body = $"Reset your password by clicking this link: <a href='{resetLink}'>Reset Password</a>";
+            var subject = "Đặt lại mật khẩu";
+            var body = $"Đặt lại mật khẩu bằng cách nhấp vào liên kết này: <a href='{resetLink}'>Đặt lại mật khẩu</a>";
 
             await SendEmailAsync(email, subject, body);
         }

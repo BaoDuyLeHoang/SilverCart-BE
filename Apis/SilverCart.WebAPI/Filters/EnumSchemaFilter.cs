@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
-using System;       
+using System;
 namespace WebAPI.Filters
 {
     public class EnumSchemaFilter : ISchemaFilter
@@ -16,14 +16,14 @@ namespace WebAPI.Filters
             {
                 schema.Enum.Clear();
                 schema.Type = "string";
-                
+
                 // Build description for enum
                 var descriptions = new List<string>();
                 foreach (var enumName in Enum.GetNames(context.Type))
                 {
                     var memberInfo = context.Type.GetMember(enumName).FirstOrDefault();
                     var description = memberInfo?.GetCustomAttribute<DescriptionAttribute>()?.Description;
-                    
+
                     if (!string.IsNullOrEmpty(description))
                     {
                         descriptions.Add($"{enumName}: {description}");
@@ -32,10 +32,10 @@ namespace WebAPI.Filters
                     {
                         descriptions.Add(enumName);
                     }
-                    
+
                     schema.Enum.Add(new OpenApiString(enumName));
                 }
-                
+
                 // Add combined description
                 if (descriptions.Any())
                 {
@@ -44,4 +44,4 @@ namespace WebAPI.Filters
             }
         }
     }
-} 
+}

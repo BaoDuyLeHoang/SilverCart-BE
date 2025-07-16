@@ -2,6 +2,7 @@
 using SilverCart.Domain.Entities;
 using FluentAssertions;
 using Domain.Tests;
+using SilverCart.Domain.Entities.Categories;
 
 namespace Infrastructures.Tests.Mappers
 {

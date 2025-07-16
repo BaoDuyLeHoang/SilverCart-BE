@@ -1,14 +1,12 @@
 ﻿using SilverCart.Application.Repositories;
-using SilverCart.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SilverCart.Domain.Common.Interfaces;
+using SilverCart.Domain.Entities.Categories;
+using SilverCart.Domain.Entities.Products;
 
 namespace Infrastructures.Interfaces.Repositories
 {
-    public interface IProductCategoryRepository : IGenericRepository<ProductCategory>
+    public interface IProductCategoryRepository : IGenericMutationRepository<ProductCategory>
     {
+        Task<ProductCategory?> GetByProductIdAndCategoryIdAsync(Guid productId, Guid categoryId);
     }
 }

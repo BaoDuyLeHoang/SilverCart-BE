@@ -46,7 +46,7 @@ namespace Infrastructures.Features.Consultation.Consultant.Create
             if (checkPhoneExist.Any())
                 throw new AppExceptions("Phone number already exists");
 
-            var consultantUser = new ConsultantUser
+            var consultantUser = new SilverCart.Domain.Entities.Auth.ConsultantUser
             {
                 FullName = request.FullName,
                 Email = request.Email,
