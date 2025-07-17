@@ -8,6 +8,7 @@ namespace SilverCart.Infrastructure.Commons
     {
         public string DatabaseConnection { get; set; } = string.Empty;
         public string RedisConnection { get; set; } = string.Empty;
+        public string RedisConnectionInternal { get; set; } = string.Empty;
         public string RedisPassword { get; set; } = string.Empty;
         public string JWTSecretKey { get; set; } = string.Empty;
         public SuperAdminConfig SuperAdmin { get; set; } = new SuperAdminConfig();

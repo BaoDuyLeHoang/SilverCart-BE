@@ -54,7 +54,7 @@ namespace Infrastructures
                     ResponseTimeout = 5000,
                     Password = configuration.RedisPassword,
                     Ssl = true
-                }, writer => writer.WriteLine));
+                }, log: Console.Out));
             services.AddScoped<IRedisService, RedisService>();
             services.AddScoped<ILockingService, LockingService>();
             services.AddScoped<ICalculateService, CalculateService>();
@@ -76,9 +76,9 @@ namespace Infrastructures
             services.AddAutoMapper(typeof(UserMapperProfile).Assembly);
 
             services.AddIdentity<BaseUser, BaseRole>(options =>
-            {
-                // configure password, lockout, etc. if needed
-            })
+                {
+                    // configure password, lockout, etc. if needed
+                })
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
