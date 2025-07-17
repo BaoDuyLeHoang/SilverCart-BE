@@ -10,4 +10,5 @@ public interface IAuditableEntity
     public Guid? CreatedById { get; set; }
     public Guid? ModificationById { get; set; }
     public Guid? DeleteById { get; set; }
+    public bool IsHardDelete { get; set; }
 }

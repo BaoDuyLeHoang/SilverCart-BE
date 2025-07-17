@@ -8,14 +8,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructures.Repositories
 {
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity>
-        where TEntity : class, IAuditableEntity, IBaseEntity
+    public class GenericRepository<TEntity> : GenericMutationRepository<TEntity>, IGenericRepository<TEntity>
+        where TEntity : class, IBaseEntity, IAuditableEntity
     {
-        protected readonly DbSet<TEntity> _dbSet;
-
-        public GenericRepository(AppDbContext context)
+        public GenericRepository(AppDbContext context) : base(context)
         {
-            _dbSet = context.Set<TEntity>();
         }
 
         public async Task<IQueryable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includes)
@@ -32,36 +29,6 @@ namespace Infrastructures.Repositories
             var entity = await query.FirstOrDefaultAsync(x => x.Id == id);
             // Optional: throw custom NotFoundException
             return entity;
-        }
-
-        public async Task AddAsync(TEntity entity)
-        {
-            await _dbSet.AddAsync(entity);
-        }
-
-        public async Task AddRangeAsync(List<TEntity> entities)
-        {
-            await _dbSet.AddRangeAsync(entities);
-        }
-
-        public void Update(TEntity entity)
-        {
-            _dbSet.Update(entity);
-        }
-
-        public void UpdateRange(List<TEntity> entities)
-        {
-            _dbSet.UpdateRange(entities);
-        }
-
-        public void SoftRemove(TEntity entity)
-        {
-            _dbSet.Update(entity);
-        }
-
-        public void SoftRemoveRange(List<TEntity> entities)
-        {
-            _dbSet.UpdateRange(entities);
         }
 
         public async Task<Pagination<TEntity>> ToPagination(int pageIndex = 0, int pageSize = 10)

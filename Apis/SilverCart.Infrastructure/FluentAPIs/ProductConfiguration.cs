@@ -1,116 +1,144 @@
-﻿using SilverCart.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SilverCart.Domain.Entities;
+using SilverCart.Domain.Entities.Products;
+using SilverCart.Domain.Entities.Stores;
 
 namespace Infrastructures.FluentAPIs
 {
     public class ProductConfiguration : IEntityTypeConfiguration<Product>,
         IEntityTypeConfiguration<ProductVariant>,
         IEntityTypeConfiguration<ProductItem>,
-        IEntityTypeConfiguration<ProductImage>,
-        IEntityTypeConfiguration<ProductPromotion>
+        IEntityTypeConfiguration<ProductImage>
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            // Configure Name
-            builder.Property(x => x.Name)
+            builder.ToTable("Products");
+
+            // Configure relationships
+            builder.HasMany(p => p.Variants)
+                .WithOne(pv => pv.Product)
+                .HasForeignKey(pv => pv.ProductId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(false);
+
+            builder.HasMany(p => p.ProductPromotions)
+                .WithOne(pp => pp.Product)
+                .HasForeignKey(pp => pp.ProductId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(false);
+
+            builder.HasOne(p => p.Store)
+                .WithMany()
+                .HasForeignKey(p => p.StoreId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+
+            // Configure properties
+            builder.Property(p => p.Name)
                 .IsRequired()
                 .HasMaxLength(200);
 
-            // Configure Description
-            builder.Property(x => x.Description)
-                .HasMaxLength(1000);
-
-            // Configure VideoPath
-            builder.Property(x => x.VideoPath)
-                .HasMaxLength(500);
-
-            // Configure ProductType
-            builder.Property(x => x.ProductType)
-                .IsRequired();
-
-            // Relationships
-
-
-            // Variants (One-to-Many)
-            builder.HasMany(x => x.Variants)
-                .WithOne(x => x.Product)
-                .HasForeignKey(x => x.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // Promotions (One-to-Many with ProductPromotion)
-            builder.HasMany(x => x.ProductPromotions)
-                .WithOne(x => x.Product)
-                .HasForeignKey(x => x.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // IsDeleted property is handled globally by BaseEntitiesConfiguration
+            builder.Property(p => p.Description)
+                .IsRequired()
+                .HasMaxLength(10000);
         }
 
         public void Configure(EntityTypeBuilder<ProductVariant> builder)
         {
-            // Basic properties
-            builder.Property(x => x.VariantName)
+            builder.ToTable("ProductVariants");
+
+            // Configure relationships
+            builder.HasOne(pv => pv.Product)
+                .WithMany(p => p.Variants)
+                .HasForeignKey(pv => pv.ProductId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(false);
+
+            builder.HasMany(pv => pv.ProductItems)
+                .WithOne(pi => pi.Variant)
+                .HasForeignKey(pi => pi.VariantId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(false);
+
+            // Configure properties
+            builder.Property(pv => pv.VariantName)
                 .IsRequired()
-                .HasMaxLength(200);
+                .HasMaxLength(100);
 
-            // Items (One-to-Many)
-            builder.HasMany(x => x.Items)
-                .WithOne(x => x.Variant)
-                .HasForeignKey(x => x.VariantId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // Product relationship is already defined in Product entity
+            builder.Property(pv => pv.IsActive)
+                .IsRequired()
+                .HasDefaultValue(true);
         }
 
         public void Configure(EntityTypeBuilder<ProductItem> builder)
         {
+            builder.ToTable("ProductItems");
+
+            // Configure relationships
+            builder.HasOne(pi => pi.Variant)
+                .WithMany(pv => pv.ProductItems)
+                .HasForeignKey(pi => pi.VariantId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(false);
+
+            builder.HasOne(pi => pi.Stock)
+                .WithOne()
+                .HasForeignKey<ProductItem>(pi => pi.StockId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(false);
+
+            builder.HasMany(pi => pi.ProductImages)
+                .WithOne(pi => pi.ProductItem)
+                .HasForeignKey(pi => pi.ProductItemId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(false);
+
             // Configure properties
-            builder.Property(x => x.SKU)
+            builder.Property(pi => pi.SKU)
                 .IsRequired()
-                .HasMaxLength(100);
+                .HasMaxLength(50);
 
-            builder.Property(x => x.OriginalPrice)
-                .HasPrecision(18, 2)
-                .IsRequired();
+            builder.Property(pi => pi.OriginalPrice)
+                .IsRequired()
+                .HasPrecision(18, 2);
 
-            builder.Property(x => x.DiscountedPrice)
-                .HasPrecision(18, 2)
-                .IsRequired();
+            builder.Property(pi => pi.DiscountedPrice)
+                .IsRequired()
+                .HasPrecision(18, 2);
 
+            builder.Property(pi => pi.IsActive)
+                .IsRequired()
+                .HasDefaultValue(true);
         }
 
         public void Configure(EntityTypeBuilder<ProductImage> builder)
         {
-            // Configure properties
-            builder.Property(x => x.ImagePath)
-                .IsRequired()
-                .HasMaxLength(500);
+            builder.ToTable("ProductImages");
 
-            builder.Property(x => x.ImageName)
+            // Configure relationships
+            builder.HasOne(pi => pi.ProductItem)
+                .WithMany(pi => pi.ProductImages)
+                .HasForeignKey(pi => pi.ProductItemId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(false);
+
+            // Configure properties
+            builder.Property(pi => pi.ImagePath)
+                .IsRequired()
+                .HasMaxLength(1000);
+
+            builder.Property(pi => pi.ImageName)
+                .IsRequired()
                 .HasMaxLength(200);
 
-            // Relationship with Product is already defined in Product entity
+            builder.Property(pi => pi.IsMain)
+                .IsRequired()
+                .HasDefaultValue(false);
 
-            // Ensure proper nullable foreign key behavior
-            builder.Property(x => x.ProductItemId).IsRequired(false);
-        }
-
-        public void Configure(EntityTypeBuilder<ProductPromotion> builder)
-        {
-            // Configure composite key
-            // builder.HasKey(x => new { x.ProductId, x.PromotionId, x.Id });
-
-            // Configure relationship with Promotion
-            builder.HasOne(x => x.Promotion)
-                .WithMany()
-                .HasForeignKey(x => x.PromotionId)
-                .OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(x => x.Product)
-                .WithMany()
-                .HasForeignKey(x => x.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
-            // Product relationship is already defined in Product entity
+            builder.Property(pi => pi.Order)
+                .IsRequired()
+                .HasDefaultValue(0);
         }
     }
 }

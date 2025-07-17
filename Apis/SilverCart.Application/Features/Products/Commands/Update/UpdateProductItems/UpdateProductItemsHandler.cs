@@ -17,7 +17,7 @@ public class UpdateProductItemsHandler(IUnitOfWork unitOfWork, IMapper mapper) :
                 predicate: x => x.Id == request.ProductId,
                 include: source => source
                     .Include(p => p.Variants)
-                        .ThenInclude(v => v.Items)
+                        .ThenInclude(v => v.ProductItems)
             );
         var product = products.FirstOrDefault();
         if (product == null)
@@ -27,7 +27,7 @@ public class UpdateProductItemsHandler(IUnitOfWork unitOfWork, IMapper mapper) :
         if (variant == null)
             throw new AppExceptions($"Variant with ID '{request.VariantId}' not found in product '{request.ProductId}'.");
 
-        var item = variant.Items.FirstOrDefault(i => i.Id == request.ItemId);
+        var item = variant.ProductItems.FirstOrDefault(i => i.Id == request.ItemId);
         if (item == null)
             throw new AppExceptions($"Item with ID '{request.ItemId}' not found.");
 

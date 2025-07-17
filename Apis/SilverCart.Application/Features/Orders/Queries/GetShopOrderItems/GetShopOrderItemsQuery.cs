@@ -6,93 +6,85 @@ using Microsoft.EntityFrameworkCore;
 using SilverCart.Application.Interfaces;
 using SilverCart.Domain.Entities;
 using SilverCart.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructures.Features.Orders.Queries.GetShopOrderItems
 {
-    public sealed record GetShopOrderItemsCommand(Guid StoreId, Guid? StoreOrderId, PagingRequest? PagingRequest, DateOnly? FromDate, DateOnly? ToDate, StoreOrderStatus? StoreOrderStatus, StoreOrderShippingGhnStatusEnum? ShippingStatus) : IRequest<PagedResult<GetShoreOrderResponse>>;
-    public record GetShoreOrderResponse(Guid Id, Guid OrderId, DateTime CreatedDate, string StoreOrderStatus, string ShippingStatus, List<GetStoreProductItemOrder> StoreProductItemOrders);
-    public class GetShopOrderItemsQuery(IUnitOfWork unitOfWork, IClaimsService claimsService) : IRequestHandler<GetShopOrderItemsCommand, PagedResult<GetShoreOrderResponse>>
+    public sealed record GetShopOrderItemsCommand(Guid StoreId, Guid? OrderId, PagingRequest? PagingRequest, DateOnly? FromDate, DateOnly? ToDate, OrderStatusEnum? OrderStatus) : IRequest<PagedResult<GetShopOrderResponse>>;
+    public record GetShopOrderResponse(Guid Id, Guid OrderId, DateTime CreationDate, string OrderStatus, List<GetShopOrderDetailsResponse> OrderDetails);
+    public record GetShopOrderDetailsResponse(Guid Id, Guid ProductItemId, int Quantity, double Price, string OrderItemStatus, GetShopProductItemResponse ProductItem);
+    public record GetShopProductItemResponse(Guid Id, string SKU, double OriginalPrice, double DiscountedPrice, int Stock, bool IsActive, List<GetProductItemsImagesResponse> ProductImages);
+    public record GetProductItemsImagesResponse(Guid Id, string ImagePath, string ImageName);
+
+    public class GetShopOrderItemsQuery(IUnitOfWork unitOfWork, IClaimsService claimsService) : IRequestHandler<GetShopOrderItemsCommand, PagedResult<GetShopOrderResponse>>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IClaimsService _claimsService = claimsService;
-        public async Task<PagedResult<GetShoreOrderResponse>> Handle(GetShopOrderItemsCommand request, CancellationToken cancellationToken)
-        {
-            // var currentStoreUserId = _claimsService.CurrentUserId;
-            // var isCurrentStoreUser = await _unitOfWork.StoreUserRepository.GetByIdAsync(currentStoreUserId);
-            // if (isCurrentStoreUser == null)
-            // {
-            //     throw new AppExceptions("Store user not found");
-            // }
-            var storeOrders = await _unitOfWork.StoreOrderRepository.GetAllAsync(
-                predicate: x => x.StoreId == request.StoreId,
-                include: x => x.Include(x => x.StoreProductItemsOrders)
-                                    .ThenInclude(x => x.StoreProductItem)
-                                        .ThenInclude(x => x.ProductItem)
-                                            .ThenInclude(x => x.ProductImages)
-                                .Include(x => x.StoreProductItemsOrders)
-                                    .ThenInclude(x => x.StoreProductItem)
-                                        .ThenInclude(x => x.ProductItem)
-                                            .ThenInclude(x => x.Variant)
-                                                .ThenInclude(x => x.Product)
-            );
-            var filterEntity = new StoreOrder
-            {
-                Id = request.StoreOrderId.HasValue ? request.StoreOrderId.Value : Guid.Empty,
-                StoreId = request.StoreId,
-                Status = request.StoreOrderStatus.HasValue ? request.StoreOrderStatus.Value : StoreOrderStatus.All,
-                ShippingStatus = request.ShippingStatus.HasValue ? request.ShippingStatus.Value : StoreOrderShippingGhnStatusEnum.All,
-            };
 
-            var filteredOrders = storeOrders.AsQueryable().CustomFilterV1(filterEntity);
+        public async Task<PagedResult<GetShopOrderResponse>> Handle(GetShopOrderItemsCommand request, CancellationToken cancellationToken)
+        {
+            // Get orders that have order details with product items from the specified store
+            var orders = await _unitOfWork.OrderRepository.GetAllAsync(
+                predicate: x => x.OrderDetails.Any(od => od.ProductItem.StoreId == request.StoreId),
+                include: x => x.Include(x => x.OrderDetails.Where(od => od.ProductItem.StoreId == request.StoreId))
+                                .ThenInclude(od => od.ProductItem)
+                                    .ThenInclude(pi => pi.ProductImages)
+            );
+
+            var filteredOrders = orders.AsQueryable();
+
+            if (request.OrderId.HasValue)
+            {
+                filteredOrders = filteredOrders.Where(x => x.Id == request.OrderId.Value);
+            }
+
             if (request.FromDate.HasValue)
             {
                 filteredOrders = filteredOrders.Where(x => x.CreationDate >= request.FromDate.Value.ToDateTime(TimeOnly.MinValue));
             }
+
             if (request.ToDate.HasValue)
             {
                 filteredOrders = filteredOrders.Where(x => x.CreationDate <= request.ToDate.Value.ToDateTime(TimeOnly.MaxValue));
             }
-            if (request.StoreOrderStatus.HasValue)
+
+            if (request.OrderStatus.HasValue)
             {
-                filteredOrders = filteredOrders.Where(x => x.Status == request.StoreOrderStatus.Value);
+                filteredOrders = filteredOrders.Where(x => x.OrderStatus == request.OrderStatus.Value);
             }
-            if (request.ShippingStatus.HasValue)
-            {
-                filteredOrders = filteredOrders.Where(x => x.ShippingStatus == request.ShippingStatus);
-            }
-            var mappedOrders = filteredOrders.Select(order => new GetShoreOrderResponse(
+
+            var mappedOrders = filteredOrders.Select(order => new GetShopOrderResponse(
                 order.Id,
-                order.OrderId,
+                order.Id, // OrderId is the same as Id in this simplified structure
                 order.CreationDate.Value,
-                order.Status.ToString(),
-                order.ShippingStatus.ToString(),
-                order.StoreProductItemsOrders.Select(x => new GetStoreProductItemOrder(
-                    x.Id,
-                    x.StoreProductItemId,
-                    x.Quantity,
-                    x.Price,
-                    x.StoreProductItem.ProductItem.Variant.Product.Name,
-                    x.StoreProductItem.ProductItem.Variant.VariantName,
-                    x.Status.ToString(),
-                    x.StoreProductItem.ProductItem.ProductImages.Select(
-                        x => new GetProductItemsImagesResponse(
-                            x.Id,
-                            x.ImagePath,
-                            x.ImageName
+                order.OrderStatus.ToString(),
+                order.OrderDetails.Where(od => od.ProductItem.StoreId == request.StoreId)
+                    .Select(orderDetail => new GetShopOrderDetailsResponse(
+                        orderDetail.Id,
+                        orderDetail.ProductItemId,
+                        orderDetail.Quantity,
+                        (double)orderDetail.Price,
+                        orderDetail.OrderItemStatus.ToString(),
+                        new GetShopProductItemResponse(
+                            orderDetail.ProductItem.Id,
+                            orderDetail.ProductItem.SKU,
+                            (double)orderDetail.ProductItem.OriginalPrice,
+                            (double)orderDetail.ProductItem.DiscountedPrice,
+                            orderDetail.ProductItem.Stock.Quantity,
+                            orderDetail.ProductItem.IsActive,
+                            orderDetail.ProductItem.ProductImages.Select(
+                                img => new GetProductItemsImagesResponse(
+                                    img.Id,
+                                    img.ImagePath,
+                                    img.ImageName
+                                )
+                            ).ToList()
                         )
-                    ).ToList()
-                )
-                ).ToList()
+                    )).ToList()
             ));
 
             var (page, pageSize, sortType, sortField) = PaginationUtils.GetPaginationAndSortingValues(request.PagingRequest);
-            var sortedResult = PaginationHelper<GetShoreOrderResponse>.Sorting(sortType, mappedOrders, sortField);
-            var result = PaginationHelper<GetShoreOrderResponse>.Paging(sortedResult, page, pageSize);
+            var sortedResult = PaginationHelper<GetShopOrderResponse>.Sorting(sortType, mappedOrders, sortField);
+            var result = PaginationHelper<GetShopOrderResponse>.Paging(sortedResult, page, pageSize);
             return result;
         }
     }

@@ -1,18 +1,26 @@
 ﻿using System.Text;
+using HealthChecks.UI.Client;
+using System.Text;
 using Infrastructures;
+using Infrastructures.Commons.Exceptions;
+using Infrastructures.Interfaces.System;
+using Infrastructures.Services.System;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using WebAPI.Middlewares;
-using WebAPI;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using SilverCart.Application.Commons;
-using SilverCart.Infrastructure.Commons;
+using System.Text;
 using VNPAY.NET;
+using WebAPI;
 using WebAPI.Extensions;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Infrastructures.Commons.Exceptions;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using SilverCart.WebAPI.Hubs;
+using WebAPI.Middlewares;
+using SilverCart.Infrastructure.Commons;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,15 +32,17 @@ builder.Services.AddMediatRServices();
 builder.Services.AddWebAPIService();
 builder.Services.AddSerilog(lc => lc.WriteTo.Console().ReadFrom.Configuration(builder.Configuration));
 builder.Services.AddSingleton(configuration);
-builder.Services.AddOutputCache();
 builder.Services.AddDistributedMemoryCache();
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = builder.Configuration.GetConnectionString("Redis");
-});
+builder.Services.AddStackExchangeRedisCache(options => { options.Configuration = configuration.RedisConnection; });
+builder.Services.AddOutputCache();
 
 // Add SignalR services
 builder.Services.AddSignalR();
+
+// Configure HealthChecks
+builder.Services.AddHealthChecks()
+    .AddRedis(configuration.RedisConnection, name: "redis")
+    .AddNpgSql(configuration.DatabaseConnection, name: "postgres");
 
 // Configure CORS for SignalR
 builder.Services.AddCors(options =>
@@ -46,16 +56,11 @@ builder.Services.AddCors(options =>
             .AllowCredentials();
     });
 });
+builder.Services.AddScoped<IStringeeService, StringeeService>();
 
-//builder.Services.AddJwtAuthentication(builder.Configuration);
 
-/*
-    register with singleton lifetime
-    now we can use dependency injection for AppConfiguration
-*/
 var IsDevelopment = builder.Environment.IsDevelopment();
 builder.Services.AddSingleton(configuration);
-Console.WriteLine(builder.Environment.EnvironmentName);
 
 var app = builder.Build();
 
@@ -78,7 +83,10 @@ app.UseMiddleware<ErrorHandlerMiddleware>();
 app.UseMiddleware<ExceptionMiddleware>();
 // app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseMiddleware<PerformanceMiddleware>();
-app.MapHealthChecks("/healthchecks");
+app.MapHealthChecks("/healthchecks", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 app.UseOutputCache();
 
 app.UseAuthentication();
@@ -88,7 +96,7 @@ app.MapControllers();
 // Map SignalR hub
 app.MapHub<ChatHub>("/chatHub");
 
-await app.SeedDatabaseAsync();
+await app.SeedDatabaseAsync(configuration);
 
 app.Run();
 

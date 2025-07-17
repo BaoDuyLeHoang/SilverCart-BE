@@ -12,7 +12,7 @@ using SilverCart.Domain.Entities;
 namespace Infrastructures.Features.Users.Commands.Create.CreateStoreUser
 {
     public sealed record CreateStoreEmployeeCommand(List<CreateStoreEmployee> StoreEmployees) : IRequest<List<Guid>>;
-    public record CreateStoreEmployee(string Email, string Password, string Phone, string FullName, RoleInStore RoleInStore);
+    public record CreateStoreEmployee(string Email, string Password, string Phone, string FullName, string Gender, RoleInStore RoleInStore);
     public class CreateStoreEmployeeHandler(IUnitOfWork unitOfWork, UserManager<BaseUser> userManager, ICurrentTime currentTime, IClaimsService claimsService) : IRequestHandler<CreateStoreEmployeeCommand, List<Guid>>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
@@ -37,6 +37,7 @@ namespace Infrastructures.Features.Users.Commands.Create.CreateStoreUser
                     UserName = storeEmployee.Email,
                     PhoneNumber = storeEmployee.Phone,
                     FullName = storeEmployee.FullName,
+                    Gender = storeEmployee.Gender,
                     CreationDate = _currentTime.GetCurrentTime(),
                     ModificationDate = _currentTime.GetCurrentTime(),
                     IsDeleted = false,

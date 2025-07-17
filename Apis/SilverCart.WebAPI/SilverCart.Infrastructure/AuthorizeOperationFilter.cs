@@ -14,7 +14,7 @@ public class AuthorizeOperationFilter : IOperationFilter
 
         if (authorizeAttributes.Count == 0)
         {
-            authorizeAttributes = context.MethodInfo.DeclaringType.GetCustomAttributes(true)
+            authorizeAttributes = context.MethodInfo.DeclaringType!.GetCustomAttributes(true)
                 .OfType<AuthorizeAttribute>()
                 .ToList();
         }

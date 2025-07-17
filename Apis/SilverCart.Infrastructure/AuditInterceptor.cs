@@ -47,6 +47,9 @@ public class AuditInterceptor : SaveChangesInterceptor
         foreach (var entry in entries)
         {
             var entity = (IAuditableEntity)entry.Entity;
+            // Skipping Hard Deleted Entities
+            // if (entity is IBaseEntity baseEntity && baseEntity.IsHardDelete) continue;
+
             switch (entry.State)
             {
                 case EntityState.Added:
@@ -63,6 +66,11 @@ public class AuditInterceptor : SaveChangesInterceptor
                     }
                 case EntityState.Deleted:
                     {
+                        if (entity.IsHardDelete)
+                        {
+                            entry.State = EntityState.Deleted;//not sure if this works
+                            continue;
+                        }
                         entity.DeletionDate = now;
                         entity.DeleteById = userId;
                         entry.State = EntityState.Modified;

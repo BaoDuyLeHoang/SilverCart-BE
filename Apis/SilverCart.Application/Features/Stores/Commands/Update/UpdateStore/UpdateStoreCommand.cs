@@ -5,8 +5,8 @@ namespace Infrastructures.Features.Stores.Commands.Update.UpdateStore
 {
     public sealed record UpdateStoreCommand : IRequest<Guid>
     {
-        public Guid Id { get; init; }
         public string StoreName { get; init; } = null!;
+        public string Phone { get; init; } = null!;
         // Store info
         public string? Information { get; init; }
         public string? AdditionalInfo { get; init; }
@@ -18,7 +18,5 @@ namespace Infrastructures.Features.Stores.Commands.Update.UpdateStore
         public string WardName { get; init; } = null!;
         public string DistrictName { get; init; } = null!;
         public string ProvinceName { get; init; } = null!;
-        // Status
-        public bool IsActive { get; init; }
     }
 }

@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SilverCart.Domain.Entities
+namespace SilverCart.Domain.Entities.Stores
 {
     public class StoreAddress : BaseEntity
     {
-        public required string StreetAddress { get; set; }
-        public string WardCode { get; set; }
+        public string Address { get; set; } = string.Empty;
+        public string WardCode { get; set; } = string.Empty;
         public int DistrictId { get; set; }
-        public string WardName { get; set; }
-        public string DistrictName { get; set; }
-        public string ProvinceName { get; set; }
+        public string WardName { get; set; } = string.Empty;
+        public string DistrictName { get; set; } = string.Empty;
+        public string ProvinceName { get; set; } = string.Empty;
+        [NotMapped]
+        public string FullAddress => $"{Address}, {WardName}, {DistrictName}, {ProvinceName}";
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace SilverCart.Domain.Entities;
+﻿namespace SilverCart.Domain.Entities.Cart;
 
 public class Cart : BaseEntity
 {
@@ -8,10 +8,9 @@ public class Cart : BaseEntity
 
     public decimal TotalPrice { get; set; } = 0;
 
-    public DateTime CreatedAt { get; set; }
-
-    public DateTime? UpdatedAt { get; set; }
+    public bool IsConsultantUserRecommend { get; set; } = false;
 
     // Navigation properties
-    public virtual StoreUser StoreUser { get; set; } = null!;
+    public Guid? StoreUserId { get; set; }
+    public virtual StoreUser? StoreUser { get; set; }
 }

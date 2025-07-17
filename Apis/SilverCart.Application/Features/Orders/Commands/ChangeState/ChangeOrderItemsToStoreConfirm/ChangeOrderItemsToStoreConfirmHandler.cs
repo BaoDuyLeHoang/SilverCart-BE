@@ -13,7 +13,7 @@ using SilverCart.Domain.Enums;
 
 namespace Infrastructures.Features.Orders.Commands.ChangeState.ChangeOrderItemsToStoreConfirm
 {
-    public sealed record ChangeOrderItemsToStoreConfirmCommand(Guid OrderId, Guid StoreOrderId, Guid StoreProductItemOrderId) : IRequest<bool>;
+    public sealed record ChangeOrderItemsToStoreConfirmCommand(Guid OrderId, Guid OrderDetailId) : IRequest<bool>;
     public class ChangeOrderItemsToStoreConfirmHandler(IUnitOfWork unitOfWork, UserManager<BaseUser> userManager, IClaimsService claimsService) : IRequestHandler<ChangeOrderItemsToStoreConfirmCommand, bool>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
@@ -32,33 +32,27 @@ namespace Infrastructures.Features.Orders.Commands.ChangeState.ChangeOrderItemsT
 
             var orders = await _unitOfWork.OrderRepository.GetAllAsync(
                 predicate: x => x.Id == request.OrderId,
-                include: x => x.Include(x => x.StoreOrders)
-                                .ThenInclude(x => x.StoreProductItemsOrders)
-                                .ThenInclude(x => x.StoreProductItem)
+                include: x => x.Include(x => x.OrderDetails)
                                 .ThenInclude(x => x.ProductItem));
             var order = await orders.FirstOrDefaultAsync();
-            var customerId = order?.CustomerId;
+            var customerId = order?.DependentUserID;
 
-            var storeOrder = order.StoreOrders.FirstOrDefault(x => x.Id == request.StoreOrderId);
-            if (storeOrder == null)
+            var orderDetails = order.OrderDetails.FirstOrDefault(x => x.Id == request.OrderDetailId);
+            if (orderDetails == null)
             {
-                throw new AppExceptions("Store order not found");
+                throw new AppExceptions("Order detail not found");
             }
-            var storeProductItemOrder = storeOrder.StoreProductItemsOrders.FirstOrDefault(x => x.Id == request.StoreProductItemOrderId);
-            if (storeProductItemOrder == null)
+            if (orderDetails.OrderItemStatus != OrderItemStatusEnums.ConfirmedByGuardian)
             {
-                throw new AppExceptions("Store product item order not found");
+                throw new AppExceptions("Order item is not confirmed by guardian");
             }
-            if (storeProductItemOrder.Status != StoreProductItemsOrderStatus.ConfirmedByGuardian)
+            orderDetails.OrderItemStatus = OrderItemStatusEnums.ConfirmedByStore;
+            _unitOfWork.OrderDetailsRepository.Update(orderDetails);
+
+            if (order.OrderDetails.All(x => x.OrderItemStatus == OrderItemStatusEnums.ConfirmedByStore || x.OrderItemStatus == OrderItemStatusEnums.Cancelled))
             {
-                throw new AppExceptions("Store product item order is not confirmed by guardian");
-            }
-            storeProductItemOrder.Status = StoreProductItemsOrderStatus.Processing;
-            _unitOfWork.StoreProductItemOrderRepository.Update(storeProductItemOrder);
-            if (storeOrder.StoreProductItemsOrders.All(x => x.Status == StoreProductItemsOrderStatus.Processing || x.Status == StoreProductItemsOrderStatus.Cancelled))
-            {
-                storeOrder.Status = StoreOrderStatus.Confirmed;
-                _unitOfWork.StoreOrderRepository.Update(storeOrder);
+                order.OrderStatus = OrderStatusEnum.StoreConfirmed;
+                _unitOfWork.OrderRepository.Update(order);
             }
             await _unitOfWork.SaveChangeAsync();
             return true;

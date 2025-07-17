@@ -1,84 +1,45 @@
-﻿using System.Net;
+﻿
 using SilverCart.Application.Commons;
-using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+using Infrastructures.Commons;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace WebAPI.Filters;
 
 public class ResponseMappingFilter : IResultFilter
 {
-    private readonly ILogger<ResponseMappingFilter> _logger;
-    private readonly IMapper _mapper;
-
-    public ResponseMappingFilter(ILogger<ResponseMappingFilter> logger, IMapper mapper)
-    {
-        _logger = logger;
-        _mapper = mapper;
-    }
-
     public void OnResultExecuting(ResultExecutingContext context)
     {
+        if (context.Result is not ObjectResult objectResult) return;
 
-        if (context.Result is ObjectResult objectResult)
+        var value = objectResult.Value;
+        if (value == null) return;
+
+        if (value is IResultObject resultObject)
         {
-            var statusCodeMessage = (HttpStatusCode?)objectResult.StatusCode;
-            if (IsPrivitiveType(objectResult.Value.GetType()))
-            {
-                var value = objectResult.Value;
-                string? stringValue = value is string str ? str : null;
-                objectResult.Value = new ApiResponse
-                {
-                    StatusCode = objectResult.StatusCode ?? 200,
-                    Message = stringValue,
-                    Data = value is string ? null : value
-                };
-            }
-            else if (objectResult.Value is Result result)
-            {
-                var apiResponse = new ApiResponse()
-                {
-                    StatusCode = (int)result.StatusCode,
-                    Message = result.Message,
-
-                };
-                if (result.GetType().IsGenericType && result.GetType().GetGenericTypeDefinition() == typeof(Result<>))
-                {
-                    var valueProperty = result.GetType().GetProperty("Value");
-                    apiResponse.Data = valueProperty?.GetValue(result);
-                }
-                objectResult.Value = apiResponse;
-            }
-            else if (objectResult.Value is HttpValidationProblemDetails err)
-            {
-                objectResult.Value = new ApiExceptionResponse()
-                {
-                    StatusCode = objectResult.StatusCode ?? 500,
-                    Message = err.Title,
-                    TraceId = err.Extensions["traceId"]?.ToString(),
-                    Type = err.Type,
-                    Data = err.Errors
-                };
-            }
-            else
-            {
-                objectResult.Value = new ApiResponse
-                {
-                    StatusCode = objectResult.StatusCode ?? 200,
-                    Message = statusCodeMessage.ToString(),
-                    Data = objectResult.Value
-                };
-            }
+            context.Result = resultObject.ToObjectResult();
         }
     }
 
     public void OnResultExecuted(ResultExecutedContext context)
     {
-        // do nothing
+        // No action needed after result execution
     }
 
-    private bool IsPrivitiveType(Type type)
-    {
-        return type.IsPrimitive || type.IsValueType || type == typeof(string);
-    }
+    // private static ApiResponse CreateApiResponseForPrimitive(object value, int? statusCode)
+    // {
+    //     var isString = value is string;
+    //     return new ApiResponse
+    //     {
+    //         StatusCode = statusCode ?? 200,
+    //         Message = isString ? (string)value : null,
+    //         Data = isString ? null : value
+    //     };
+    // }
+
+    // private static bool IsPrimitiveType(Type type)
+    // {
+    //     return type.IsPrimitive || type.IsValueType || type == typeof(string);
+    // }
 }

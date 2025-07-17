@@ -3,12 +3,14 @@ using Infrastructures.Commons.Exceptions;
 using MediatR;
 using SilverCart.Application.Interfaces;
 using SilverCart.Domain.Entities;
+using SilverCart.Domain.Entities.Products;
 using SilverCart.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SilverCart.Domain.Entities.Categories;
 
 namespace Infrastructures.Features.Products.Commands.Create.CreateProduct
 {
@@ -25,14 +27,14 @@ namespace Infrastructures.Features.Products.Commands.Create.CreateProduct
         {
             var currentUserId = _claimsService.CurrentUserId;
             if (currentUserId == Guid.Empty)
-                throw new AppExceptions("User not authenticated.");
+                throw new AppExceptions("Không thấy Id tài khoản.");
 
             var storeUser = (await _unitOfWork.StoreUserRepository
                 .GetAllAsync(x => x.Id == currentUserId))
                 .FirstOrDefault();
 
             if (storeUser == null)
-                throw new AppExceptions("StoreUser not found for the current user.");
+                throw new AppExceptions("Không tìm thấy người dùng hiện tại.");
 
             var storeId = storeUser.StoreId;
 
@@ -48,7 +50,7 @@ namespace Infrastructures.Features.Products.Commands.Create.CreateProduct
                     mappedVariant.Id = Guid.NewGuid();
                     mappedVariant.ProductId = newProduct.Id;
 
-                    mappedVariant.Items = variantVM.ProductItems?.Select(itemVM =>
+                    mappedVariant.ProductItems = variantVM.ProductItems?.Select(itemVM =>
                     {
                         var mappedItem = _mapper.Map<ProductItem>(itemVM);
                         mappedItem.Id = Guid.NewGuid();
@@ -84,21 +86,6 @@ namespace Infrastructures.Features.Products.Commands.Create.CreateProduct
 
             await _unitOfWork.ProductRepository.AddAsync(newProduct);
             await _unitOfWork.SaveChangeAsync();
-
-            if (itemMappings.Count > 0)
-            {
-                var storeProductItems = itemMappings.Select(pair => new StoreProductItem
-                {
-                    Id = Guid.NewGuid(),
-                    StoreId = storeId,
-                    ProductItemId = pair.Item.Id,
-                    Stock = pair.ItemVM.Stock
-                }).ToList();
-
-                await _unitOfWork.StoreRepository.AddStoreProductItemsAsync(storeProductItems);
-                await _unitOfWork.SaveChangeAsync();
-            }
-
             return newProduct.Id;
         }
     }

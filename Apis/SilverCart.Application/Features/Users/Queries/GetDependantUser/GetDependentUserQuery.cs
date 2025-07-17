@@ -8,7 +8,7 @@ using MediatR;
 namespace Infrastructures.Features.Users.Queries.GetDependantUser
 {
     public sealed record GetDependentUserQuery(Guid GuardianId) : IRequest<List<GetDependentUserResponse>>;
-    public record GetDependentUserResponse(Guid Id, string FullName, string Email, string Phone, DateTime CreatedDate);
+    public record GetDependentUserResponse(Guid Id, string FullName, string Email, string Phone, DateTime CreationDate);
     public class GetDependentUserQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetDependentUserQuery, List<GetDependentUserResponse>>
     {
         public async Task<List<GetDependentUserResponse>> Handle(GetDependentUserQuery request, CancellationToken cancellationToken)

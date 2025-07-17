@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SilverCart.Domain.Enums;
 
-public enum OrderStatusEnums
+public enum OrderStatusEnum
 {
     All = -1,
     Pending = 0,

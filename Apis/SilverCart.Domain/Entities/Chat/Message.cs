@@ -1,9 +1,9 @@
 using SilverCart.Domain.Common.Interfaces;
-using System;
+using SilverCart.Domain.Entities.Auth;
 
 namespace SilverCart.Domain.Entities.Chat
 {
-    public class Message : BaseEntity, IAuditableEntity
+    public class Message : BaseEntity
     {
         public Guid ConversationId { get; set; }
         public Conversation Conversation { get; set; }

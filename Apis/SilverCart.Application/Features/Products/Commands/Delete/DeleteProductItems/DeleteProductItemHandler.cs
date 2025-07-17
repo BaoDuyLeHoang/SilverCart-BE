@@ -20,7 +20,7 @@ namespace Infrastructures.Features.Products.Commands.Delete.DeleteProductItems
                 predicate: x => x.Id == request.ProductId,
                 include: source => source
                     .Include(p => p.Variants)
-                        .ThenInclude(v => v.Items)
+                        .ThenInclude(v => v.ProductItems)
             );
 
             var product = products.FirstOrDefault();
@@ -31,7 +31,7 @@ namespace Infrastructures.Features.Products.Commands.Delete.DeleteProductItems
             if (variant == null)
                 throw new AppExceptions($"Variant with ID '{request.VariantId}' not found in product '{request.ProductId}'.");
 
-            var item = variant.Items.FirstOrDefault(i => i.Id == request.ItemId);
+            var item = variant.ProductItems.FirstOrDefault(i => i.Id == request.ItemId);
             if (item == null)
                 throw new AppExceptions($"Item with ID '{request.ItemId}' not found in variant '{request.VariantId}'.");
 

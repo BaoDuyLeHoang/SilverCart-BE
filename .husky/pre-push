@@ -1,0 +1,24 @@
+#!/usr/bin/env sh
+# . "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Chạy build..."
+
+dotnet build
+
+# # Run tests
+# echo "🧪 Chạy test..."
+# dotnet test
+# if [ $? -ne 0 ]; then
+#     echo "❌ Tests failed. Please fix test failures before pushing."
+#     exit 1
+# fi
+
+Check code formatting
+echo "🎨 Kiểm tra định dạng code..."
+dotnet format --verify-no-changes
+if [ $? -ne 0 ]; then
+    echo "❌ Code formatting check failed. Please run 'dotnet format' to fix formatting issues."
+    exit 1
+fi
+
+echo "✅ All pre-push checks passed! Ready to push." 

@@ -5,6 +5,7 @@ using SilverCart.Domain.Enums;
 using VNPAY.NET;
 using VNPAY.NET.Enums;
 using VNPAY.NET.Models;
+using SilverCart.Application.Utils;
 
 namespace Infrastructures.Features.Payments.Commands.CreatePayment;
 
@@ -40,22 +41,22 @@ public class CreatePaymentHandler : IRequestHandler<CreatePaymentCommand, string
             ? $"Thanh toán đơn hàng {order.Id} - {order.TotalPrice} VND - {order.CreationDate.Value.ToString("dd/MM/yyyy", cultureInfo)}"
             : $"Payment for order {order.Id} - {order.TotalPrice} VND - {order.CreationDate.Value.ToString("dd/MM/yyyy", cultureInfo)}";
 
-        string? paymentUrl = null;
+        string? paymentUrl;
         switch (request.PaymentMethod)
         {
-            case PaymentMethodEnum.VNPAY:
+            case PaymentMethodEnum.BankTransfer:
                 paymentUrl = GetVNPAYUrl(request, order, description, cultureInfo);
                 break;
-            case PaymentMethodEnum.MOMO:
-                throw new NotImplementedException("MOMO payment is not implemented yet");
-            case PaymentMethodEnum.ZALOPAY:
-                throw new NotImplementedException("ZALOPAY payment is not implemented yet");
+            case PaymentMethodEnum.Cash:
+                throw new NotImplementedException("Không được dùng Cash này ở đây");
+            case PaymentMethodEnum.Other:
+                throw new NotImplementedException("Chưa hỗ trợ thanh toán bằng phương thức khác");
             default:
-                throw new ArgumentException($"Unsupported payment method: {request.PaymentMethod}");
+                throw new ArgumentException($"Không hỗ trợ phương thức thanh toán: {request.PaymentMethod}");
         }
 
         if (string.IsNullOrEmpty(paymentUrl))
-            throw new Exception("Failed to create payment URL");
+            throw new Exception("Lỗi khi tạo URL thanh toán");
 
         return paymentUrl;
     }
@@ -66,7 +67,7 @@ public class CreatePaymentHandler : IRequestHandler<CreatePaymentCommand, string
         var paymentRequest = new PaymentRequest
         {
             PaymentId = currentTime.Ticks,
-            Money = order.TotalPrice * 100, // Convert to smallest currency unit
+            Money = (double)order.TotalPrice * 100, // Convert to smallest currency unit
             Description = description,
             BankCode = request.BankCode,
             CreatedDate = currentTime,

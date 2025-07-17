@@ -10,11 +10,8 @@ namespace SilverCart.Application.Features.Orders.Commands.ChangeState.ChangeOrde
             RuleFor(x => x.OrderId)
                 .NotEmpty().WithMessage("ID đơn hàng không được để trống");
 
-            RuleFor(x => x.StoreOrderId)
+            RuleFor(x => x.OrderDetailId)
                 .NotEmpty().WithMessage("ID đơn hàng cửa hàng không được để trống");
-
-            RuleFor(x => x.StoreProductItemOrderId)
-                .NotEmpty().WithMessage("ID sản phẩm đơn hàng không được để trống");
         }
     }
-} 
+}

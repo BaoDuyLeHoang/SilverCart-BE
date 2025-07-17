@@ -1,9 +1,11 @@
-﻿using Infrastructures.Features.Products.Commands.Add.AddProductImages;
-using Infrastructures.Features.Products.Commands.Add.AddProductItems.AddProductItemsToStore;
-using Infrastructures.Features.Products.Commands.Add.AddProductItems.AddProductItemsToVariant;
+﻿using Infrastructures.Commons;
+using Infrastructures.Features.Products.Commands.Add.AddProductImages;
 using Infrastructures.Features.Products.Commands.Add.AddProductToCategories;
 using Infrastructures.Features.Products.Commands.Add.AddStockToStoreProductItems;
+using Infrastructures.Features.Products.Commands.AddProductItems;
+using Infrastructures.Features.Products.Commands.Create.CreateItem;
 using Infrastructures.Features.Products.Commands.Create.CreateProduct;
+using Infrastructures.Features.Products.Commands.Create.CreateVariant;
 using Infrastructures.Features.Products.Commands.Delete.DeleteProductImage;
 using Infrastructures.Features.Products.Commands.Delete.DeleteProductItems;
 using Infrastructures.Features.Products.Commands.Delete.DeleteProductVariant;
@@ -28,13 +30,13 @@ namespace WebAPI.Controllers
             _mediator = mediator;
         }
         [HttpPost]
-        public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommand productCreateDTO)
+        public async Task<ActionResult<Guid>> CreateProduct([FromBody] CreateProductCommand command)
         {
-            var result = await _mediator.Send(productCreateDTO);
+            var result = await _mediator.Send(command);
             return Ok(result);
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllProduct([FromQuery] GetAllProductsCommand command)
+        public async Task<IActionResult> GetAllProducts([FromQuery] GetAllProductsCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
@@ -65,18 +67,6 @@ namespace WebAPI.Controllers
         }
         [HttpPost("{productId}/categories")]
         public async Task<IActionResult> AddProductToCategory(AddProductToCategoriesCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
-        [HttpPost("store/items")]
-        public async Task<IActionResult> AddProductItemsToStore(AddProductItemsToStoreCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
-        [HttpPut("add-stock")]
-        public async Task<IActionResult> AddStockToStoreProductItem(AddStockToStoreProductItemsCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
@@ -124,6 +114,18 @@ namespace WebAPI.Controllers
             {
                 return BadRequest("ID mismatch");
             }
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+        [HttpPost("variants")]
+        public async Task<IActionResult> CreateVariant([FromBody] CreateProductVariantCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+        [HttpPost("items")]
+        public async Task<IActionResult> CreateItem([FromBody] CreateProductItemCommand command)
+        {
             var result = await _mediator.Send(command);
             return Ok(result);
         }

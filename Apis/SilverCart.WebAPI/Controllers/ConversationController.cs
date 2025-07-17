@@ -15,7 +15,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetConversationById([FromQuery] GetConversationByUserIdQuery command)
         {
             var result = await _sender.Send(command);
-            return result != null ? Ok(result) : NotFound(new { message = "No conversations found" } );
+            return result != null ? Ok(result) : NotFound(new { message = "No conversations found" });
         }
         [HttpPost]
         public async Task<IActionResult> CreateConversation(CreateConversationCommand command)

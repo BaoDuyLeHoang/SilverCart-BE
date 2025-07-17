@@ -1,10 +1,9 @@
 ﻿using Infrastructures;
 using Infrastructures.Features.Orders.Commands.ChangeState.ChangeOrderItemsStateGuardianConfirm;
-using Infrastructures.Features.Orders.Commands.ChangeState.ChangeOrderItemsStatusToShip;
 using Infrastructures.Features.Orders.Commands.ChangeState.ChangeOrderItemsToStoreConfirm;
+using Infrastructures.Features.Orders.Commands.ChangeState.ChangeOrderStatusToShipping;
 using Infrastructures.Features.Orders.Commands.Create;
-using Infrastructures.Features.Orders.Commands.Update.UpdateOrderItems;
-using Infrastructures.Interfaces.Entities;
+using Infrastructures.Features.Orders.Commands.Update.UpdateOrderDetail;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -51,16 +50,22 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
         [HttpPut("ship")]
-        public async Task<IActionResult> ChangeOrderItemsToShip([FromBody] ChangeOrderItemsStatusToShipCommand command)
+        public async Task<IActionResult> ChangeOrderItemsToShip([FromBody] ChangeOrderStatusToShippingCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
         }
-        [HttpPut("order-items")]
-        public async Task<IActionResult> ChangeOrderItemsToStoreConfirm([FromQuery] UpdateOrderItemsCommand command)
+        [HttpPut("details")]
+        public async Task<IActionResult> ChangeOrderDetails([FromBody] UpdateOrderDetailsCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
         }
+        //[HttpPut("order-items")]
+        //public async Task<IActionResult> ChangeOrderItemsToStoreConfirm([FromQuery] UpdateOrderItemsCommand command)
+        //{
+        //    var result = await _mediator.Send(command);
+        //    return Ok(result);
+        //}
     }
 }

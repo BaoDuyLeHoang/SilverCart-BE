@@ -2,15 +2,8 @@ using Infrastructures.Commons.Paginations;
 using Infrastructures.Services.System;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using SilverCart.Application.Interfaces;
-using SilverCart.Domain.Entities;
+using SilverCart.Domain.Entities.Categories;
 using SilverCart.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Infrastructures.Features.Categories.Queries.GetAll
 {
@@ -42,7 +35,7 @@ namespace Infrastructures.Features.Categories.Queries.GetAll
 
             var filteredCategories = query.AsQueryable().CustomFilterV1(filteredEntity);
 
-            var mappedCategories = filteredCategories
+            var mappedCategories = await filteredCategories
                 .Select(category => new GetAllCategoryResponse(
                     category.Id,
                     category.Name,
@@ -52,7 +45,7 @@ namespace Infrastructures.Features.Categories.Queries.GetAll
                     category.ParentCategory != null ? category.ParentCategory.Name : null,
                     category.CreationDate,
                     category.ProductCategories.Count
-                )).ToList();
+                )).ToListAsync(cancellationToken);
 
             var (page, pageSize, sortType, sortField) = PaginationUtils.GetPaginationAndSortingValues(request.PagingRequest);
 
