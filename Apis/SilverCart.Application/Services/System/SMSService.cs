@@ -13,15 +13,13 @@ public class SMSService : ISMSService
     private readonly IEmailService? _emailService;
     private readonly ILogger<SMSService> _logger;
     private readonly IWebHostEnvironment _env;
-    private readonly IStringeeService _stringeeService;
 
-    public SMSService(IEmailService? emailService, ILogger<SMSService> logger, IStringeeService stringeeService, IWebHostEnvironment env)
+    public SMSService(IEmailService? emailService, ILogger<SMSService> logger, IWebHostEnvironment env)
     {
         // Use email service in development
         _emailService = env.IsDevelopment() ? emailService : null;
         _logger = logger;
         _env = env;
-        _stringeeService = stringeeService;
     }
 
     public async Task SendSMS(string phoneNumber, string message)
@@ -40,7 +38,7 @@ public class SMSService : ISMSService
             try
             {
                 // // Assuming stringeeService is injected and available
-                // await _stringeeService.SendSmsAsync(phoneNumber, message);
+                // await stringeeService.SendSmsAsync(phoneNumber, message);
                 _logger.LogInformation($"SMS sent successfully to {phoneNumber}");
             }
             catch (Exception ex)

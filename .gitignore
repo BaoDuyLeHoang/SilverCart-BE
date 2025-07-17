@@ -472,7 +472,6 @@ cmake-build-*/
 
 # File-based project format
 *.iws
-
 # IntelliJ
 out/
 
@@ -1076,3 +1075,4 @@ FodyWeavers.xsd
 
 # End of https://www.toptal.com/developers/gitignore/api/rider,vs,visualstudio,visualstudiocode
 token.txt
+migration.sql

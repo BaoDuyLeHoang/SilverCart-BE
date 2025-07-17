@@ -9,7 +9,7 @@ using SilverCart.Domain.Enums;
 
 namespace Infrastructures.Features.Orders.Commands.Create;
 
-public class CreateOrderHandler(IUnitOfWork unitOfWork, AutoMapper.IMapper mapperConfig, IClaimsService claimsService) : IRequestHandler<CreateOrderCommand, CreateOrderResponse>
+public class CreateOrderHandler(IUnitOfWork unitOfWork, IClaimsService claimsService) : IRequestHandler<CreateOrderCommand, CreateOrderResponse>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IClaimsService _claimService = claimsService;
