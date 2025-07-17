@@ -54,7 +54,7 @@ namespace Infrastructures
                     ResponseTimeout = 5000,
                     Password = configuration.RedisPassword,
                     Ssl = true
-                }));
+                }, writer => writer.WriteLine));
             services.AddScoped<IRedisService, RedisService>();
             services.AddScoped<ILockingService, LockingService>();
             services.AddScoped<ICalculateService, CalculateService>();
