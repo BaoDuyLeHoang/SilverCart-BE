@@ -30,7 +30,6 @@ namespace Infrastructures
         public static IServiceCollection AddApplicationService(this IServiceCollection services,
             AppConfiguration configuration)
         {
-
             AddRepositories(services);
 
             services.AddScoped<AuditInterceptor>();
@@ -43,22 +42,23 @@ namespace Infrastructures
             services.AddSingleton<ILockingService, LockingService>();
             services.AddSingleton<ICalculateService, CalculateService>();
             services.AddSingleton<IGenerateQRCodeGeneratorService, GenerateQRCodeGeneratorService>();
+
+            // Configure Redis
+            services.AddSingleton<IConnectionMultiplexer>(sp =>
+                ConnectionMultiplexer.Connect(new ConfigurationOptions
+                {
+                    EndPoints = { configuration.RedisConnection },
+                    AbortOnConnectFail = false,
+                    ConnectTimeout = 5000,
+                    SyncTimeout = 5000,
+                    ResponseTimeout = 5000,
+                    Password = configuration.RedisConnection.Split(',')[1].Split('=')[1],
+                    Ssl = true
+                }));
             services.AddScoped<IRedisService, RedisService>();
             services.AddScoped<ILockingService, LockingService>();
             services.AddScoped<ICalculateService, CalculateService>();
             services.AddScoped<IGenerateQRCodeGeneratorService, GenerateQRCodeGeneratorService>();
-
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = configuration.RedisConnection;
-                options.ConfigurationOptions = new StackExchange.Redis.ConfigurationOptions
-                {
-                    AbortOnConnectFail = false,
-                    ConnectTimeout = 5000,
-                    SyncTimeout = 5000,
-                    ResponseTimeout = 5000
-                };
-            });
 
             // Add Payments service to the container.
             services.AddSingleton<IVnpay, Vnpay>();
@@ -72,9 +72,6 @@ namespace Infrastructures
                 option.UseNpgsql(configuration.DatabaseConnection);
                 option.AddInterceptors(auditInterceptor);
             });
-
-            // this configuration just use in-memory for fast develop
-            //services.AddDbContext<AppDbContext>(option => option.UseInMemoryDatabase("test"));
 
             services.AddAutoMapper(typeof(UserMapperProfile).Assembly);
 
@@ -115,16 +112,5 @@ namespace Infrastructures
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
-
-        //public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
-        //{
-        //    // Add Kafka Settings
-        //    services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
-
-        //    // Register Kafka producer as singleton (recommended for Kafka producers)
-        //    services.AddSingleton<IOrderMessageProducer, OrderMessageProducer>();
-
-        //    return services;
-        //}
     }
 }
