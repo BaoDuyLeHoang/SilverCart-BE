@@ -48,9 +48,17 @@ namespace Infrastructures
             services.AddScoped<ICalculateService, CalculateService>();
             services.AddScoped<IGenerateQRCodeGeneratorService, GenerateQRCodeGeneratorService>();
 
-            // Redis configuration
-            services.AddSingleton<IConnectionMultiplexer>(sp =>
-                ConnectionMultiplexer.Connect(sp.GetRequiredService<IConfiguration>().GetConnectionString("RedisConnection") ?? "localhost"));
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = configuration.RedisConnection;
+                options.ConfigurationOptions = new StackExchange.Redis.ConfigurationOptions
+                {
+                    AbortOnConnectFail = false,
+                    ConnectTimeout = 5000,
+                    SyncTimeout = 5000,
+                    ResponseTimeout = 5000
+                };
+            });
 
             // Add Payments service to the container.
             services.AddSingleton<IVnpay, Vnpay>();

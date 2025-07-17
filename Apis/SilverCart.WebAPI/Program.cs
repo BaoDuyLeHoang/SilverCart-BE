@@ -32,13 +32,7 @@ builder.Services.AddMediatRServices();
 builder.Services.AddWebAPIService();
 builder.Services.AddSerilog(lc => lc.WriteTo.Console().ReadFrom.Configuration(builder.Configuration));
 builder.Services.AddSingleton(configuration);
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = configuration.RedisConnection;
-    options.ConfigurationOptions.ConnectTimeout = 5000;
-    options.ConfigurationOptions.AbortOnConnectFail = false;
-});
+
 builder.Services.AddOutputCache();
 
 // Add SignalR services
