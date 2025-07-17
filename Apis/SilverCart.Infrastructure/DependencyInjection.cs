@@ -50,7 +50,7 @@ namespace Infrastructures
 
             // Redis configuration
             services.AddSingleton<IConnectionMultiplexer>(sp =>
-                ConnectionMultiplexer.Connect(sp.GetRequiredService<IConfiguration>().GetConnectionString("RedisConnection") ?? "localhost"));
+                ConnectionMultiplexer.Connect(configuration.RedisConnection ?? "localhost"));
 
             // Add Payments service to the container.
             services.AddSingleton<IVnpay, Vnpay>();
