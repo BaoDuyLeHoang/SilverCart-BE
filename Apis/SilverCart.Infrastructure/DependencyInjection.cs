@@ -52,7 +52,7 @@ namespace Infrastructures
                     ConnectTimeout = 5000,
                     SyncTimeout = 5000,
                     ResponseTimeout = 5000,
-                    Password = configuration.RedisConnection.Split(',')[1].Split('=')[1],
+                    Password = configuration.RedisPassword,
                     Ssl = true
                 }));
             services.AddScoped<IRedisService, RedisService>();
