@@ -4,7 +4,7 @@ using SilverCart.Application.Repositories;
 using AutoFixture;
 using AutoMapper;
 using Infrastructures;
-using Infrastructures.Mappers;
+
 using Microsoft.EntityFrameworkCore;
 using Moq;
 

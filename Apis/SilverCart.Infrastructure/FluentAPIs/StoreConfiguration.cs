@@ -17,7 +17,7 @@ namespace Infrastructures.FluentAPIs
             builder.ToTable("Stores");
 
             // Configure relationships
-            builder.HasMany<Product>(s => s.Products)
+            builder.HasMany(s => s.Products)
                 .WithOne(p => p.Store)
                 .HasForeignKey(p => p.StoreId)
                 .OnDelete(DeleteBehavior.Restrict);
