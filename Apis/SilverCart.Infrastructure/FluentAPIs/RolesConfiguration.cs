@@ -17,15 +17,15 @@ public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTy
             new StoreRole
             {
                 Id = Guid.Parse("60cb3e42-0903-4c3f-8e9c-bfdc6f6a1a01"),
-                Name = "StoreOwner",
-                NormalizedName = "Chủ cửa hàng",
+                Name = "Chủ cửa hàng",
+                NormalizedName = "STOREOWNER",
                 Description = "Chủ cửa hàng là người quản lý cửa hàng và có quyền quản lý cửa hàng."
             },
             new StoreRole
             {
                 Id = Guid.Parse("a2a02247-2a41-4a38-8804-4be8038fa78b"),
-                Name = "StoreSupport",
-                NormalizedName = "Hỗ trợ cửa hàng",
+                Name = "Hỗ trợ cửa hàng",
+                NormalizedName = "STORESUPPORT",
                 Description = "Hỗ trợ cửa hàng là người hỗ trợ cửa hàng và có quyền hỗ trợ cửa hàng."
             }
         );
@@ -39,15 +39,15 @@ public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTy
             new AdministratorRole
             {
                 Id = Guid.Parse("5c2cb3f3-d9b1-4d5f-8a9c-1e6f689ee0f4"),
-                Name = "SuperAdmin",
-                NormalizedName = "Siêu quản trị viên",
+                Name = "Siêu quản trị viên",
+                NormalizedName = "SUPERADMIN",
                 Description = "Siêu quản trị viên là người quản lý toàn bộ hệ thống và có quyền quản lý toàn bộ hệ thống."
             },
             new AdministratorRole
             {
                 Id = Guid.Parse("0e61cc83-d3c4-43b1-9334-8dd0c9d22833"),
-                Name = "Admin",
-                NormalizedName = "Quản trị viên",
+                Name = "Quản trị viên",
+                NormalizedName = "ADMIN",
                 Description = "Quản trị viên là người quản lý cửa hàng và có quyền quản lý cửa hàng."
             }
         );
@@ -61,8 +61,8 @@ public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTy
             new CustomerRole
             {
                 Id = Guid.Parse("0c09b112-baf9-4ec3-bc79-cce452219d60"),
-                Name = "Guardian",
-                NormalizedName = "Người giám hộ",
+                Name = "Người giám hộ",
+                NormalizedName = "GUARDIAN",
                 Description = "Người giám hộ là người giám hộ cho người phụ thuộc và có quyền giám hộ cho người phụ thuộc."
             },
             // new CustomerRole
@@ -75,8 +75,8 @@ public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTy
             new CustomerRole
             {
                 Id = Guid.Parse("c66a403b-e1f9-47f3-9f6b-d8c3913b7a1b"),
-                Name = "DependentUser",
-                NormalizedName = "Người phụ thuộc",
+                Name = "Người phụ thuộc",
+                NormalizedName = "DEPENDENTUSER",
                 Description = "Người phụ thuộc là người phụ thuộc cho người giám hộ và có quyền phụ thuộc cho người giám hộ."
             }
         );

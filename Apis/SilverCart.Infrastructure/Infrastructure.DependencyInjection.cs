@@ -38,10 +38,9 @@ namespace Infrastructures
             services.AddSingleton<IEmailService, EmailService>();
             services.AddSingleton<ISMSService, SMSService>();
             services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
-            services.AddHttpClient<IGhnService, GhnService>();
-            services.AddSingleton<ILockingService, LockingService>();
             services.AddSingleton<ICalculateService, CalculateService>();
             services.AddSingleton<IGenerateQRCodeGeneratorService, GenerateQRCodeGeneratorService>();
+            services.AddHttpClient<IGhnService, GhnService>();
 
             // Configure Redis
             services.AddSingleton<IConnectionMultiplexer>(sp =>
@@ -56,8 +55,6 @@ namespace Infrastructures
                     Ssl = false
                 }, log: Console.Out));
             services.AddScoped<IRedisService, RedisService>();
-            services.AddScoped<ILockingService, LockingService>();
-            services.AddScoped<ICalculateService, CalculateService>();
             services.AddScoped<IGenerateQRCodeGeneratorService, GenerateQRCodeGeneratorService>();
 
             // Add Payments service to the container.
