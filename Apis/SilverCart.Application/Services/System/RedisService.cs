@@ -1,4 +1,5 @@
-﻿using Core.Interfaces;
+﻿using System.Text.Json;
+using Core.Interfaces;
 using StackExchange.Redis;
 
 namespace Infrastructures.Services.System
@@ -12,15 +13,15 @@ namespace Infrastructures.Services.System
             _db = redis.GetDatabase();
         }
 
-        public async Task SetAsync(string key, string value, TimeSpan? expiry = null)
+        public async Task SetAsync<T>(string key, T value, TimeSpan? expiry = null)
         {
-            await _db.StringSetAsync(key, value, expiry);
+            await _db.StringSetAsync(key, JsonSerializer.Serialize(value), expiry);
         }
 
-        public async Task<string?> GetAsync(string key)
+        public async Task<T?> GetAsync<T>(string key)
         {
             var result = await _db.StringGetAsync(key);
-            return result.HasValue ? result.ToString() : null;
+            return result.HasValue ? JsonSerializer.Deserialize<T>(result.ToString()) : default;
         }
 
         public async Task<bool> DeleteAsync(string key)

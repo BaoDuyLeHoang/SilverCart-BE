@@ -1,3 +1,4 @@
+using Core.Interfaces;
 using Infrastructures.Commons.Paginations;
 using Infrastructures.Services.System;
 using MediatR;
@@ -11,11 +12,19 @@ namespace Infrastructures
     public record GetAllOrderDetailsResponse(Guid Id, Guid ProductItemId, int Quantity, double Price, string OrderItemStatus, GetAllProductItemResponse ProductItem);
     public record GetAllProductItemResponse(Guid Id, string SKU, double OriginalPrice, double DiscountedPrice, int Stock, bool IsActive, List<GetProductItemsImagesResponse> ProductImages);
     public record GetProductItemsImagesResponse(Guid Id, string ImagePath, string ImageName);
-    public class GetAllOrdersQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetAllOrdersQuery, PagedResult<GetAllOrdersResponse>>
+    public class GetAllOrdersQueryHandler(IUnitOfWork unitOfWork, IRedisService redisService) : IRequestHandler<GetAllOrdersQuery, PagedResult<GetAllOrdersResponse>>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         public async Task<PagedResult<GetAllOrdersResponse>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
         {
+
+            var cacheKey = $"orders_{request.Id}_{request.CustomerId}_{request.OrderStatus}";
+            var cachedOrders = await redisService.GetAsync<PagedResult<GetAllOrdersResponse>>(cacheKey);
+            if (cachedOrders != null)
+            {
+                return cachedOrders;
+            }
+
             var orders = await _unitOfWork.OrderRepository.GetAllAsync(
                predicate: _ => true,
                include: x => x.Include(x => x.OrderDetails)

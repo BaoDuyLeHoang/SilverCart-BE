@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructures.Features.Users.Queries.GetAllUsers
 {
-    public sealed record GetAllUsersQuery(PagingRequest? PagingRequest, Guid? Id, string? Keyword) : IRequest<PagedResult<GetAllUsersResponse>>;
+    public sealed record GetAllUsersQuery(PagingRequest? PagingRequest, Guid? Id, string? FullName, string? Email, string? Phone) : IRequest<PagedResult<GetAllUsersResponse>>;
     public record GetAllUsersResponse(Guid Id, string FullName, string Email, string Phone, string Role, DateTime CreationDate);
     public class GetAllUsersHandler(IUnitOfWork unitOfWork, UserManager<BaseUser> userManager) : IRequestHandler<GetAllUsersQuery, PagedResult<GetAllUsersResponse>>
     {
@@ -26,13 +26,13 @@ namespace Infrastructures.Features.Users.Queries.GetAllUsers
 
             if (request.Id.HasValue)
                 query = query.Where(u => u.Id == request.Id.Value);
-            
-            if (!string.IsNullOrWhiteSpace(request.Keyword))
-                query = query.Where(u => 
-                    u.FullName.Contains(request.Keyword) || 
-                    u.Email.Contains(request.Keyword) || 
-                    u.PhoneNumber.Contains(request.Keyword)
-                );
+            if (!string.IsNullOrWhiteSpace(request.FullName))
+                query = query.Where(u => u.FullName.Contains(request.FullName));
+            if (!string.IsNullOrWhiteSpace(request.Email))
+                query = query.Where(u => u.Email.Contains(request.Email));
+            if (!string.IsNullOrWhiteSpace(request.Phone))
+                query = query.Where(u => u.PhoneNumber.Contains(request.Phone));
+
 
             var (page, pageSize, sortType, sortField) = PaginationUtils.GetPaginationAndSortingValues(request.PagingRequest);
             var pagedUsers = query.ToList();

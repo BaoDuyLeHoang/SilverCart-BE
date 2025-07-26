@@ -544,7 +544,7 @@ namespace Infrastructures.Migrations
                             IsDeleted = false,
                             IsHardDelete = false,
                             Name = "SuperAdmin",
-                            NormalizedName = "Siêu quản trị viên"
+                            NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
@@ -553,7 +553,7 @@ namespace Infrastructures.Migrations
                             IsDeleted = false,
                             IsHardDelete = false,
                             Name = "Admin",
-                            NormalizedName = "Quản trị viên"
+                            NormalizedName = "ADMIN"
                         });
                 });
 
@@ -571,7 +571,7 @@ namespace Infrastructures.Migrations
                             IsDeleted = false,
                             IsHardDelete = false,
                             Name = "Guardian",
-                            NormalizedName = "Người giám hộ"
+                            NormalizedName = "GUARDIAN"
                         },
                         new
                         {
@@ -580,7 +580,7 @@ namespace Infrastructures.Migrations
                             IsDeleted = false,
                             IsHardDelete = false,
                             Name = "DependentUser",
-                            NormalizedName = "Người phụ thuộc"
+                            NormalizedName = "DEPENDENTUSER"
                         });
                 });
 
@@ -598,7 +598,7 @@ namespace Infrastructures.Migrations
                             IsDeleted = false,
                             IsHardDelete = false,
                             Name = "StoreOwner",
-                            NormalizedName = "Chủ cửa hàng"
+                            NormalizedName = "STOREOWNER"
                         },
                         new
                         {
@@ -607,7 +607,7 @@ namespace Infrastructures.Migrations
                             IsDeleted = false,
                             IsHardDelete = false,
                             Name = "StoreSupport",
-                            NormalizedName = "Hỗ trợ cửa hàng"
+                            NormalizedName = "STORESUPPORT"
                         });
                 });
 

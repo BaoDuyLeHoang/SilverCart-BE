@@ -26,15 +26,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 // parse the configuration in appsettings
 var configuration = builder.Configuration.Get<AppConfiguration>();
-builder.Services.AddApplicationService(configuration.DatabaseConnection);
+builder.Services.AddApplicationService(configuration);
 builder.Services.AddSwaggerGeneration(builder);
 builder.Services.AddMediatRServices();
 builder.Services.AddWebAPIService();
 builder.Services.AddSerilog(lc => lc.WriteTo.Console().ReadFrom.Configuration(builder.Configuration));
 builder.Services.AddSingleton(configuration);
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddStackExchangeRedisCache(options => { options.Configuration = configuration.RedisConnection; });
 builder.Services.AddOutputCache();
+
+// Add Redis Cache
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = configuration.RedisConnection;
+    options.InstanceName = "SilverCart_";
+});
 
 // Add SignalR services
 builder.Services.AddSignalR();
