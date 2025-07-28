@@ -49,8 +49,6 @@ public class CreatePaymentHandler : IRequestHandler<CreatePaymentCommand, string
                 break;
             case PaymentMethodEnum.Cash:
                 throw new NotImplementedException("Không được dùng Cash này ở đây");
-            case PaymentMethodEnum.Other:
-                throw new NotImplementedException("Chưa hỗ trợ thanh toán bằng phương thức khác");
             default:
                 throw new ArgumentException($"Không hỗ trợ phương thức thanh toán: {request.PaymentMethod}");
         }

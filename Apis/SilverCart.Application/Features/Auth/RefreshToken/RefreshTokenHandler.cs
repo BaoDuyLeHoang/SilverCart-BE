@@ -48,7 +48,7 @@ public class RefreshTokenHandler(UserManager<BaseUser> userManager, IJwtTokenGen
 
         if (!result.Succeeded)
         {
-            throw new AppExceptions("Failed to update refresh token");
+            throw new AppExceptions("đổi refresh token lỗi");
         }
 
         return new RefreshTokenResponse(

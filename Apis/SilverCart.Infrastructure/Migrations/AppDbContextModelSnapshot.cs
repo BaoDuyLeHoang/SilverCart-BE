@@ -543,7 +543,7 @@ namespace Infrastructures.Migrations
                             Description = "Siêu quản trị viên là người quản lý toàn bộ hệ thống và có quyền quản lý toàn bộ hệ thống.",
                             IsDeleted = false,
                             IsHardDelete = false,
-                            Name = "Siêu quản trị viên",
+                            Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
@@ -552,7 +552,7 @@ namespace Infrastructures.Migrations
                             Description = "Quản trị viên là người quản lý cửa hàng và có quyền quản lý cửa hàng.",
                             IsDeleted = false,
                             IsHardDelete = false,
-                            Name = "Quản trị viên",
+                            Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
                 });
@@ -570,7 +570,7 @@ namespace Infrastructures.Migrations
                             Description = "Người giám hộ là người giám hộ cho người phụ thuộc và có quyền giám hộ cho người phụ thuộc.",
                             IsDeleted = false,
                             IsHardDelete = false,
-                            Name = "Người giám hộ",
+                            Name = "Guardian",
                             NormalizedName = "GUARDIAN"
                         },
                         new
@@ -579,7 +579,7 @@ namespace Infrastructures.Migrations
                             Description = "Người phụ thuộc là người phụ thuộc cho người giám hộ và có quyền phụ thuộc cho người giám hộ.",
                             IsDeleted = false,
                             IsHardDelete = false,
-                            Name = "Người phụ thuộc",
+                            Name = "DependentUser",
                             NormalizedName = "DEPENDENTUSER"
                         });
                 });
@@ -597,7 +597,7 @@ namespace Infrastructures.Migrations
                             Description = "Chủ cửa hàng là người quản lý cửa hàng và có quyền quản lý cửa hàng.",
                             IsDeleted = false,
                             IsHardDelete = false,
-                            Name = "Chủ cửa hàng",
+                            Name = "StoreOwner",
                             NormalizedName = "STOREOWNER"
                         },
                         new
@@ -606,65 +606,9 @@ namespace Infrastructures.Migrations
                             Description = "Hỗ trợ cửa hàng là người hỗ trợ cửa hàng và có quyền hỗ trợ cửa hàng.",
                             IsDeleted = false,
                             IsHardDelete = false,
-                            Name = "Hỗ trợ cửa hàng",
+                            Name = "StoreSupport",
                             NormalizedName = "STORESUPPORT"
                         });
-                });
-
-            modelBuilder.Entity("SilverCart.Domain.Entities.Address", b =>
-                {
-                    b.HasBaseType("SilverCart.Domain.Entities.BaseEntity");
-
-                    b.Property<Guid?>("AdministratorUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("ConsultantUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("CustomerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("DependentUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("DistrictId")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid?>("GuardianUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("StoreUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("StreetAddress")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ToDistrictName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ToProvinceName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("WardCode")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasIndex("AdministratorUserId");
-
-                    b.HasIndex("ConsultantUserId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("DependentUserId");
-
-                    b.HasIndex("GuardianUserId");
-
-                    b.HasIndex("StoreUserId");
-
-                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.Auth.Wallet", b =>
@@ -970,12 +914,11 @@ namespace Infrastructures.Migrations
                 {
                     b.HasBaseType("SilverCart.Domain.Entities.BaseEntity");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<DateTime?>("CancelledAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("ConfirmUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("ConfirmedAt")
                         .HasColumnType("timestamp with time zone");
@@ -992,10 +935,15 @@ namespace Infrastructures.Migrations
                     b.Property<decimal>("FinalPrice")
                         .HasColumnType("numeric");
 
+                    b.Property<string>("FromAddress")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<Guid?>("GuardianId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("OrderGhnCode")
+                    b.Property<string>("OrderCode")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("OrderNote")
@@ -1008,6 +956,16 @@ namespace Infrastructures.Migrations
                     b.Property<Guid?>("OrderStatusId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("OrderedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("RecieveUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ToAddress")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("numeric");
 
@@ -1017,6 +975,8 @@ namespace Infrastructures.Migrations
                     b.Property<Guid?>("UserPromotionId")
                         .HasColumnType("uuid");
 
+                    b.HasIndex("ConfirmUserId");
+
                     b.HasIndex("CustomerUserId");
 
                     b.HasIndex("DependentUserID");
@@ -1024,6 +984,10 @@ namespace Infrastructures.Migrations
                     b.HasIndex("GuardianId");
 
                     b.HasIndex("OrderStatusId");
+
+                    b.HasIndex("OrderedUserId");
+
+                    b.HasIndex("RecieveUserId");
 
                     b.HasIndex("UserPromotionId");
 
@@ -1302,6 +1266,10 @@ namespace Infrastructures.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
 
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("SKU")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -1309,6 +1277,10 @@ namespace Infrastructures.Migrations
 
                     b.Property<Guid>("StockId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<Guid>("VariantId")
                         .HasColumnType("uuid");
@@ -1389,6 +1361,44 @@ namespace Infrastructures.Migrations
                     b.HasIndex("AdministratorUserId");
 
                     b.ToTable("Reports", (string)null);
+                });
+
+            modelBuilder.Entity("SilverCart.Domain.Entities.SavedAddress", b =>
+                {
+                    b.HasBaseType("SilverCart.Domain.Entities.BaseEntity");
+
+                    b.Property<Guid?>("BaseUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("DistrictId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("DistrictName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ProvinceId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ProvinceName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("StreetAddress")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("WardCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("WardName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasIndex("BaseUserId");
+
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.Stocks.Stock", b =>
@@ -1566,7 +1576,8 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("AdministratorUserId");
 
-                    b.HasIndex("StoreAddressId");
+                    b.HasIndex("StoreAddressId")
+                        .IsUnique();
 
                     b.ToTable("Stores", (string)null);
 
@@ -1577,11 +1588,12 @@ namespace Infrastructures.Migrations
                             CreationDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
                             IsHardDelete = false,
-                            AvatarPath = "/images/stores/doc-lap.jpg",
+                            AvatarPath = "/images/stores/store.jpg",
                             Description = "Cửa hàng độc lập chuyên cung cấp thiết bị y tế và thuốc cho người cao tuổi",
+                            GhnShopId = 197185,
                             IsGhnSynced = false,
                             Name = "Nhà thuốc Độc Lập",
-                            Phone = "028-1234-5678",
+                            Phone = "02812345678",
                             StoreAddressId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
                         });
                 });
@@ -1590,13 +1602,7 @@ namespace Infrastructures.Migrations
                 {
                     b.HasBaseType("SilverCart.Domain.Entities.BaseEntity");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
                     b.Property<int>("DistrictId")
-                        .HasMaxLength(255)
                         .HasColumnType("integer");
 
                     b.Property<string>("DistrictName")
@@ -1604,15 +1610,24 @@ namespace Infrastructures.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
+                    b.Property<int>("ProvinceId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ProvinceName")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
+                    b.Property<Guid>("StoreId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("StreetAddress")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("WardCode")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasColumnType("text");
 
                     b.Property<string>("WardName")
                         .IsRequired()
@@ -1628,12 +1643,14 @@ namespace Infrastructures.Migrations
                             CreationDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
                             IsHardDelete = false,
-                            Address = "123 Đường Độc Lập",
-                            DistrictId = 1,
-                            DistrictName = "Quận 1",
-                            ProvinceName = "TP.HCM",
-                            WardCode = "00001",
-                            WardName = "Phường 1"
+                            DistrictId = 1451,
+                            DistrictName = "Quận 9",
+                            ProvinceId = 202,
+                            ProvinceName = "Hồ Chí Minh",
+                            StoreId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaab"),
+                            StreetAddress = "123 Lê Văn Việt",
+                            WardCode = "20901",
+                            WardName = "Phường Hiệp Phú"
                         });
                 });
 
@@ -1754,6 +1771,11 @@ namespace Infrastructures.Migrations
             modelBuilder.Entity("SilverCart.Domain.Entities.ProductReport", b =>
                 {
                     b.HasBaseType("SilverCart.Domain.Entities.Report");
+
+                    b.Property<Guid>("ProductItemId")
+                        .HasColumnType("uuid");
+
+                    b.HasIndex("ProductItemId");
 
                     b.ToTable("ProductReports", (string)null);
                 });
@@ -1929,41 +1951,6 @@ namespace Infrastructures.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SilverCart.Domain.Entities.Address", b =>
-                {
-                    b.HasOne("SilverCart.Domain.Entities.Auth.AdministratorUser", null)
-                        .WithMany("Addresses")
-                        .HasForeignKey("AdministratorUserId");
-
-                    b.HasOne("SilverCart.Domain.Entities.Auth.ConsultantUser", null)
-                        .WithMany("Addresses")
-                        .HasForeignKey("ConsultantUserId");
-
-                    b.HasOne("SilverCart.Domain.Entities.Auth.CustomerUser", "Customer")
-                        .WithMany("Addresses")
-                        .HasForeignKey("CustomerId");
-
-                    b.HasOne("SilverCart.Domain.Entities.Auth.DependentUser", null)
-                        .WithMany("Addresses")
-                        .HasForeignKey("DependentUserId");
-
-                    b.HasOne("SilverCart.Domain.Entities.Auth.GuardianUser", null)
-                        .WithMany("Addresses")
-                        .HasForeignKey("GuardianUserId");
-
-                    b.HasOne("SilverCart.Domain.Entities.BaseEntity", null)
-                        .WithOne()
-                        .HasForeignKey("SilverCart.Domain.Entities.Address", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SilverCart.Domain.Entities.StoreUser", null)
-                        .WithMany("Addresses")
-                        .HasForeignKey("StoreUserId");
-
-                    b.Navigation("Customer");
-                });
-
             modelBuilder.Entity("SilverCart.Domain.Entities.Auth.Wallet", b =>
                 {
                     b.HasOne("SilverCart.Domain.Entities.BaseEntity", null)
@@ -2134,14 +2121,14 @@ namespace Infrastructures.Migrations
 
             modelBuilder.Entity("SilverCart.Domain.Entities.CustomerAddress", b =>
                 {
-                    b.HasOne("SilverCart.Domain.Entities.Address", "Address")
-                        .WithMany()
+                    b.HasOne("SilverCart.Domain.Entities.SavedAddress", "SavedAddress")
+                        .WithMany("CustomerAddresses")
                         .HasForeignKey("AddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SilverCart.Domain.Entities.Auth.CustomerUser", "Customer")
-                        .WithMany()
+                        .WithMany("CustomerAddresses")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2152,9 +2139,9 @@ namespace Infrastructures.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Address");
-
                     b.Navigation("Customer");
+
+                    b.Navigation("SavedAddress");
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.CustomerPaymentMethod", b =>
@@ -2208,6 +2195,10 @@ namespace Infrastructures.Migrations
 
             modelBuilder.Entity("SilverCart.Domain.Entities.Order", b =>
                 {
+                    b.HasOne("SilverCart.Domain.Entities.Auth.GuardianUser", "ConfirmUser")
+                        .WithMany()
+                        .HasForeignKey("ConfirmUserId");
+
                     b.HasOne("SilverCart.Domain.Entities.Auth.CustomerUser", "CustomerUser")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerUserId");
@@ -2230,15 +2221,29 @@ namespace Infrastructures.Migrations
                         .WithMany("Orders")
                         .HasForeignKey("OrderStatusId");
 
+                    b.HasOne("SilverCart.Domain.Entities.BaseUser", "OrderedUser")
+                        .WithMany()
+                        .HasForeignKey("OrderedUserId");
+
+                    b.HasOne("SilverCart.Domain.Entities.BaseUser", "RecieveUser")
+                        .WithMany()
+                        .HasForeignKey("RecieveUserId");
+
                     b.HasOne("SilverCart.Domain.Entities.UserPromotion", "UserPromotion")
                         .WithMany()
                         .HasForeignKey("UserPromotionId");
+
+                    b.Navigation("ConfirmUser");
 
                     b.Navigation("CustomerUser");
 
                     b.Navigation("DependentUser");
 
                     b.Navigation("Guardian");
+
+                    b.Navigation("OrderedUser");
+
+                    b.Navigation("RecieveUser");
 
                     b.Navigation("UserPromotion");
                 });
@@ -2454,6 +2459,19 @@ namespace Infrastructures.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SilverCart.Domain.Entities.SavedAddress", b =>
+                {
+                    b.HasOne("SilverCart.Domain.Entities.BaseUser", null)
+                        .WithMany("Addresses")
+                        .HasForeignKey("BaseUserId");
+
+                    b.HasOne("SilverCart.Domain.Entities.BaseEntity", null)
+                        .WithOne()
+                        .HasForeignKey("SilverCart.Domain.Entities.SavedAddress", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SilverCart.Domain.Entities.Stocks.Stock", b =>
                 {
                     b.HasOne("SilverCart.Domain.Entities.BaseEntity", null)
@@ -2501,8 +2519,8 @@ namespace Infrastructures.Migrations
                         .IsRequired();
 
                     b.HasOne("SilverCart.Domain.Entities.Stores.StoreAddress", "StoreAddress")
-                        .WithMany()
-                        .HasForeignKey("StoreAddressId")
+                        .WithOne("Store")
+                        .HasForeignKey("SilverCart.Domain.Entities.Stores.Store", "StoreAddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -2642,6 +2660,14 @@ namespace Infrastructures.Migrations
                         .HasForeignKey("SilverCart.Domain.Entities.ProductReport", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("SilverCart.Domain.Entities.Products.ProductItem", "ProductItem")
+                        .WithMany()
+                        .HasForeignKey("ProductItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductItem");
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.UserReport", b =>
@@ -2660,6 +2686,8 @@ namespace Infrastructures.Migrations
 
             modelBuilder.Entity("SilverCart.Domain.Entities.BaseUser", b =>
                 {
+                    b.Navigation("Addresses");
+
                     b.Navigation("ConversationMemberships");
                 });
 
@@ -2762,6 +2790,11 @@ namespace Infrastructures.Migrations
                     b.Navigation("ProductPromotions");
                 });
 
+            modelBuilder.Entity("SilverCart.Domain.Entities.SavedAddress", b =>
+                {
+                    b.Navigation("CustomerAddresses");
+                });
+
             modelBuilder.Entity("SilverCart.Domain.Entities.Stores.Store", b =>
                 {
                     b.Navigation("Products");
@@ -2769,10 +2802,14 @@ namespace Infrastructures.Migrations
                     b.Navigation("StoreUsers");
                 });
 
+            modelBuilder.Entity("SilverCart.Domain.Entities.Stores.StoreAddress", b =>
+                {
+                    b.Navigation("Store")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SilverCart.Domain.Entities.Auth.AdministratorUser", b =>
                 {
-                    b.Navigation("Addresses");
-
                     b.Navigation("Reports");
 
                     b.Navigation("Stores");
@@ -2780,14 +2817,12 @@ namespace Infrastructures.Migrations
 
             modelBuilder.Entity("SilverCart.Domain.Entities.Auth.ConsultantUser", b =>
                 {
-                    b.Navigation("Addresses");
-
                     b.Navigation("Consultations");
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.Auth.CustomerUser", b =>
                 {
-                    b.Navigation("Addresses");
+                    b.Navigation("CustomerAddresses");
 
                     b.Navigation("CustomerPaymentMethods");
 
@@ -2801,22 +2836,16 @@ namespace Infrastructures.Migrations
 
             modelBuilder.Entity("SilverCart.Domain.Entities.Auth.DependentUser", b =>
                 {
-                    b.Navigation("Addresses");
-
                     b.Navigation("Consultations");
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.Auth.GuardianUser", b =>
                 {
-                    b.Navigation("Addresses");
-
                     b.Navigation("Dependents");
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.StoreUser", b =>
                 {
-                    b.Navigation("Addresses");
-
                     b.Navigation("StoreUserRoles");
                 });
 #pragma warning restore 612, 618

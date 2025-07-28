@@ -6,7 +6,8 @@ using Infrastructures.Interfaces.System;
 
 namespace Infrastructures
 {
-    public class UnitOfWork(AppDbContext dbContext, IAdministratorUserRepository administratorUserRepository,
+    public class UnitOfWork(AppDbContext dbContext,
+                            IAdministratorUserRepository administratorUserRepository, IAddressRepository addressRepository,
                             ICategoryRepository categoryRepository, IConsultantUserRepository consultantUserRepository,
                             IConsultationRepository consultationRepository, IConversationRepository conversationRepository,
                             ICustomerUserRepository customerUserRepository, IDependentUserRepository dependentUserRepository,
@@ -16,7 +17,8 @@ namespace Infrastructures
                             IProductCategoryRepository productCategoryRepository, IProductItemRepository productItemRepository,
                             IProductRepository productRepository, IProductVariantRepository productVariantRepository,
                             IStoreAddressRepository storeAddressRepository, IStoreRepository storeRepository,
-                            IStoreUserRepository storeUserRepository, IUserRepository userRepository) : IUnitOfWork
+                            IStoreUserRepository storeUserRepository, IUserRepository userRepository,
+                            IUserPromotionRepository userPromotionRepository, IReportRepository reportRepository) : IUnitOfWork
     {
         public ICategoryRepository CategoryRepository => categoryRepository;
         public IOrderRepository OrderRepository => orderRepository;
@@ -39,11 +41,21 @@ namespace Infrastructures
         public IConsultationRepository ConsultationRepository => consultationRepository;
         public IAdministratorUserRepository AdministratorUserRepository => administratorUserRepository;
         public IPaymentRepository PaymentRepository => paymentRepository;
+        public IAddressRepository AddressRepository => addressRepository;
+
+        public IUserPromotionRepository UserPromotionRepository => userPromotionRepository;
+
+        public IReportRepository ReportRepository => reportRepository;
 
         // Transaction methods
-        public async Task<IDbContextTransaction> BeginTransactionAsync() => await dbContext.Database.BeginTransactionAsync();
-        public async Task CommitTransactionAsync() => await dbContext.Database.CommitTransactionAsync();
-        public async Task RollbackTransactionAsync() => await dbContext.Database.RollbackTransactionAsync();
-        public async Task<int> SaveChangeAsync() => await dbContext.SaveChangesAsync();
+        public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default) => await dbContext.Database.BeginTransactionAsync(cancellationToken);
+        public async Task CommitTransactionAsync(CancellationToken cancellationToken = default) => await dbContext.Database.CommitTransactionAsync(cancellationToken);
+        public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
+        {
+            if (dbContext.Database.CurrentTransaction != null)
+                await dbContext.Database.RollbackTransactionAsync(cancellationToken);
+        }
+
+        public async Task<int> SaveChangeAsync(CancellationToken cancellationToken = default) => await dbContext.SaveChangesAsync(cancellationToken);
     }
 }

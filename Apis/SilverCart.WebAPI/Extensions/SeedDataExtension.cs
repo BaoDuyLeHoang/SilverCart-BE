@@ -13,6 +13,7 @@ using SilverCart.Domain.Entities.Categories;
 using SilverCart.Domain.Entities.Orders;
 using SilverCart.Domain.Enums;
 using SilverCart.Infrastructure.Commons;
+using Infrastructures.Commons.Exceptions;
 
 namespace WebAPI.Extensions
 {
@@ -97,7 +98,7 @@ namespace WebAPI.Extensions
             {
                 // Create store faker
                 var store = await dbContext.Stores.FirstOrDefaultAsync();
-
+                AppExceptions.ThrowIfNotFound(store, "Store not found");
                 // Create categories
                 var categories = _productCategories.Select(name => new Category
                 {
@@ -484,7 +485,8 @@ namespace WebAPI.Extensions
                         CustomerUserId = customer.Id,
                         CustomerUser = customer,
                         OrderStatus = OrderStatusEnum.Completed,
-                        Address = "123 Đường Lê Lợi, Phường Bến Nghé, Quận 1, TP.HCM",
+                        FromAddress = "123 Đường Lê Lợi, Phường Bến Nghé, Quận 1, TP.HCM",
+                        ToAddress = "123 Đường Lê Văn Việt, Phường 1, Quận 1, TP.HCM",
                         OrderNote = "Đơn hàng thật",
                         EarnedPoints = 100,
                         UsedPoints = 0,
@@ -568,7 +570,8 @@ namespace WebAPI.Extensions
                         CustomerUserId = customer.Id,
                         CustomerUser = customer,
                         OrderStatus = orderStatus,
-                        Address = $"{Random.Shared.Next(1, 999)} Đường {new Faker().Address.StreetName()}, {new Faker().Address.City()}",
+                        FromAddress = $"{Random.Shared.Next(1, 999)} Đường {new Faker().Address.StreetName()}, {new Faker().Address.City()}",
+                        ToAddress = $"{Random.Shared.Next(1, 999)} Đường {new Faker().Address.StreetName()}, {new Faker().Address.City()}",
                         OrderNote = new Faker("vi").Lorem.Sentence(),
                         EarnedPoints = Random.Shared.Next(10, 200),
                         UsedPoints = Random.Shared.Next(0, 100),

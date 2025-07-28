@@ -4,16 +4,19 @@ using SilverCart.Domain.Entities.Auth;
 namespace SilverCart.Domain.Entities;
 
 /// <summary>
+/// Saved Address only use to save User address in database.
+/// Because we have GhnService to get Province, District, Ward information.
 /// <see cref="AddressConfiguration.cs"/>
 /// </summary>
-public class Address : BaseEntity
+public class SavedAddress : BaseEntity
 {
-    public required string StreetAddress { get; set; }
-    public string WardCode { get; set; }
+    public required string StreetAddress { get; set; } // 123 Lê quí đôn 
     public int DistrictId { get; set; }
-    public string ToDistrictName { get; set; }
-    public string ToProvinceName { get; set; }
-    public Guid? CustomerId { get; set; }
-    public virtual CustomerUser? Customer { get; set; }
-    public string FullAddress => $"{StreetAddress}, {WardCode}, {DistrictId}, {ToDistrictName}, {ToProvinceName}";
+    public string DistrictName { get; set; } // Quận 1
+    public int ProvinceId { get; set; }
+    public string ProvinceName { get; set; } // Thành phố Hồ Chí Minh
+    public string WardCode { get; set; } // "123456"
+    public string WardName { get; set; } // Phường 1
+    public virtual List<CustomerAddress>? CustomerAddresses { get; set; }
+    public string FullAddress => $"{StreetAddress}, {WardName}, {DistrictName}, {ProvinceName}";
 }

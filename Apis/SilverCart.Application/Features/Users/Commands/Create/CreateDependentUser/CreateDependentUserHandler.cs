@@ -40,9 +40,9 @@ public class CreateDependentUserHandler(IUnitOfWork unitOfWork, UserManager<Base
                 Gender = dependentUser.Gender,
                 CreationDate = _currentTime.GetCurrentTime(),
                 Email = null,
-                Addresses = new List<Address>
+                Addresses = new List<SavedAddress>
                 {
-                    new Address
+                    new SavedAddress
                     {
                         StreetAddress = dependentUser.Address.StreetAddress,
                         WardCode = dependentUser.Address.WardCode,

@@ -1,26 +1,16 @@
-﻿using System.Text;
-using HealthChecks.UI.Client;
-using System.Text;
-using Infrastructures;
+﻿using Infrastructures;
 using Infrastructures.Commons.Exceptions;
 using Infrastructures.Interfaces.System;
 using Infrastructures.Services.System;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.IdentityModel.Tokens;
 using Serilog;
-using SilverCart.Application.Commons;
-using System.Text;
 using VNPAY.NET;
 using WebAPI;
 using WebAPI.Extensions;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Infrastructures.Commons.Exceptions;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using SilverCart.WebAPI.Hubs;
 using WebAPI.Middlewares;
 using SilverCart.Infrastructure.Commons;
+using HealthChecks.UI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,17 +20,12 @@ builder.Services.AddApplicationService(configuration);
 builder.Services.AddSwaggerGeneration(builder);
 builder.Services.AddMediatRServices();
 builder.Services.AddWebAPIService();
+builder.Services.AddApplicationDI(configuration);
 builder.Services.AddSerilog(lc => lc.WriteTo.Console().ReadFrom.Configuration(builder.Configuration));
 builder.Services.AddSingleton(configuration);
+builder.Services.AddDistributedMemoryCache();
 builder.Services.AddOutputCache();
-
-// Add Redis Cache
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = configuration.RedisConnection;
-    options.InstanceName = "SilverCart_";
-});
-
+builder.Services.AddDistributedMemoryCache();
 // Add SignalR services
 builder.Services.AddSignalR();
 
@@ -55,7 +40,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("ChatPolicy", builder =>
     {
         builder
-            .WithOrigins("http://localhost:3000")
+            .WithOrigins("http://localhost:5001")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials();
@@ -86,7 +71,7 @@ app.UseCors("ChatPolicy");
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
 app.UseMiddleware<ExceptionMiddleware>();
-// app.UseMiddleware<GlobalExceptionMiddleware>();
+
 app.UseMiddleware<PerformanceMiddleware>();
 app.MapHealthChecks("/healthchecks", new HealthCheckOptions
 {
@@ -98,7 +83,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-// Map SignalR hub
 app.MapHub<ChatHub>("/chatHub");
 
 await app.SeedDatabaseAsync(configuration);

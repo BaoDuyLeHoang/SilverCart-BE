@@ -11,5 +11,6 @@ namespace Infrastructures.Interfaces.System
     {
         Task<string> RegisterUserAsync(StringeeUserRegistrationRequest request);
         Task<string> GenerateAccessTokenAsync(Guid userId, string role);
+        Task<string> SendSmsAsync(string phoneNumber, string message);
     }
 }

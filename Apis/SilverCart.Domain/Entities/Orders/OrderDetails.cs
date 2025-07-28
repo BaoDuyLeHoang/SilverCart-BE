@@ -11,13 +11,13 @@ namespace SilverCart.Domain.Entities.Orders
         public virtual ProductItem ProductItem { get; set; } = null!;
         public OrderItemStatusEnums OrderItemStatus { get; set; } = OrderItemStatusEnums.Pending;
         // Shipping Required data
-        public int Weight { get; set; } = 0;
-        public int Length { get; set; } = 0;
-        public int Width { get; set; } = 0;
-        public int Height { get; set; } = 0;
+        public required int Weight { get; set; }
+        public required int Length { get; set; }
+        public required int Width { get; set; }
+        public required int Height { get; set; }
         // Product Required data
-        public int Quantity { get; set; }
-        public decimal Price { get; set; }
+        public required int Quantity { get; set; }
+        public required decimal Price { get; set; }
         // Additional info for tracking
         public string? Notes { get; set; }
     }

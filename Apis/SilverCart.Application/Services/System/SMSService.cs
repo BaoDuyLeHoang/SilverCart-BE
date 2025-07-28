@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SilverCart.Application.Interfaces;
 using SilverCart.Application.Interfaces.System;
+using SilverCart.Application.Utils;
 
 namespace Infrastructures.Services.System;
 
@@ -13,13 +14,14 @@ public class SMSService : ISMSService
     private readonly IEmailService? _emailService;
     private readonly ILogger<SMSService> _logger;
     private readonly IWebHostEnvironment _env;
-
-    public SMSService(IEmailService? emailService, ILogger<SMSService> logger, IWebHostEnvironment env)
+    private readonly IStringeeService _stringeeService;
+    public SMSService(IEmailService? emailService, ILogger<SMSService> logger, IWebHostEnvironment env, IStringeeService stringeeService)
     {
         // Use email service in development
         _emailService = env.IsDevelopment() ? emailService : null;
         _logger = logger;
         _env = env;
+        _stringeeService = stringeeService;
     }
 
     public async Task SendSMS(string phoneNumber, string message)
@@ -38,8 +40,8 @@ public class SMSService : ISMSService
             try
             {
                 // // Assuming stringeeService is injected and available
-                // await stringeeService.SendSmsAsync(phoneNumber, message);
-                _logger.LogInformation($"SMS sent successfully to {phoneNumber}");
+                var response = await _stringeeService.SendSmsAsync(phoneNumber, message);
+                _logger.LogInformation($"SMS sent successfully to {phoneNumber} with response: {response}");
             }
             catch (Exception ex)
             {
