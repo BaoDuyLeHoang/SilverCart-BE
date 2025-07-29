@@ -14,6 +14,7 @@ using SilverCart.Domain.Entities.Orders;
 using SilverCart.Domain.Enums;
 using SilverCart.Infrastructure.Commons;
 using Infrastructures.Commons.Exceptions;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace WebAPI.Extensions
 {
@@ -94,6 +95,7 @@ namespace WebAPI.Extensions
             // Check if users already exist
             if (await _userManager.Users.AnyAsync(u => u.Email != null && u.Email.Contains("test")))
             {
+                await AddRoleToUnknownUser(_userManager);
                 return; // Skip if test users already exist
             }
 
@@ -799,5 +801,20 @@ namespace WebAPI.Extensions
             }
         }
 
+        private static async Task AddRoleToUnknownUser(UserManager<BaseUser> _userManager)
+        {
+            var users = _userManager.Users.ToList();
+            if (users.Count > 0)
+            {
+                foreach (var user in users)
+                {
+                    var roles = await _userManager.GetRolesAsync(user);
+                    if (roles.Count == 0)
+                    {
+                        await _userManager.AddToRoleAsync(user, RoleEnum.Customer.ToString());
+                    }
+                }
+            }
+        }
     }
 }
