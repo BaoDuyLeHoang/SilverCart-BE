@@ -1,36 +1,7 @@
 using SilverCart.Domain.Entities.Chat;
 
-namespace Infrastructures;
-public class MessageDto
-{
-    public Guid Id { get; set; }
-    public Guid ConversationId { get; set; }
-    public Guid SenderId { get; set; }
-    public string Content { get; set; }
-    public DateTime CreationDate { get; set; }
-    public bool IsRead { get; set; }
-    public bool IsDeleted { get; set; }
-    public DateTime? ModificationDate { get; set; }
-    public bool IsModified { get; set; }
-}
+namespace SilverCart.Application.Interfaces.Repositories;
 
-public record CreateMessageRequest(Guid ConversationId, string Content);
-public record CreateMessageResponse(Guid MessageId, string Content);
-
-public record UpdateMessageRequest(Guid MessageId, string NewContent);
-public record UpdateMessageResponse(Guid MessageId, string Content, DateTime ModificationDate);
-
-public record MarkAsReadRequest(Guid MessageId);
-public record MarkAsReadResponse(Guid MessageId, bool IsRead);
-
-public record RecallMessageRequest(Guid MessageId);
-public record RecallMessageResponse(Guid MessageId, bool IsDeleted, DateTime? DeletionDate);
-
-public record GetMessagesByConversationRequest(Guid ConversationId);
-public record GetMessagesByConversationResponse(List<MessageDto> Messages);
-
-public record CountUnreadMessagesRequest(Guid ConversationId, Guid UserId);
-public record CountUnreadMessagesResponse(int UnreadCount);
 public interface IMessageRepository
 {
     Task<List<MessageDto>> GetMessagesByConversationIdAsync(Guid conversationId);

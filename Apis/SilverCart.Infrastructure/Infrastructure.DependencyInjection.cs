@@ -24,6 +24,7 @@ using SilverCart.Application.Interfaces.System;
 using SilverCart.Infrastructure.Commons;
 using SilverCart.Application.Services.System;
 using SilverCart.Application.Features.Orders.Queries.Shipping.CalculateShippingFee;
+using SilverCart.Application.Interfaces.Repositories;
 
 namespace Infrastructures
 {

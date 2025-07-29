@@ -9,8 +9,6 @@ using Infrastructures.Features.Stores.Queries.GetMyStore;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebAPI.Controllers
 {
@@ -27,11 +25,7 @@ namespace WebAPI.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        [SwaggerResponse(StatusCodes.Status200OK, "Tạo cửa hàng thành công")]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Dữ liệu không hợp lệ")]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, "Không có quyền truy cập")]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Lỗi hệ thống")]
-        public async Task<IActionResult> CreateStore([FromBody] CreateStoreCommand command)
+        public async Task<ActionResult<Guid>> CreateStore([FromBody] CreateStoreCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
@@ -39,23 +33,14 @@ namespace WebAPI.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut]
-        [SwaggerResponse(StatusCodes.Status200OK, "Cập nhật thông tin cửa hàng thành công")]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Dữ liệu không hợp lệ")]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, "Không có quyền truy cập")]
-        [SwaggerResponse(StatusCodes.Status404NotFound, "Không tìm thấy cửa hàng")]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Lỗi hệ thống")]
-        public async Task<IActionResult> UpdateStore([FromBody] UpdateStoreCommand command)
+        public async Task<ActionResult<bool>> UpdateStore([FromBody] UpdateStoreCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
         }
 
         [HttpGet("my-store")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Lấy thông tin cửa hàng thành công", typeof(GetMyStoreQueryResponse))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Dữ liệu không hợp lệ")]
-        [SwaggerResponse(StatusCodes.Status404NotFound, "Không tìm thấy cửa hàng")]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Lỗi hệ thống")]
-        public async Task<IActionResult> GetMyStore()
+        public async Task<ActionResult<GetMyStoreQueryResponse>> GetMyStore()
         {
             var result = await _mediator.Send(new GetMyStoreQueryCommand());
             return Ok(result);

@@ -6,6 +6,7 @@ using Infrastructures;
 using SilverCart.Application.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using SilverCart.Application.Interfaces.Repositories;
 
 namespace SilverCart.WebAPI.Hubs
 {

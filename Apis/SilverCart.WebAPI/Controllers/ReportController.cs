@@ -7,8 +7,6 @@ using Infrastructures.Features.Reports.Command.Add;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebAPI.Controllers
 {
@@ -25,11 +23,7 @@ namespace WebAPI.Controllers
 
         [Authorize]
         [HttpPost]
-        [SwaggerResponse(StatusCodes.Status200OK, "Tạo báo cáo thành công")]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Dữ liệu không hợp lệ")]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, "Không có quyền truy cập")]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Lỗi hệ thống")]
-        public async Task<IActionResult> AddReport([FromForm] AddReportCommand command)
+        public async Task<ActionResult<Guid>> AddReport([FromForm] AddReportCommand command)
         {
             if (command == null)
             {

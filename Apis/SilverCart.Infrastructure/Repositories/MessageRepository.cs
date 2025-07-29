@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using SilverCart.Application.Interfaces;
 using SilverCart.Domain.Entities.Chat;
 using Infrastructures.Commons.Exceptions;
+using SilverCart.Application.Interfaces.Repositories;
 
 namespace Infrastructures
 {
