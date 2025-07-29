@@ -144,6 +144,7 @@ namespace WebAPI
                         Array.Empty<string>()
                     }
                 });
+                c.UseAllOfToExtendReferenceSchemas();
             });
 
             return services;
