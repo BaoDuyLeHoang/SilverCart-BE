@@ -7,8 +7,8 @@ if "%~1"=="" (
     dotnet ef migrations remove --project ./Apis/SilverCart.Infrastructure --startup-project ./Apis/SilverCart.WebAPI
 ) else (
     REM Validate if parameter is a number
-    echo %~1| findstr /r "^[0-9]*$" >nul
-    if %ERRORLEVEL% EQU 0 (
+    echo %~1| findstr /r "^[0-9]*$" > nul
+    if %ERRORLEVEL% == 0 (
         echo 🗑️ Removing last %~1 migration(s)
         for /l %%i in (1,1,%~1) do (
             dotnet ef migrations remove --project ./Apis/SilverCart.Infrastructure --startup-project ./Apis/SilverCart.WebAPI
@@ -24,7 +24,7 @@ if "%~1"=="" (
     )
 )
 
-if %ERRORLEVEL% EQU 0 (
+if %ERRORLEVEL% == 0 (
     echo ✅ Migration(s) removed successfully
 ) else (
     echo ❌ Failed to remove migration(s)

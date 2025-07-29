@@ -27,15 +27,15 @@ public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTy
             new StoreRole
             {
                 Id = Guid.Parse("60cb3e42-0903-4c3f-8e9c-bfdc6f6a1a01"),
-                Name = "StoreOwner",
-                NormalizedName = "STOREOWNER",
+                Name = RoleEnum.ShopOwner.ToString(),
+                NormalizedName = RoleEnum.ShopOwner.ToString().ToUpper(),
                 Description = "Chủ cửa hàng là người quản lý cửa hàng và có quyền quản lý cửa hàng."
             },
             new StoreRole
             {
                 Id = Guid.Parse("a2a02247-2a41-4a38-8804-4be8038fa78b"),
-                Name = "StoreSupport",
-                NormalizedName = "STORESUPPORT",
+                Name = RoleEnum.Staff.ToString(),
+                NormalizedName = RoleEnum.Staff.ToString().ToUpper(),
                 Description = "Hỗ trợ cửa hàng là người hỗ trợ cửa hàng và có quyền hỗ trợ cửa hàng."
             }
         );
@@ -49,8 +49,8 @@ public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTy
             new AdministratorRole
             {
                 Id = Guid.Parse("5c2cb3f3-d9b1-4d5f-8a9c-1e6f689ee0f4"),
-                Name = "SuperAdmin",
-                NormalizedName = "SUPERADMIN",
+                Name = RoleEnum.SuperAdmin.ToString(),
+                NormalizedName = RoleEnum.SuperAdmin.ToString().ToUpper(),
                 Description = "Siêu quản trị viên là người quản lý toàn bộ hệ thống và có quyền quản lý toàn bộ hệ thống."
             },
             new AdministratorRole
@@ -81,6 +81,14 @@ public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTy
                 Name = "DependentUser",
                 NormalizedName = "DEPENDENTUSER",
                 Description = "Người phụ thuộc là người phụ thuộc cho người giám hộ và có quyền phụ thuộc cho người giám hộ."
+            }
+            ,
+            new CustomerRole
+            {
+                Id = Guid.Parse("c66a403b-e1f9-47f3-9f6b-d8c3913b7a1c"),
+                Name = RoleEnum.Customer.ToString(),
+                NormalizedName = RoleEnum.Customer.ToString().ToUpper(),
+                Description = "Người khách là người khách và có quyền khách."
             }
         );
     }
