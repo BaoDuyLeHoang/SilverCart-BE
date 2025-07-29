@@ -1,6 +1,7 @@
 ﻿using Infrastructures.Interfaces.Entities;
 using Infrastructures.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore.Storage;
+using SilverCart.Application.Interfaces.Repositories;
 using SilverCart.Application.Repositories;
 
 namespace Infrastructures

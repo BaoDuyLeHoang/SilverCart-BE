@@ -1,9 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using MediatR;
 using SilverCart.Domain.Entities.Chat;
+using SilverCart.Application.Interfaces;
+using SilverCart.Application.Interfaces.Repositories;
 
 namespace Infrastructures.Features.Messages.Queries.GetByConversationId
 {

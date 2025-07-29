@@ -26,30 +26,21 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("provinces")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Lấy danh sách tỉnh/thành phố thành công", typeof(JObject))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Dữ liệu không hợp lệ")]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Lỗi hệ thống")]
-        public async Task<IActionResult> GetProvinces()
+        public async Task<ActionResult<JObject>> GetProvinces()
         {
             var result = await _mediator.Send(new GetProvincesQuery());
             return Ok(result);
         }
 
         [HttpGet("districts/{provinceId}")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Lấy danh sách quận/huyện thành công", typeof(JObject))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Dữ liệu không hợp lệ")]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Lỗi hệ thống")]
-        public async Task<IActionResult> GetDistrictsByProvinceId([FromRoute] int provinceId)
+        public async Task<ActionResult<JObject>> GetDistrictsByProvinceId([FromRoute] int provinceId)
         {
             var result = await _mediator.Send(new GetDistrictsByProvinceIdQuery(provinceId));
             return Ok(result);
         }
 
         [HttpGet("wards/{districtId}")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Lấy danh sách phường/xã thành công", typeof(JObject))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Dữ liệu không hợp lệ")]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Lỗi hệ thống")]
-        public async Task<IActionResult> GetWardsByDistrictId([FromRoute] int districtId)
+        public async Task<ActionResult<JObject>> GetWardsByDistrictId([FromRoute] int districtId)
         {
             var result = await _mediator.Send(new GetWardsByDistrictIdQuery(districtId));
             return Ok(result);

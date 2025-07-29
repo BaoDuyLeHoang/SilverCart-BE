@@ -19,13 +19,13 @@ public class RefreshTokenHandler(UserManager<BaseUser> userManager, IJwtTokenGen
     {
         if (string.IsNullOrEmpty(request.RefreshToken))
         {
-            throw new AppExceptions("Invalid refresh token");
+            throw new AppExceptions("Refresh token không hợp lệ");
         }
 
         var user = _userManager.Users.FirstOrDefault(u => u.RefreshToken == request.RefreshToken);
         if (user == null)
         {
-            throw new AppExceptions("Invalid refresh token");
+            throw new AppExceptions("Refresh token không hợp lệ");
         }
 
         var tokenCreationTime = user.ModificationDate ?? user.CreationDate ?? _currentTime.GetCurrentTime();
@@ -33,7 +33,7 @@ public class RefreshTokenHandler(UserManager<BaseUser> userManager, IJwtTokenGen
         {
             user.RefreshToken = null;
             await _userManager.UpdateAsync(user);
-            throw new AppExceptions("Refresh token has expired");
+            throw new AppExceptions("Refresh token đã hết hạn");
         }
 
         var userRoles = await _userManager.GetRolesAsync(user);
@@ -48,7 +48,7 @@ public class RefreshTokenHandler(UserManager<BaseUser> userManager, IJwtTokenGen
 
         if (!result.Succeeded)
         {
-            throw new AppExceptions("đổi refresh token lỗi");
+            throw new AppExceptions("Thất bại khi đổi refresh token");
         }
 
         return new RefreshTokenResponse(

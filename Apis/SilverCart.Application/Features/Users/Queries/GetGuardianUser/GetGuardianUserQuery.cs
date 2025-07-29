@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructures;
+namespace Infrastructures.Features.Users.Queries.GetGuardianUser;
 
 public sealed record GetGuardianUserQuery(Guid? Id, string? FullName, string? Email, string? Phone) : IRequest<List<GetGuardianUserResponse>>;
 public record GetGuardianUserResponse(Guid Id, string FullName, string Email, string Phone, List<GetDependentUserResponse> DependentUsers);

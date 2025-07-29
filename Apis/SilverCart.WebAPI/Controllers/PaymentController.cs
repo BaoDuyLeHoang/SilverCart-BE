@@ -7,8 +7,6 @@ using Infrastructures.Features.Payments.Commands.CreatePayment;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Swashbuckle.AspNetCore.Annotations;
 using VNPAY.NET;
 using VNPAY.NET.Utilities;
 
@@ -29,11 +27,7 @@ namespace WebAPI.Controllers
 
         [Authorize]
         [HttpPost]
-        [SwaggerResponse(StatusCodes.Status200OK, "Tạo thanh toán thành công")]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Dữ liệu không hợp lệ")]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, "Không có quyền truy cập")]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Lỗi hệ thống")]
-        public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentCommand command)
+        public async Task<ActionResult<string>> CreatePayment([FromBody] CreatePaymentCommand command)
         {
             try
             {
@@ -55,11 +49,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("ipn")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Xử lý callback từ VNPay thành công")]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Dữ liệu không hợp lệ")]
-        [SwaggerResponse(StatusCodes.Status404NotFound, "Không tìm thấy thông tin thanh toán")]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Lỗi hệ thống")]
-        public IActionResult IPNReturn()
+        public ActionResult<bool> IPNReturn()
         {
             if (Request.QueryString.HasValue)
             {
@@ -68,7 +58,7 @@ namespace WebAPI.Controllers
                     var paymentResult = _vnPay.GetPaymentResult(Request.Query);
                     if (paymentResult.IsSuccess)
                     {
-                        return Ok();
+                        return Ok(true);
                     }
                     return BadRequest("Thanh toán thất bại");
                 }
@@ -81,10 +71,6 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("callback")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Xử lý return từ VNPay thành công")]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "Dữ liệu không hợp lệ")]
-        [SwaggerResponse(StatusCodes.Status404NotFound, "Không tìm thấy thông tin thanh toán")]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Lỗi hệ thống")]
         public ActionResult<string> Callback()
         {
             if (Request.QueryString.HasValue)
