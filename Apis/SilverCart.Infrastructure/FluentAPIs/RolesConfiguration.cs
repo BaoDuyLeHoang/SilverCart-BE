@@ -5,7 +5,17 @@ using SilverCart.Domain.Entities.Auth;
 using SilverCart.Domain.Entities.Stores;
 
 namespace Infrastructures.FluentAPIs;
-
+public enum RoleEnum
+{
+    SuperAdmin = 0,
+    Admin = 1,
+    ShopOwner = 2,
+    Staff = 3,
+    Consultant = 4,
+    Customer = 5,
+    Guardian = 6,
+    DependentUser = 6
+}
 public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTypeConfiguration<AdministratorRole>,
     IEntityTypeConfiguration<CustomerRole>, IEntityTypeConfiguration<StoreUserRole>, IEntityTypeConfiguration<ConsultantRole>
 {
@@ -85,5 +95,13 @@ public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTy
     public void Configure(EntityTypeBuilder<ConsultantRole> builder)
     {
         builder.ToTable("ConsultantRoles");
+        builder.HasData(
+            new ConsultantRole
+            {
+                Id = Guid.Parse("0c09b112-baf9-4ec3-bc79-cce452219d61"),
+                RoleName = RoleEnum.Consultant.ToString(),
+                Description = "Chuyên viên tư vấn là người tư vấn cho người cao tuổi và có quyền tư vấn cho người cao tuổi."
+            }
+        );
     }
 }

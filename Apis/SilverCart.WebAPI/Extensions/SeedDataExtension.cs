@@ -83,7 +83,7 @@ namespace WebAPI.Extensions
                                         string.Join(", ", result.Errors.Select(e => e.Description)));
                 }
 
-                await _userManager.AddToRoleAsync(superAdmin, "SuperAdmin");
+                await _userManager.AddToRoleAsync(superAdmin, RoleEnum.SuperAdmin.ToString());
             }
         }
 
@@ -98,6 +98,7 @@ namespace WebAPI.Extensions
             }
 
             var store = await dbContext.Stores.FirstOrDefaultAsync();
+            AppExceptions.ThrowIfNotFound(store, "Store not found");
 
             // Create 5 Administrators
             for (int i = 1; i <= 5; i++)
@@ -110,9 +111,12 @@ namespace WebAPI.Extensions
                     Gender = "Other",
                     EmailConfirmed = true,
                     PhoneNumber = $"01234567{i}0",
-                    Role = new AdministratorRole { Name = $"Admin {i}" }
                 };
-                await _userManager.CreateAsync(admin, defaultPassword);
+                var result = await _userManager.CreateAsync(admin, defaultPassword);
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(admin, RoleEnum.Admin.ToString());
+                }
             }
 
             // Create 5 Store Users
@@ -126,9 +130,14 @@ namespace WebAPI.Extensions
                     Gender = "Other",
                     EmailConfirmed = true,
                     PhoneNumber = $"01234567{i}1",
-                    Store = store
+                    Store = store,
+                    StoreUserRoles = new HashSet<StoreUserRole>()
                 };
-                await _userManager.CreateAsync(storeUser, defaultPassword);
+                var result = await _userManager.CreateAsync(storeUser, defaultPassword);
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(storeUser, RoleEnum.ShopOwner.ToString());
+                }
             }
 
             // Create 5 Consultants
@@ -146,9 +155,12 @@ namespace WebAPI.Extensions
                     Biography = $"Chuyên gia tư vấn sức khỏe cho người cao tuổi {i}",
                     AvatarPath = "/images/avatars/default.jpg",
                     ExpertiseArea = "Chăm sóc sức khỏe",
-                    Role = new ConsultantRole { RoleName = $"Health Consultant {i}" }
                 };
-                await _userManager.CreateAsync(consultant, defaultPassword);
+                var result = await _userManager.CreateAsync(consultant, defaultPassword);
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(consultant, RoleEnum.Consultant.ToString());
+                }
             }
 
             // Create 5 Guardians with their Dependents
@@ -163,7 +175,11 @@ namespace WebAPI.Extensions
                     EmailConfirmed = true,
                     PhoneNumber = $"01234567{i}3"
                 };
-                await _userManager.CreateAsync(guardian, defaultPassword);
+                var guardianResult = await _userManager.CreateAsync(guardian, defaultPassword);
+                if (guardianResult.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(guardian, RoleEnum.Guardian.ToString());
+                }
 
                 // Create Dependent for each Guardian
                 var dependent = new DependentUser
@@ -176,7 +192,11 @@ namespace WebAPI.Extensions
                     PhoneNumber = $"01234567{i}4",
                     Guardian = guardian
                 };
-                await _userManager.CreateAsync(dependent, defaultPassword);
+                var dependentResult = await _userManager.CreateAsync(dependent, defaultPassword);
+                if (dependentResult.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(dependent, RoleEnum.DependentUser.ToString());
+                }
             }
 
             // Create 5 Customers
@@ -200,7 +220,11 @@ namespace WebAPI.Extensions
                         TotalRefunded = 0
                     }
                 };
-                await _userManager.CreateAsync(customer, defaultPassword);
+                var result = await _userManager.CreateAsync(customer, defaultPassword);
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(customer, RoleEnum.Customer.ToString());
+                }
             }
 
             await dbContext.SaveChangesAsync();
