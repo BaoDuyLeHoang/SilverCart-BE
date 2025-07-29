@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructures.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250729163922_FixCustomer")]
+    [Migration("20250729165720_FixCustomer")]
     partial class FixCustomer
     {
         /// <inheritdoc />
@@ -590,7 +590,7 @@ namespace Infrastructures.Migrations
                             Description = "Người phụ thuộc là người phụ thuộc cho người giám hộ và có quyền phụ thuộc cho người giám hộ.",
                             IsDeleted = false,
                             IsHardDelete = false,
-                            Name = "DependentUser",
+                            Name = "Guardian",
                             NormalizedName = "DEPENDENTUSER"
                         },
                         new

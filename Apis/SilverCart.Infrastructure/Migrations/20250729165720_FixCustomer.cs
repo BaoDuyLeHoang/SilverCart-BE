@@ -25,6 +25,13 @@ namespace Infrastructures.Migrations
                 columns: new[] { "Name", "NormalizedName" },
                 values: new object[] { "Staff", "STAFF" });
 
+            migrationBuilder.UpdateData(
+                table: "AspNetRoles",
+                keyColumn: "Id",
+                keyValue: new Guid("c66a403b-e1f9-47f3-9f6b-d8c3913b7a1b"),
+                column: "Name",
+                value: "Guardian");
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "CreatedById", "CreationDate", "DeleteById", "DeletionDate", "Description", "IsDeleted", "IsHardDelete", "ModificationById", "ModificationDate", "Name", "NormalizedName" },
@@ -62,6 +69,13 @@ namespace Infrastructures.Migrations
                 keyValue: new Guid("a2a02247-2a41-4a38-8804-4be8038fa78b"),
                 columns: new[] { "Name", "NormalizedName" },
                 values: new object[] { "StoreSupport", "STORESUPPORT" });
+
+            migrationBuilder.UpdateData(
+                table: "AspNetRoles",
+                keyColumn: "Id",
+                keyValue: new Guid("c66a403b-e1f9-47f3-9f6b-d8c3913b7a1b"),
+                column: "Name",
+                value: "DependentUser");
         }
     }
 }

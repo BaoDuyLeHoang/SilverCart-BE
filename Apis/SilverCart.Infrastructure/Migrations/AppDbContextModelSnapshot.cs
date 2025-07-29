@@ -587,7 +587,7 @@ namespace Infrastructures.Migrations
                             Description = "Người phụ thuộc là người phụ thuộc cho người giám hộ và có quyền phụ thuộc cho người giám hộ.",
                             IsDeleted = false,
                             IsHardDelete = false,
-                            Name = "DependentUser",
+                            Name = "Guardian",
                             NormalizedName = "DEPENDENTUSER"
                         },
                         new

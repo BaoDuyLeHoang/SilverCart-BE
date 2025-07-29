@@ -56,7 +56,7 @@ public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTy
             new AdministratorRole
             {
                 Id = Guid.Parse("0e61cc83-d3c4-43b1-9334-8dd0c9d22833"),
-                Name = "Admin",
+                Name = RoleEnum.Admin.ToString(),
                 NormalizedName = "ADMIN",
                 Description = "Quản trị viên là người quản lý cửa hàng và có quyền quản lý cửa hàng."
             }
@@ -71,14 +71,14 @@ public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTy
             new CustomerRole
             {
                 Id = Guid.Parse("0c09b112-baf9-4ec3-bc79-cce452219d60"),
-                Name = "Guardian",
+                Name = RoleEnum.Guardian.ToString(),
                 NormalizedName = "GUARDIAN",
                 Description = "Người giám hộ là người giám hộ cho người phụ thuộc và có quyền giám hộ cho người phụ thuộc."
             },
             new CustomerRole
             {
                 Id = Guid.Parse("c66a403b-e1f9-47f3-9f6b-d8c3913b7a1b"),
-                Name = "DependentUser",
+                Name = RoleEnum.DependentUser.ToString(),
                 NormalizedName = "DEPENDENTUSER",
                 Description = "Người phụ thuộc là người phụ thuộc cho người giám hộ và có quyền phụ thuộc cho người giám hộ."
             }
@@ -87,7 +87,7 @@ public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTy
             {
                 Id = Guid.Parse("c66a403b-e1f9-47f3-9f6b-d8c3913b7a1c"),
                 Name = RoleEnum.Customer.ToString(),
-                NormalizedName = RoleEnum.Customer.ToString().ToUpper(),
+                NormalizedName = "CUSTOMER",
                 Description = "Người khách là người khách và có quyền khách."
             }
         );

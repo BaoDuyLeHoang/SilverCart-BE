@@ -8,11 +8,13 @@ if "%~1"=="/force" (
 ) else (
     echo ⚠️ Dropping database (use /force to skip confirmation)
 )
+
 if("%~2" == "y") (
     set env=Release
 ) else (
     set env=Debug
 )
+
 if %isForce%==true (
     dotnet ef database drop --project ./Apis/SilverCart.Infrastructure --startup-project ./Apis/SilverCart.WebAPI --force --yes -c %env%
 ) else (
