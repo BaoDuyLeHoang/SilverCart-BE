@@ -62,13 +62,13 @@ public class RegisterUserHandler(IUnitOfWork unitOfWork, UserManager<BaseUser> u
             };
         }
 
-        var address = new Address
+        var address = new SavedAddress
         {
             StreetAddress = request.Address.StreetAddress,
             WardCode = request.Address.WardCode ?? "",
             DistrictId = request.Address.DistrictId,
-            ToDistrictName = request.Address.ToDistrictName ?? "",
-            ToProvinceName = request.Address.ToProvinceName ?? ""
+            DistrictName = request.Address.ToDistrictName ?? "",
+            ProvinceName = request.Address.ToProvinceName ?? ""
         };
         user.Addresses.Add(address);
 

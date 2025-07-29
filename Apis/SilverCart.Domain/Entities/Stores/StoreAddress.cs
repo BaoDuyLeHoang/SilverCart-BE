@@ -4,13 +4,15 @@ namespace SilverCart.Domain.Entities.Stores
 {
     public class StoreAddress : BaseEntity
     {
-        public string Address { get; set; } = string.Empty;
-        public string WardCode { get; set; } = string.Empty;
+        public required string StreetAddress { get; set; } // 123 Lê quí đôn 
         public int DistrictId { get; set; }
-        public string WardName { get; set; } = string.Empty;
-        public string DistrictName { get; set; } = string.Empty;
-        public string ProvinceName { get; set; } = string.Empty;
-        [NotMapped]
-        public string FullAddress => $"{Address}, {WardName}, {DistrictName}, {ProvinceName}";
+        public string DistrictName { get; set; } // Quận 1
+        public int ProvinceId { get; set; }
+        public string ProvinceName { get; set; } // Thành phố Hồ Chí Minh
+        public string WardCode { get; set; } // 123456
+        public string WardName { get; set; } // Phường 1
+        public Guid StoreId { get; set; }
+        public virtual Store Store { get; set; } = null!;
+        public string FullAddress => $"{StreetAddress}, {WardName}, {DistrictName}, {ProvinceName}";
     }
 }

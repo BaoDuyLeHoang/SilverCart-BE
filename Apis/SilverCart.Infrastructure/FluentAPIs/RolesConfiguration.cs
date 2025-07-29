@@ -34,7 +34,7 @@ public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTy
     public void Configure(EntityTypeBuilder<AdministratorRole> builder)
     {
         builder.ToTable("AdministratorRoles");
-        List<string> roles = ["SuperAdmin", "Admin", "Staff", "Moderator", "CustomerSupport", "Consultant"];
+
         builder.HasData(
             new AdministratorRole
             {
@@ -65,13 +65,6 @@ public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTy
                 NormalizedName = "GUARDIAN",
                 Description = "Người giám hộ là người giám hộ cho người phụ thuộc và có quyền giám hộ cho người phụ thuộc."
             },
-            // new CustomerRole
-            // {
-            //     Id = Guid.Parse("2c8499d3-6ec2-4745-b2f7-6e33182f6f6f"),
-            //     Name = "Customer",
-            //     NormalizedName = "Khách hàng",
-            //     Description = "Khách hàng là người mua hàng và có quyền mua hàng."
-            // },
             new CustomerRole
             {
                 Id = Guid.Parse("c66a403b-e1f9-47f3-9f6b-d8c3913b7a1b"),
@@ -92,6 +85,5 @@ public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTy
     public void Configure(EntityTypeBuilder<ConsultantRole> builder)
     {
         builder.ToTable("ConsultantRoles");
-
     }
 }

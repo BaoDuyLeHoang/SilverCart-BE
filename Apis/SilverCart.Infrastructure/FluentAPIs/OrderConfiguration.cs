@@ -20,6 +20,9 @@ namespace Infrastructures.FluentAPIs
             builder.HasOne(o => o.Guardian);
             builder.HasOne(o => o.UserPromotion);
             builder.HasOne(o => o.DependentUser);
+            builder.HasOne(o => o.ConfirmUser);
+            builder.HasOne(o => o.OrderedUser);
+            builder.HasOne(o => o.RecieveUser);
         }
 
         public void Configure(EntityTypeBuilder<OrderStatus> builder)

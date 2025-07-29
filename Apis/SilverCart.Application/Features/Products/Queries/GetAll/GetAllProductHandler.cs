@@ -13,8 +13,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Infrastructures.Features.Products.Queries.GetAll;
-
-public sealed record GetAllProductsCommand(PagingRequest? PagingRequest, Guid? Id, string? ProductName, string? Description, ProductTypeEnum? ProductType) : IRequest<PagedResult<GetAllProductsResponse>>;
+//Keyword sẽ search theo tên sản phẩm, mô tả sản phẩm, tên danh mục, tên phân loại, cả product item
+public sealed record GetAllProductsCommand(PagingRequest? PagingRequest, Guid? Id, string? Keyword, ProductTypeEnum? ProductType) : IRequest<PagedResult<GetAllProductsResponse>>;
 public record GetAllProductsResponse(Guid Id, string ProductName, string? Description, string? VideoPath, string ProductType, DateTime? CreationDate, List<GetProductCategoriesResponse> ProductCategories, List<GetProductVariantsResponse> Variants);
 public record GetProductCategoriesResponse(Guid Id, string CategoryName);
 public record GetProductVariantsResponse(Guid Id, string VariantName, bool IsActive, List<GetProductItemsResponse> ProductItems);
@@ -36,17 +36,12 @@ public class GetAllProductHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetA
                 .Include(x => x.ProductImages)
         );
 
-        var filteredEntity = new Product
+        if (!string.IsNullOrEmpty(request.Keyword))
         {
-            Id = request.Id ?? Guid.Empty,
-            Name = request.ProductName ?? string.Empty,
-            Description = request.Description ?? string.Empty,
-            ProductType = request.ProductType ?? ProductTypeEnum.All
-        };
+            products = products.Where(p => p.Name.Contains(request.Keyword) || p.Description.Contains(request.Keyword) || p.ProductCategories.Any(c => c.Category.Name.Contains(request.Keyword)) || p.Variants.Any(v => v.VariantName.Contains(request.Keyword)) || p.Variants.Any(v => v.ProductItems.Any(i => i.SKU.Contains(request.Keyword))));
+        }
 
-        var filteredProducts = products.AsQueryable().CustomFilterV1(filteredEntity);
-
-        var mappedProducts = filteredProducts
+        var mappedProducts = products
             .Select(product => new GetAllProductsResponse(
                 product.Id,
                 product.Name,

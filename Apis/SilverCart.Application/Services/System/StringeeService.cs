@@ -49,5 +49,23 @@ namespace Infrastructures.Services.System
             // Or return the accessToken from registration response
             return Task.FromResult("GENERATED_ACCESS_TOKEN"); // replace with real implementation
         }
+
+        public async Task<string> SendSmsAsync(string phoneNumber, string message)
+        {
+            var client = new RestClient("https://api.stringee.com/v1/sms");
+            var restRequest = new RestRequest()
+                .AddHeader("X-STRINGEE-AUTH", _apiKeySecret)
+                .AddJsonBody(new
+                {
+                    phoneNumber = phoneNumber,
+                    message = message
+                });
+
+            var response = await client.PostAsync(restRequest);
+            if (!response.IsSuccessful)
+                throw new Exception("Failed to send SMS with Stringee.");
+
+            return response.Content;
+        }
     }
 }

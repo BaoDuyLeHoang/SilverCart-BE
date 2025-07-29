@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,7 +33,7 @@ public class AppExceptions : Exception
         StatusCode = 400;
     }
 
-    public AppExceptions(string message, int statusCode) : base(message)
+    public AppExceptions(string message, int statusCode = 400) : base(message)
     {
         Errors = new List<string> { message };
         FieldErrors = new List<FieldError>();
@@ -80,8 +81,7 @@ public class AppExceptions : Exception
         FieldErrors = fieldErrors ?? new List<FieldError>();
         StatusCode = 400;
     }
-
-    public static void ThrowIfNotFound(object value, string message)
+    public static void ThrowIfNotFound([NotNull] object? value, string message)
     {
         if (value == null)
             throw new AppExceptions(message, 404);

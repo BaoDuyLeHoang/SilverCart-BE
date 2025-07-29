@@ -33,7 +33,7 @@ namespace SilverCart.Application.Features.Orders.Queries.GetShopOrderItems
             {
                 RuleFor(x => x.OrderStatus)
                     .IsInEnum().WithMessage("Trạng thái đơn hàng không hợp lệ")
-                    .NotEqual(OrderStatusEnum.All).WithMessage("Trạng thái đơn hàng không thể là 'All'");
+                    .NotEqual(Domain.Enums.OrderStatusEnum.All).WithMessage("Trạng thái đơn hàng không thể là 'All'");
             });
         }
     }

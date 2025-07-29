@@ -8,5 +8,5 @@ public class CustomerAddress : BaseEntity
     public Guid CustomerId { get; set; }
     public CustomerUser Customer { get; set; } = null!;
     public Guid AddressId { get; set; }
-    public Address Address { get; set; } = null!;
+    public SavedAddress SavedAddress { get; set; } = null!;
 }

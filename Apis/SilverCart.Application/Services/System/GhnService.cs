@@ -1,140 +1,258 @@
-﻿using Infrastructures.Commons.Exceptions;
-using Infrastructures.Features.Stores.Commands.Create.CreateStore;
-using Infrastructures.Interfaces.System;
+﻿using System.Text;
+using Newtonsoft.Json.Linq;
 using Microsoft.Extensions.Configuration;
-using SilverCart.Domain.Enums;
-using System;
-using System.Net.Http;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Infrastructures.Features.Stores.Commands.Create.CreateStore;
+using SilverCart.Infrastructure.Commons;
 
-namespace Infrastructures.Services.System;
+namespace SilverCart.Application.Services.System;
+
+
 public class GhnService : IGhnService
 {
     private readonly HttpClient _httpClient;
-    private readonly IConfiguration _configuration;
+    private readonly string _token;
+    private readonly int _shopId;
+    private readonly string _baseUrl;
+    private JsonSerializer _serializer;
 
-    public GhnService(HttpClient httpClient, IConfiguration configuration)
+
+    public GhnService(AppConfiguration configuration)
     {
-        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-    }
+        _token = configuration.Ghn?.TokenAPI ?? throw new ArgumentNullException("GHN Token is missing");
+        _shopId = configuration.Ghn?.ShopId ?? throw new ArgumentNullException("GHN ShopId is missing");
+        _baseUrl = configuration.Ghn?.BaseUrl ?? throw new ArgumentNullException("GHN BaseUrl is missing");
 
-    public async Task<string> CreateOrderShippingAsync(CreateOrderShippingGhnRequest command)
-    {
-        if (command == null) throw new ArgumentNullException(nameof(command));
-
-        var requestUrl = "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create";
-        var token = _configuration["Ghn:TokenAPI"];
-
-        if (string.IsNullOrEmpty(token))
-            throw new AppExceptions("GHN Token is not configured.");
-
-        var requestData = new
+        _httpClient = new HttpClient
         {
-            to_name = command.ToName,
-            from_name = command.FromName,
-            from_phone = command.FromPhone,
-            from_address = command.FromAddress,
-            from_ward_name = command.FromWardName,
-            from_district_name = command.FromDistrictName,
-            from_provice_name = command.FromProvinceName,
-            to_phone = command.ToPhone,
-            to_address = command.ToAddress,
-            to_ward_code = command.ToWardCode,
-            to_district_id = command.ToDistrictId,
-            return_phone = command.ReturnPhone,
-            return_address = command.ReturnAddress,
-            return_district_id = command.ReturnDistrictId,
-            return_ward_code = command.ReturnWardCode,
-            client_order_code = command.ClientOrderCode,
-            cod_amount = command.CodAmount,
-            content = command.Content,
-            weight = command.Weight,
-            length = command.Length,
-            width = command.Width,
-            height = command.Height,
-            service_type_id = command.ServiceTypeId,
-            payment_type_id = command.PaymentTypeId,
-            required_note = command.RequireNote,
-            Items = command.OrderItems
+            BaseAddress = new Uri(_baseUrl)
         };
-
-        var json = JsonSerializer.Serialize(requestData, new JsonSerializerOptions
+        _httpClient.DefaultRequestHeaders.Add("Token", _token);
+        _serializer = JsonSerializer.Create(new JsonSerializerSettings
         {
-            WriteIndented = true
+            ContractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new SnakeCaseNamingStrategy()
+            }
         });
-        Console.WriteLine("📦 GHN Request JSON:");
-        Console.WriteLine(json);
-
-
-        using var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        using var request = new HttpRequestMessage(HttpMethod.Post, requestUrl);
-        request.Content = content;
-        request.Headers.Add("Token", token);
-        request.Headers.Add("ShopId", command.ShopId.ToString());
-
-        using var response = await _httpClient.SendAsync(request);
-        var responseContent = await response.Content.ReadAsStringAsync();
-
-        if (!response.IsSuccessStatusCode)
-            throw new Exception($"GHN API Error: {response.StatusCode}, {responseContent}");
-
-        using var doc = JsonDocument.Parse(responseContent);
-        var root = doc.RootElement;
-
-        if (root.TryGetProperty("data", out var data) && data.TryGetProperty("order_code", out var orderCode))
-        {
-            return orderCode.GetString() ?? throw new Exception("Order code is null");
-        }
-
-        throw new Exception("Invalid response from GHN: order_code not found.");
     }
 
-
-    public async Task<int> RegisterStoreAsync(CreateStoreGhnRequest vm)
+    public async Task<ShippingFeeResponse> CalculateShippingFee(CalculateShippingFeeRequest request)
     {
-        if (vm == null) throw new ArgumentNullException(nameof(vm));
-
-        var requestUrl = "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shop/register";
-        var token = _configuration["Ghn:TokenAPI"];
-
-        if (string.IsNullOrEmpty(token))
-            throw new InvalidOperationException("GHN Token is not configured.");
-
-        var requestData = new
+        try
         {
-            name = vm.ShopName,
-            phone = vm.ShopPhone,
-            address = vm.ShopAddress,
-            ward_code = vm.WardCode,
-            district_id = vm.DistrictId
-        };
-
-        var json = JsonSerializer.Serialize(requestData);
-        using var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        using var request = new HttpRequestMessage(HttpMethod.Post, requestUrl);
-        request.Content = content;
-        request.Headers.Add("Token", token);
-
-        using var response = await _httpClient.SendAsync(request);
-
-        var responseContent = await response.Content.ReadAsStringAsync();
-
-        if (!response.IsSuccessStatusCode)
-            throw new Exception($"GHN API Error: {response.StatusCode}, {responseContent}");
-
-        using var doc = JsonDocument.Parse(responseContent);
-        var root = doc.RootElement;
-
-        if (root.TryGetProperty("data", out var data) && data.TryGetProperty("shop_id", out var shopId))
+            // Add ShopId header for fee calculation
+            _httpClient.DefaultRequestHeaders.Remove("ShopId");
+            _httpClient.DefaultRequestHeaders.Add("ShopId", _shopId.ToString());
+            // Convert request to match GHN API format
+            var ghnRequest = JObject.FromObject(request, _serializer);
+            var result = await PostAsync("/shiip/public-api/v2/shipping-order/fee", ghnRequest);
+            return result.ToObject<ShippingFeeResponse>(_serializer);
+        }
+        catch (Exception ex)
         {
-            return shopId.GetInt32();
+            throw new Exception($"Thất Bại tính phí vận chuyển: {ex.Message}");
+        }
+    }
+
+    public async Task<CreateOrderResponse> CreateShippingOrder(GhnCreateOrderRequest request)
+    {
+        try
+        {
+            // Add ShopId header for create order request
+            _httpClient.DefaultRequestHeaders.Remove("ShopId");
+            _httpClient.DefaultRequestHeaders.Add("ShopId", _shopId.ToString());
+
+            // Convert request to match GHN API format
+            var ghnRequest = JObject.FromObject(request, _serializer);
+
+            var result = await PostAsync("/shiip/public-api/v2/shipping-order/create", ghnRequest);
+            return result.ToObject<CreateOrderResponse>(_serializer);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Thất Bại tạo đơn hàng: {ex.Message}");
+        }
+    }
+
+    public async Task<JToken> GetProvinces()
+    {
+        try
+        {
+            var response = await GetAsync("/shiip/public-api/master-data/province");
+
+            if (response == null)
+                return new JArray();
+            return response as JArray;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Thất Bại lấy tỉnh thành: {ex.Message}");
+        }
+    }
+
+    public async Task<JToken> GetDistricts(int provinceId)
+    {
+        try
+        {
+            var response = await GetAsync($"/shiip/public-api/master-data/district?province_id={provinceId}");
+
+            // Ensure we have a valid response
+            if (response == null)
+                return new JArray();
+
+            // If response is already a JArray, return it
+            if (response is JArray array)
+                return array;
+
+            // If response is a JObject with a "districts" property that's an array
+            if (response is JObject obj && obj["districts"] is JArray districts)
+                return districts;
+
+            // If we can't find a valid array structure, return empty array
+            return new JArray();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Thất Bại lấy quận huyện: {ex.Message}");
+        }
+    }
+
+    public async Task<JToken> GetWards(int districtId)
+    {
+        try
+        {
+            var response = await GetAsync($"/shiip/public-api/master-data/ward?district_id={districtId}");
+
+            // Ensure we have a valid response
+            if (response == null)
+                return new JArray();
+
+            // If response is already a JArray, return it
+            if (response is JArray array)
+                return array;
+
+            // If response is a JObject with a "wards" property that's an array
+            if (response is JObject obj && obj["wards"] is JArray wards)
+                return wards;
+
+            // If we can't find a valid array structure, return empty array
+            return new JArray();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Thất Bại lấy phường xã: {ex.Message}");
+        }
+    }
+
+    public async Task<JToken> GetServices(int fromDistrictId, int toDistrictId)
+    {
+        try
+        {
+            var request = JObject.FromObject(new
+            {
+                shop_id = _shopId,
+                from_district = fromDistrictId,
+                to_district = toDistrictId
+            }, _serializer);
+
+            // Only Token header is needed for this API
+            _httpClient.DefaultRequestHeaders.Remove("ShopId");
+
+            var response = await PostAsync("/shiip/public-api/v2/shipping-order/available-services", request);
+
+            // Ensure we have a valid response
+            if (response == null)
+                return new JArray();
+
+            // If response is already a JArray, return it
+            if (response is JArray array)
+                return array;
+
+            // If response is a JObject with a "services" property that's an array
+            if (response is JObject obj && obj["services"] is JArray services)
+                return services;
+
+            // If we can't find a valid array structure, return empty array
+            return new JArray();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Thất Bại lấy dịch vụ vận chuyển: {ex.Message}");
+        }
+    }
+
+    public async Task<JToken> CancelOrder(string orderCode)
+    {
+        try
+        {
+            return await PostAsync("/shiip/public-api/v2/switch-status/cancel", new JObject
+            {
+                ["order_codes"] = new JArray { orderCode }
+            });
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Thất Bại hủy đơn hàng: {ex.Message}");
+        }
+    }
+
+    public async Task<JToken> GetOrderInfo(string orderCode)
+    {
+        try
+        {
+            return await PostAsync("/shiip/public-api/v2/shipping-order/detail", new JObject
+            {
+                ["order_code"] = orderCode
+            });
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Thất Bại lấy thông tin đơn hàng: {ex.Message}");
+        }
+    }
+
+    public async Task<int?> RegisterStoreAsync(CreateStoreGhnRequest createStoreGhnRequest)
+    {
+        try
+        {
+            var result = await PostAsync("/shiip/public-api/v2/shop/register", JObject.FromObject(createStoreGhnRequest, _serializer));
+            return result["shop_id"]?.Value<int>();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Thất Bại đăng ký cửa hàng: {ex.Message}");
+        }
+    }
+
+    private async Task<JToken> GetAsync(string endpoint)
+    {
+        var response = await _httpClient.GetAsync(endpoint);
+        var content = await response.Content.ReadAsStringAsync();
+        var json = JObject.Parse(content);
+
+        if (json["code"]?.Value<int>() != 200)
+        {
+            throw new Exception(json["message"]?.Value<string>() ?? "Unknown error");
         }
 
-        throw new Exception("Invalid response from GHN: shop_id not found.");
+        return json["data"] ?? new JObject();
+    }
+
+    private async Task<JToken> PostAsync(string endpoint, JObject data)
+    {
+        var response = await _httpClient.PostAsync(endpoint,
+            new StringContent(data.ToString(), Encoding.UTF8, "application/json"));
+        var content = await response.Content.ReadAsStringAsync();
+        var json = JObject.Parse(content);
+
+        if (json["code"]?.Value<int>() != 200)
+        {
+            throw new Exception(json["message"]?.Value<string>() ?? "Unknown error");
+        }
+
+        return json["data"] ?? new JObject();
     }
 }
+

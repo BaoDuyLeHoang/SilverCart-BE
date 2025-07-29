@@ -9,7 +9,7 @@ using SilverCart.Domain.Enums;
 
 namespace Infrastructures.Features.Orders.Queries.GetShopOrderItems
 {
-    public sealed record GetShopOrderItemsCommand(Guid StoreId, Guid? OrderId, PagingRequest? PagingRequest, DateOnly? FromDate, DateOnly? ToDate, OrderStatusEnum? OrderStatus) : IRequest<PagedResult<GetShopOrderResponse>>;
+    public sealed record GetShopOrderItemsCommand(Guid StoreId, Guid? OrderId, PagingRequest? PagingRequest, DateOnly? FromDate, DateOnly? ToDate, SilverCart.Domain.Enums.OrderStatusEnum? OrderStatus) : IRequest<PagedResult<GetShopOrderResponse>>;
     public record GetShopOrderResponse(Guid Id, Guid OrderId, DateTime CreationDate, string OrderStatus, List<GetShopOrderDetailsResponse> OrderDetails);
     public record GetShopOrderDetailsResponse(Guid Id, Guid ProductItemId, int Quantity, double Price, string OrderItemStatus, GetShopProductItemResponse ProductItem);
     public record GetShopProductItemResponse(Guid Id, string SKU, double OriginalPrice, double DiscountedPrice, int Stock, bool IsActive, List<GetProductItemsImagesResponse> ProductImages);

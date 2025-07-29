@@ -89,7 +89,6 @@ public class ForgotPasswordHandler : IRequestHandler<ForgotPasswordCommand, stri
         await _unitOfWork.SaveChangeAsync();
 
         // Send SMS with OTP
-
         await _smsService.SendSMS(user.PhoneNumber, otp);
         return user;
     }

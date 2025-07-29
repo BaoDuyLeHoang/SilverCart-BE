@@ -18,6 +18,7 @@ public sealed class CustomerUser : BaseUser
     public ICollection<CustomerPaymentMethod> CustomerPaymentMethods { get; set; } = new List<CustomerPaymentMethod>();
     public Wallet? Wallet { get; set; }
     public ICollection<PaymentHistory> PaymentHistories { get; set; } = new List<PaymentHistory>();
+    public ICollection<CustomerAddress> CustomerAddresses { get; set; } = new List<CustomerAddress>();
 }
 
 public class Wallet : BaseEntity

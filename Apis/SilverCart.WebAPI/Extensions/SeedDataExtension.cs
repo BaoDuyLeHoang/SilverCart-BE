@@ -13,6 +13,7 @@ using SilverCart.Domain.Entities.Categories;
 using SilverCart.Domain.Entities.Orders;
 using SilverCart.Domain.Enums;
 using SilverCart.Infrastructure.Commons;
+using Infrastructures.Commons.Exceptions;
 
 namespace WebAPI.Extensions
 {
@@ -58,6 +59,7 @@ namespace WebAPI.Extensions
 
             var _userManager = services.GetRequiredService<UserManager<BaseUser>>();
             await AddSuperAdmin(configuration, _userManager);
+            await AddUsers(_userManager, dbContext);
             await AddStoreAndProducts(dbContext);
             await AddOrders(dbContext);
         }
@@ -85,6 +87,125 @@ namespace WebAPI.Extensions
             }
         }
 
+        private static async Task AddUsers(UserManager<BaseUser> _userManager, AppDbContext dbContext)
+        {
+            const string defaultPassword = "12345678";
+
+            // Check if users already exist
+            if (await _userManager.Users.AnyAsync(u => u.Email != null && u.Email.Contains("test")))
+            {
+                return; // Skip if test users already exist
+            }
+
+            var store = await dbContext.Stores.FirstOrDefaultAsync();
+
+            // Create 5 Administrators
+            for (int i = 1; i <= 5; i++)
+            {
+                var admin = new AdministratorUser
+                {
+                    UserName = $"testadmin{i}@example.com",
+                    Email = $"testadmin{i}@example.com",
+                    FullName = $"Test Admin {i}",
+                    Gender = "Other",
+                    EmailConfirmed = true,
+                    PhoneNumber = $"01234567{i}0",
+                    Role = new AdministratorRole { Name = $"Admin {i}" }
+                };
+                await _userManager.CreateAsync(admin, defaultPassword);
+            }
+
+            // Create 5 Store Users
+            for (int i = 1; i <= 5; i++)
+            {
+                var storeUser = new StoreUser
+                {
+                    UserName = $"teststore{i}@example.com",
+                    Email = $"teststore{i}@example.com",
+                    FullName = $"Test Store User {i}",
+                    Gender = "Other",
+                    EmailConfirmed = true,
+                    PhoneNumber = $"01234567{i}1",
+                    Store = store
+                };
+                await _userManager.CreateAsync(storeUser, defaultPassword);
+            }
+
+            // Create 5 Consultants
+            for (int i = 1; i <= 5; i++)
+            {
+                var consultant = new ConsultantUser
+                {
+                    UserName = $"testconsultant{i}@example.com",
+                    Email = $"testconsultant{i}@example.com",
+                    FullName = $"Test Consultant {i}",
+                    Gender = "Other",
+                    EmailConfirmed = true,
+                    PhoneNumber = $"01234567{i}2",
+                    Specialization = "Sức khỏe người cao tuổi",
+                    Biography = $"Chuyên gia tư vấn sức khỏe cho người cao tuổi {i}",
+                    AvatarPath = "/images/avatars/default.jpg",
+                    ExpertiseArea = "Chăm sóc sức khỏe",
+                    Role = new ConsultantRole { RoleName = $"Health Consultant {i}" }
+                };
+                await _userManager.CreateAsync(consultant, defaultPassword);
+            }
+
+            // Create 5 Guardians with their Dependents
+            for (int i = 1; i <= 5; i++)
+            {
+                var guardian = new GuardianUser
+                {
+                    UserName = $"testguardian{i}@example.com",
+                    Email = $"testguardian{i}@example.com",
+                    FullName = $"Test Guardian {i}",
+                    Gender = "Other",
+                    EmailConfirmed = true,
+                    PhoneNumber = $"01234567{i}3"
+                };
+                await _userManager.CreateAsync(guardian, defaultPassword);
+
+                // Create Dependent for each Guardian
+                var dependent = new DependentUser
+                {
+                    UserName = $"testdependent{i}@example.com",
+                    Email = $"testdependent{i}@example.com",
+                    FullName = $"Test Dependent {i}",
+                    Gender = "Other",
+                    EmailConfirmed = true,
+                    PhoneNumber = $"01234567{i}4",
+                    Guardian = guardian
+                };
+                await _userManager.CreateAsync(dependent, defaultPassword);
+            }
+
+            // Create 5 Customers
+            for (int i = 1; i <= 5; i++)
+            {
+                var customer = new CustomerUser
+                {
+                    UserName = $"testcustomer{i}@example.com",
+                    Email = $"testcustomer{i}@example.com",
+                    FullName = $"Test Customer {i}",
+                    Gender = "Other",
+                    EmailConfirmed = true,
+                    PhoneNumber = $"01234567{i}5",
+                    Rank = new CustomerRank { Rank = RankEnum.Bronze },
+                    Wallet = new Wallet
+                    {
+                        Balance = 0,
+                        Points = 0,
+                        TotalSpent = 0,
+                        TotalReceived = 0,
+                        TotalRefunded = 0
+                    }
+                };
+                await _userManager.CreateAsync(customer, defaultPassword);
+            }
+
+            await dbContext.SaveChangesAsync();
+        }
+
         private static async Task AddStoreAndProducts(AppDbContext dbContext)
         {
             if (await dbContext.Products.AnyAsync())
@@ -97,7 +218,7 @@ namespace WebAPI.Extensions
             {
                 // Create store faker
                 var store = await dbContext.Stores.FirstOrDefaultAsync();
-
+                AppExceptions.ThrowIfNotFound(store, "Store not found");
                 // Create categories
                 var categories = _productCategories.Select(name => new Category
                 {
@@ -484,7 +605,8 @@ namespace WebAPI.Extensions
                         CustomerUserId = customer.Id,
                         CustomerUser = customer,
                         OrderStatus = OrderStatusEnum.Completed,
-                        Address = "123 Đường Lê Lợi, Phường Bến Nghé, Quận 1, TP.HCM",
+                        FromAddress = "123 Đường Lê Lợi, Phường Bến Nghé, Quận 1, TP.HCM",
+                        ToAddress = "123 Đường Lê Văn Việt, Phường 1, Quận 1, TP.HCM",
                         OrderNote = "Đơn hàng thật",
                         EarnedPoints = 100,
                         UsedPoints = 0,
@@ -568,7 +690,8 @@ namespace WebAPI.Extensions
                         CustomerUserId = customer.Id,
                         CustomerUser = customer,
                         OrderStatus = orderStatus,
-                        Address = $"{Random.Shared.Next(1, 999)} Đường {new Faker().Address.StreetName()}, {new Faker().Address.City()}",
+                        FromAddress = $"{Random.Shared.Next(1, 999)} Đường {new Faker().Address.StreetName()}, {new Faker().Address.City()}",
+                        ToAddress = $"{Random.Shared.Next(1, 999)} Đường {new Faker().Address.StreetName()}, {new Faker().Address.City()}",
                         OrderNote = new Faker("vi").Lorem.Sentence(),
                         EarnedPoints = Random.Shared.Next(10, 200),
                         UsedPoints = Random.Shared.Next(0, 100),
