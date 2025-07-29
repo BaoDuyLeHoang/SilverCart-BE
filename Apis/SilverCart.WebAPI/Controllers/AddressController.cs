@@ -1,45 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Infrastructures;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Swashbuckle.AspNetCore.Annotations;
 using SilverCart.Application.Features.Address.Queries.GetProvinces;
 using SilverCart.Application.Features.Address.Queries.GetDistricts;
 using SilverCart.Application.Features.Address.Queries.GetWards;
-using WebAPI.Controllers;
+using Newtonsoft.Json.Linq;
 
-namespace SilverCart.WebAPI.Controllers;
-
-[ApiController]
-[Route("api/[controller]")]
-public class AddressController : BaseController
+namespace WebAPI.Controllers
 {
-    private readonly IMediator _mediator;
-
-    public AddressController(IMediator mediator)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AddressController : BaseController
     {
-        _mediator = mediator;
-    }
+        private readonly IMediator _mediator;
 
-    // get Province , District , Ward
-    [HttpGet("provinces")]
-    public async Task<IActionResult> GetProvinces()
-    {
-        var result = await _mediator.Send(new GetProvincesQuery());
-        return Ok(result);
-    }
+        public AddressController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
 
-    // get Districts by ProvinceId
-    [HttpGet("districts/{provinceId}")]
-    public async Task<IActionResult> GetDistrictsByProvinceId([FromRoute] int provinceId)
-    {
-        var result = await _mediator.Send(new GetDistrictsByProvinceIdQuery(provinceId));
-        return Ok(result);
-    }
+        [HttpGet("provinces")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Lấy danh sách tỉnh/thành phố thành công", typeof(JObject))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Dữ liệu không hợp lệ")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Lỗi hệ thống")]
+        public async Task<IActionResult> GetProvinces()
+        {
+            var result = await _mediator.Send(new GetProvincesQuery());
+            return Ok(result);
+        }
 
-    // get Wards by DistrictId
-    [HttpGet("wards/{districtId}")]
-    public async Task<IActionResult> GetWardsByDistrictId([FromRoute] int districtId)
-    {
-        var result = await _mediator.Send(new GetWardsByDistrictIdQuery(districtId));
-        return Ok(result);
-    }
+        [HttpGet("districts/{provinceId}")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Lấy danh sách quận/huyện thành công", typeof(JObject))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Dữ liệu không hợp lệ")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Lỗi hệ thống")]
+        public async Task<IActionResult> GetDistrictsByProvinceId([FromRoute] int provinceId)
+        {
+            var result = await _mediator.Send(new GetDistrictsByProvinceIdQuery(provinceId));
+            return Ok(result);
+        }
 
+        [HttpGet("wards/{districtId}")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Lấy danh sách phường/xã thành công", typeof(JObject))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Dữ liệu không hợp lệ")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Lỗi hệ thống")]
+        public async Task<IActionResult> GetWardsByDistrictId([FromRoute] int districtId)
+        {
+            var result = await _mediator.Send(new GetWardsByDistrictIdQuery(districtId));
+            return Ok(result);
+        }
+    }
 }
