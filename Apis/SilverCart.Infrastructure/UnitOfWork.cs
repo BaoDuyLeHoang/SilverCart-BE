@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Infrastructures.Interfaces.Repositories;
 using Infrastructures.Interfaces.Entities;
 using Infrastructures.Interfaces.System;
+using SilverCart.Application.Interfaces.Repositories;
 
 namespace Infrastructures
 {

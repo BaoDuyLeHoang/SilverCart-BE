@@ -20,7 +20,7 @@ public class GhnWebhookController : ControllerBase
     }
 
     [HttpPost("callback/order-status")]
-    public async Task<IActionResult> HandleCallback([FromBody] GhnWebhookResponse webhook)
+    public async Task<ActionResult<bool>> HandleCallback([FromBody] GhnWebhookResponse webhook)
     {
         try
         {
@@ -55,13 +55,13 @@ public class GhnWebhookController : ControllerBase
             }
 
             // GHN yêu cầu trả về status code 200
-            return Ok();
+            return Ok(true);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error processing GHN webhook");
             // Vẫn trả về 200 để GHN không gửi lại webhook
-            return Ok();
+            return Ok(true);
         }
     }
 

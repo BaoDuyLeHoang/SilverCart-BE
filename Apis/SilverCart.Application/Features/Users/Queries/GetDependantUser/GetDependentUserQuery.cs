@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Infrastructures.Commons.Exceptions;
 using MediatR;
 
 namespace Infrastructures.Features.Users.Queries.GetDependantUser
 {
     public sealed record GetDependentUserQuery(Guid GuardianId) : IRequest<List<GetDependentUserResponse>>;
-    public record GetDependentUserResponse(Guid Id, string FullName, string Email, string Phone, DateTime CreationDate);
+    public sealed record GetDependentUserResponse(Guid Id, string FullName, string Email, string Phone, DateTime CreationDate);
     public class GetDependentUserQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetDependentUserQuery, List<GetDependentUserResponse>>
     {
         public async Task<List<GetDependentUserResponse>> Handle(GetDependentUserQuery request, CancellationToken cancellationToken)

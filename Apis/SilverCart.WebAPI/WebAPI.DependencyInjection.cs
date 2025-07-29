@@ -129,6 +129,7 @@ namespace WebAPI
                     Scheme = "bearer",
                 });
                 c.OperationFilter<AuthorizeOperationFilter>();
+                c.CustomSchemaIds((type) => type.FullName);
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
