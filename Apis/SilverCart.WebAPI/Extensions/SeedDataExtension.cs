@@ -804,15 +804,19 @@ namespace WebAPI.Extensions
         private static async Task AddRoleToUnknownUser(UserManager<BaseUser> _userManager)
         {
             var users = _userManager.Users.ToList();
-            if (users.Count > 0)
+            foreach (var user in users)
             {
-                foreach (var user in users)
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles.Count == 0)
                 {
-                    var roles = await _userManager.GetRolesAsync(user);
-                    if (roles.Count == 0)
+                    // Nếu security stamp bị null thì set một giá trị mới
+                    if (string.IsNullOrEmpty(user.SecurityStamp))
                     {
-                        await _userManager.AddToRoleAsync(user, RoleEnum.Customer.ToString());
+                        user.SecurityStamp = Guid.NewGuid().ToString();
+                        await _userManager.UpdateAsync(user); // Lưu thay đổi trước khi thêm role
                     }
+
+                    await _userManager.AddToRoleAsync(user, RoleEnum.Customer.ToString());
                 }
             }
         }
