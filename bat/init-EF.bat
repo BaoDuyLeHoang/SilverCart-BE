@@ -84,7 +84,7 @@ echo.
 
 REM Create backup of existing scripts
 if exist "add-migration.bat" (
-    echo 📦 Creating backup of existing scripts...
+    echo 📦 Creating backup of existing scripts
     if not exist "backup" mkdir backup
     move "add-migration.bat" "backup\add-migration.bat.backup" >nul 2>&1
     move "update-db.bat" "backup\update-db.bat.backup" >nul 2>&1
@@ -95,11 +95,11 @@ if exist "add-migration.bat" (
 )
 
 echo.
-echo 🔨 Generating enhanced EF Core scripts...
+echo 🔨 Generating enhanced EF Core scripts
 echo.
 
 REM ========== 1. add-migration.bat ==========
-echo Creating add-migration.bat...
+echo Creating add-migration.bat
 (
 echo @echo off
 echo setlocal enabledelayedexpansion
@@ -130,14 +130,14 @@ echo ^)
 ) > "add-migration.bat"
 
 REM ========== 2. update-db.bat ==========
-echo Creating update-db.bat...
+echo Creating update-db.bat
 (
 echo @echo off
 echo setlocal enabledelayedexpansion
 echo.
 echo REM Check if target migration is provided as parameter
 echo if "%%~1"=="" ^(
-echo     echo 🔄 Updating database to latest migration...
+echo     echo 🔄 Updating database to latest migration
 echo     dotnet ef database update --project "!PROJECT_PATH!" --startup-project "!STARTUP_PATH!"
 echo ^) else ^(
 echo     echo 🔄 Updating database to migration: %%~1
@@ -153,20 +153,20 @@ echo ^)
 ) > "update-db.bat"
 
 REM ========== 3. remove-last-migration.bat ==========
-echo Creating remove-last-migration.bat...
+echo Creating remove-last-migration.bat
 (
 echo @echo off
 echo setlocal enabledelayedexpansion
 echo.
 echo REM Check if number of migrations to remove is provided as parameter
 echo if "%%~1"=="" ^(
-echo     echo 🗑️ Removing last migration...
+echo     echo 🗑️ Removing last migration
 echo     dotnet ef migrations remove --project "!PROJECT_PATH!" --startup-project "!STARTUP_PATH!"
 echo ^) else ^(
 echo     REM Validate if parameter is a number
 echo     echo %%~1^| findstr /r "^[0-9]*$" ^>nul
 echo     if %%ERRORLEVEL%% EQU 0 ^(
-echo         echo 🗑️ Removing last %%~1 migration^(s^)...
+echo         echo 🗑️ Removing last %%~1 migration^(s^)
 echo         for /l %%%%i in ^(1,1,%%~1^) do ^(
 echo             dotnet ef migrations remove --project "!PROJECT_PATH!" --startup-project "!STARTUP_PATH!"
 echo             if !ERRORLEVEL! NEQ 0 ^(
@@ -190,7 +190,7 @@ echo ^)
 ) > "remove-last-migration.bat"
 
 REM ========== 4. script-migrations.bat ==========
-echo Creating script-migrations.bat...
+echo Creating script-migrations.bat
 (
 echo @echo off
 echo setlocal enabledelayedexpansion
@@ -226,17 +226,17 @@ echo ^)
 ) > "script-migrations.bat"
 
 REM ========== 5. reset-db.bat ==========
-echo Creating reset-db.bat...
+echo Creating reset-db.bat
 (
 echo @echo off
 echo setlocal enabledelayedexpansion
 echo.
 echo REM Check if force parameter is provided
 echo if "%%~1"=="/force" ^(
-echo     echo 🗑️ Force dropping database...
+echo     echo 🗑️ Force dropping database
 echo     dotnet ef database drop --project "!PROJECT_PATH!" --startup-project "!STARTUP_PATH!" --force --yes
 echo ^) else ^(
-echo     echo ⚠️ Dropping database ^(use /force to skip confirmation^)...
+echo     echo ⚠️ Dropping database ^(use /force to skip confirmation^)
 echo     dotnet ef database drop --project "!PROJECT_PATH!" --startup-project "!STARTUP_PATH!"
 echo ^)
 echo.
@@ -247,7 +247,7 @@ echo     echo ❌ Failed to drop database
 echo     exit /b 1
 echo ^)
 echo.
-echo echo 🔄 Creating new database...
+echo echo 🔄 Creating new database
 echo dotnet ef database update --project "!PROJECT_PATH!" --startup-project "!STARTUP_PATH!"
 echo.
 echo if %%ERRORLEVEL%% EQU 0 ^(
@@ -259,7 +259,7 @@ echo ^)
 ) > "reset-db.bat"
 
 REM ========== 6. list-migrations.bat ==========
-echo Creating list-migrations.bat...
+echo Creating list-migrations.bat
 (
 echo @echo off
 echo setlocal enabledelayedexpansion
@@ -290,7 +290,7 @@ echo ^)
 ) > "list-migrations.bat"
 
 REM ========== 7. db-status.bat ==========
-echo Creating db-status.bat...
+echo Creating db-status.bat
 (
 echo @echo off
 echo setlocal enabledelayedexpansion
@@ -341,7 +341,7 @@ echo    - db-status.bat
 echo.
 
 REM Test the configuration
-echo 🔍 Testing configuration...
+echo 🔍 Testing configuration
 dotnet ef migrations list --project "!PROJECT_PATH!" --startup-project "!STARTUP_PATH!" >nul 2>&1
 if %ERRORLEVEL% EQU 0 (
     echo ✅ Configuration test passed

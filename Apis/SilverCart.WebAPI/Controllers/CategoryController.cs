@@ -6,6 +6,7 @@ using Infrastructures.Features.Categories.Queries.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Infrastructures.Commons.Paginations;
 
 namespace WebAPI.Controllers
 {
@@ -22,7 +23,7 @@ namespace WebAPI.Controllers
 
         [Authorize(Roles = "SuperAdmin")]
         [HttpPost]
-        public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryCommand request)
+        public async Task<ActionResult<Guid>> CreateCategory([FromBody] CreateCategoryCommand request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
@@ -30,28 +31,29 @@ namespace WebAPI.Controllers
 
         [Authorize(Roles = "SuperAdmin")]
         [HttpPut]
-        public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryCommand request)
+        public async Task<ActionResult<bool>> UpdateCategory([FromBody] UpdateCategoryCommand request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
         }
+
         [Authorize(Roles = "SuperAdmin")]
         [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> DeleteCategory(Guid id)
+        public async Task<ActionResult<bool>> DeleteCategory(Guid id)
         {
             var result = await _mediator.Send(new DeleteCategoryCommand(id));
             return Ok(result);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCategoryById(Guid id)
+        public async Task<ActionResult<GetAllCategoryResponse>> GetCategoryById(Guid id)
         {
             var result = await _mediator.Send(new GetCategoryByIdQuery(id));
             return Ok(result);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCategories([FromQuery] GetAllCategoriesQuery request)
+        public async Task<ActionResult<PagedResult<GetAllCategoryResponse>>> GetAllCategories([FromQuery] GetAllCategoriesQuery request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);

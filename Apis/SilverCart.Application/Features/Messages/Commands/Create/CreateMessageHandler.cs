@@ -5,6 +5,7 @@ using SilverCart.Domain.Entities.Chat;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using SilverCart.Application.Interfaces.Repositories;
 
 namespace Infrastructures.Features.Messages.Commands.Create
 {

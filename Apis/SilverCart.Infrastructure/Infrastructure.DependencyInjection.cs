@@ -22,6 +22,9 @@ using Infrastructures.Services.System;
 using StackExchange.Redis;
 using SilverCart.Application.Interfaces.System;
 using SilverCart.Infrastructure.Commons;
+using SilverCart.Application.Services.System;
+using SilverCart.Application.Features.Orders.Queries.Shipping.CalculateShippingFee;
+using SilverCart.Application.Interfaces.Repositories;
 
 namespace Infrastructures
 {
@@ -32,36 +35,8 @@ namespace Infrastructures
         {
             AddRepositories(services);
 
+            // Add StoreSettings configuration
             services.AddScoped<AuditInterceptor>();
-
-            services.AddSingleton<ICurrentTime, CurrentTime>();
-            services.AddSingleton<IEmailService, EmailService>();
-            services.AddSingleton<ISMSService, SMSService>();
-            services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
-            services.AddSingleton<ICalculateService, CalculateService>();
-            services.AddSingleton<IGenerateQRCodeGeneratorService, GenerateQRCodeGeneratorService>();
-            services.AddHttpClient<IGhnService, GhnService>();
-
-            // Configure Redis
-            services.AddSingleton<IConnectionMultiplexer>(sp =>
-                ConnectionMultiplexer.Connect(new ConfigurationOptions
-                {
-                    EndPoints = { configuration.RedisConnection },
-                    AbortOnConnectFail = false,
-                    ConnectTimeout = 5000,
-                    SyncTimeout = 5000,
-                    ResponseTimeout = 5000,
-                    Password = configuration.RedisPassword,
-                    Ssl = false
-                }, log: Console.Out));
-            services.AddScoped<IRedisService, RedisService>();
-            services.AddScoped<IGenerateQRCodeGeneratorService, GenerateQRCodeGeneratorService>();
-
-            // Add Payments service to the container.
-            services.AddSingleton<IVnpay, Vnpay>();
-            // Add service that supports consultant users for call video...
-            services.AddSingleton<IStringeeService, StringeeService>();
-
             // ATTENTION: if you do migration please check file README.md
             services.AddDbContext<AppDbContext>((service, option) =>
             {
@@ -69,8 +44,10 @@ namespace Infrastructures
                 option.UseNpgsql(configuration.DatabaseConnection);
                 option.AddInterceptors(auditInterceptor);
             });
-
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            services.AddAutoMapper(assemblies);
             services.AddAutoMapper(typeof(UserMapperProfile).Assembly);
+            // services.AddAutoMapper(typeof(CalculateShippingFeeMapper).Assembly);
 
             services.AddIdentity<BaseUser, BaseRole>(options =>
                 {
@@ -85,6 +62,7 @@ namespace Infrastructures
 
         private static void AddRepositories(IServiceCollection services)
         {
+            services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOTPRepository, OTPRepository>();
@@ -106,8 +84,10 @@ namespace Infrastructures
             services.AddScoped<IOrderDetailsRepository, OrderDetailsRepository>();
             services.AddScoped<IProductVariantRepository, ProductVariantsRepository>();
             services.AddScoped<IAdministratorUserRepository, AdministratorUserRepository>();
+            services.AddScoped<IUserPromotionRepository, UserPromotionRepository>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IReportRepository, ReportRepository>();
         }
     }
 }

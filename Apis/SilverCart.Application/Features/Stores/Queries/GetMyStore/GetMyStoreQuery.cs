@@ -11,7 +11,7 @@ namespace Infrastructures.Features.Stores.Queries.GetMyStore
 {
     public sealed record GetMyStoreQueryCommand : IRequest<GetMyStoreQueryResponse>;
     public record GetMyStoreQueryResponse(string Name, string? Infomation, string AvatarPath, string? AdditionalInfo, int? GhnShopId, string Phone, GetStoreAddressResponse Address);
-    public record GetStoreAddressResponse(string StreetAddress, string WardCode, int DistrictId, string? DistrictName, string? ProvinceName, string? WardName);
+    public record GetStoreAddressResponse(string FullAddress, string StreetAddress, string WardCode, int DistrictId, string? DistrictName, string? ProvinceName, string? WardName);
     public class GetMyStoreQuery(IUnitOfWork unitOfWork) : IRequestHandler<GetMyStoreQueryCommand, GetMyStoreQueryResponse>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
@@ -33,7 +33,8 @@ namespace Infrastructures.Features.Stores.Queries.GetMyStore
                     store.GhnShopId,
                     store.Phone,
                     new GetStoreAddressResponse(
-                        store.StoreAddress.Address,
+                        store.StoreAddress.FullAddress,
+                        store.StoreAddress.StreetAddress,
                         store.StoreAddress.WardCode,
                         store.StoreAddress.DistrictId,
                         store.StoreAddress.DistrictName,

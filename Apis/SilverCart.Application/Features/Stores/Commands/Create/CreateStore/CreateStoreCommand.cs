@@ -54,7 +54,7 @@ namespace Infrastructures.Features.Stores.Commands.Create.CreateStore
         public int Height { get; init; }
         public int ServiceTypeId { get; init; } //https://api.ghn.vn/home/docs/detail?id=77
         public int PaymentTypeId { get; init; } //Shipping Fee: 1: seller, 2: buyer
-        public string RequireNote { get; init; } = RequireNoteEnums.KHONGCHOXEMHANG.ToString();
+        public string RequireNote { get; init; } = GhnRequireNoteEnum.KHONGCHOXEMHANG.ToString();
         public List<OrderItemsToDelivery> OrderItems { get; set; } = new List<OrderItemsToDelivery>();
     }
     public sealed record OrderItemsToDelivery

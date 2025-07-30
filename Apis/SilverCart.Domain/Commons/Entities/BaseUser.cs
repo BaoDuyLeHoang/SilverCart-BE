@@ -11,7 +11,7 @@ namespace SilverCart.Domain.Entities
         public string FullName { get; set; }
         public OTPData? OTP { get; set; }
         public string Gender { get; set; } = "Other";
-        public virtual ICollection<Address> Addresses { get; set; } = new HashSet<Address>();
+        public virtual ICollection<SavedAddress> Addresses { get; set; } = new HashSet<SavedAddress>();
         public string? RefreshToken { get; set; }
         public virtual ICollection<ConversationMember> ConversationMemberships { get; set; } = new HashSet<ConversationMember>();
 

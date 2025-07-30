@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SilverCart.Application.Interfaces;
+using SilverCart.Application.Services.System;
 using SilverCart.Domain.Commons.Enums;
 using SilverCart.Domain.Entities;
 using SilverCart.Domain.Entities.Stores;
@@ -29,15 +30,7 @@ namespace Infrastructures.Features.Stores.Commands.Create.CreateStore
             if (currentUser == null)
                 throw new AppExceptions("Không tìm thấy người dùng");
 
-            // Register store with GHN
-            var shopId = await _ghnService.RegisterStoreAsync(new CreateStoreGhnRequest
-            {
-                DistrictId = request.DistrictId,
-                WardCode = request.WardCode,
-                ShopName = request.StoreName,
-                ShopPhone = currentUser.PhoneNumber ?? throw new AppExceptions("User does not have a phone number"),
-                ShopAddress = request.StreetAddress
-            });
+            var transaction = await _unitOfWork.BeginTransactionAsync(cancellationToken);
 
             // Create store entity
             var store = new Store
@@ -48,14 +41,13 @@ namespace Infrastructures.Features.Stores.Commands.Create.CreateStore
                 AdditionalInfo = request.AdditionalInfo,
                 AvatarPath = request.AvatarPath ?? string.Empty,
                 Phone = currentUser.PhoneNumber,
-                GhnShopId = shopId,
                 CreationDate = _currentTime.GetCurrentTime()
             };
 
             // Create address
             var address = new StoreAddress
             {
-                Address = request.StreetAddress,
+                StreetAddress = request.StreetAddress,
                 WardCode = request.WardCode,
                 DistrictId = request.DistrictId,
                 WardName = request.WardName,
@@ -71,7 +63,19 @@ namespace Infrastructures.Features.Stores.Commands.Create.CreateStore
             // Save all
             await _unitOfWork.StoreRepository.AddAsync(store);
             await _unitOfWork.StoreAddressRepository.AddAsync(address);
-            await _unitOfWork.SaveChangeAsync();
+            await _unitOfWork.SaveChangeAsync(cancellationToken);
+            // Register store with GHN
+            var shopId = await _ghnService.RegisterStoreAsync(new CreateStoreGhnRequest
+            {
+                DistrictId = request.DistrictId,
+                WardCode = request.WardCode,
+                ShopName = request.StoreName,
+                ShopPhone = currentUser.PhoneNumber ?? throw new AppExceptions("Người dùng không có số điện thoại"),
+                ShopAddress = request.StreetAddress
+            });
+            store.GhnShopId = shopId;
+            await _unitOfWork.SaveChangeAsync(cancellationToken);
+
 
             // Add StoreOwner role if not assigned
             var hasRole = await _userManager.IsInRoleAsync(currentUser, "StoreOwner");
@@ -81,6 +85,7 @@ namespace Infrastructures.Features.Stores.Commands.Create.CreateStore
                 if (!addRoleResult.Succeeded)
                     throw new AppExceptions("Failed to assign StoreOwner role to user");
             }
+            await transaction.CommitAsync(cancellationToken);
 
             return store.Id;
         }

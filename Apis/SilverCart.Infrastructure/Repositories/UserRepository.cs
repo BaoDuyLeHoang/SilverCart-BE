@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SilverCart.Domain.Entities.Auth;
+using System.Linq.Expressions;
 
 namespace Infrastructures.Repositories
 {
@@ -16,6 +18,6 @@ namespace Infrastructures.Repositories
         {
         }
 
-
     }
 }
+

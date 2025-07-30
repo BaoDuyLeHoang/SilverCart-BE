@@ -1,6 +1,7 @@
 ﻿using Infrastructures.Interfaces.Entities;
 using Infrastructures.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore.Storage;
+using SilverCart.Application.Interfaces.Repositories;
 using SilverCart.Application.Repositories;
 
 namespace Infrastructures
@@ -24,15 +25,19 @@ namespace Infrastructures
         public IGuardianUserRepository GuardianUserRepository { get; }
         public IConversationRepository ConversationRepository { get; }
         public IMessageRepository MessageRepository { get; }
+        public IAddressRepository AddressRepository { get; }
         //public IStoreOrderRepository StoreOrderRepository { get; }
         //public IStoreProductItemOrderRepository StoreProductItemOrderRepository { get; }
         public IConsultantUserRepository ConsultantUserRepository { get; }
         public IConsultationRepository ConsultationRepository { get; }
         public IAdministratorUserRepository AdministratorUserRepository { get; }
+        public IUserPromotionRepository UserPromotionRepository { get; }
+        public IPaymentRepository PaymentRepository { get; }
+        public IReportRepository ReportRepository { get; }
 
-        public Task<IDbContextTransaction> BeginTransactionAsync();
-        public Task<int> SaveChangeAsync();
-        public Task CommitTransactionAsync();
-        public Task RollbackTransactionAsync();
+        public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
+        public Task<int> SaveChangeAsync(CancellationToken cancellationToken = default);
+        public Task CommitTransactionAsync(CancellationToken cancellationToken = default);
+        public Task RollbackTransactionAsync(CancellationToken cancellationToken = default);
     }
 }

@@ -57,13 +57,13 @@ namespace Infrastructures.Features.Consultation.Consultant.Create
                 Specialization = request.Specialization,
             };
 
-            var address = new Address
+            var address = new SavedAddress
             {
                 StreetAddress = request.Address.StreetAddress,
                 WardCode = request.Address.WardCode ?? string.Empty,
                 DistrictId = request.Address.DistrictId,
-                ToDistrictName = request.Address.ToDistrictName ?? string.Empty,
-                ToProvinceName = request.Address.ToProvinceName ?? string.Empty
+                DistrictName = request.Address.ToDistrictName ?? string.Empty,
+                ProvinceName = request.Address.ToProvinceName ?? string.Empty
             };
             consultantUser.Addresses.Add(address);
 

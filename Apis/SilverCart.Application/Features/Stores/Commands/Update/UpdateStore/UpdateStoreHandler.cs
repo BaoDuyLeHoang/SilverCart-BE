@@ -36,7 +36,7 @@ namespace Infrastructures.Features.Stores.Commands.Update.UpdateStore
             var storeAddress = store.StoreAddress;
             if (storeAddress != null)
             {
-                storeAddress.Address = request.StreetAddress;
+                storeAddress.StreetAddress = request.StreetAddress;
                 storeAddress.WardCode = request.WardCode;
                 storeAddress.DistrictId = request.DistrictId;
                 storeAddress.WardName = request.WardName;

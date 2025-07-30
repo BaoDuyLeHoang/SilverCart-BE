@@ -8,7 +8,7 @@ namespace SilverCart.Application.Services
         public DateTime GetCurrentTime()
         {
             //DateTime.UtcNow produce utc time, so we need to add 7 hours to get vietnam time
-            _currentTime ??= DateTime.UtcNow.AddDays(7);
+            _currentTime ??= DateTime.UtcNow.AddHours(7);
             return _currentTime.Value;
         }
     }

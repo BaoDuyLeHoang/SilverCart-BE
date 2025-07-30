@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SilverCart.Domain.Enums
 {
-    public enum RequireNoteEnums
+    public enum GhnRequireNoteEnum
     {
         KHONGCHOXEMHANG,
         CHOXEMHANGKHONGTHU,

@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 
 REM Check if target migration is provided as parameter
 if "%~1"=="" (
-    echo 🔄 Updating database to latest migration...
+    echo 🔄 Updating database to latest migration
     dotnet ef database update --project ./Apis/SilverCart.Infrastructure --startup-project ./Apis/SilverCart.WebAPI
 ) else (
     echo 🔄 Updating database to migration: %~1

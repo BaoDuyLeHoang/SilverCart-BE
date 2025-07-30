@@ -7,6 +7,6 @@ public interface IOrderRepository : IGenericRepository<Order>
 {
     //Task<IEnumerable<Order>> GetByCustomerIdAsync(Guid customerId);
     //Task<IEnumerable<Order>> GetByStatusAsync(OrderStatusEnums status);
-    //Task<Order?> GetByIdWithDetailsAsync(Guid id);
+    Task<Order?> GetDetailedOrderAsync(Guid id);
     //Task<IEnumerable<Order>> GetCustomerOrdersAsync(Guid customerId, OrderStatusEnums? status = null);
 }

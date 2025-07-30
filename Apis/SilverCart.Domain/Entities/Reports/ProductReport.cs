@@ -2,4 +2,6 @@
 
 public class ProductReport : Report
 {
+    public Guid ProductItemId { get; set; }
+    public virtual ProductItem ProductItem { get; set; } = null!;
 }

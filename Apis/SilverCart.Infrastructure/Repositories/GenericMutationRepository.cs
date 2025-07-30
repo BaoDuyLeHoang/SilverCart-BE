@@ -4,13 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructures.Repositories
 {
-    public class GenericMutationRepository<TEntity> : IGenericMutationRepository<TEntity> where TEntity : class, IAuditableEntity
+    public class GenericMutationRepository<TEntity>(AppDbContext context) : IGenericMutationRepository<TEntity> where TEntity : class, IAuditableEntity
     {
-        protected readonly DbSet<TEntity> _dbSet;
-        public GenericMutationRepository(AppDbContext context)
-        {
-            _dbSet = context.Set<TEntity>();
-        }
+        protected readonly AppDbContext _context = context;
+        protected readonly DbSet<TEntity> _dbSet = context.Set<TEntity>();
 
         public async Task AddAsync(TEntity entity)
         {

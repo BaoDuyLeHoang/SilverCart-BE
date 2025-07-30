@@ -19,25 +19,15 @@ namespace SilverCart.Application.Features.Products.Queries.GetAll
                     .LessThanOrEqualTo(100).WithMessage("Kích thước trang không được vượt quá 100");
             });
 
-            RuleFor(x => x.ProductName)
+            RuleFor(x => x.Keyword)
                 .MaximumLength(255)
-                .When(x => !string.IsNullOrEmpty(x.ProductName))
-                .WithMessage("Product name cannot exceed 255 characters");
-
-            RuleFor(x => x.Description)
-                .MaximumLength(1000)
-                .When(x => !string.IsNullOrEmpty(x.Description))
-                .WithMessage("Description cannot exceed 1000 characters");
-
-            RuleFor(x => x.ProductType)
-                .IsInEnum()
-                .When(x => x.ProductType.HasValue)
-                .WithMessage("Invalid product type");
+                .When(x => !string.IsNullOrEmpty(x.Keyword))
+                .WithMessage("Từ khóa không được vượt quá 255 ký tự");
 
             RuleFor(x => x.Id)
                 .NotEmpty()
                 .When(x => x.Id.HasValue)
-                .WithMessage("Product ID cannot be empty when provided");
+                .WithMessage("ID sản phẩm không được để trống");
         }
     }
 }

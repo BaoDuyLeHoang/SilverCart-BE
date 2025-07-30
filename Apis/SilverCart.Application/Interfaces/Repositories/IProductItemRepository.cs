@@ -5,6 +5,7 @@ namespace Infrastructures.Interfaces.Repositories
 {
     public interface IProductItemRepository : IGenericRepository<ProductItem>
     {
+        Task<Product> GetProductByProductItemID(Guid productItemId);
         //Task<IEnumerable<ProductItem>> GetByVariantIdAsync(Guid variantId);
         //Task<IEnumerable<ProductItem>> GetByStoreIdAsync(Guid storeId);
         //Task<ProductItem?> GetBySkuAsync(string sku);

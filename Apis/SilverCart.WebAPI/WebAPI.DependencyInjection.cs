@@ -10,9 +10,11 @@ using WebAPI.SilverCart.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Infrastructures;
-using System.Security.Claims;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using WebAPI.Services;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace WebAPI
 {
@@ -20,10 +22,15 @@ namespace WebAPI
     {
         public static IServiceCollection AddWebAPIService(this IServiceCollection services)
         {
-            services.AddControllers(options => { options.Filters.Add<ResponseMappingFilter>(); })
-                .AddJsonOptions(options =>
+
+            services.AddControllers(options =>
                 {
-                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    options.Filters.Add<ResponseMappingFilter>();
+                })
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                    options.SerializerSettings.Converters.Add(new StringEnumConverter()); // Enum dưới dạng string
                 });
 
             services.AddEndpointsApiExplorer();
@@ -32,8 +39,6 @@ namespace WebAPI
                 c.SchemaFilter<EnumSchemaFilter>();
             });
 
-            services.AddApplicationDI();
-            services.AddSingleton<GlobalExceptionMiddleware>();
             services.AddSingleton<PerformanceMiddleware>();
             services.AddSingleton<Stopwatch>();
             services.AddScoped<IClaimsService, ClaimsService>();
@@ -55,29 +60,43 @@ namespace WebAPI
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
                         ValidAudience = builder.Configuration["JwtSettings:Audience"],
                         IssuerSigningKey =
                             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"])),
-                        ClockSkew = TimeSpan.FromSeconds(1)
+                        ClockSkew = TimeSpan.FromMinutes(5)
                     };
                     options.Events = new JwtBearerEvents
                     {
                         OnChallenge = context =>
                         {
                             context.HandleResponse();
-
                             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                             context.Response.ContentType = "application/json";
                             var result = Newtonsoft.Json.JsonConvert.SerializeObject(new
                             {
-                                message = "You need to log in to access this resource."
+                                message = "Bạn cần đăng nhập để truy cập tài nguyên này."
                             });
                             return context.Response.WriteAsync(result);
+                        },
+                        OnAuthenticationFailed = context =>
+                        {
+                            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                            {
+                                context.Response.Headers.Append("Token-Expired", "true");
+                                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                                context.Response.ContentType = "application/json";
+                                var result = Newtonsoft.Json.JsonConvert.SerializeObject(new
+                                {
+                                    message = "Token đã hết hạn. Vui lòng đăng nhập lại."
+                                });
+                                return context.Response.WriteAsync(result);
+                            }
+                            return Task.CompletedTask;
                         },
                         OnMessageReceived = context =>
                         {
@@ -110,6 +129,7 @@ namespace WebAPI
                     Scheme = "bearer",
                 });
                 c.OperationFilter<AuthorizeOperationFilter>();
+                c.CustomSchemaIds((type) => type.FullName);
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
@@ -125,6 +145,7 @@ namespace WebAPI
                         Array.Empty<string>()
                     }
                 });
+                c.UseAllOfToExtendReferenceSchemas();
             });
 
             return services;

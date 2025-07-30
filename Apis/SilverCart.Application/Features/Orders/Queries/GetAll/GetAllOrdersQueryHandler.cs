@@ -7,7 +7,7 @@ using SilverCart.Domain.Entities;
 using SilverCart.Domain.Enums;
 namespace Infrastructures
 {
-    public sealed record GetAllOrdersQuery(PagingRequest? PagingRequest, Guid? Id, Guid? CustomerId, OrderStatusEnum? OrderStatus) : IRequest<PagedResult<GetAllOrdersResponse>>;
+    public sealed record GetAllOrdersQuery(PagingRequest? PagingRequest, Guid? Id, Guid? CustomerId, SilverCart.Domain.Enums.OrderStatusEnum? OrderStatus) : IRequest<PagedResult<GetAllOrdersResponse>>;
     public record GetAllOrdersResponse(Guid Id, double TotalPrice, DateTime? CreationDate, string OrderStatus, string Address, List<GetAllOrderDetailsResponse> OrderDetails);
     public record GetAllOrderDetailsResponse(Guid Id, Guid ProductItemId, int Quantity, double Price, string OrderItemStatus, GetAllProductItemResponse ProductItem);
     public record GetAllProductItemResponse(Guid Id, string SKU, double OriginalPrice, double DiscountedPrice, int Stock, bool IsActive, List<GetProductItemsImagesResponse> ProductImages);
@@ -38,7 +38,7 @@ namespace Infrastructures
             {
                 Id = request.Id.HasValue ? request.Id.Value : Guid.Empty,
                 DependentUserID = request.CustomerId.HasValue ? request.CustomerId.Value : Guid.Empty,
-                OrderStatus = request.OrderStatus.HasValue ? request.OrderStatus.Value : OrderStatusEnum.All,
+                OrderStatus = request.OrderStatus.HasValue ? request.OrderStatus.Value : SilverCart.Domain.Enums.OrderStatusEnum.All,
             };
 
             var filteredOrders = orders.AsQueryable().CustomFilterV1(filteredEntity);

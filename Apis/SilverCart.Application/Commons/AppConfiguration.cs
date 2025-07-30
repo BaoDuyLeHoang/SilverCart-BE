@@ -16,6 +16,8 @@ namespace SilverCart.Infrastructure.Commons
         public EmailSettings EmailSettings { get; set; } = null!;
         public bool IsDevelopment { get; set; } = false;
         public VNPAYSettings Vnpay { get; set; } = null!;
+        public StoreSettings StoreSettings { get; set; } = new StoreSettings();
+        public GhnSettings Ghn { get; set; } = new GhnSettings();
     }
 
     public class VNPAYSettings
@@ -48,5 +50,18 @@ namespace SilverCart.Infrastructure.Commons
         public string Audience { get; set; }
         public string Key { get; set; }
         public int ExpiresInMinutes { get; set; } = 30;
+    }
+
+    public class StoreSettings
+    {
+        public Guid Id { get; set; } = Guid.Empty;
+        public Guid AddressId { get; set; } = Guid.Empty;
+    }
+
+    public class GhnSettings
+    {
+        public string TokenAPI { get; set; } = string.Empty;
+        public int ShopId { get; set; }
+        public string BaseUrl { get; set; } = string.Empty;
     }
 }

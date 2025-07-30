@@ -25,7 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Apis\SilverCart.Application\SilverCart.WebApi.csproj" />
+		<ProjectReference Include="..\..\Apis\SilverCart.WebApi\SilverCart.WebApi.csproj" />
 		<ProjectReference Include="..\Domain.Tests\Domain.Tests.csproj" />
 	</ItemGroup>
 
