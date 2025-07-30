@@ -34,5 +34,6 @@
   <ItemGroup>
     <Folder Include="Features\Consultation\ProductPropose\" />
     <Folder Include="Features\Conversations\Queries\GetByUserId\" />
+    <Folder Include="Features\Users\Commands\Update\UpdateDependentUser\" />
   </ItemGroup>
 </Project>

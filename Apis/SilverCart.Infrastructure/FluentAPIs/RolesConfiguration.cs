@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SilverCart.Domain.Entities;
 using SilverCart.Domain.Entities.Auth;
 using SilverCart.Domain.Entities.Stores;
+using SilverCart.Domain.Enums;
 
 namespace Infrastructures.FluentAPIs;
 public enum RoleEnum

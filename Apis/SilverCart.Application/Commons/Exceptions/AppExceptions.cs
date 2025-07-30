@@ -87,7 +87,7 @@ public class AppExceptions : Exception
             throw new AppExceptions(message, 404);
     }
 
-    public static void ThrowIfTrue(bool condition, string message, int statusCode = 400)
+    public static void ThrowIfTrue([NotNullWhen(false)] bool condition, string message, int statusCode = 400)
     {
         if (condition)
             throw new AppExceptions(message, statusCode);
