@@ -3,19 +3,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SilverCart.Domain.Entities;
 using SilverCart.Domain.Entities.Auth;
 using SilverCart.Domain.Entities.Stores;
+using SilverCart.Domain.Enums;
 
 namespace Infrastructures.FluentAPIs;
-public enum RoleEnum
-{
-    SuperAdmin = 0,
-    Admin = 1,
-    ShopOwner = 2,
-    Staff = 3,
-    Consultant = 4,
-    Customer = 5,
-    Guardian = 6,
-    DependentUser = 6
-}
+
 public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTypeConfiguration<AdministratorRole>,
     IEntityTypeConfiguration<CustomerRole>, IEntityTypeConfiguration<StoreUserRole>, IEntityTypeConfiguration<ConsultantRole>
 {

@@ -1,10 +1,11 @@
 ﻿using System.Linq.Expressions;
 using SilverCart.Application.Interfaces;
 using SilverCart.Application.Repositories;
-using SilverCart.Application.Commons;
 using SilverCart.Domain.Common.Interfaces;
 using SilverCart.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Infrastructures.Commons.Paginations;
+using SilverCart.Domain.Commons.Enums;
 
 namespace Infrastructures.Repositories
 {
@@ -27,27 +28,82 @@ namespace Infrastructures.Repositories
             IQueryable<TEntity> query = _dbSet;
             query = includes.Aggregate(query, (current, include) => current.Include(include));
             var entity = await query.FirstOrDefaultAsync(x => x.Id == id);
-            // Optional: throw custom NotFoundException
             return entity;
         }
 
-        public async Task<Pagination<TEntity>> ToPagination(int pageIndex = 0, int pageSize = 10)
+        public async Task<TEntity?> GetByIdAsync(Guid id, Expression<Func<TEntity, bool>>? predicate = null, Expression<Func<TEntity, object>>[]? includes = null)
         {
-            var total = await _dbSet.CountAsync();
-            var items = await _dbSet.OrderByDescending(x => typeof(IAuditableEntity).IsAssignableFrom(x.GetType())
-                    ? ((IAuditableEntity)x).CreationDate
-                    : DateTime.MinValue)
-                .Skip(pageIndex * pageSize)
+            IQueryable<TEntity> query = _dbSet;
+            if (includes != null && includes.Any())
+            {
+                query = includes.Aggregate(query, (current, include) => current.Include(include));
+            }
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+            var entity = await query.FirstOrDefaultAsync(x => x.Id == id);
+            return entity;
+        }
+
+        public async Task<PagedResult<TEntity>> ToPaginationAsync(
+            int pageNumber = 1,
+            int pageSize = 10,
+            Expression<Func<TEntity, bool>>? predicate = null,
+            string? sortColumn = null,
+            SortOrder? sortOrder = null,
+            params Expression<Func<TEntity, object>>[] includes)
+        {
+            // Start with base query
+            IQueryable<TEntity> query = _dbSet;
+
+            // Apply includes
+            query = includes.Aggregate(query, (current, include) => current.Include(include));
+
+            // Apply predicate if provided
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            // Get total count before pagination
+            var total = await query.CountAsync();
+
+            // Apply sorting
+            if (!string.IsNullOrWhiteSpace(sortColumn))
+            {
+                var property = typeof(TEntity).GetProperty(sortColumn, System.Reflection.BindingFlags.IgnoreCase | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                if (property != null)
+                {
+                    var parameter = Expression.Parameter(typeof(TEntity), "x");
+                    var propertyAccess = Expression.Property(parameter, property);
+                    var lambda = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(propertyAccess, typeof(object)), parameter);
+
+                    query = sortOrder == SortOrder.Descending
+                        ? query.OrderByDescending(lambda)
+                        : query.OrderBy(lambda);
+                }
+            }
+            else
+            {
+                // Default sort by creation date
+                query = query.OrderByDescending(x => x.CreationDate);
+            }
+
+            // Apply pagination
+            var items = await query
+                .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .AsNoTracking()
                 .ToListAsync();
 
-            return new Pagination<TEntity>
+            // Return paged result
+            return new PagedResult<TEntity>
             {
-                PageIndex = pageIndex,
+                PageNumber = pageNumber,
                 PageSize = pageSize,
-                TotalItemsCount = total,
-                Items = items
+                TotalNumberOfRecords = total,
+                Results = items
             };
         }
 
@@ -69,6 +125,7 @@ namespace Infrastructures.Repositories
 
             return await Task.FromResult(query);
         }
+
         public async Task<IQueryable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null)
         {
             IQueryable<TEntity> query = _dbSet;
@@ -85,12 +142,12 @@ namespace Infrastructures.Repositories
 
             return await Task.FromResult(query);
         }
+
         public async Task<TEntity?> GetSingleAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
         {
             IQueryable<TEntity> query = _dbSet;
             query = includes.Aggregate(query, (current, include) => current.Include(include));
             return await query.FirstOrDefaultAsync(predicate);
         }
-
     }
 }

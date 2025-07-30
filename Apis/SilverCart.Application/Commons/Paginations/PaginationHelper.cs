@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Infrastructures.Commons.Paginations;
-public class PaginationHelper<T> where T : class
+public static class PaginationHelper<T> where T : class
 {
     public static PagedResult<T> EmptyResult(int pageSize)
     {
@@ -15,7 +15,6 @@ public class PaginationHelper<T> where T : class
             Results = new List<T>(),
             PageNumber = 1,
             PageSize = pageSize,
-            TotalNumberOfPages = 0,
             TotalNumberOfRecords = 0
         };
     }
@@ -37,14 +36,11 @@ public class PaginationHelper<T> where T : class
             var skipAmount = pageSize * (page - 1);
             var totalNumberOfRecords = list.Count;
             var results = list.Skip((int)skipAmount).Take((int)pageSize).ToList();
-            var mod = totalNumberOfRecords % pageSize;
-            var totalPageCount = totalNumberOfRecords / pageSize + (mod == 0 ? 0 : 1);
             return new PagedResult<T>
             {
                 Results = results,
                 PageNumber = (int)page,
                 PageSize = (int)pageSize,
-                TotalNumberOfPages = (int)totalPageCount,
                 TotalNumberOfRecords = totalNumberOfRecords,
             };
         }

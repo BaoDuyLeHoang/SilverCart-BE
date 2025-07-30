@@ -1,7 +1,8 @@
 ﻿using System.Linq.Expressions;
-using SilverCart.Application.Commons;
 using SilverCart.Domain.Common.Interfaces;
 using SilverCart.Domain.Entities;
+using Infrastructures.Commons.Paginations;
+using SilverCart.Domain.Commons.Enums;
 
 namespace SilverCart.Application.Repositories
 {
@@ -11,7 +12,14 @@ namespace SilverCart.Application.Repositories
         Task<IQueryable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes);
         Task<IQueryable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null);
         Task<TEntity?> GetByIdAsync(Guid id, params Expression<Func<TEntity, object>>[] includes);
+        Task<TEntity?> GetByIdAsync(Guid id, Expression<Func<TEntity, bool>>? predicate = null, Expression<Func<TEntity, object>>[]? includes = null);
         Task<TEntity?> GetSingleAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes);
-        Task<Pagination<TEntity>> ToPagination(int pageNumber = 0, int pageSize = 10);
+        Task<PagedResult<TEntity>> ToPaginationAsync(
+            int pageNumber = 1,
+            int pageSize = 10,
+            Expression<Func<TEntity, bool>>? predicate = null,
+            string? sortColumn = null,
+            SortOrder? sortOrder = null,
+            params Expression<Func<TEntity, object>>[] includes);
     }
 }

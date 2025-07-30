@@ -5,4 +5,5 @@ namespace Infrastructures;
 
 public interface IDependentUserRepository : IGenericRepository<DependentUser>
 {
+    Task<bool> IsUserInMyFamilyAsync(Guid currentUserId, Guid id);
 }

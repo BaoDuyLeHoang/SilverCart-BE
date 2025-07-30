@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Security.Claims;
 using SilverCart.Application.Interfaces;
+using SilverCart.Domain.Enums;
 
 namespace WebAPI.Services
 {
@@ -13,7 +14,11 @@ namespace WebAPI.Services
             _httpContextAccessor = httpContextAccessor;
             var id = httpContextAccessor.HttpContext?.User?.FindFirstValue("UserId");
             CurrentUserId = string.IsNullOrEmpty(id) ? Guid.Empty : Guid.Parse(id);
-            CurrentRole = httpContextAccessor.HttpContext?.User?.FindFirstValue("Role") ?? "";
+            if (_httpContextAccessor.HttpContext?.User.Identity.IsAuthenticated ?? false)
+            {
+                var roleClaims = _httpContextAccessor.HttpContext?.User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+                CurrentRole = roleClaims.FirstOrDefault() != null ? Enum.Parse<RoleEnum>(roleClaims.FirstOrDefault()!) : null;
+            }
         }
 
         public CultureInfo GetUserCultureInfo()
@@ -39,6 +44,6 @@ namespace WebAPI.Services
         }
 
         public Guid CurrentUserId { get; }
-        public string CurrentRole { get; }
+        public RoleEnum? CurrentRole { get; }
     }
 }
