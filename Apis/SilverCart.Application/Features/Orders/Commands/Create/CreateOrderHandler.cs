@@ -22,7 +22,7 @@ public class CreateOrderHandler(
 
     public async Task<CreateOrderResponse> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
-        (Guid currentUserId, string currentUserRole, BaseUser? user, IQueryable<ProductItem> productItems) = await HandleValidation(request, cancellationToken);
+        (Guid currentUserId, RoleEnum? currentUserRole, BaseUser? user, IQueryable<ProductItem> productItems) = await HandleValidation(request, cancellationToken);
 
         (List<OrderDetails> orderDetails, Order order) = await HandleCreateOrder(request, productItems, cancellationToken);
 
@@ -143,7 +143,7 @@ public class CreateOrderHandler(
         return (orderDetails, order);
     }
 
-    private async Task<(Guid currentUserId, string currentUserRole, BaseUser? user, IQueryable<ProductItem> productItems)> HandleValidation(CreateOrderCommand request, CancellationToken cancellationToken)
+    private async Task<(Guid currentUserId, RoleEnum? currentUserRole, BaseUser? user, IQueryable<ProductItem> productItems)> HandleValidation(CreateOrderCommand request, CancellationToken cancellationToken)
     {
         var currentUserId = _claimService.CurrentUserId;
         if (currentUserId == Guid.Empty)
@@ -152,9 +152,9 @@ public class CreateOrderHandler(
         }
         var currentUserRole = _claimService.CurrentRole;
         BaseUser? user = await _unitOfWork.UserRepository.GetByIdAsync(currentUserId);
-        AppExceptions.ThrowIfNotFound(user, $"{currentUserRole} with ID {currentUserId} not found");
+        AppExceptions.ThrowIfNotFound(user, $"{string.Join(", ", currentUserRole)} with ID {currentUserId} not found");
 
-        if (currentUserRole != "Guardian" && currentUserRole != "DependentUser")
+        if (currentUserRole != RoleEnum.Guardian && currentUserRole != RoleEnum.DependentUser)
         {
             throw new AppExceptions("Chỉ Guardian và DependentUser có thể tạo đơn hàng");
         }
@@ -190,9 +190,9 @@ public class CreateOrderHandler(
         return (currentUserId, currentUserRole, user, productItems);
     }
 
-    private async Task HandleUserRole(Guid currentUserId, string currentUserRole, List<OrderDetails> orderDetails, Order order)
+    private async Task HandleUserRole(Guid currentUserId, RoleEnum? currentUserRole, List<OrderDetails> orderDetails, Order order)
     {
-        if (currentUserRole == "Guardian")
+        if (currentUserRole == RoleEnum.Guardian)
         {
             order.GuardianId = currentUserId;
             order.DependentUserID = null;
@@ -204,7 +204,7 @@ public class CreateOrderHandler(
                 orderDetail.OrderItemStatus = OrderItemStatusEnums.ConfirmedByGuardian;
             }
         }
-        else if (currentUserRole == "DependentUser")
+        else if (currentUserRole == RoleEnum.DependentUser)
         {
             var dependentUser = await _unitOfWork.DependentUserRepository.GetByIdAsync(currentUserId);
             AppExceptions.ThrowIfNotFound(dependentUser, "Người dùng phụ thuộc không tồn tại");

@@ -46,7 +46,7 @@ namespace Infrastructures
             });
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             services.AddAutoMapper(assemblies);
-            services.AddAutoMapper(typeof(UserMapperProfile).Assembly);
+            // services.AddAutoMapper(typeof(UserMapperProfile).Assembly);
             // services.AddAutoMapper(typeof(CalculateShippingFeeMapper).Assembly);
 
             services.AddIdentity<BaseUser, BaseRole>(options =>

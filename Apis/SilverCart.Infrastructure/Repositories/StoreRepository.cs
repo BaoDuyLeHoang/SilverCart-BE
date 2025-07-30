@@ -23,5 +23,20 @@ namespace Infrastructures.Repositories
         {
             return await GetByIdAsync(_configuration.StoreSettings.Id);
         }
+
+        public async Task<bool> IsUserInMyStoreAsync(Guid id, Guid guid)
+        {
+            var user = await _context.Users.FindAsync(guid);
+            if (user == null)
+                return false;
+            if (user is not StoreUser storeUser)
+            {
+                return false;
+            }
+            var store = await GetByIdAsync(storeUser.StoreId.Value, includes: u => u.StoreUsers);
+            if (store == null)
+                return false;
+            return store.StoreUsers.Any(s => s.Id == storeUser.Id);
+        }
     }
 }

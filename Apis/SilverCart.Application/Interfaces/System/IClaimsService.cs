@@ -1,11 +1,11 @@
 ﻿using System.Globalization;
-
+using SilverCart.Domain.Enums;
 namespace SilverCart.Application.Interfaces
 {
     public interface IClaimsService
     {
         public Guid CurrentUserId { get; }
-        public string CurrentRole { get; }
+        public RoleEnum? CurrentRole { get; }
         public CultureInfo GetUserCultureInfo();
     }
 }

@@ -61,6 +61,7 @@ namespace WebAPI.Extensions
             var _userManager = services.GetRequiredService<UserManager<BaseUser>>();
             await AddSuperAdmin(configuration, _userManager);
             await AddUsers(_userManager, dbContext);
+            await AddGuardiansAndDependents(_userManager);
             await AddStoreAndProducts(dbContext);
             await AddOrders(dbContext);
         }
@@ -85,6 +86,61 @@ namespace WebAPI.Extensions
                 }
 
                 await _userManager.AddToRoleAsync(superAdmin, RoleEnum.SuperAdmin.ToString());
+            }
+        }
+
+        private static async Task AddGuardiansAndDependents(UserManager<BaseUser> _userManager)
+        {
+            const string defaultPassword = "12345678@Yy";
+
+            if (await _userManager.Users.AnyAsync(u => u.Email != null && u.Email.Contains("guardian")))
+            {
+                return;
+            }
+
+            // Create 5 Guardians
+            for (int i = 1; i <= 5; i++)
+            {
+                var guardian = new GuardianUser
+                {
+                    UserName = $"guardian{i}@example.com",
+                    Email = $"guardian{i}@example.com",
+                    FullName = $"Người giám hộ {i}",
+                    Gender = "Other",
+                    EmailConfirmed = true,
+                    PhoneNumber = $"0987654{i}21",
+                    SecurityStamp = Guid.NewGuid().ToString()
+                };
+
+                var guardianResult = await _userManager.CreateAsync(guardian, defaultPassword);
+                if (guardianResult.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(guardian, RoleEnum.Guardian.ToString());
+
+                    // Create 3-5 Dependents for this Guardian
+                    var dependentCount = Random.Shared.Next(3, 6); // Random number between 3 and 5
+                    for (int j = 1; j <= dependentCount; j++)
+                    {
+                        var dependent = new DependentUser
+                        {
+                            UserName = $"dependent{i}_{j}@example.com",
+                            Email = $"dependent{i}_{j}@example.com",
+                            FullName = $"Người phụ thuộc {j} của {guardian.FullName}",
+                            Gender = "Other",
+                            EmailConfirmed = true,
+                            PhoneNumber = $"0987654{i}{j}2",
+                            SecurityStamp = Guid.NewGuid().ToString(),
+                            GuardianId = guardian.Id,
+                            Guardian = guardian
+                        };
+
+                        var dependentResult = await _userManager.CreateAsync(dependent, defaultPassword);
+                        if (dependentResult.Succeeded)
+                        {
+                            await _userManager.AddToRoleAsync(dependent, RoleEnum.DependentUser.ToString());
+                        }
+                    }
+                }
             }
         }
 

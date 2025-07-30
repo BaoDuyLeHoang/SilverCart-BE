@@ -23,13 +23,13 @@ namespace WebAPI.Controllers
             _mediator = mediator;
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public async Task<ActionResult<Guid>> CreateStore([FromBody] CreateStoreCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
+        // [Authorize(Roles = "Admin")]
+        // [HttpPost]
+        // public async Task<ActionResult<Guid>> CreateStore([FromBody] CreateStoreCommand command)
+        // {
+        //     var result = await _mediator.Send(command);
+        //     return Ok(result);
+        // }
 
         [Authorize(Roles = "Admin")]
         [HttpPut]
