@@ -1,0 +1,51 @@
+You are an expert in .NET 7, ASP.NET Core, EF Core, Clean Architecture.
+
+## 🧩 Core Expectations
+- Always use GenericRepository and GenericMutationRepository for DB operations.
+- Use AutoMapper (or similar) for converting between DTOs and Entities.
+- Map configurations consistently via multiple IEntityTypeConfiguration<T> classes using Fluent API.
+
+## 📁 Project Structure
+- All entity classes reside in /Entities folder.
+- AppMessages (user-facing messages) must be in Vietnamese, not HTTP status texts.
+- Use PascalCase for class and property names, camelCase for local variables.
+
+## 🚧 Naming / Mapping Rules
+- Entity-to-DTO mapping done using AutoMapper profiles.
+- Each Entity must have separate mapping configuration class under /Configurations or use IEntityTypeConfiguration<T>.
+
+## 🔄 Business Logic & Flow
+- Write service/repository layers; controllers only orchestrate – no business logic in controllers.
+- Translation/messages shown to Elder (via AppMessages) must be Vietnamese.
+- Use EnumToString conversion for EF Core mapping enums to string in DB.
+
+## ✅ Response & Error Handling
+- All API responses wrapped in ApiResponse<T>, localization via AppMessages in Vietnamese.
+- GenericMutationRepository to return IResultObject<T> with meaningful Vietnamese message every time.
+
+## ❌ Don’ts
+- Don’t map enums as int in DB — always map to string.
+- Don’t bypass GenericRepository — no direct DbContext access in service layer.
+- Don’t produce messages in English or raw HTTP text — always use AppMessages.
+
+## 🛠 Workflow Highlights
+- Prefer automation via AutoMapper profiles for DTO<Entity mapping.
+- Migrations: use Fluent API, create configuration classes, separate migration files per change.
+- Testing: use GenericRepository mocks, include mapping and business tests (xUnit).
+
+## ↔ Extensions & Tooling
+- When writing new repository/service classes, copy template from existing ones: e.g., `ProductRepository`, `OrderMutator`.
+- Use ConvertAllEnumsToStrings extension in `OnModelCreating()` to enforce enum string mapping.
+
+## 🧠 Always Do:
+- Follow instructions above for every new feature.
+- Keep customization minimal, follow patterns you already have.
+- Ask for clarification if uncertain — don’t assume.
+
+## ✅ Final Checklist:
+- ✅ Mapper usage?
+- ✅ Fluent entity mapping (IEntityTypeConfiguration)?
+- ✅ GenericRepository & GenericMutationRepository applied?
+- ✅ AppMessages Vietnamese applied?
+- ✅ enum stored as string?
+- ✅ Folder structure correct?

@@ -1,0 +1,33 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# dotnet husky run --group pre-commit
+echo "🔍 Chạy lệnh pre-commit..."
+
+# Format code automatically
+echo "🎨 Check Định dạng code..."
+dotnet format --verify-no-changes
+if [ $? -ne 0 ]; then
+    dotnet format
+    # ask for permission to git add **
+    git status
+    read -p "Bạn có muốn thêm tất cả file đã định dạng không? (y/n): " answer
+    if [ "$answer" = "y" ]; then
+        git add .
+    else
+        echo "❌ Sửa lại lỗi trước khi commit."
+        exit 1
+    fi
+fi
+echo "🧨 Clean dự án..."
+dotnet clean -v d
+
+# Build the project
+# echo "📦 Build dự án..."
+# dotnet build -v d
+# if [ $? -ne 0 ]; then
+#     echo "❌ Build failed. Vui lòng sửa lỗi trước khi commit."
+#     exit 1
+# fi
+
+echo "✅ Pre-commit pass rồi nha!" 
