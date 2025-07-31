@@ -34,12 +34,7 @@ namespace WebAPI.Extensions
             "Thuốc bổ", "Vitamin", "Dụng cụ massage", "Thiết bị điện tử"
         };
 
-        private static readonly string[] _variants = new[]
-        {
-            "Cơ bản", "Nâng cao", "Cao cấp",
-            "Loại 1", "Loại 2", "Loại 3",
-            "Gói tiêu chuẩn", "Gói đặc biệt", "Gói cao cấp"
-        };
+
 
         private static readonly string[] _imagePaths = new[]
         {
@@ -61,6 +56,7 @@ namespace WebAPI.Extensions
             var _userManager = services.GetRequiredService<UserManager<BaseUser>>();
             await AddSuperAdmin(configuration, _userManager);
             await AddUsers(_userManager, dbContext);
+            await AddGuardiansAndDependents(_userManager);
             await AddStoreAndProducts(dbContext);
             await AddOrders(dbContext);
         }
@@ -85,6 +81,61 @@ namespace WebAPI.Extensions
                 }
 
                 await _userManager.AddToRoleAsync(superAdmin, RoleEnum.SuperAdmin.ToString());
+            }
+        }
+
+        private static async Task AddGuardiansAndDependents(UserManager<BaseUser> _userManager)
+        {
+            const string defaultPassword = "12345678@Yy";
+
+            if (await _userManager.Users.AnyAsync(u => u.Email != null && u.Email.Contains("guardian")))
+            {
+                return;
+            }
+
+            // Create 5 Guardians
+            for (int i = 1; i <= 5; i++)
+            {
+                var guardian = new GuardianUser
+                {
+                    UserName = $"guardian{i}@example.com",
+                    Email = $"guardian{i}@example.com",
+                    FullName = $"Người giám hộ {i}",
+                    Gender = "Other",
+                    EmailConfirmed = true,
+                    PhoneNumber = $"0987654{i}21",
+                    SecurityStamp = Guid.NewGuid().ToString()
+                };
+
+                var guardianResult = await _userManager.CreateAsync(guardian, defaultPassword);
+                if (guardianResult.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(guardian, RoleEnum.Guardian.ToString());
+
+                    // Create 3-5 Dependents for this Guardian
+                    var dependentCount = Random.Shared.Next(3, 6); // Random number between 3 and 5
+                    for (int j = 1; j <= dependentCount; j++)
+                    {
+                        var dependent = new DependentUser
+                        {
+                            UserName = $"dependent{i}_{j}@example.com",
+                            Email = $"dependent{i}_{j}@example.com",
+                            FullName = $"Người phụ thuộc {j} của {guardian.FullName}",
+                            Gender = "Other",
+                            EmailConfirmed = true,
+                            PhoneNumber = $"0987654{i}{j}2",
+                            SecurityStamp = Guid.NewGuid().ToString(),
+                            GuardianId = guardian.Id,
+                            Guardian = guardian
+                        };
+
+                        var dependentResult = await _userManager.CreateAsync(dependent, defaultPassword);
+                        if (dependentResult.Succeeded)
+                        {
+                            await _userManager.AddToRoleAsync(dependent, RoleEnum.DependentUser.ToString());
+                        }
+                    }
+                }
             }
         }
 
@@ -407,22 +458,16 @@ namespace WebAPI.Extensions
                         });
                     }
 
-                    // Add 2-3 variants
-                    var variantCount = Random.Shared.Next(2, 4);
-                    for (int v = 0; v < variantCount; v++)
+                    // Add 2-3 items
+                    var itemCount = Random.Shared.Next(2, 4);
+                    for (int v = 0; v < itemCount; v++)
                     {
-                        var variant = new ProductVariant
-                        {
-                            VariantName = _variants[Random.Shared.Next(_variants.Length)],
-                            IsActive = true,
-                            ProductId = product.Id
-                        };
-
-                        // Create item for variant
+                        // Create item
                         var item = productItemFaker.Generate();
                         var priceMultiplier = 1 + (v * 0.2m); // Tăng giá 20% cho mỗi cấp độ
                         item.OriginalPrice *= priceMultiplier;
                         item.DiscountedPrice = item.OriginalPrice * 0.9m;
+                        item.ProductId = product.Id;
 
                         // Add 1-3 images for each item
                         var itemImageCount = Random.Shared.Next(1, 4);
@@ -432,7 +477,7 @@ namespace WebAPI.Extensions
                             var productImage = new ProductImage
                             {
                                 ImagePath = imagePath,
-                                ImageName = $"Variant_{variant.VariantName}_Item_{i + 1}",
+                                ImageName = $"Item_{i + 1}",
                                 IsMain = i == 0,
                                 Order = i,
                                 ProductItemId = item.Id
@@ -457,8 +502,7 @@ namespace WebAPI.Extensions
                             });
                         }
 
-                        variant.ProductItems.Add(item);
-                        product.Variants.Add(variant);
+                        product.ProductItems.Add(item);
                     }
 
                     // Add reviews for real products
@@ -519,22 +563,16 @@ namespace WebAPI.Extensions
                         });
                     }
 
-                    // Add 2-3 variants
-                    var variantCount = Random.Shared.Next(2, 4);
-                    for (int v = 0; v < variantCount; v++)
+                    // Add 2-3 items
+                    var itemCount = Random.Shared.Next(2, 4);
+                    for (int v = 0; v < itemCount; v++)
                     {
-                        var variant = new ProductVariant
-                        {
-                            VariantName = _variants[Random.Shared.Next(_variants.Length)],
-                            IsActive = true,
-                            ProductId = product.Id
-                        };
-
-                        // Create item for variant
+                        // Create item
                         var item = productItemFaker.Generate();
                         var priceMultiplier = 1 + (v * 0.2m);
                         item.OriginalPrice *= priceMultiplier;
                         item.DiscountedPrice = item.OriginalPrice * 0.95m;
+                        item.ProductId = product.Id;
 
                         // Add 1-3 images for each item
                         var itemImageCount = Random.Shared.Next(1, 4);
@@ -544,7 +582,7 @@ namespace WebAPI.Extensions
                             var productImage = new ProductImage
                             {
                                 ImagePath = imagePath,
-                                ImageName = $"Variant_{variant.VariantName}_Item_{i + 1}",
+                                ImageName = $"Item_{i + 1}",
                                 IsMain = i == 0,
                                 Order = i,
                                 ProductItemId = item.Id
@@ -569,8 +607,7 @@ namespace WebAPI.Extensions
                             });
                         }
 
-                        variant.ProductItems.Add(item);
-                        product.Variants.Add(variant);
+                        product.ProductItems.Add(item);
                     }
 
                     // Add random reviews (0-3 reviews)
@@ -615,8 +652,7 @@ namespace WebAPI.Extensions
             {
                 var customers = await dbContext.CustomerUsers.ToListAsync();
                 var products = await dbContext.Products
-                    .Include(p => p.Variants)
-                    .ThenInclude(v => v.ProductItems)
+                    .Include(p => p.ProductItems)
                     .ToListAsync();
 
                 var realProducts = products.Take(5).ToList(); // 5 sản phẩm thật đầu tiên
@@ -660,8 +696,7 @@ namespace WebAPI.Extensions
 
                     foreach (var product in orderProducts)
                     {
-                        var variant = product.Variants.First();
-                        var item = variant.ProductItems.First();
+                        var item = product.ProductItems.First();
                         var quantity = Random.Shared.Next(1, 4);
                         var price = item.DiscountedPrice;
                         totalPrice += price * quantity;
@@ -751,8 +786,7 @@ namespace WebAPI.Extensions
 
                     foreach (var product in orderProducts)
                     {
-                        var variant = product.Variants.OrderBy(x => Random.Shared.Next()).First();
-                        var item = variant.ProductItems.First();
+                        var item = product.ProductItems.OrderBy(x => Random.Shared.Next()).First();
                         var quantity = Random.Shared.Next(1, 6);
                         var price = item.DiscountedPrice;
                         totalPrice += price * quantity;
@@ -803,20 +837,26 @@ namespace WebAPI.Extensions
 
         private static async Task AddRoleToUnknownUser(UserManager<BaseUser> _userManager)
         {
-            var users = _userManager.Users.ToList();
-            foreach (var user in users)
-            {
-                var roles = await _userManager.GetRolesAsync(user);
-                if (roles.Count == 0)
-                {
-                    // Nếu security stamp bị null thì set một giá trị mới
-                    if (string.IsNullOrEmpty(user.SecurityStamp))
-                    {
-                        user.SecurityStamp = Guid.NewGuid().ToString();
-                        await _userManager.UpdateAsync(user); // Lưu thay đổi trước khi thêm role
-                    }
+            var users = await _userManager.Users
+                .Where(u => u.SecurityStamp != null)
+                .ToListAsync();
 
-                    await _userManager.AddToRoleAsync(user, RoleEnum.Customer.ToString());
+            if (users.Count > 0)
+            {
+                foreach (var user in users)
+                {
+                    var roles = await _userManager.GetRolesAsync(user);
+                    if (roles.Count == 0)
+                    {
+                        // Set security stamp if not set
+                        if (string.IsNullOrEmpty(user.SecurityStamp))
+                        {
+                            user.SecurityStamp = Guid.NewGuid().ToString();
+                            await _userManager.UpdateAsync(user);
+                        }
+
+                        await _userManager.AddToRoleAsync(user, RoleEnum.Customer.ToString());
+                    }
                 }
             }
         }

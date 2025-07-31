@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using SilverCart.Application.Commons;
+
 using SilverCart.Application.Interfaces;
 using SilverCart.Application.Utils;
 using SilverCart.Domain.Common.Interfaces;
@@ -28,7 +28,7 @@ namespace Infrastructures
         }
 
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductVariant> ProductVariants { get; set; }
+
         public DbSet<ProductItem> ProductItems { get; set; }
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<ConversationMember> ConversationMembers { get; set; }

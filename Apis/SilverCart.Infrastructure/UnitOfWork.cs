@@ -16,7 +16,8 @@ namespace Infrastructures
                             IOrderDetailsRepository orderDetailsRepository, IOrderRepository orderRepository,
                             IOTPRepository otpRepository, IPaymentRepository paymentRepository,
                             IProductCategoryRepository productCategoryRepository, IProductItemRepository productItemRepository,
-                            IProductRepository productRepository, IProductVariantRepository productVariantRepository,
+                            IProductRepository productRepository,
+                            IProductImageRepository productImageRepository,
                             IStoreAddressRepository storeAddressRepository, IStoreRepository storeRepository,
                             IStoreUserRepository storeUserRepository, IUserRepository userRepository,
                             IUserPromotionRepository userPromotionRepository, IReportRepository reportRepository) : IUnitOfWork
@@ -36,7 +37,7 @@ namespace Infrastructures
         public IConversationRepository ConversationRepository => conversationRepository;
         public IMessageRepository MessageRepository => messageRepository;
         public IOrderDetailsRepository OrderDetailsRepository => orderDetailsRepository;
-        public IProductVariantRepository ProductVariantRepository => productVariantRepository;
+
         public IOTPRepository OTPRepository => otpRepository;
         public IConsultantUserRepository ConsultantUserRepository => consultantUserRepository;
         public IConsultationRepository ConsultationRepository => consultationRepository;
@@ -47,6 +48,7 @@ namespace Infrastructures
         public IUserPromotionRepository UserPromotionRepository => userPromotionRepository;
 
         public IReportRepository ReportRepository => reportRepository;
+        public IProductImageRepository ProductImageRepository => productImageRepository;
 
         // Transaction methods
         public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default) => await dbContext.Database.BeginTransactionAsync(cancellationToken);

@@ -46,7 +46,7 @@ namespace Infrastructures
             });
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             services.AddAutoMapper(assemblies);
-            services.AddAutoMapper(typeof(UserMapperProfile).Assembly);
+            // services.AddAutoMapper(typeof(UserMapperProfile).Assembly);
             // services.AddAutoMapper(typeof(CalculateShippingFeeMapper).Assembly);
 
             services.AddIdentity<BaseUser, BaseRole>(options =>
@@ -74,6 +74,7 @@ namespace Infrastructures
             services.AddScoped<IStoreUserRepository, StoreUserRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProductItemRepository, ProductItemRepository>();
+            services.AddScoped<IProductImageRepository, ProductImageRepository>();
             services.AddScoped<IStoreAddressRepository, StoreAddressRepository>();
             services.AddScoped<ICustomerUserRepository, CustomerUserRepository>();
             services.AddScoped<IDependentUserRepository, DependentUserRepository>();
@@ -82,7 +83,7 @@ namespace Infrastructures
             services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddScoped<IConsultationRepository, ConsultationRepository>();
             services.AddScoped<IOrderDetailsRepository, OrderDetailsRepository>();
-            services.AddScoped<IProductVariantRepository, ProductVariantsRepository>();
+
             services.AddScoped<IAdministratorUserRepository, AdministratorUserRepository>();
             services.AddScoped<IUserPromotionRepository, UserPromotionRepository>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));

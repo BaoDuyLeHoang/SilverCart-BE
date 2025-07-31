@@ -82,7 +82,7 @@ public class GhnCreateOrderRequest
             Note = note,
             Items = orderDetails.Select(od => new GhnOrderItem
             {
-                Name = od.ProductItem.Variant.Product.Name,
+                Name = od.ProductItem.Product.Name,
                 Quantity = od.Quantity,
                 Price = od.Price
             }).ToList()

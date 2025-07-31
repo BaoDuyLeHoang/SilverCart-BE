@@ -31,12 +31,19 @@ namespace Infrastructures.Repositories
 
         public void SoftRemove(TEntity entity)
         {
-            _dbSet.Update(entity);
+            _dbSet.Remove(entity);
         }
 
         public void SoftRemoveRange(List<TEntity> entities)
         {
-            _dbSet.UpdateRange(entities);
+            _dbSet.RemoveRange(entities);
         }
+
+        public void HardRemove(TEntity entity)
+        {
+            entity.IsHardDelete = true;
+            _dbSet.Remove(entity);
+        }
+
     }
 }

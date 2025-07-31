@@ -10,4 +10,6 @@ public class ProductImage : BaseEntity
     public int Order { get; set; } = 0;
     public Guid? ProductItemId { get; set; }
     public virtual ProductItem? ProductItem { get; set; }
+    public Guid? ProductId { get; set; }
+    public virtual Product? Product { get; set; }
 }

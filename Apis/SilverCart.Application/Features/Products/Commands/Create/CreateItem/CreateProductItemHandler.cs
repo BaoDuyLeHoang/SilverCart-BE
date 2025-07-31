@@ -18,11 +18,11 @@ public class CreateProductItemHandler : IRequestHandler<CreateProductItemCommand
     public async Task<CreateProductItemResponse> Handle(CreateProductItemCommand request,
         CancellationToken cancellationToken)
     {
-        // Check if variant exists
-        var variant = await _unitOfWork.ProductVariantRepository.GetByIdAsync(request.VariantId);
-        if (variant == null)
+        // Check if product exists
+        var product = await _unitOfWork.ProductRepository.GetByIdAsync(request.ProductId);
+        if (product == null)
         {
-            throw new ArgumentException($"Product variant with ID {request.VariantId} not found");
+            throw new ArgumentException($"Product with ID {request.ProductId} not found");
         }
 
         // Check if store exists
@@ -34,8 +34,8 @@ public class CreateProductItemHandler : IRequestHandler<CreateProductItemCommand
 
         var existingItem = await _unitOfWork.ProductItemRepository.GetAllAsync(
             predicate: item =>
-                item.SKU == request.SKU && item.VariantId == request.VariantId && item.StoreId == request.StoreId,
-            include: source => source.Include(item => item.Variant).ThenInclude(variant => variant.Product)
+                item.SKU == request.SKU && item.ProductId == request.ProductId && item.StoreId == request.StoreId,
+            include: source => source.Include(item => item.Product)
         );
         if (existingItem != null)
         {
@@ -44,7 +44,7 @@ public class CreateProductItemHandler : IRequestHandler<CreateProductItemCommand
 
         var item = new ProductItem
         {
-            VariantId = request.VariantId,
+            ProductId = request.ProductId,
             SKU = request.SKU,
             OriginalPrice = request.OriginalPrice,
             DiscountedPrice = request.DiscountedPrice,
@@ -61,7 +61,7 @@ public class CreateProductItemHandler : IRequestHandler<CreateProductItemCommand
 
         return new CreateProductItemResponse(
             item.Id,
-            item.VariantId,
+            item.ProductId,
             item.SKU,
             item.OriginalPrice,
             item.DiscountedPrice,

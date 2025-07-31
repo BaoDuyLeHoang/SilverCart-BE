@@ -6,9 +6,9 @@ public class CreateProductItemValidator : AbstractValidator<CreateProductItemCom
 {
     public CreateProductItemValidator()
     {
-        RuleFor(x => x.VariantId)
+        RuleFor(x => x.ProductId)
             .NotEmpty()
-            .WithMessage("Variant ID is required");
+            .WithMessage("Product ID is required");
 
         RuleFor(x => x.StoreId)
             .NotEmpty()

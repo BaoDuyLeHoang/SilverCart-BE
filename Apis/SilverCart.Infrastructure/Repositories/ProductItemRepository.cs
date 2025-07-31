@@ -19,8 +19,10 @@ namespace Infrastructures.Repositories
 
         public async Task<Product> GetProductByProductItemID(Guid productItemId)
         {
-            var productItem = await _context.ProductItems.Where(x => x.Id == productItemId).Include(x => x.Variant).ThenInclude(x => x.Product).FirstOrDefaultAsync();
-            return productItem.Variant.Product;
+            var productItem = await _context.ProductItems.Where(x => x.Id == productItemId).Include(x => x.Product).FirstOrDefaultAsync();
+            if (productItem == null)
+                throw new AppExceptions($"Sản phẩm với ID '{productItemId}' không tồn tại.");
+            return productItem.Product;
         }
     }
 }

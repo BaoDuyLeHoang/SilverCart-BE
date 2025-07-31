@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructures.Features.Users.Queries.GetGuardianUser;
 
-public sealed record GetGuardianUserQuery(Guid? Id, string? FullName, string? Email, string? Phone) : IRequest<List<GetGuardianUserResponse>>;
+public sealed record GetGuardianUserQuery(Guid? Id, string? Keyword) : IRequest<List<GetGuardianUserResponse>>;
 public record GetGuardianUserResponse(Guid Id, string FullName, string Email, string Phone, List<GetDependentUserResponse> DependentUsers);
 public record GetDependentUserResponse(Guid Id, string FullName, string Email, string Phone);
 public class GetGuardianUserQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetGuardianUserQuery, List<GetGuardianUserResponse>>
@@ -18,12 +18,8 @@ public class GetGuardianUserQueryHandler(IUnitOfWork unitOfWork) : IRequestHandl
 
         if (request.Id.HasValue)
             guardianUsers = guardianUsers.Where(u => u.Id == request.Id.Value);
-        if (!string.IsNullOrWhiteSpace(request.FullName))
-            guardianUsers = guardianUsers.Where(u => u.FullName.Contains(request.FullName));
-        if (!string.IsNullOrWhiteSpace(request.Email))
-            guardianUsers = guardianUsers.Where(u => u.Email.Contains(request.Email));
-        if (!string.IsNullOrWhiteSpace(request.Phone))
-            guardianUsers = guardianUsers.Where(u => u.PhoneNumber.Contains(request.Phone));
+        if (!string.IsNullOrWhiteSpace(request.Keyword))
+            guardianUsers = guardianUsers.Where(u => u.FullName.Contains(request.Keyword) || u.Email.Contains(request.Keyword) || u.PhoneNumber.Contains(request.Keyword));
 
         return guardianUsers.Select(u => new GetGuardianUserResponse(
             u.Id,

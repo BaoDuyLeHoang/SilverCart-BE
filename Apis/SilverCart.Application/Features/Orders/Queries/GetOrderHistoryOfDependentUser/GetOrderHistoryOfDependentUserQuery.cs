@@ -13,16 +13,27 @@ public record OrderItemResponse(Guid ProductId, string ProductName, int Quantity
 public class GetOrderHistoryOfDependentUserQuery(IUnitOfWork unitOfWork) : IRequestHandler<GetOrderHistoryOfDependentUserCommand, List<OrderHistoryResponse>>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    public Task<List<OrderHistoryResponse>> Handle(GetOrderHistoryOfDependentUserCommand request, CancellationToken cancellationToken)
+    public async Task<List<OrderHistoryResponse>> Handle(GetOrderHistoryOfDependentUserCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
-        var orderList = _unitOfWork.OrderRepository.GetAllAsync(
+        var orderList = await _unitOfWork.OrderRepository.GetAllAsync(
             predicate: o => o.DependentUserID == request.DependentUserId,
             include: source => source
                 .Include(o => o.OrderDetails)
                     .ThenInclude(od => od.ProductItem)
-                        .ThenInclude(pi => pi.Variant)
-                            .ThenInclude(v => v.Product)
+                        .ThenInclude(pi => pi.Product)
             );
+
+        return orderList.Select(order => new OrderHistoryResponse(
+            order.Id,
+            order.CreationDate ?? DateTime.UtcNow,
+            order.TotalPrice,
+            order.OrderStatus.ToString(),
+            order.OrderDetails.Select(detail => new OrderItemResponse(
+                detail.ProductItem.Product.Id,
+                detail.ProductItem.Product.Name,
+                detail.Quantity,
+                detail.Price
+            )).ToList()
+        )).ToList();
     }
 }

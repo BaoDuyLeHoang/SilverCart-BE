@@ -18,10 +18,6 @@ public class PagedResult<T>
     /// </summary>
     public int PageSize { get; set; }
 
-    /// <summary>
-    /// The total number of pages available.
-    /// </summary>
-    public int TotalNumberOfPages { get; set; }
 
     /// <summary>
     /// The total number of records available.
@@ -32,4 +28,10 @@ public class PagedResult<T>
     /// The URL to the next page - if null, there are no more pages.
     /// </summary>
     public List<T> Results { get; set; }
+    /// <summary>
+    /// The total number of pages available.
+    /// </summary>
+    public int TotalNumberOfPages => (int)Math.Ceiling((double)TotalNumberOfRecords / PageSize);
+    public bool NextPage => PageNumber < TotalNumberOfPages;
+    public bool PreviousPage => PageNumber > 1;
 }

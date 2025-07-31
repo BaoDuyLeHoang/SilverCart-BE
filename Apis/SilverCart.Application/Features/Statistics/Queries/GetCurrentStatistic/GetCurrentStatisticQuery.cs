@@ -35,7 +35,7 @@ namespace Infrastructures.Features.Statistics.Queries.GetCurrentStatistic
 
             var totalRevenue = await _unitOfWork.OrderRepository.GetAllAsync(
                 predicate: p => p.PaymentStatus.PaymentStatus == PaymentStatusEnum.Paid,
-                include: p => p.Include(p => p.OrderDetails).ThenInclude(p => p.ProductItem).ThenInclude(p => p.Variant).ThenInclude(p => p.Product)
+                include: p => p.Include(p => p.OrderDetails).ThenInclude(p => p.ProductItem).ThenInclude(p => p.Product)
             );
 
             var totalRevenueAmount = totalRevenue.Where(p => p.CreationDate >= currentMonthStart && p.CreationDate <= DateTime.UtcNow).Sum(p => p.OrderDetails.Sum(o => o.ProductItem.OriginalPrice * o.Quantity));

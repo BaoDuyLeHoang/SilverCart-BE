@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using SilverCart.Application.Interfaces;
 using SilverCart.Domain.Entities;
 using SilverCart.Domain.Entities.Auth;
+using SilverCart.Domain.Enums;
 
 namespace Infrastructures;
 
@@ -19,20 +20,11 @@ public class CreateDependentUserHandler(IUnitOfWork unitOfWork, UserManager<Base
     public async Task<List<Guid>> Handle(CreateDependentUserCommand request, CancellationToken cancellationToken)
     {
         var currentUserId = _claimsService.CurrentUserId;
-        var currentRole = _claimsService.CurrentRole;
-        var guardian = await _unitOfWork.UserRepository.GetByIdAsync(currentUserId);
-        if (guardian == null)
-            throw new AppExceptions("Guardian not found");
-
-        var guardianRole = await _userManager.GetRolesAsync(guardian);
-        if (!guardianRole.Contains("Guardian"))
-            throw new AppExceptions("This user is not a guardian");
-
         var createdUserIds = new List<Guid>();
 
         foreach (var dependentUser in request.DependentUsers)
         {
-            var user = new BaseUser
+            var user = new DependentUser
             {
                 UserName = Guid.NewGuid().ToString(),
                 PhoneNumber = dependentUser.Phone,
@@ -40,33 +32,20 @@ public class CreateDependentUserHandler(IUnitOfWork unitOfWork, UserManager<Base
                 Gender = dependentUser.Gender,
                 CreationDate = _currentTime.GetCurrentTime(),
                 Email = null,
-                Addresses = new List<SavedAddress>
-                {
-                    new SavedAddress
-                    {
-                        StreetAddress = dependentUser.Address.StreetAddress,
-                        WardCode = dependentUser.Address.WardCode,
-                        DistrictId = dependentUser.Address.DistrictId
-                    }
-                }
+                GuardianId = currentUserId
             };
 
             var tempPassword = "SilverCart2025@";
 
             var result = await _userManager.CreateAsync(user, tempPassword);
             if (!result.Succeeded)
-                throw new AppExceptions(result.Errors.FirstOrDefault()?.Description ?? "Failed to create dependent user");
+                throw new AppExceptions(result.Errors.FirstOrDefault()?.Description ?? "Lỗi khi tạo người dùng phụ thuộc");
 
-            await _userManager.AddToRoleAsync(user, "DependentUser");
+            await _userManager.AddToRoleAsync(user, RoleEnum.DependentUser.ToString());
             createdUserIds.Add(user.Id);
 
-            var dependentUserEntity = new DependentUser
-            {
-                Id = user.Id,
-                GuardianId = guardian.Id,
-                CreationDate = _currentTime.GetCurrentTime()
-            };
-            await _unitOfWork.DependentUserRepository.AddAsync(dependentUserEntity);
+            await _unitOfWork.DependentUserRepository.AddAsync(user);
+            await _unitOfWork.SaveChangeAsync();
         }
         await _unitOfWork.SaveChangeAsync();
 

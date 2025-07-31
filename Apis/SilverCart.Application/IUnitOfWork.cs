@@ -12,7 +12,7 @@ namespace Infrastructures
         public IOrderRepository OrderRepository { get; }
         public IOrderDetailsRepository OrderDetailsRepository { get; }
         public IProductRepository ProductRepository { get; }
-        public IProductVariantRepository ProductVariantRepository { get; }
+
         public IStoreRepository StoreRepository { get; }
         public IProductCategoryRepository ProductCategoryRepository { get; }
         public IStoreUserRepository StoreUserRepository { get; }
@@ -34,6 +34,7 @@ namespace Infrastructures
         public IUserPromotionRepository UserPromotionRepository { get; }
         public IPaymentRepository PaymentRepository { get; }
         public IReportRepository ReportRepository { get; }
+        public IProductImageRepository ProductImageRepository { get; }
 
         public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
         public Task<int> SaveChangeAsync(CancellationToken cancellationToken = default);
