@@ -60,8 +60,7 @@ public class CreateOrderHandler(
                 od.Id,
                 od.ProductItemId,
                 productItem.Product.Name,
-                productItem.SKU,
-                productItem.SKU,
+                productItem.ProductName,
                 od.Quantity,
                 od.Price
             );
@@ -177,7 +176,7 @@ public class CreateOrderHandler(
             var productItem = await productItems.FirstAsync(pi => pi.Id == orderItem.ProductItemId, cancellationToken);
             if (productItem.Stock.Quantity < orderItem.Quantity)
             {
-                stockIssues.Add($"Không đủ stock cho SKU {productItem.SKU}. Còn lại: {productItem.Stock}, Yêu cầu: {orderItem.Quantity}");
+                stockIssues.Add($"Không đủ stock cho ProductName {productItem.ProductName}. Còn lại: {productItem.Stock}, Yêu cầu: {orderItem.Quantity}");
             }
         }
 

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructures.Features.Products.Commands.Update.UpdateProductItems;
 public sealed record UpdateProductItemsCommand(Guid ProductId, Guid ItemId, UpdateProductItemsRequest ProductItems) : IRequest<Guid>;
-public record UpdateProductItemsRequest(string? SKU, int Stock, decimal OriginalPrice, decimal DiscountedPrice);
+public record UpdateProductItemsRequest(string? ProductName, int Stock, decimal OriginalPrice, decimal DiscountedPrice);
 public class UpdateProductItemsHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<UpdateProductItemsCommand, Guid>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
@@ -28,7 +28,7 @@ public class UpdateProductItemsHandler(IUnitOfWork unitOfWork, IMapper mapper) :
 
         _mapper.Map(request, item);
 
-        item.SKU = request.ProductItems.SKU ?? item.SKU;
+        item.ProductName = request.ProductItems.ProductName ?? item.ProductName;
         item.OriginalPrice = request.ProductItems.OriginalPrice;
         item.DiscountedPrice = request.ProductItems.DiscountedPrice;
 

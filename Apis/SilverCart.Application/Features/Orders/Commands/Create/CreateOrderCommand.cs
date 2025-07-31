@@ -34,7 +34,6 @@ public record CreateOrderDetailResponse(
     Guid Id,
     Guid ProductItemId,
     string ProductName,
-    string VariantName,
     string SKU,
     int Quantity,
     decimal Price

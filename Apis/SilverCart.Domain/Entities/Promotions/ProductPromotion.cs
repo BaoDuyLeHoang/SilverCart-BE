@@ -1,4 +1,6 @@
-﻿namespace SilverCart.Domain.Entities;
+﻿using SilverCart.Domain.Entities.Products;
+
+namespace SilverCart.Domain.Entities;
 
 public sealed class ProductPromotion : AuditableEntity
 {

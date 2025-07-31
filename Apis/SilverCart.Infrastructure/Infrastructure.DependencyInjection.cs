@@ -83,7 +83,8 @@ namespace Infrastructures
             services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddScoped<IConsultationRepository, ConsultationRepository>();
             services.AddScoped<IOrderDetailsRepository, OrderDetailsRepository>();
-
+            services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<ICartItemRepository, CartItemRepository>();
             services.AddScoped<IAdministratorUserRepository, AdministratorUserRepository>();
             services.AddScoped<IUserPromotionRepository, UserPromotionRepository>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));

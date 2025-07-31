@@ -14,6 +14,7 @@ namespace SilverCart.Domain.Entities
         public virtual ICollection<SavedAddress> Addresses { get; set; } = new HashSet<SavedAddress>();
         public string? RefreshToken { get; set; }
         public virtual ICollection<ConversationMember> ConversationMemberships { get; set; } = new HashSet<ConversationMember>();
+        public string? ImageUrl { get; set; }
 
         public bool IsDeleted { get; set; }
         public DateTime? CreationDate { get; set; }

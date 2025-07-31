@@ -42,7 +42,7 @@ public class GetProductByIdHandler(IUnitOfWork unitOfWork) : IRequestHandler<Get
             ProductItems: product.ProductItems.Select(item => new GetProductItemsResponse
             (
                 Id: item.Id,
-                SKU: item.SKU,
+                ProductName: item.ProductName,
                 OriginalPrice: item.OriginalPrice,
                 DiscountedPrice: item.DiscountedPrice,
                 Weight: item.Weight,

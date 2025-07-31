@@ -7,10 +7,10 @@ using SilverCart.Domain.Entities;
 using SilverCart.Domain.Enums;
 namespace Infrastructures
 {
-    public sealed record GetAllOrdersQuery(PagingRequest? PagingRequest, Guid? Id, Guid? CustomerId, SilverCart.Domain.Enums.OrderStatusEnum? OrderStatus) : IRequest<PagedResult<GetAllOrdersResponse>>;
+    public sealed record GetAllOrdersQuery(PagingRequest? PagingRequest, Guid? Id, Guid? CustomerId, OrderStatusEnum? OrderStatus) : IRequest<PagedResult<GetAllOrdersResponse>>;
     public record GetAllOrdersResponse(Guid Id, double TotalPrice, DateTime? CreationDate, string OrderStatus, string Address, List<GetAllOrderDetailsResponse> OrderDetails);
     public record GetAllOrderDetailsResponse(Guid Id, Guid ProductItemId, int Quantity, double Price, string OrderItemStatus, GetAllProductItemResponse ProductItem);
-    public record GetAllProductItemResponse(Guid Id, string SKU, double OriginalPrice, double DiscountedPrice, int Stock, bool IsActive, List<GetProductItemsImagesResponse> ProductImages);
+    public record GetAllProductItemResponse(Guid Id, string ProductName, double OriginalPrice, double DiscountedPrice, int Stock, bool IsActive, List<GetProductItemsImagesResponse> ProductImages);
     public record GetProductItemsImagesResponse(Guid Id, string ImagePath, string ImageName);
     public class GetAllOrdersQueryHandler(IUnitOfWork unitOfWork, IRedisService redisService) : IRequestHandler<GetAllOrdersQuery, PagedResult<GetAllOrdersResponse>>
     {
@@ -57,7 +57,7 @@ namespace Infrastructures
                     orderDetail.OrderItemStatus.ToString(),
                     new GetAllProductItemResponse(
                         orderDetail.ProductItem.Id,
-                        orderDetail.ProductItem.SKU,
+                        orderDetail.ProductItem.ProductName,
                         (double)orderDetail.ProductItem.OriginalPrice,
                         (double)orderDetail.ProductItem.DiscountedPrice,
                         orderDetail.ProductItem.Stock.Quantity,

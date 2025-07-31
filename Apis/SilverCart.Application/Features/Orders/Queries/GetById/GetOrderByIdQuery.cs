@@ -8,7 +8,7 @@ namespace Infrastructures;
 public sealed record GetOrderByIdQuery(Guid Id) : IRequest<GetOrderByIdResponse>;
 public record GetOrderByIdResponse(Guid Id, double TotalPrice, DateTime CreationDate, string OrderStatus, string Address, List<GetOrderDetailsResponse> OrderDetails);
 public record GetOrderDetailsResponse(Guid Id, Guid ProductItemId, int Quantity, double Price, string OrderItemStatus, GetProductItemResponse ProductItem);
-public record GetProductItemResponse(Guid Id, string SKU, double OriginalPrice, double DiscountedPrice, int Stock, bool IsActive, List<GetProductItemsImagesResponse> ProductImages);
+public record GetProductItemResponse(Guid Id, string ProductName, double OriginalPrice, double DiscountedPrice, int Stock, bool IsActive, List<GetProductItemsImagesResponse> ProductImages);
 public class GetOrderByIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetOrderByIdQuery, GetOrderByIdResponse>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
@@ -44,7 +44,7 @@ public class GetOrderByIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<
                 ProductItem: new GetProductItemResponse
                 (
                     Id: orderDetail.ProductItem.Id,
-                    SKU: orderDetail.ProductItem.SKU,
+                    ProductName: orderDetail.ProductItem.ProductName,
                     OriginalPrice: (double)orderDetail.ProductItem.OriginalPrice,
                     DiscountedPrice: (double)orderDetail.ProductItem.DiscountedPrice,
                     Stock: orderDetail.ProductItem.Stock.Quantity,
