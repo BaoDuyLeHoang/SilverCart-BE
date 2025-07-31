@@ -18,7 +18,7 @@ namespace Infrastructures.Features.Stores.Queries.GetMyStore
         public async Task<GetMyStoreQueryResponse> Handle(GetMyStoreQueryCommand request, CancellationToken cancellationToken)
         {
             var stores = await _unitOfWork.StoreRepository.GetAllAsync(
-                predicate: x => x.Id == Guid.Parse("c4f31cea-14f3-45cd-98ad-39d68e78e0e7"), //Change after host
+                predicate: x => x.Id == Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaab"), //Change after host
                 include: x => x.Include(s => s.StoreAddress)
                 );
 
