@@ -25,44 +25,31 @@ namespace SilverCart.Application.Features.Products.Commands.Create.CreateProduct
                     .NotEmpty().WithMessage("ID danh mục không được để trống");
             });
 
-            When(x => x.ProductVariants != null && x.ProductVariants.Any(), () =>
+            When(x => x.ProductItems != null && x.ProductItems.Any(), () =>
             {
-                RuleForEach(x => x.ProductVariants).ChildRules(variant =>
+                RuleForEach(x => x.ProductItems).ChildRules(item =>
                 {
-                    variant.RuleFor(v => v.VariantName)
-                        .NotEmpty().WithMessage("Tên biến thể không được để trống")
-                        .MaximumLength(100).WithMessage("Tên biến thể không được vượt quá 100 ký tự");
+                    item.RuleFor(i => i.Stock)
+                        .GreaterThanOrEqualTo(0).WithMessage("Số lượng tồn kho phải lớn hơn hoặc bằng 0");
 
-                    variant.RuleFor(v => v.Price)
-                        .GreaterThanOrEqualTo(0).WithMessage("Giá biến thể phải lớn hơn hoặc bằng 0");
+                    item.RuleFor(i => i.OriginalPrice)
+                        .GreaterThanOrEqualTo(0).WithMessage("Giá gốc phải lớn hơn hoặc bằng 0");
 
-                    variant.When(v => v.ProductItems != null && v.ProductItems.Any(), () =>
+                    item.RuleFor(i => i.DiscountedPrice)
+                        .GreaterThanOrEqualTo(0).WithMessage("Giá khuyến mãi phải lớn hơn hoặc bằng 0")
+                        .LessThanOrEqualTo(i => i.OriginalPrice).WithMessage("Giá khuyến mãi phải nhỏ hơn hoặc bằng giá gốc");
+
+                    item.When(i => i.ProductImages != null && i.ProductImages.Any(), () =>
                     {
-                        variant.RuleForEach(v => v.ProductItems).ChildRules(item =>
+                        item.RuleForEach(i => i.ProductImages).ChildRules(image =>
                         {
-                            item.RuleFor(i => i.Stock)
-                                .GreaterThanOrEqualTo(0).WithMessage("Số lượng tồn kho phải lớn hơn hoặc bằng 0");
+                            image.RuleFor(i => i.ImagePath)
+                                .NotEmpty().WithMessage("Đường dẫn hình ảnh không được để trống")
+                                .MaximumLength(500).WithMessage("Đường dẫn hình ảnh không được vượt quá 500 ký tự");
 
-                            item.RuleFor(i => i.OriginalPrice)
-                                .GreaterThanOrEqualTo(0).WithMessage("Giá gốc phải lớn hơn hoặc bằng 0");
-
-                            item.RuleFor(i => i.DiscountedPrice)
-                                .GreaterThanOrEqualTo(0).WithMessage("Giá khuyến mãi phải lớn hơn hoặc bằng 0")
-                                .LessThanOrEqualTo(i => i.OriginalPrice).WithMessage("Giá khuyến mãi phải nhỏ hơn hoặc bằng giá gốc");
-
-                            item.When(i => i.ProductImages != null && i.ProductImages.Any(), () =>
-                            {
-                                item.RuleForEach(i => i.ProductImages).ChildRules(image =>
-                                {
-                                    image.RuleFor(i => i.ImagePath)
-                                        .NotEmpty().WithMessage("Đường dẫn hình ảnh không được để trống")
-                                        .MaximumLength(500).WithMessage("Đường dẫn hình ảnh không được vượt quá 500 ký tự");
-
-                                    image.RuleFor(i => i.ImageName)
-                                        .NotEmpty().WithMessage("Tên hình ảnh không được để trống")
-                                        .MaximumLength(100).WithMessage("Tên hình ảnh không được vượt quá 100 ký tự");
-                                });
-                            });
+                            image.RuleFor(i => i.ImageName)
+                                .NotEmpty().WithMessage("Tên hình ảnh không được để trống")
+                                .MaximumLength(100).WithMessage("Tên hình ảnh không được vượt quá 100 ký tự");
                         });
                     });
                 });

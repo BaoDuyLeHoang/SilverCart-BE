@@ -15,9 +15,8 @@ using System.Threading.Tasks;
 namespace Infrastructures.Features.Products.Queries.GetAll;
 //Keyword sẽ search theo tên sản phẩm, mô tả sản phẩm, tên danh mục, tên phân loại, cả product item
 public sealed record GetAllProductsCommand(PagingRequest? PagingRequest, Guid? Id, string? Keyword, ProductTypeEnum? ProductType) : IRequest<PagedResult<GetAllProductsResponse>>;
-public record GetAllProductsResponse(Guid Id, string ProductName, string? Description, string? VideoPath, string ProductType, DateTime? CreationDate, List<GetProductCategoriesResponse> ProductCategories, List<GetProductVariantsResponse> Variants);
+public record GetAllProductsResponse(Guid Id, string ProductName, string? Description, string? VideoPath, string ProductType, DateTime? CreationDate, List<GetProductCategoriesResponse> ProductCategories, List<GetProductItemsResponse> ProductItems);
 public record GetProductCategoriesResponse(Guid Id, string CategoryName);
-public record GetProductVariantsResponse(Guid Id, string VariantName, bool IsActive, List<GetProductItemsResponse> ProductItems);
 public record GetProductItemsResponse(Guid Id, string SKU, decimal OriginalPrice, decimal DiscountedPrice, int Weight, int Stock, bool IsActive, List<GetProductImagesResponse> ProductImages);
 public record GetProductImagesResponse(Guid Id, string ImagePath, string ImageName);
 public record GetCategoryProductResponse(Guid Id, string CategoryName);
@@ -30,15 +29,17 @@ public class GetAllProductHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetA
         var products = await _unitOfWork.ProductRepository.GetAllAsync(
             predicate: _ => true,
             include: source => source
-                .Include(x => x.Variants)
-                    .ThenInclude(v => v.ProductItems)
-                        .ThenInclude(i => i.ProductImages)
+                .Include(x => x.ProductItems)
+                    .ThenInclude(i => i.ProductImages)
                 .Include(x => x.ProductImages)
         );
 
         if (!string.IsNullOrEmpty(request.Keyword))
         {
-            products = products.Where(p => p.Name.Contains(request.Keyword) || p.Description.Contains(request.Keyword) || p.ProductCategories.Any(c => c.Category.Name.Contains(request.Keyword)) || p.Variants.Any(v => v.VariantName.Contains(request.Keyword)) || p.Variants.Any(v => v.ProductItems.Any(i => i.SKU.Contains(request.Keyword))));
+            products = products.Where(p => p.Name.Contains(request.Keyword) ||
+                (p.Description != null && p.Description.Contains(request.Keyword)) ||
+                p.ProductCategories.Any(c => c.Category.Name.Contains(request.Keyword)) ||
+                p.ProductItems.Any(i => i.SKU.Contains(request.Keyword)));
         }
 
         var mappedProducts = products
@@ -53,23 +54,18 @@ public class GetAllProductHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetA
                     category.CategoryId,
                     category.Category.Name
                 )).ToList(),
-                product.Variants.Select(variant => new GetProductVariantsResponse(
-                    variant.Id,
-                    variant.VariantName,
-                    variant.IsActive,
-                    variant.ProductItems.Select(item => new GetProductItemsResponse(
-                        item.Id,
-                        item.SKU,
-                        item.OriginalPrice,
-                        item.DiscountedPrice,
-                        item.Weight,
-                        item.Stock.Quantity,
-                        item.IsActive,
-                        item.ProductImages.Select(img => new GetProductImagesResponse(
-                            img.Id,
-                            img.ImagePath,
-                            img.ImageName
-                        )).ToList()
+                product.ProductItems.Select(item => new GetProductItemsResponse(
+                    item.Id,
+                    item.SKU,
+                    item.OriginalPrice,
+                    item.DiscountedPrice,
+                    item.Weight,
+                    item.Stock.Quantity,
+                    item.IsActive,
+                    item.ProductImages.Select(img => new GetProductImagesResponse(
+                        img.Id,
+                        img.ImagePath,
+                        img.ImageName
                     )).ToList()
                 )).ToList()
             ));

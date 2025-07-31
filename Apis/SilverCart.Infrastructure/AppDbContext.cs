@@ -28,7 +28,7 @@ namespace Infrastructures
         }
 
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductVariant> ProductVariants { get; set; }
+
         public DbSet<ProductItem> ProductItems { get; set; }
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<ConversationMember> ConversationMembers { get; set; }

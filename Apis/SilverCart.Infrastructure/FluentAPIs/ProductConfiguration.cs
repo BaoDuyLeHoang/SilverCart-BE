@@ -7,7 +7,6 @@ using SilverCart.Domain.Entities.Stores;
 namespace Infrastructures.FluentAPIs
 {
     public class ProductConfiguration : IEntityTypeConfiguration<Product>,
-        IEntityTypeConfiguration<ProductVariant>,
         IEntityTypeConfiguration<ProductItem>,
         IEntityTypeConfiguration<ProductImage>
     {
@@ -16,15 +15,21 @@ namespace Infrastructures.FluentAPIs
             builder.ToTable("Products");
 
             // Configure relationships
-            builder.HasMany(p => p.Variants)
-                .WithOne(pv => pv.Product)
-                .HasForeignKey(pv => pv.ProductId)
+            builder.HasMany(p => p.ProductItems)
+                .WithOne(pi => pi.Product)
+                .HasForeignKey(pi => pi.ProductId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired(false);
 
             builder.HasMany(p => p.ProductPromotions)
                 .WithOne(pp => pp.Product)
                 .HasForeignKey(pp => pp.ProductId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(false);
+
+            builder.HasMany(p => p.ProductImages)
+                .WithOne(pi => pi.Product)
+                .HasForeignKey(pi => pi.ProductId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired(false);
 
@@ -44,41 +49,16 @@ namespace Infrastructures.FluentAPIs
                 .HasMaxLength(10000);
         }
 
-        public void Configure(EntityTypeBuilder<ProductVariant> builder)
-        {
-            builder.ToTable("ProductVariants");
 
-            // Configure relationships
-            builder.HasOne(pv => pv.Product)
-                .WithMany(p => p.Variants)
-                .HasForeignKey(pv => pv.ProductId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .IsRequired(false);
-
-            builder.HasMany(pv => pv.ProductItems)
-                .WithOne(pi => pi.Variant)
-                .HasForeignKey(pi => pi.VariantId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .IsRequired(false);
-
-            // Configure properties
-            builder.Property(pv => pv.VariantName)
-                .IsRequired()
-                .HasMaxLength(100);
-
-            builder.Property(pv => pv.IsActive)
-                .IsRequired()
-                .HasDefaultValue(true);
-        }
 
         public void Configure(EntityTypeBuilder<ProductItem> builder)
         {
             builder.ToTable("ProductItems");
 
             // Configure relationships
-            builder.HasOne(pi => pi.Variant)
-                .WithMany(pv => pv.ProductItems)
-                .HasForeignKey(pi => pi.VariantId)
+            builder.HasOne(pi => pi.Product)
+                .WithMany(p => p.ProductItems)
+                .HasForeignKey(pi => pi.ProductId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired(false);
 
@@ -120,6 +100,12 @@ namespace Infrastructures.FluentAPIs
             builder.HasOne(pi => pi.ProductItem)
                 .WithMany(pi => pi.ProductImages)
                 .HasForeignKey(pi => pi.ProductItemId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(false);
+
+            builder.HasOne(pi => pi.Product)
+                .WithMany(p => p.ProductImages)
+                .HasForeignKey(pi => pi.ProductId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired(false);
 

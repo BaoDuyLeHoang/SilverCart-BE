@@ -1,28 +1,27 @@
 using FluentValidation;
-using Infrastructures.Features.Products.Commands.Add.AddProductImages;
+using System.Linq;
 
-namespace SilverCart.Application.Features.Products.Commands.Add.AddProductImages
+namespace Infrastructures.Features.Products.Commands.Add.AddProductImages
 {
     public class AddProductImagesValidator : AbstractValidator<AddProductImagesCommand>
     {
         public AddProductImagesValidator()
         {
-            RuleFor(x => x.ProductItemId)
-                .NotEmpty().WithMessage("ID sản phẩm không được để trống");
+            RuleFor(x => x.Images)
+                .NotEmpty().WithMessage("Danh sách ảnh không được để trống")
+                .Must(x => x.Count <= 10).WithMessage("Số lượng ảnh không được vượt quá 10");
 
-            RuleFor(x => x.ProductImages)
-                .NotEmpty().WithMessage("Danh sách hình ảnh không được để trống");
+            RuleForEach(x => x.Images)
+                .NotEmpty().WithMessage("File ảnh không được để trống")
+                .Must(x => x.Length > 0).WithMessage("File ảnh không được rỗng")
+                .Must(x => x.ContentType.StartsWith("image/")).WithMessage("File phải là ảnh");
 
-            RuleForEach(x => x.ProductImages).ChildRules(image =>
-            {
-                image.RuleFor(i => i.ImagePath)
-                    .NotEmpty().WithMessage("Đường dẫn hình ảnh không được để trống")
-                    .MaximumLength(500).WithMessage("Đường dẫn hình ảnh không được vượt quá 500 ký tự");
+            RuleFor(x => x)
+                .Must(x => x.ProductId.HasValue || x.ProductItemId.HasValue)
+                .WithMessage("Phải chỉ định ProductId hoặc ProductItemId");
 
-                image.RuleFor(i => i.ImageName)
-                    .NotEmpty().WithMessage("Tên hình ảnh không được để trống")
-                    .MaximumLength(100).WithMessage("Tên hình ảnh không được vượt quá 100 ký tự");
-            });
+            RuleFor(x => x.Order)
+                .GreaterThanOrEqualTo(0).WithMessage("Order phải lớn hơn hoặc bằng 0");
         }
     }
 }

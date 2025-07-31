@@ -15,7 +15,7 @@ public class OrderRepository : GenericRepository<Order>, IOrderRepository
 
     public async Task<Order?> GetDetailedOrderAsync(Guid id)
     {
-        return await _dbSet.Include(x => x.OrderDetails).ThenInclude(x => x.ProductItem).ThenInclude(x => x.Variant).ThenInclude(x => x.Product).FirstOrDefaultAsync(x => x.Id == id);
+        return await _dbSet.Include(x => x.OrderDetails).ThenInclude(x => x.ProductItem).ThenInclude(x => x.Product).FirstOrDefaultAsync(x => x.Id == id);
     }
 
 

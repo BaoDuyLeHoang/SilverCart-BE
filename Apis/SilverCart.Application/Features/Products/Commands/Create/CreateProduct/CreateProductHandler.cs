@@ -14,8 +14,7 @@ using SilverCart.Domain.Entities.Categories;
 
 namespace Infrastructures.Features.Products.Commands.Create.CreateProduct
 {
-    public sealed record CreateProductCommand(string Name, string Description, string VideoPath, ProductTypeEnum ProductType, List<Guid> CategoryIds, List<CreateProductVariants> ProductVariants) : IRequest<Guid>;
-    public sealed record CreateProductVariants(string VariantName, decimal Price, List<CreateProductItemsRequest> ProductItems);
+    public sealed record CreateProductCommand(string Name, string Description, string VideoPath, ProductTypeEnum ProductType, List<Guid> CategoryIds, List<CreateProductItemsRequest> ProductItems) : IRequest<Guid>;
     public record CreateProductItemsRequest(string SKU, int Stock, decimal OriginalPrice, int Weight, decimal DiscountedPrice, List<CreateProductItemsImages> ProductImages);
     public sealed record CreateProductItemsImages(string ImagePath, string ImageName);
     public class CreateProductHandler(IUnitOfWork unitOfWork, IClaimsService claimsService, IMapper mapper) : IRequestHandler<CreateProductCommand, Guid>
@@ -42,33 +41,25 @@ namespace Infrastructures.Features.Products.Commands.Create.CreateProduct
             newProduct.Id = Guid.NewGuid();
             var itemMappings = new List<(ProductItem Item, CreateProductItemsRequest ItemVM)>();
 
-            if (product.ProductVariants is { Count: > 0 })
+            if (product.ProductItems is { Count: > 0 })
             {
-                newProduct.Variants = product.ProductVariants.Select(variantVM =>
+                newProduct.ProductItems = product.ProductItems.Select(itemVM =>
                 {
-                    var mappedVariant = _mapper.Map<ProductVariant>(variantVM);
-                    mappedVariant.Id = Guid.NewGuid();
-                    mappedVariant.ProductId = newProduct.Id;
-
-                    mappedVariant.ProductItems = variantVM.ProductItems?.Select(itemVM =>
+                    var mappedItem = _mapper.Map<ProductItem>(itemVM);
+                    mappedItem.Id = Guid.NewGuid();
+                    mappedItem.ProductId = newProduct.Id;
+                    mappedItem.ProductImages = itemVM.ProductImages?.Select(imageVM =>
                     {
-                        var mappedItem = _mapper.Map<ProductItem>(itemVM);
-                        mappedItem.Id = Guid.NewGuid();
-                        mappedItem.VariantId = mappedVariant.Id;
-                        mappedItem.ProductImages = itemVM.ProductImages?.Select(imageVM =>
-                        {
-                            var mappedImage = _mapper.Map<ProductImage>(imageVM);
-                            mappedImage.Id = Guid.NewGuid();
-                            mappedImage.ProductItemId = mappedItem.Id;
-                            return mappedImage;
-                        }).ToList();
+                        if (imageVM == null) return null!;
+                        var mappedImage = _mapper.Map<ProductImage>(imageVM);
+                        mappedImage.Id = Guid.NewGuid();
+                        mappedImage.ProductItemId = mappedItem.Id;
+                        return mappedImage;
+                    }).ToList() ?? new List<ProductImage>();
 
-                        itemMappings.Add((mappedItem, itemVM));
+                    itemMappings.Add((mappedItem, itemVM));
 
-                        return mappedItem;
-                    }).ToList() ?? new();
-
-                    return mappedVariant;
+                    return mappedItem;
                 }).ToList();
             }
 

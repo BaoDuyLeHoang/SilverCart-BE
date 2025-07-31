@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Infrastructures.Features.Products.Queries.GetAll;
+using System.Collections.Generic;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,12 +17,10 @@ public class GetProductByIdHandler(IUnitOfWork unitOfWork) : IRequestHandler<Get
                 include: source => source
                     .Include(x => x.ProductCategories)
                         .ThenInclude(pc => pc.Category)
-                    .Include(x => x.Variants!)
-                        .ThenInclude(v => v.ProductItems!)
-                            .ThenInclude(i => i.ProductImages)
-                    .Include(x => x.Variants!)
-                        .ThenInclude(v => v.ProductItems!)
-                            .ThenInclude(spi => spi.Store)
+                    .Include(x => x.ProductItems!)
+                        .ThenInclude(i => i.ProductImages)
+                    .Include(x => x.ProductItems!)
+                        .ThenInclude(i => i.Store)
             );
 
         var product = products.FirstOrDefault();
@@ -40,25 +39,19 @@ public class GetProductByIdHandler(IUnitOfWork unitOfWork) : IRequestHandler<Get
                     pc.Category.Name
                 )).ToList(),
             CreationDate: product.CreationDate,
-            Variants: product.Variants.Select(variant => new GetProductVariantsResponse
+            ProductItems: product.ProductItems.Select(item => new GetProductItemsResponse
             (
-                Id: variant.Id,
-                VariantName: variant.VariantName,
-                IsActive: variant.IsActive,
-                ProductItems: variant.ProductItems.Select(item => new GetProductItemsResponse
-                (
-                    Id: item.Id,
-                    SKU: item.SKU,
-                    OriginalPrice: item.OriginalPrice,
-                    DiscountedPrice: item.DiscountedPrice,
-                    Weight: item.Weight,
-                    Stock: item.Stock.Quantity,
-                    IsActive: item.IsActive,
-                    ProductImages: item.ProductImages.Select(img => new Infrastructures.Features.Products.Queries.GetAll.GetProductImagesResponse(
-                        img.Id,
-                        img.ImagePath,
-                        img.ImageName
-                    )).ToList()
+                Id: item.Id,
+                SKU: item.SKU,
+                OriginalPrice: item.OriginalPrice,
+                DiscountedPrice: item.DiscountedPrice,
+                Weight: item.Weight,
+                Stock: item.Stock.Quantity,
+                IsActive: item.IsActive,
+                ProductImages: item.ProductImages.Select(img => new Infrastructures.Features.Products.Queries.GetAll.GetProductImagesResponse(
+                    img.Id,
+                    img.ImagePath,
+                    img.ImageName
                 )).ToList()
             )).ToList()
         );

@@ -12,5 +12,6 @@ namespace SilverCart.Application.Repositories
         void SoftRemove(TEntity entity);
         Task AddRangeAsync(List<TEntity> entities);
         void SoftRemoveRange(List<TEntity> entities);
+        void HardRemove(TEntity entity);
     }
 }

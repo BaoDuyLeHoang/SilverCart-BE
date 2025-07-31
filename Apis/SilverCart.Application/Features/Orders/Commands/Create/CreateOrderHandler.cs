@@ -59,8 +59,8 @@ public class CreateOrderHandler(
             return new CreateOrderDetailResponse(
                 od.Id,
                 od.ProductItemId,
-                productItem.Variant.Product.Name,
-                productItem.Variant.VariantName,
+                productItem.Product.Name,
+                productItem.SKU,
                 productItem.SKU,
                 od.Quantity,
                 od.Price
@@ -163,8 +163,7 @@ public class CreateOrderHandler(
         var productItems = await _unitOfWork.ProductItemRepository.GetAllAsync(
             predicate: pi => productItemIds.Contains(pi.Id) && pi.IsActive,
             include: source => source
-                .Include(pi => pi.Variant)
-                    .ThenInclude(v => v.Product)
+                .Include(pi => pi.Product)
         );
 
         if (await productItems.CountAsync() != productItemIds.Count)
