@@ -96,6 +96,13 @@ namespace Infrastructures.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.Sql(@"
+                UPDATE ""ProductItems"" pi
+                SET ""VariantId"" = pv.""Id""
+                FROM ""ProductVariants"" pv
+                WHERE pi.""ProductId"" = pv.""ProductId"";
+            ");
+
             migrationBuilder.UpdateData(
                 table: "AspNetRoles",
                 keyColumn: "Id",

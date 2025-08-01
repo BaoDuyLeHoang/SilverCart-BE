@@ -11,6 +11,7 @@ using SilverCart.Domain.Entities.Stores;
 using SilverCart.Domain.Entities.Stocks;
 using SilverCart.Domain.Entities.Categories;
 using SilverCart.Domain.Entities.Orders;
+using SilverCart.Domain.Entities.Carts;
 using SilverCart.Domain.Enums;
 using SilverCart.Infrastructure.Commons;
 using Infrastructures.Commons.Exceptions;
@@ -56,7 +57,7 @@ namespace WebAPI.Extensions
             var _userManager = services.GetRequiredService<UserManager<BaseUser>>();
             await AddSuperAdmin(configuration, _userManager);
             await AddUsers(_userManager, dbContext);
-            await AddGuardiansAndDependents(_userManager);
+            await AddGuardiansAndDependents(_userManager, dbContext);
             await AddStoreAndProducts(dbContext);
             await AddOrders(dbContext);
         }
@@ -84,7 +85,7 @@ namespace WebAPI.Extensions
             }
         }
 
-        private static async Task AddGuardiansAndDependents(UserManager<BaseUser> _userManager)
+        private static async Task AddGuardiansAndDependents(UserManager<BaseUser> _userManager, AppDbContext dbContext)
         {
             const string defaultPassword = "12345678@Yy";
 
@@ -111,6 +112,16 @@ namespace WebAPI.Extensions
                 if (guardianResult.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(guardian, RoleEnum.Guardian.ToString());
+
+                    // Create Cart for Guardian
+                    var guardianCart = new Cart
+                    {
+                        UserId = guardian.Id,
+                        TotalPrice = 0,
+                        IsConsultantUserRecommend = false
+                    };
+                    dbContext.Carts.Add(guardianCart);
+                    await dbContext.SaveChangesAsync();
 
                     // Create 3-5 Dependents for this Guardian
                     var dependentCount = Random.Shared.Next(3, 6); // Random number between 3 and 5
@@ -232,6 +243,15 @@ namespace WebAPI.Extensions
                 if (guardianResult.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(guardian, RoleEnum.Guardian.ToString());
+
+                    // Create Cart for Guardian
+                    var guardianCart = new Cart
+                    {
+                        UserId = guardian.Id,
+                        TotalPrice = 0,
+                        IsConsultantUserRecommend = false
+                    };
+                    dbContext.Carts.Add(guardianCart);
                 }
 
                 // Create Dependent for each Guardian
@@ -277,6 +297,15 @@ namespace WebAPI.Extensions
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(customer, RoleEnum.Customer.ToString());
+
+                    // Create Cart for Customer
+                    var customerCart = new Cart
+                    {
+                        UserId = customer.Id,
+                        TotalPrice = 0,
+                        IsConsultantUserRecommend = false
+                    };
+                    dbContext.Carts.Add(customerCart);
                 }
             }
 
@@ -399,7 +428,7 @@ namespace WebAPI.Extensions
 
                 // Create product faker for elderly care items
                 var productItemFaker = new Faker<ProductItem>("vi")
-                    .RuleFor(pi => pi.SKU, (f, pi) => f.Random.Replace("SKU-####-####"))
+                    .RuleFor(pi => pi.ProductName, (f, pi) => f.Random.Replace("Product-####-####"))
                     .RuleFor(pi => pi.OriginalPrice, f => f.Random.Decimal(100000, 10000000))
                     .RuleFor(pi => pi.Weight, f => f.Random.Int(100, 5000))
                     .RuleFor(pi => pi.Length, f => f.Random.Int(10, 100))

@@ -34,18 +34,18 @@ public class CreateProductItemHandler : IRequestHandler<CreateProductItemCommand
 
         var existingItem = await _unitOfWork.ProductItemRepository.GetAllAsync(
             predicate: item =>
-                item.SKU == request.SKU && item.ProductId == request.ProductId && item.StoreId == request.StoreId,
+                item.ProductName == request.ProductName && item.ProductId == request.ProductId && item.StoreId == request.StoreId,
             include: source => source.Include(item => item.Product)
         );
         if (existingItem != null)
         {
-            throw new ArgumentException($"Product item with SKU {request.SKU} already exists");
+            throw new ArgumentException($"Product item with ProductName {request.ProductName} already exists");
         }
 
         var item = new ProductItem
         {
             ProductId = request.ProductId,
-            SKU = request.SKU,
+            ProductName = request.ProductName,
             OriginalPrice = request.OriginalPrice,
             DiscountedPrice = request.DiscountedPrice,
             Weight = request.Weight,
@@ -62,7 +62,7 @@ public class CreateProductItemHandler : IRequestHandler<CreateProductItemCommand
         return new CreateProductItemResponse(
             item.Id,
             item.ProductId,
-            item.SKU,
+            item.ProductName,
             item.OriginalPrice,
             item.DiscountedPrice,
             item.Weight,

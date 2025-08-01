@@ -13,11 +13,8 @@ using Infrastructures.Features.Products.Commands.Update.UpdateProduct;
 using Infrastructures.Features.Products.Commands.Update.UpdateProductImages;
 using Infrastructures.Features.Products.Commands.Update.UpdateProductItems;
 using Infrastructures.Features.Products.Commands.AddProductItems;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Infrastructures.Interfaces.System;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace WebAPI.Controllers
 {
@@ -33,9 +30,17 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "StoreUser, Administrator, SuperAdmin")]
         public async Task<ActionResult<Guid>> CreateProduct([FromBody] CreateProductCommand command)
         {
             var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+        [HttpPut("{id}")]
+        [Authorize(Roles = "ShopOwner, Administrator, SuperAdmin")]
+        public async Task<ActionResult<bool>> UpdateProduct(Guid id, [FromBody] UpdateProductCommand command)
+        {
+            var result = await _mediator.Send(command with { Id = id });
             return Ok(result);
         }
 
@@ -54,6 +59,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("images")]
+        [Authorize(Roles = "ShopOwner, Administrator, SuperAdmin")]
         public async Task<ActionResult<bool>> AddProductImage([FromForm] AddProductImagesCommand command)
         {
             var result = await _mediator.Send(command);
@@ -61,6 +67,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("images/{imageId}")]
+        [Authorize(Roles = "ShopOwner, Administrator, SuperAdmin")]
         public async Task<ActionResult<bool>> UpdateProductImage(
             [FromRoute] Guid imageId,
             [FromForm] UpdateProductImagesCommand command)
@@ -71,6 +78,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("images/{imageId}")]
+        [Authorize(Roles = "ShopOwner, Administrator, SuperAdmin")]
         public async Task<ActionResult<bool>> DeleteProductImage([FromRoute] Guid imageId)
         {
             var command = new DeleteProductImageCommand(imageId);
@@ -106,16 +114,6 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<bool>> UpdateProduct(Guid id, [FromBody] UpdateProductCommand command)
-        {
-            if (id != command.Id)
-            {
-                return BadRequest("ID mismatch");
-            }
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
 
 
 

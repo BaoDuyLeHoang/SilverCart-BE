@@ -10,6 +10,9 @@ using Infrastructures.Features.Users.Queries.GetGuardianUser;
 using Infrastructures;
 using Microsoft.AspNetCore.Authorization;
 using Infrastructures.Features.Users.Queries.GetDetailsUser;
+using Infrastructures.Features.Users.Commands.Update.UpdateDependentUser;
+using Infrastructures.Features.Users.Commands.Update.UpdateImageUrl;
+using Infrastructures;
 
 namespace WebAPI.Controllers
 {
@@ -37,7 +40,7 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPost("update-profile")]
+        [HttpPut("update-profile")]
         public async Task<ActionResult<Guid>> UpdateProfile([FromBody] UpdateUserProfileCommand command)
         {
             var result = await _mediator.Send(command);
@@ -67,5 +70,29 @@ namespace WebAPI.Controllers
             var result = await _mediator.Send(command);
             return Ok(result);
         }
+
+        [HttpPut("dependent-user/{id}")]
+        [Authorize(Roles = "Guardian,Admin,SuperAdmin")]
+        public async Task<ActionResult<UpdateDependentUserResponse>> UpdateDependentUser(
+            [FromRoute] Guid id,
+            [FromBody] UpdateDependentUserCommand command)
+        {
+            // Đảm bảo Id trong route và command giống nhau
+            if (id != command.Id)
+                return BadRequest("Id trong route và command không khớp.");
+
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPut("update-image")]
+        [Authorize]
+        public async Task<ActionResult<UpdateImageUrlResponse>> UpdateImageUrl([FromForm] UpdateImageUrlCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+
     }
 }

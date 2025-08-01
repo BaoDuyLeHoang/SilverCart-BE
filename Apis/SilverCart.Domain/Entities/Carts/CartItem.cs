@@ -1,8 +1,6 @@
-﻿global using SilverCart.Domain.Entities.Products;
-global using SilverCart.Domain.Entities.Stores;
-using SilverCart.Domain.Entities.Products;
+﻿using SilverCart.Domain.Entities.Products;
 
-namespace SilverCart.Domain.Entities.Cart;
+namespace SilverCart.Domain.Entities.Carts;
 
 public class CartItem : BaseEntity
 {
@@ -22,4 +20,5 @@ public class CartItem : BaseEntity
     public virtual ProductItem ProductItem { get; set; } = null!;
     public Guid StoreId { get; set; }
     public virtual Store Store { get; set; } = null!;
+    public virtual Cart Cart { get; set; } = null!;
 }

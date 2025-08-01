@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using SilverCart.Domain.Entities.Auth;
+using SilverCart.Domain.Entities.Products;
 
 namespace SilverCart.Domain.Entities;
 

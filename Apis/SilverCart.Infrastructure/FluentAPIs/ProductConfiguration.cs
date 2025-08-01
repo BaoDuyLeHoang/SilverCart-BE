@@ -75,9 +75,9 @@ namespace Infrastructures.FluentAPIs
                 .IsRequired(false);
 
             // Configure properties
-            builder.Property(pi => pi.SKU)
+            builder.Property(pi => pi.ProductName)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(200);
 
             builder.Property(pi => pi.OriginalPrice)
                 .IsRequired()

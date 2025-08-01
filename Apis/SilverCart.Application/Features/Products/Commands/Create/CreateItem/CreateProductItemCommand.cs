@@ -5,7 +5,7 @@ namespace Infrastructures.Features.Products.Commands.Create.CreateItem;
 public sealed record CreateProductItemCommand(
     Guid ProductId,
     Guid StoreId,
-    string SKU,
+    string ProductName,
     decimal OriginalPrice,
     decimal DiscountedPrice,
     int Weight,
@@ -16,7 +16,7 @@ public sealed record CreateProductItemCommand(
 public record CreateProductItemResponse(
     Guid Id,
     Guid ProductId,
-    string SKU,
+    string ProductName,
     decimal OriginalPrice,
     decimal DiscountedPrice,
     int Weight,

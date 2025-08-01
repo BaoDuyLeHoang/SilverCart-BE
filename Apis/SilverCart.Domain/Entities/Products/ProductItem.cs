@@ -6,7 +6,6 @@ namespace SilverCart.Domain.Entities.Products;
 
 public class ProductItem : BaseEntity
 {
-    public string SKU { get; set; } = string.Empty;
     public string ProductName { get; set; } = string.Empty;
     public string Value { get; set; } = string.Empty;
     public decimal OriginalPrice { get; set; }

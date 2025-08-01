@@ -35,7 +35,10 @@ namespace Infrastructures
         public IPaymentRepository PaymentRepository { get; }
         public IReportRepository ReportRepository { get; }
         public IProductImageRepository ProductImageRepository { get; }
-
+        public ICartRepository CartRepository { get; }
+        public ICartItemRepository CartItemRepository { get; }
+        public IWalletRepository WalletRepository { get; }
+        public IPaymentHistoryRepository PaymentHistoryRepository { get; }
         public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
         public Task<int> SaveChangeAsync(CancellationToken cancellationToken = default);
         public Task CommitTransactionAsync(CancellationToken cancellationToken = default);

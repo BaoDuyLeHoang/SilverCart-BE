@@ -15,7 +15,7 @@ using SilverCart.Domain.Entities.Payments;
 using SilverCart.Domain.Entities.Categories;
 using SilverCart.Domain.Entities.Stores;
 using SilverCart.Domain.Entities.Auth;
-using SilverCart.Domain.Entities.Cart;
+using SilverCart.Domain.Entities.Carts;
 using SilverCart.Domain.Entities.Stocks;
 using SilverCart.Domain.Entities.Chat;
 
