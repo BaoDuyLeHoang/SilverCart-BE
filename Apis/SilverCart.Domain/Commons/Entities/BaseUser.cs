@@ -11,10 +11,10 @@ namespace SilverCart.Domain.Entities
         public string FullName { get; set; }
         public OTPData? OTP { get; set; }
         public string Gender { get; set; } = "Other";
-        public virtual ICollection<SavedAddress> Addresses { get; set; } = new HashSet<SavedAddress>();
         public string? RefreshToken { get; set; }
-        public virtual ICollection<ConversationMember> ConversationMemberships { get; set; } = new HashSet<ConversationMember>();
         public string? ImageUrl { get; set; }
+        public virtual ICollection<SavedAddress> Addresses { get; set; } = new HashSet<SavedAddress>();
+        public virtual ICollection<ConversationMember> ConversationMemberships { get; set; } = new HashSet<ConversationMember>();
 
         public bool IsDeleted { get; set; }
         public DateTime? CreationDate { get; set; }

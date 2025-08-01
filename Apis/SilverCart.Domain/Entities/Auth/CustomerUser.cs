@@ -23,13 +23,3 @@ public sealed class CustomerUser : BaseUser
     public ICollection<PaymentHistory> PaymentHistories { get; set; } = new List<PaymentHistory>();
     public ICollection<CustomerAddress> CustomerAddresses { get; set; } = new List<CustomerAddress>();
 }
-
-public class Wallet : BaseEntity
-{
-    public int Balance { get; set; }
-    public int Points { get; set; }
-    public int TotalSpent { get; set; } = 0;
-    public int TotalReceived { get; set; } = 0;
-    public int TotalRefunded { get; set; } = 0;
-    public ICollection<PaymentHistory> PaymentHistories { get; set; } = new List<PaymentHistory>();
-}

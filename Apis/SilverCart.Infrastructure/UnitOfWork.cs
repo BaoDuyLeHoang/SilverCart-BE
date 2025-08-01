@@ -21,7 +21,8 @@ namespace Infrastructures
                             IStoreAddressRepository storeAddressRepository, IStoreRepository storeRepository,
                             IStoreUserRepository storeUserRepository, IUserRepository userRepository,
                             IUserPromotionRepository userPromotionRepository, IReportRepository reportRepository,
-                            ICartRepository cartRepository, ICartItemRepository cartItemRepository) : IUnitOfWork
+                                                         ICartRepository cartRepository, ICartItemRepository cartItemRepository,
+                             IWalletRepository walletRepository, IPaymentHistoryRepository paymentHistoryRepository) : IUnitOfWork
     {
         public ICategoryRepository CategoryRepository => categoryRepository;
         public IOrderRepository OrderRepository => orderRepository;
@@ -52,6 +53,8 @@ namespace Infrastructures
         public IProductImageRepository ProductImageRepository => productImageRepository;
         public ICartRepository CartRepository => cartRepository;
         public ICartItemRepository CartItemRepository => cartItemRepository;
+        public IWalletRepository WalletRepository => walletRepository;
+        public IPaymentHistoryRepository PaymentHistoryRepository => paymentHistoryRepository;
         // Transaction methods
         public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default) => await dbContext.Database.BeginTransactionAsync(cancellationToken);
         public async Task CommitTransactionAsync(CancellationToken cancellationToken = default) => await dbContext.Database.CommitTransactionAsync(cancellationToken);

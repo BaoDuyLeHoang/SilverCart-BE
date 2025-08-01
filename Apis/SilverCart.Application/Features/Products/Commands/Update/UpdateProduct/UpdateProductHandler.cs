@@ -33,11 +33,11 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, bool>
     {
         var currentUserId = _claimsService.CurrentUserId;
         if (currentUserId == Guid.Empty)
-            throw new AppExceptions("User not authenticated.");
+            throw new AppExceptions("Người dùng không được xác thực.");
 
         var product = await _unitOfWork.ProductRepository.GetByIdAsync(request.Id, x => x.ProductCategories);
         if (product == null)
-            throw new AppExceptions($"Product with ID {request.Id} not found.");
+            throw new AppExceptions($"Không tìm thấy sản phẩm với ID {request.Id}.");
 
         // Update basic product information only if new values are provided
         if (!string.IsNullOrWhiteSpace(request.Name))

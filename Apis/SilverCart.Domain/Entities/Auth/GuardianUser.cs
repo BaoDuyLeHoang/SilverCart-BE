@@ -12,6 +12,7 @@ namespace SilverCart.Domain.Entities.Auth
         {
 
         }
+        public Wallet? Wallet { get; set; }
         public List<Cart> Carts { get; set; } = new List<Cart>();
         public ICollection<DependentUser> Dependents { get; set; } = new HashSet<DependentUser>();
         public ICollection<CustomerUser> Dependants { get; set; } = new HashSet<CustomerUser>();

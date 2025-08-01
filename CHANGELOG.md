@@ -1,4 +1,75 @@
-# CHANGE LOGS - SilverCart Project
+# CHANGELOG - SilverCart Project
+
+## 📅 Date: 2025-07-31
+
+### Cart Module - Cleanup redundant files
+    - Removed AddToCart module (Command, Handler, Validator)
+    - Removed ClearCart module (Command, Handler)
+    - Removed duplicate GetCart files from Commands folder
+    - Updated CartController to remove AddToCart endpoint
+    - Kept only GetCart in Queries folder
+    - Build successful after cleanup
+
+### DependentUser Entity - Add new fields and CRUD
+    - Created RelationshipEnum with 10 relationship types
+    - Added ImageUrl field to BaseUser entity
+    - Added 6 new fields to DependentUser: DateOfBirth, Relationship, MedicalNotes, MonthlySpendingLimit, AddressId, SuggestedCategoryIds
+    - Created UpdateDependentUserCommand and Handler
+    - Updated CreateDependentUserHandler with new fields
+    - Added PUT /api/user/dependent-user/{id} endpoint
+    - Added PUT /api/user/update-image endpoint for image upload
+    - Created database migration AddDependentUserFields
+    - All new fields are optional for backward compatibility
+
+### User Management - Image upload functionality
+    - Created UpdateImageUrlCommand with IFormFile parameter
+    - Created UpdateImageUrlHandler using FirebaseFileService
+    - Added transaction support with IUnitOfWork
+    - Uploads images to "user-avatars" folder on Firebase
+    - Updates ImageUrl in BaseUser entity
+    - Added proper error handling and rollback
+    - Enhanced response with additional user fields (Gender, CreationDate, ModificationDate)
+
+### Database Schema - Migration updates
+    - Added 6 new columns to DependentUsers table
+    - Added ImageUrl column to AspNetUsers table
+    - Migration applied successfully
+    - IMPORTANT: Run database update before testing new features!!!
+
+### API Endpoints - New user management features
+    - POST /api/user/dependent-user (Guardian role) - Create multiple dependent users
+    - PUT /api/user/dependent-user/{id} (Guardian,Admin,SuperAdmin roles) - Update dependent user
+    - PUT /api/user/update-image (Authorize) - Upload user avatar
+    - All endpoints include proper authorization and validation
+    - Support for multipart/form-data for image uploads
+
+### Repository Layer - Add WalletRepository
+    - Created IWalletRepository interface following existing pattern
+    - Created WalletRepository implementation inheriting from GenericRepository<Wallet>
+    - Added IWalletRepository to IUnitOfWork interface
+    - Added WalletRepository to UnitOfWork constructor and property
+    - Registered IWalletRepository in DependencyInjection
+    - Build successful with no compilation errors
+    - IMPORTANT: WalletRepository now available for use in handlers!!!
+
+### Payment System - Implement IPN for Wallet top-up
+    - Fixed CreatePaymentCommand parameter order (optional parameters after required)
+    - Created AddToWalletCommand and AddToWalletHandler for IPN processing
+    - Updated PaymentController IPNReturn endpoint to use AddToWalletCommand
+    - Added proper error handling and response structure
+    - Fixed CreatePaymentHandler GetByIdAsync method call
+    - Updated AddToWalletCommand to use PaymentResponse directly
+    - Simplified PaymentController to pass PaymentResponse to command
+    - Build successful with all warnings being nullable reference warnings
+    - IMPORTANT: IPN endpoint now properly processes VNPAY callbacks!!!
+
+### Build Status - Project stability
+    - Build successful with no compile errors
+    - All warnings are nullable reference warnings (non-critical)
+    - Transaction support implemented for data integrity
+    - Role-based access control properly implemented
+    - Backward compatibility maintained for existing features 
+  # CHANGE LOGS - SilverCart Project
 
 ## 📅 Date: 2025-07-31
 

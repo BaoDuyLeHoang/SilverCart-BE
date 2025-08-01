@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Infrastructures;
 using Infrastructures.Features.Payments.Commands.CreatePayment;
+using Infrastructures.Features.Payments.Commands.AddToWallet;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -49,23 +50,14 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("ipn")]
-        public ActionResult<bool> IPNReturn()
+        public async Task<ActionResult<AddToWalletResponse>> IPNReturn([FromQuery] IQueryCollection query)
         {
             if (Request.QueryString.HasValue)
             {
-                try
-                {
-                    var paymentResult = _vnPay.GetPaymentResult(Request.Query);
-                    if (paymentResult.IsSuccess)
-                    {
-                        return Ok(true);
-                    }
-                    return BadRequest("Thanh toán thất bại");
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+                var paymentResult = _vnPay.GetPaymentResult(query);
+                var command = new AddToWalletCommand(paymentResult.PaymentResponse);
+                var result = await _mediator.Send(command);
+                return result;
             }
             return NotFound("Không tìm thấy thông tin thanh toán.");
         }
