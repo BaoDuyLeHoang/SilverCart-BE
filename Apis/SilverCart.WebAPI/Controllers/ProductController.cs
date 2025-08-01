@@ -31,14 +31,14 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "StoreUser, Administrator, SuperAdmin")]
+        [Authorize(Roles = "ShopOwner, Admin, SuperAdmin")]
         public async Task<ActionResult<Guid>> CreateProduct([FromBody] CreateProductCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
         }
         [HttpPut("{id}")]
-        [Authorize(Roles = "ShopOwner, Administrator, SuperAdmin")]
+        [Authorize(Roles = "ShopOwner, Admin, SuperAdmin")]
         public async Task<ActionResult<bool>> UpdateProduct(Guid id, [FromBody] UpdateProductCommand command)
         {
             var result = await _mediator.Send(command with { Id = id });
@@ -60,7 +60,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("images")]
-        [Authorize(Roles = "ShopOwner, Administrator, SuperAdmin")]
+        [Authorize(Roles = "ShopOwner, Admin, SuperAdmin")]
         public async Task<ActionResult<bool>> AddProductImage([FromForm] AddProductImagesCommand command)
         {
             var result = await _mediator.Send(command);
@@ -68,7 +68,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("images/{imageId}")]
-        [Authorize(Roles = "ShopOwner, Administrator, SuperAdmin")]
+        [Authorize(Roles = "ShopOwner, Admin, SuperAdmin")]
         public async Task<ActionResult<bool>> UpdateProductImage(
             [FromRoute] Guid imageId,
             [FromForm] UpdateProductImagesCommand command)
@@ -79,7 +79,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("images/{imageId}")]
-        [Authorize(Roles = "ShopOwner, Administrator, SuperAdmin")]
+        [Authorize(Roles = "ShopOwner, Admin, SuperAdmin")]
         public async Task<ActionResult<bool>> DeleteProductImage([FromRoute] Guid imageId)
         {
             var command = new DeleteProductImageCommand(imageId);

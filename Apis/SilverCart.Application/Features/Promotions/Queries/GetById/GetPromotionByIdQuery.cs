@@ -36,7 +36,7 @@ namespace Infrastructures.Features.Promotions.Queries.GetById
                     promotion.StartDate,
                     promotion.EndDate,
                     promotion.Discount,
-                    promotion.Discount.ToString(),
+                    promotion.DiscountType.ToString(),
                     promotion.IsActive,
                     promotion.MinimumQuantity,
                     promotion.MaximumQuantity,

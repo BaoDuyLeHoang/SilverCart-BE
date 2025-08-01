@@ -22,7 +22,8 @@ namespace WebAPI.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("{userId}")]
+//        /promotion/{id}
+        [HttpGet("a/{userId:Guid}")]
         [Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<ActionResult<List<GetPromotionByIdResponse>>> GetAllPromotionsByUserId(Guid userId)
         {
@@ -30,6 +31,8 @@ namespace WebAPI.Controllers
             var result = await _mediator.Send(new GetPromotionByUserIdQuery(userId));
             return Ok(result);
         }
+//        /promotion/{id}
+
         [HttpGet("{id:Guid}")]
         [Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<ActionResult<GetPromotionByIdResponse>> GetPromotionById(Guid? id)
