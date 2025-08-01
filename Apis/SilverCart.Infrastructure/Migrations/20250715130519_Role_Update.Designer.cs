@@ -1831,7 +1831,7 @@ namespace Infrastructures.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SilverCart.Domain.Entities.Promotion", b =>
+            modelBuilder.Entity("SilverCart.Domain.Entities.PromotionRepository", b =>
                 {
                     b.HasBaseType("SilverCart.Domain.Entities.BaseEntity");
 
@@ -2769,7 +2769,7 @@ namespace Infrastructures.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SilverCart.Domain.Entities.Promotion", "Promotion")
+                    b.HasOne("SilverCart.Domain.Entities.PromotionRepository", "PromotionRepository")
                         .WithMany()
                         .HasForeignKey("PromotionId");
 
@@ -2786,7 +2786,7 @@ namespace Infrastructures.Migrations
 
                     b.Navigation("PaymentMethod");
 
-                    b.Navigation("Promotion");
+                    b.Navigation("PromotionRepository");
 
                     b.Navigation("Wallet");
                 });
@@ -2816,19 +2816,19 @@ namespace Infrastructures.Migrations
                         .WithMany("ProductPromotions")
                         .HasForeignKey("ProductId1");
 
-                    b.HasOne("SilverCart.Domain.Entities.Promotion", "Promotion")
+                    b.HasOne("SilverCart.Domain.Entities.PromotionRepository", "PromotionRepository")
                         .WithMany()
                         .HasForeignKey("PromotionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SilverCart.Domain.Entities.Promotion", null)
+                    b.HasOne("SilverCart.Domain.Entities.PromotionRepository", null)
                         .WithMany("ProductPromotions")
                         .HasForeignKey("PromotionId1");
 
                     b.Navigation("Product");
 
-                    b.Navigation("Promotion");
+                    b.Navigation("PromotionRepository");
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.ProductReview", b =>
@@ -2937,7 +2937,7 @@ namespace Infrastructures.Migrations
 
             modelBuilder.Entity("SilverCart.Domain.Entities.UserPromotion", b =>
                 {
-                    b.HasOne("SilverCart.Domain.Entities.Promotion", "Promotion")
+                    b.HasOne("SilverCart.Domain.Entities.PromotionRepository", "PromotionRepository")
                         .WithMany()
                         .HasForeignKey("PromotionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2949,7 +2949,7 @@ namespace Infrastructures.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Promotion");
+                    b.Navigation("PromotionRepository");
 
                     b.Navigation("User");
                 });
@@ -3147,7 +3147,7 @@ namespace Infrastructures.Migrations
                     b.Navigation("StockHistories");
                 });
 
-            modelBuilder.Entity("SilverCart.Domain.Entities.Promotion", b =>
+            modelBuilder.Entity("SilverCart.Domain.Entities.PromotionRepository", b =>
                 {
                     b.Navigation("ProductPromotions");
                 });

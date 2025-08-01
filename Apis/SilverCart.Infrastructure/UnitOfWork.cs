@@ -3,98 +3,71 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Infrastructures.Interfaces.Repositories;
 using Infrastructures.Interfaces.Entities;
 using Infrastructures.Interfaces.System;
+using SilverCart.Application.Interfaces.Repositories;
 
 namespace Infrastructures
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork(AppDbContext dbContext,
+                            IAdministratorUserRepository administratorUserRepository, IAddressRepository addressRepository,
+                            ICategoryRepository categoryRepository, IConsultantUserRepository consultantUserRepository,
+                            IConsultationRepository consultationRepository, IConversationRepository conversationRepository,
+                            ICustomerUserRepository customerUserRepository, IDependentUserRepository dependentUserRepository,
+                            IGuardianUserRepository guardianUserRepository, IMessageRepository messageRepository,
+                            IOrderDetailsRepository orderDetailsRepository, IOrderRepository orderRepository,
+                            IOTPRepository otpRepository, IPaymentRepository paymentRepository,
+                            IProductCategoryRepository productCategoryRepository, IProductItemRepository productItemRepository,
+                            IProductRepository productRepository,
+                            IProductImageRepository productImageRepository,
+                            IStoreAddressRepository storeAddressRepository, IStoreRepository storeRepository,
+                            IStoreUserRepository storeUserRepository, IUserRepository userRepository,
+                            IUserPromotionRepository userPromotionRepository, IReportRepository reportRepository,
+                                                         ICartRepository cartRepository, ICartItemRepository cartItemRepository,
+                             IWalletRepository walletRepository, IPaymentHistoryRepository paymentHistoryRepository,
+                             IProductPromotionRepository productPromotionRepository,
+                             IPromotionRepository promotionRepository) : IUnitOfWork
     {
-        private readonly AppDbContext _dbContext;
-        private readonly ICategoryRepository _categoryRepository;
-        private readonly IOrderRepository _orderRepository;
-        private readonly IProductRepository _productRepository;
-        private readonly IStoreRepository _storeRepository;
-        private readonly IProductCategoryRepository _productCategoryRepository;
-        private readonly IStoreUserRepository _storeUserRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly IProductItemRepository _productItemRepository;
-        private readonly IStoreProductItemRepository _storeProductItemRepository;
-        private readonly IStoreAddressRepository _storeAddressRepository;
-        private readonly ICustomerUserRepository _customerUserRepository;
-        private readonly IOrderItemRepository _orderItemRepository;
-        private readonly IDependentUserRepository _dependentUserRepository;
-        private readonly IGuardianUserRepository _guardianUserRepository;
-        private readonly IConversationRepository _conversationRepository;
-        private readonly IMessageRepository _messageRepository;
-        private readonly IConsultantUserRepository _consultantUserRepository;
-        private readonly IConsultationRepository _consultationRepository;
-        public UnitOfWork(AppDbContext dbContext,
-            ICategoryRepository categoryRepository,
-            IOrderRepository orderRepository,
-            IProductRepository productRepository,
-            IStoreRepository storeRepository,
-            IProductCategoryRepository productCategoryRepository,
-            IStoreUserRepository storeUserRepository,
-            IUserRepository userRepository,
-            IProductItemRepository productItemRepository,
-            IStoreProductItemRepository storeProductItemRepository,
-            IStoreAddressRepository storeAddressRepository,
-            ICustomerUserRepository customerUserRepository,
-            IDependentUserRepository dependentUserRepository,
-            IGuardianUserRepository guardianUserRepository,
-            IConversationRepository conversationRepository,
-            IMessageRepository messageRepository,
-            IConsultantUserRepository consultantUserRepository,
-            IConsultationRepository consultationRepository)
+        public ICategoryRepository CategoryRepository => categoryRepository;
+        public IOrderRepository OrderRepository => orderRepository;
+        public IProductRepository ProductRepository => productRepository;
+        public IStoreRepository StoreRepository => storeRepository;
+        public IProductCategoryRepository ProductCategoryRepository => productCategoryRepository;
+        public IStoreUserRepository StoreUserRepository => storeUserRepository;
+        public IUserRepository UserRepository => userRepository;
+        public IProductItemRepository ProductItemRepository => productItemRepository;
+        public IStoreAddressRepository StoreAddressRepository => storeAddressRepository;
+        public ICustomerUserRepository CustomerUserRepository => customerUserRepository;
+        public IDependentUserRepository DependentUserRepository => dependentUserRepository;
+        public IGuardianUserRepository GuardianUserRepository => guardianUserRepository;
+        public IConversationRepository ConversationRepository => conversationRepository;
+        public IMessageRepository MessageRepository => messageRepository;
+        public IOrderDetailsRepository OrderDetailsRepository => orderDetailsRepository;
+
+        public IOTPRepository OTPRepository => otpRepository;
+        public IConsultantUserRepository ConsultantUserRepository => consultantUserRepository;
+        public IConsultationRepository ConsultationRepository => consultationRepository;
+        public IAdministratorUserRepository AdministratorUserRepository => administratorUserRepository;
+        public IPaymentRepository PaymentRepository => paymentRepository;
+        public IAddressRepository AddressRepository => addressRepository;
+
+        public IUserPromotionRepository UserPromotionRepository => userPromotionRepository;
+
+        public IReportRepository ReportRepository => reportRepository;
+        public IProductImageRepository ProductImageRepository => productImageRepository;
+        public ICartRepository CartRepository => cartRepository;
+        public ICartItemRepository CartItemRepository => cartItemRepository;
+        public IWalletRepository WalletRepository => walletRepository;
+        public IPaymentHistoryRepository PaymentHistoryRepository => paymentHistoryRepository;
+        public IProductPromotionRepository ProductPromotionRepository => productPromotionRepository;
+        public IPromotionRepository PromotionRepository => promotionRepository;
+        // Transaction methods
+        public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default) => await dbContext.Database.BeginTransactionAsync(cancellationToken);
+        public async Task CommitTransactionAsync(CancellationToken cancellationToken = default) => await dbContext.Database.CommitTransactionAsync(cancellationToken);
+        public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
         {
-            _dbContext = dbContext;
-            _categoryRepository = categoryRepository;
-            _orderRepository = orderRepository;
-            _productRepository = productRepository;
-            _storeRepository = storeRepository;
-            _productCategoryRepository = productCategoryRepository;
-            _storeUserRepository = storeUserRepository;
-            _userRepository = userRepository;
-            _productItemRepository = productItemRepository;
-            _storeProductItemRepository = storeProductItemRepository;
-            _storeAddressRepository = storeAddressRepository;
-            _customerUserRepository = customerUserRepository;
-            _dependentUserRepository = dependentUserRepository;
-            _guardianUserRepository = guardianUserRepository;
-            _conversationRepository = conversationRepository;
-            _messageRepository = messageRepository;
-            _consultantUserRepository = consultantUserRepository;
-            _consultationRepository = consultationRepository;
+            if (dbContext.Database.CurrentTransaction != null)
+                await dbContext.Database.RollbackTransactionAsync(cancellationToken);
         }
 
-        public ICategoryRepository CategoryRepository => _categoryRepository;
-        public IOrderRepository OrderRepository => _orderRepository;
-        public IProductRepository ProductRepository => _productRepository;
-        public IStoreRepository StoreRepository => _storeRepository;
-        public IProductCategoryRepository ProductCategoryRepository => _productCategoryRepository;
-        public IStoreUserRepository StoreUserRepository => _storeUserRepository;
-        public IUserRepository UserRepository => _userRepository;
-        public IProductItemRepository ProductItemRepository => _productItemRepository;
-        public IStoreProductItemRepository StoreProductItemRepository => _storeProductItemRepository;
-        public IStoreAddressRepository StoreAddressRepository => _storeAddressRepository;
-        public ICustomerUserRepository CustomerUserRepository => _customerUserRepository;
-        public IOrderItemRepository OrderItemRepository => _orderItemRepository;
-        public IDependentUserRepository DependentUserRepository => _dependentUserRepository;
-        public IGuardianUserRepository GuardianUserRepository => _guardianUserRepository;
-
-        public IConversationRepository ConversationRepository => _conversationRepository;
-
-        public IMessageRepository MessageRepository => _messageRepository;
-        public IConsultantUserRepository ConsultantUserRepository => _consultantUserRepository;
-        public IConsultationRepository ConsultationRepository => _consultationRepository;
-        public async Task<IDbContextTransaction> BeginTransactionAsync()
-        {
-            return await _dbContext.Database.BeginTransactionAsync();
-        }
-
-
-        public async Task<int> SaveChangeAsync()
-        {
-            return await _dbContext.SaveChangesAsync();
-        }
+        public async Task<int> SaveChangeAsync(CancellationToken cancellationToken = default) => await dbContext.SaveChangesAsync(cancellationToken);
     }
 }

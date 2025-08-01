@@ -10,5 +10,6 @@ namespace Infrastructures.Interfaces.System
     public interface IFirebaseFileService
     {
         public Task<string> UploadFIleAsync(IFormFile formFile, string folderName);
+        public Task DeleteFileAsync(string fileUrl);
     }
 }

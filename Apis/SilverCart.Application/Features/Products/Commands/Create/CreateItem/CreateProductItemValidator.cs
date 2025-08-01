@@ -6,18 +6,18 @@ public class CreateProductItemValidator : AbstractValidator<CreateProductItemCom
 {
     public CreateProductItemValidator()
     {
-        RuleFor(x => x.VariantId)
+        RuleFor(x => x.ProductId)
             .NotEmpty()
-            .WithMessage("Variant ID is required");
+            .WithMessage("Product ID is required");
 
         RuleFor(x => x.StoreId)
             .NotEmpty()
             .WithMessage("Store ID is required");
 
-        RuleFor(x => x.SKU)
+        RuleFor(x => x.ProductName)
             .NotEmpty()
-            .MaximumLength(100)
-            .WithMessage("SKU is required and cannot exceed 100 characters");
+            .MaximumLength(200)
+            .WithMessage("Product name is required and cannot exceed 200 characters");
 
         RuleFor(x => x.OriginalPrice)
             .GreaterThanOrEqualTo(0)

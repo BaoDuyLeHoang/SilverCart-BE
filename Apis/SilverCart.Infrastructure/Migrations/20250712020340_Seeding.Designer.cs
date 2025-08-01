@@ -1707,7 +1707,7 @@ namespace Infrastructures.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SilverCart.Domain.Entities.Promotion", b =>
+            modelBuilder.Entity("SilverCart.Domain.Entities.PromotionRepository", b =>
                 {
                     b.HasBaseType("SilverCart.Domain.Entities.BaseEntity");
 
@@ -2526,7 +2526,7 @@ namespace Infrastructures.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SilverCart.Domain.Entities.Promotion", "Promotion")
+                    b.HasOne("SilverCart.Domain.Entities.PromotionRepository", "PromotionRepository")
                         .WithMany("ProductPromotions")
                         .HasForeignKey("PromotionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2534,7 +2534,7 @@ namespace Infrastructures.Migrations
 
                     b.Navigation("Product");
 
-                    b.Navigation("Promotion");
+                    b.Navigation("PromotionRepository");
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.ProductVariant", b =>
@@ -2590,7 +2590,7 @@ namespace Infrastructures.Migrations
 
             modelBuilder.Entity("SilverCart.Domain.Entities.UserPromotion", b =>
                 {
-                    b.HasOne("SilverCart.Domain.Entities.Promotion", "Promotion")
+                    b.HasOne("SilverCart.Domain.Entities.PromotionRepository", "PromotionRepository")
                         .WithMany()
                         .HasForeignKey("PromotionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2602,7 +2602,7 @@ namespace Infrastructures.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Promotion");
+                    b.Navigation("PromotionRepository");
 
                     b.Navigation("User");
                 });
@@ -2764,7 +2764,7 @@ namespace Infrastructures.Migrations
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("SilverCart.Domain.Entities.Promotion", b =>
+            modelBuilder.Entity("SilverCart.Domain.Entities.PromotionRepository", b =>
                 {
                     b.Navigation("ProductPromotions");
                 });

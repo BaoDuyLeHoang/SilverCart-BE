@@ -1,66 +1,221 @@
-using System;
-using AutoMapper;
+using System.Drawing;
 using Infrastructures.Commons.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SilverCart.Application.Interfaces;
+using SilverCart.Application.Services.System;
 using SilverCart.Domain.Entities;
+using SilverCart.Domain.Entities.Orders;
+using SilverCart.Domain.Entities.Products;
+using SilverCart.Domain.Entities.Stores;
+using SilverCart.Domain.Enums;
 
 namespace Infrastructures.Features.Orders.Commands.Create;
 
-public sealed record CreateOrderCommand(List<CreateOrderItem> OrderItems) : IRequest<Guid>;
-public record CreateOrderItem(Guid StoreProductId, int Quantity);
-public class CreateOrderHandler(IUnitOfWork unitOfWork, IClaimsService claimsService, IMapper mapper) : IRequestHandler<CreateOrderCommand, Guid>
+public class CreateOrderHandler(
+    IUnitOfWork unitOfWork,
+    IClaimsService claimsService
+) : IRequestHandler<CreateOrderCommand, CreateOrderResponse>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly IClaimsService _claimsService = claimsService;
-    private readonly IMapper _mapper = mapper;
-    public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+    private readonly IClaimsService _claimService = claimsService;
+
+    public async Task<CreateOrderResponse> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
-        var currentUserId = _claimsService.CurrentUserId;
-        if (currentUserId == Guid.Empty)
-            throw new UnauthorizedAccessException("User not authenticated.");
+        (Guid currentUserId, RoleEnum? currentUserRole, BaseUser? user, IQueryable<ProductItem> productItems) = await HandleValidation(request, cancellationToken);
 
-        var customerUser = await _unitOfWork.CustomerUserRepository.GetByIdAsync(currentUserId);
-        if (customerUser == null)
-            throw new AppExceptions("User not found.");
+        (List<OrderDetails> orderDetails, Order order) = await HandleCreateOrder(request, productItems, cancellationToken);
 
-        var storeProductItems = await _unitOfWork.StoreProductItemRepository.GetAllAsync(predicate: _ => true, include: x => x.Include(x => x.ProductItem));
-        var storeProductItemsIds = storeProductItems.Select(item => item.Id).ToList();
-        var productItemsPrices = storeProductItems.ToDictionary(item => item.Id, item => item.ProductItem.DiscountedPrice);
-        var orderItems = request.OrderItems.Where(item => storeProductItemsIds.Contains(item.StoreProductId)).ToList();
-        if (orderItems.Count != request.OrderItems.Count)
-            throw new AppExceptions("Invalid store product id.");
-
-        var orderItemsToCheck = orderItems.Select(item => new OrderItem
+        await HandleUserRole(currentUserId, currentUserRole, orderDetails, order);
+        using (var transaction = await _unitOfWork.BeginTransactionAsync(cancellationToken))
         {
-            StoreProductItemId = item.StoreProductId,
-            Quantity = item.Quantity,
-            Price = (double)productItemsPrices[item.StoreProductId],
+            try
+            {
+                // Create order and its details
+                await _unitOfWork.OrderRepository.AddAsync(order);
+                await _unitOfWork.SaveChangeAsync();
+
+                // Update stock
+                foreach (var orderItem in request.OrderItems)
+                {
+                    var productItem = await productItems.FirstAsync(pi => pi.Id == orderItem.ProductItemId, cancellationToken);
+                    productItem.Stock.Quantity -= orderItem.Quantity;
+                    _unitOfWork.ProductItemRepository.Update(productItem);
+                }
+
+                await _unitOfWork.SaveChangeAsync();
+                await transaction.CommitAsync(cancellationToken);
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+        }
+
+        var orderDetailResponses = orderDetails.Select(od =>
+        {
+            ProductItem productItem = productItems.First(pi => pi.Id == od.ProductItemId);
+            return new CreateOrderDetailResponse(
+                od.Id,
+                od.ProductItemId,
+                productItem.Product.Name,
+                productItem.ProductName,
+                od.Quantity,
+                od.Price
+            );
         }).ToList();
 
-        var checkStock = await _unitOfWork.StoreProductItemRepository.CheckStock(orderItemsToCheck);
-        if (!checkStock)
-            throw new AppExceptions("Stock not enough.");
+        return new CreateOrderResponse(
+            order.Id,
+            order.TotalPrice,
+            order.FinalPrice,
+            order.OrderStatus,
+            order.CreationDate ?? DateTime.UtcNow,
+            orderDetailResponses
+        );
+    }
+
+
+
+    private async Task<(List<OrderDetails> orderDetails, Order order)> HandleCreateOrder(CreateOrderCommand request, IQueryable<ProductItem> productItems, CancellationToken cancellationToken)
+    {
+        decimal totalPrice = 0;
+        var orderDetails = new List<OrderDetails>();
+
+        foreach (var orderItem in request.OrderItems)
+        {
+            var productItem = await productItems.FirstAsync(pi => pi.Id == orderItem.ProductItemId, cancellationToken);
+            var itemTotal = productItem.DiscountedPrice * orderItem.Quantity;
+            totalPrice += itemTotal;
+
+            var orderDetail = new OrderDetails
+            {
+                ProductItemId = orderItem.ProductItemId,
+                Quantity = orderItem.Quantity,
+                Price = productItem.OriginalPrice,
+                Notes = orderItem.Notes,
+                OrderItemStatus = OrderItemStatusEnums.Pending,
+                Weight = productItem.Weight,
+                Length = productItem.Length,
+                Width = productItem.Width,
+                Height = productItem.Height
+            };
+
+            orderDetails.Add(orderDetail);
+        }
 
         var order = new Order
         {
-            CustomerId = currentUserId,
-            TotalPrice = (double)orderItems.Sum(item => productItemsPrices[item.StoreProductId] * item.Quantity),
-            OrderItems = orderItems.Select(item => new OrderItem
+            TotalPrice = totalPrice,
+            OrderStatus = OrderStatusEnum.Pending,
+            UserPromotionId = request.UserPromotionId,
+            OrderDetails = orderDetails,
+            UsedPoints = request.Points,
+            OrderNote = request.OrderInfo.Note,
+            PaymentStatus = new OrderPaymentStatus
             {
-                StoreProductItemId = item.StoreProductId,
-                Quantity = item.Quantity,
-                Price = (double)productItemsPrices[item.StoreProductId],
-            }).ToList(),
+                PaymentStatus = PaymentStatusEnum.Pending,
+                PaymentMethod = request.OrderInfo.PaymentMethod
+            },
+            ShippingStatus = new OrderShippingStatus
+            {
+                Status = ShippingStatusEnum.Pending
+            },
+            CreationDate = DateTime.UtcNow
         };
 
-        var reduceStock = await _unitOfWork.StoreProductItemRepository.ReduceStock(orderItemsToCheck);
-        if (!reduceStock)
-            throw new AppExceptions("Reduce stock failed.");
-
-        await _unitOfWork.OrderRepository.AddAsync(order);
-        await _unitOfWork.SaveChangeAsync();
-        return order.Id;
+        order.FinalPrice = order.TotalPrice;
+        if (request.UserPromotionId != null)
+        {
+            var userPromotion = await _unitOfWork.UserPromotionRepository.GetByIdAsync(request.UserPromotionId.Value, u => u.Promotion);
+            if (userPromotion != null)
+            {
+                order.FinalPrice -= userPromotion.Promotion.Discount;
+            }
+        }
+        if (request.Points > 0)
+        {
+            order.FinalPrice -= request.Points;
+        }
+        order.EarnedPoints = (int)(order.FinalPrice / 1000);
+        return (orderDetails, order);
     }
+
+    private async Task<(Guid currentUserId, RoleEnum? currentUserRole, BaseUser? user, IQueryable<ProductItem> productItems)> HandleValidation(CreateOrderCommand request, CancellationToken cancellationToken)
+    {
+        var currentUserId = _claimService.CurrentUserId;
+        if (currentUserId == Guid.Empty)
+        {
+            throw new AppExceptions("Người dùng chưa đăng nhập", 401);
+        }
+        var currentUserRole = _claimService.CurrentRole;
+        BaseUser? user = await _unitOfWork.UserRepository.GetByIdAsync(currentUserId);
+        AppExceptions.ThrowIfNotFound(user, $"{string.Join(", ", currentUserRole)} with ID {currentUserId} not found");
+
+        if (currentUserRole != RoleEnum.Guardian && currentUserRole != RoleEnum.DependentUser)
+        {
+            throw new AppExceptions("Chỉ Guardian và DependentUser có thể tạo đơn hàng");
+        }
+
+        var productItemIds = request.OrderItems.Select(oi => oi.ProductItemId).ToList();
+        var productItems = await _unitOfWork.ProductItemRepository.GetAllAsync(
+            predicate: pi => productItemIds.Contains(pi.Id) && pi.IsActive,
+            include: source => source
+                .Include(pi => pi.Product)
+        );
+
+        if (await productItems.CountAsync() != productItemIds.Count)
+        {
+            throw new AppExceptions("Một số sản phẩm không tồn tại hoặc không hoạt động");
+        }
+
+        var stockIssues = new List<string>();
+        foreach (var orderItem in request.OrderItems)
+        {
+            var productItem = await productItems.FirstAsync(pi => pi.Id == orderItem.ProductItemId, cancellationToken);
+            if (productItem.Stock.Quantity < orderItem.Quantity)
+            {
+                stockIssues.Add($"Không đủ stock cho ProductName {productItem.ProductName}. Còn lại: {productItem.Stock}, Yêu cầu: {orderItem.Quantity}");
+            }
+        }
+
+        if (stockIssues.Any())
+        {
+            throw new AppExceptions($"Vấn đề về stock: {string.Join("; ", stockIssues)}");
+        }
+
+        return (currentUserId, currentUserRole, user, productItems);
+    }
+
+    private async Task HandleUserRole(Guid currentUserId, RoleEnum? currentUserRole, List<OrderDetails> orderDetails, Order order)
+    {
+        if (currentUserRole == RoleEnum.Guardian)
+        {
+            order.GuardianId = currentUserId;
+            order.DependentUserID = null;
+
+            order.OrderStatus = OrderStatusEnum.GuardianConfirmed;
+
+            foreach (var orderDetail in orderDetails)
+            {
+                orderDetail.OrderItemStatus = OrderItemStatusEnums.ConfirmedByGuardian;
+            }
+        }
+        else if (currentUserRole == RoleEnum.DependentUser)
+        {
+            var dependentUser = await _unitOfWork.DependentUserRepository.GetByIdAsync(currentUserId);
+            AppExceptions.ThrowIfNotFound(dependentUser, "Người dùng phụ thuộc không tồn tại");
+            order.DependentUserID = currentUserId;
+            order.GuardianId = dependentUser.GuardianId;
+
+            order.OrderStatus = OrderStatusEnum.Pending;
+
+            foreach (var orderDetail in orderDetails)
+            {
+                orderDetail.OrderItemStatus = OrderItemStatusEnums.Pending;
+            }
+        }
+    }
+
 }

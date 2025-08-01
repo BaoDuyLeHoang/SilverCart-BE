@@ -1,20 +1,21 @@
-﻿using Infrastructures.Features.Products.Commands.Add.AddProductImages;
-using Infrastructures.Features.Products.Commands.Add.AddProductItems.AddProductItemsToStore;
-using Infrastructures.Features.Products.Commands.Add.AddProductItems.AddProductItemsToVariant;
-using Infrastructures.Features.Products.Commands.Add.AddProductToCategories;
-using Infrastructures.Features.Products.Commands.Add.AddStockToStoreProductItems;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Infrastructures.Features.Products.Commands.Create.CreateProduct;
+using Infrastructures.Features.Products.Commands.Create.CreateItem;
+using Infrastructures.Features.Products.Queries.GetAll;
+using Infrastructures.Features.Products.Queries.GetById;
+using Infrastructures.Commons.Paginations;
+using Infrastructures.Features.Products.Commands.Add.AddProductImages;
+using Infrastructures.Features.Products.Commands.Add.AddProductToCategories;
 using Infrastructures.Features.Products.Commands.Delete.DeleteProductImage;
 using Infrastructures.Features.Products.Commands.Delete.DeleteProductItems;
-using Infrastructures.Features.Products.Commands.Delete.DeleteProductVariant;
 using Infrastructures.Features.Products.Commands.Update.UpdateProduct;
 using Infrastructures.Features.Products.Commands.Update.UpdateProductImages;
 using Infrastructures.Features.Products.Commands.Update.UpdateProductItems;
-using Infrastructures.Features.Products.Commands.Update.UpdateProductVariant;
-using Infrastructures.Features.Products.Queries.GetAll;
-using Infrastructures.Features.Products.Queries.GetById;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
+using Infrastructures.Features.Products.Commands.AddProductItems;
+using Microsoft.AspNetCore.Authorization;
+using Infrastructures.Features.Products.Queries.GetByPromotionId;
+
 
 namespace WebAPI.Controllers
 {
@@ -23,108 +24,111 @@ namespace WebAPI.Controllers
     public class ProductController : BaseController
     {
         private readonly IMediator _mediator;
+
         public ProductController(IMediator mediator)
         {
             _mediator = mediator;
         }
+
         [HttpPost]
-        public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommand productCreateDTO)
-        {
-            var result = await _mediator.Send(productCreateDTO);
-            return Ok(result);
-        }
-        [HttpGet]
-        public async Task<IActionResult> GetAllProduct([FromQuery] GetAllProductsCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetProductById(Guid id)
-        {
-            var result = await _mediator.Send(new GetProductByIdCommand(id));
-            return Ok(result);
-        }
-        [HttpPost("{productId}/images")]
-        public async Task<IActionResult> AddProductImage(AddProductImagesCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
-        [HttpPut("{productId}/images")]
-        public async Task<IActionResult> UpdateProductImages(UpdateProductImagesCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
-        [HttpDelete("{productId}/images")]
-        public async Task<IActionResult> DeleteProductImage(DeleteProductImageCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
-        [HttpPost("{productId}/categories")]
-        public async Task<IActionResult> AddProductToCategory(AddProductToCategoriesCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
-        [HttpPost("store/items")]
-        public async Task<IActionResult> AddProductItemsToStore(AddProductItemsToStoreCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
-        [HttpPut("add-stock")]
-        public async Task<IActionResult> AddStockToStoreProductItem(AddStockToStoreProductItemsCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
-        [HttpPost("{productId}/variants")]
-        public async Task<IActionResult> AddProductVariantToProduct(AddProductItemsToVariantCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
-        [HttpPut("{productId}/variants/{variantId}")]
-        public async Task<IActionResult> UpdateProductVariant(UpdateProductVariantCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
-        [HttpDelete("{productId}/variants/{variantId}")]
-        public async Task<IActionResult> DeleteProductVariant(DeleteProductVariantCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
-        [HttpPost("{productId}/variants/{variantId}/items")]
-        public async Task<IActionResult> AddProductItemToVariant(AddProductItemsToVariantCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
-        [HttpPut("{productId}/variants/{variantId}/items/{itemId}")]
-        public async Task<IActionResult> UpdateProductItem(UpdateProductItemsCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
-        [HttpDelete("{productId}/variants/{variantId}/items/{itemId}")]
-        public async Task<IActionResult> DeleteProductItem(DeleteProductItemCommand command)
+        [Authorize(Roles = "StoreUser, Administrator, SuperAdmin")]
+        public async Task<ActionResult<Guid>> CreateProduct([FromBody] CreateProductCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductCommand command)
+        [Authorize(Roles = "ShopOwner, Administrator, SuperAdmin")]
+        public async Task<ActionResult<bool>> UpdateProduct(Guid id, [FromBody] UpdateProductCommand command)
         {
-            if (id != command.Id)
-            {
-                return BadRequest("ID mismatch");
-            }
+            var result = await _mediator.Send(command with { Id = id });
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<PagedResult<GetAllProductsResponse>>> GetAllProducts([FromQuery] GetAllProductsCommand command)
+        {
             var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<GetAllProductsResponse>> GetProductById(Guid id)
+        {
+            var result = await _mediator.Send(new GetProductByIdCommand(id));
+            return Ok(result);
+        }
+
+        [HttpPost("images")]
+        [Authorize(Roles = "ShopOwner, Administrator, SuperAdmin")]
+        public async Task<ActionResult<bool>> AddProductImage([FromForm] AddProductImagesCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPut("images/{imageId}")]
+        [Authorize(Roles = "ShopOwner, Administrator, SuperAdmin")]
+        public async Task<ActionResult<bool>> UpdateProductImage(
+            [FromRoute] Guid imageId,
+            [FromForm] UpdateProductImagesCommand command)
+        {
+            var updatedCommand = command with { ImageId = imageId };
+            var result = await _mediator.Send(updatedCommand);
+            return Ok(result);
+        }
+
+        [HttpDelete("images/{imageId}")]
+        [Authorize(Roles = "ShopOwner, Administrator, SuperAdmin")]
+        public async Task<ActionResult<bool>> DeleteProductImage([FromRoute] Guid imageId)
+        {
+            var command = new DeleteProductImageCommand(imageId);
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost("{productId}/categories")]
+        public async Task<ActionResult<bool>> AddProductToCategory(AddProductToCategoriesCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost("{productId}/items")]
+        public async Task<ActionResult<bool>> AddProductItem(AddProductItemsCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPut("{productId}/items/{itemId}")]
+        public async Task<ActionResult<bool>> UpdateProductItem(UpdateProductItemsCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpDelete("{productId}/items/{itemId}")]
+        public async Task<ActionResult<bool>> DeleteProductItem(DeleteProductItemCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+
+
+
+        [HttpPost("items")]
+        public async Task<ActionResult<Guid>> CreateItem([FromBody] CreateProductItemCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpGet("products-in-promotion")]
+        public async Task<ActionResult<PagedResult<GetProductByPromotionIdResponse>>> GetProductByPromotionIdAsync([FromQuery] GetProductByPromotionIdQuery query)
+        {
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
     }

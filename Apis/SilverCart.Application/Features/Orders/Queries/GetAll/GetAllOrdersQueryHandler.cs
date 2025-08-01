@@ -1,53 +1,84 @@
+using Core.Interfaces;
 using Infrastructures.Commons.Paginations;
 using Infrastructures.Services.System;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SilverCart.Domain.Entities;
 using SilverCart.Domain.Enums;
-
-namespace Infrastructures;
-
-public sealed record GetAllOrdersQuery(PagingRequest? PagingRequest, Guid? Id, Guid? CustomerId, OrderStatusEnums? OrderStatus) : IRequest<PagedResult<GetAllOrdersResponse>>;
-public record GetAllOrdersResponse(Guid Id, double TotalPrice, DateTime? CreatedDate, List<GetAllOrdersResponseItem> OrderItems);
-public record GetAllOrdersResponseItem(Guid Id, Guid StoreProductItemId, int Quantity, double Price);
-public class GetAllOrdersQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetAllOrdersQuery, PagedResult<GetAllOrdersResponse>>
+namespace Infrastructures
 {
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    public async Task<PagedResult<GetAllOrdersResponse>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
+    public sealed record GetAllOrdersQuery(PagingRequest? PagingRequest, Guid? Id, Guid? CustomerId, OrderStatusEnum? OrderStatus) : IRequest<PagedResult<GetAllOrdersResponse>>;
+    public record GetAllOrdersResponse(Guid Id, double TotalPrice, DateTime? CreationDate, string OrderStatus, string Address, List<GetAllOrderDetailsResponse> OrderDetails);
+    public record GetAllOrderDetailsResponse(Guid Id, Guid ProductItemId, int Quantity, double Price, string OrderItemStatus, GetAllProductItemResponse ProductItem);
+    public record GetAllProductItemResponse(Guid Id, string ProductName, double OriginalPrice, double DiscountedPrice, int Stock, bool IsActive, List<GetProductItemsImagesResponse> ProductImages);
+    public record GetProductItemsImagesResponse(Guid Id, string ImagePath, string ImageName);
+    public class GetAllOrdersQueryHandler(IUnitOfWork unitOfWork, IRedisService redisService) : IRequestHandler<GetAllOrdersQuery, PagedResult<GetAllOrdersResponse>>
     {
-        var orders = await _unitOfWork.OrderRepository.GetAllAsync(
-            predicate: _ => true,
-            include: x => x.Include(x => x.OrderItems));
-
-        var filteredEntity = new Order
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        public async Task<PagedResult<GetAllOrdersResponse>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
         {
-            Id = request.Id.HasValue ? request.Id.Value : Guid.Empty,
-            CustomerId = request.CustomerId.HasValue ? request.CustomerId.Value : Guid.Empty,
-            OrderStatus = request.OrderStatus.HasValue ? request.OrderStatus.Value : OrderStatusEnums.All,
-        };
 
-        var filteredOrders = orders.AsQueryable().CustomFilterV1(filteredEntity);
+            var cacheKey = $"orders_{request.Id}_{request.CustomerId}_{request.OrderStatus}";
+            var cachedOrders = await redisService.GetAsync<PagedResult<GetAllOrdersResponse>>(cacheKey);
+            if (cachedOrders != null)
+            {
+                return cachedOrders;
+            }
 
-        var mappedOrders = filteredOrders.Select(order => new GetAllOrdersResponse(
-            order.Id,
-            order.TotalPrice,
-            order.CreationDate,
-            order.OrderItems.Select(
-                item => new GetAllOrdersResponseItem(
-                    item.Id,
-                    item.StoreProductItemId,
-                    item.Quantity,
-                    item.Price)
-                ).ToList()
-            )
-        ).ToList();
+            var orders = await _unitOfWork.OrderRepository.GetAllAsync(
+               predicate: _ => true,
+               include: x => x.Include(x => x.OrderDetails)
+                            .ThenInclude(od => od.ProductItem)
+                                .ThenInclude(pi => pi.ProductImages)
+                    .Include(x => x.DependentUser)
+                        .ThenInclude(x => x.Addresses)
+               );
 
-        var (page, pageSize, sortType, sortField) = PaginationUtils.GetPaginationAndSortingValues(request.PagingRequest);
+            var filteredEntity = new Order
+            {
+                Id = request.Id.HasValue ? request.Id.Value : Guid.Empty,
+                DependentUserID = request.CustomerId.HasValue ? request.CustomerId.Value : Guid.Empty,
+                OrderStatus = request.OrderStatus.HasValue ? request.OrderStatus.Value : SilverCart.Domain.Enums.OrderStatusEnum.All,
+            };
 
-        var sortedResult = PaginationHelper<GetAllOrdersResponse>.Sorting(sortType, mappedOrders, sortField);
-        var result = PaginationHelper<GetAllOrdersResponse>.Paging(sortedResult, page, pageSize);
+            var filteredOrders = orders.AsQueryable().CustomFilterV1(filteredEntity);
 
-        return result;
+            var mappedOrders = filteredOrders.Select(order => new GetAllOrdersResponse(
+               order.Id,
+               (double)order.TotalPrice,
+               order.CreationDate,
+               order.OrderStatus.ToString(),
+               order.DependentUser.Addresses.FirstOrDefault().StreetAddress ?? "",
+               order.OrderDetails.Select(orderDetail => new GetAllOrderDetailsResponse(
+                    orderDetail.Id,
+                    orderDetail.ProductItemId,
+                    orderDetail.Quantity,
+                    (double)orderDetail.Price,
+                    orderDetail.OrderItemStatus.ToString(),
+                    new GetAllProductItemResponse(
+                        orderDetail.ProductItem.Id,
+                        orderDetail.ProductItem.ProductName,
+                        (double)orderDetail.ProductItem.OriginalPrice,
+                        (double)orderDetail.ProductItem.DiscountedPrice,
+                        orderDetail.ProductItem.Stock.Quantity,
+                        orderDetail.ProductItem.IsActive,
+                        orderDetail.ProductItem.ProductImages.Select(
+                            img => new GetProductItemsImagesResponse(
+                                img.Id,
+                                img.ImagePath,
+                                img.ImageName
+                            )
+                        ).ToList()
+                    )
+               )).ToList()
+            ));
+
+            var (page, pageSize, sortType, sortField) = PaginationUtils.GetPaginationAndSortingValues(request.PagingRequest);
+
+            var sortedResult = PaginationHelper<GetAllOrdersResponse>.Sorting(sortType, mappedOrders, sortField);
+            var result = PaginationHelper<GetAllOrdersResponse>.Paging(sortedResult, page, pageSize);
+
+            return result;
+        }
     }
-
 }

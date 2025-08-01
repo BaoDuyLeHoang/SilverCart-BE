@@ -6,7 +6,6 @@ namespace SilverCart.Domain.Entities.Products;
 
 public class ProductItem : BaseEntity
 {
-    public string SKU { get; set; } = string.Empty;
     public string ProductName { get; set; } = string.Empty;
     public string Value { get; set; } = string.Empty;
     public decimal OriginalPrice { get; set; }
@@ -18,13 +17,13 @@ public class ProductItem : BaseEntity
     public bool IsActive { get; set; } = true;
 
     // Foreign keys
-    public Guid VariantId { get; set; }
-    public virtual ProductVariant Variant { get; set; } = null!;
+    public Guid ProductId { get; set; }
+    public virtual Product Product { get; set; } = null!;
 
     [NotMapped]
-    public Guid? StoreId => Variant.Product.StoreId;
+    public Guid? StoreId => Product.StoreId;
     [NotMapped]
-    public virtual Store? Store => Variant.Product.Store;
+    public virtual Store? Store => Product.Store;
 
     public Guid StockId { get; set; }
     public virtual Stock Stock { get; set; } = null!;

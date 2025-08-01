@@ -12,7 +12,6 @@ namespace SilverCart.Domain.Entities.Auth
         public Guid RoleId { get; set; }
         public ConsultantRole Role { get; set; } = null!;
         public string Specialization { get; set; } = null!;
-
         public string Biography { get; set; } = null!;
         public string AvatarPath { get; set; } = null!;
         public string ExpertiseArea { get; set; } = string.Empty;

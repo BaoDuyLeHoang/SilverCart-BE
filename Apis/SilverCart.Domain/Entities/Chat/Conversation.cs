@@ -6,12 +6,10 @@ namespace SilverCart.Domain.Entities.Chat
 {
     public class Conversation : BaseEntity, IAuditableEntity
     {
-        public Guid User1Id { get; set; }
-        public BaseUser User1 { get; set; }
-        public Guid User2Id { get; set; }
-        public BaseUser User2 { get; set ; }
+        public string Name { get; set; } // Optional: group chat name
+        public ICollection<ConversationMember> Members { get; set; } = new List<ConversationMember>();
+        public ICollection<Message> Messages { get; set; } = new List<Message>();
         public DateTime? LastMessageAt { get; set; }
-        private readonly List<Message> _messages = new List<Message>();
-        public IReadOnlyCollection<Message> Messages => _messages.AsReadOnly();
+        public string LastMessage { get; set; } = string.Empty;
     }
-} 
+}

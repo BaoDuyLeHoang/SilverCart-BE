@@ -46,13 +46,13 @@ namespace Infrastructures
             });
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             services.AddAutoMapper(assemblies);
-            services.AddAutoMapper(typeof(UserMapperProfile).Assembly);
+            // services.AddAutoMapper(typeof(UserMapperProfile).Assembly);
             // services.AddAutoMapper(typeof(CalculateShippingFeeMapper).Assembly);
 
             services.AddIdentity<BaseUser, BaseRole>(options =>
-                {
-                    // configure password, lockout, etc. if needed
-                })
+            {
+                // configure password, lockout, etc. if needed
+            })
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -74,6 +74,7 @@ namespace Infrastructures
             services.AddScoped<IStoreUserRepository, StoreUserRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProductItemRepository, ProductItemRepository>();
+            services.AddScoped<IProductImageRepository, ProductImageRepository>();
             services.AddScoped<IStoreAddressRepository, StoreAddressRepository>();
             services.AddScoped<ICustomerUserRepository, CustomerUserRepository>();
             services.AddScoped<IDependentUserRepository, DependentUserRepository>();
@@ -82,12 +83,17 @@ namespace Infrastructures
             services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddScoped<IConsultationRepository, ConsultationRepository>();
             services.AddScoped<IOrderDetailsRepository, OrderDetailsRepository>();
-            services.AddScoped<IProductVariantRepository, ProductVariantsRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<ICartItemRepository, CartItemRepository>();
+            services.AddScoped<IWalletRepository, WalletRepository>();
+            services.AddScoped<IPaymentHistoryRepository, PaymentHistoryRepository>();
             services.AddScoped<IAdministratorUserRepository, AdministratorUserRepository>();
             services.AddScoped<IUserPromotionRepository, UserPromotionRepository>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IReportRepository, ReportRepository>();
+            services.AddScoped<IProductPromotionRepository, ProductPromotionRespository>();
+            services.AddScoped<IPromotionRepository, PromotionRepository>();
         }
     }
 }

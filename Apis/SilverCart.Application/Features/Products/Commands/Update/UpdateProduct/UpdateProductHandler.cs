@@ -4,6 +4,9 @@ using SilverCart.Domain.Entities;
 using SilverCart.Domain.Enums;
 using SilverCart.Application.Interfaces;
 using Infrastructures.Services.System;
+using Infrastructures.Commons.Exceptions;
+using SilverCart.Domain.Entities.Categories;
+using SilverCart.Domain.Entities.Products;
 
 namespace Infrastructures.Features.Products.Commands.Update.UpdateProduct;
 
@@ -30,11 +33,11 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, bool>
     {
         var currentUserId = _claimsService.CurrentUserId;
         if (currentUserId == Guid.Empty)
-            throw new UnauthorizedAccessException("User not authenticated.");
+            throw new AppExceptions("Người dùng không được xác thực.");
 
-        var product = await _unitOfWork.ProductRepository.GetByIdAsync(request.Id);
+        var product = await _unitOfWork.ProductRepository.GetByIdAsync(request.Id, x => x.ProductCategories);
         if (product == null)
-            throw new Exception($"Product with ID {request.Id} not found.");
+            throw new AppExceptions($"Không tìm thấy sản phẩm với ID {request.Id}.");
 
         // Update basic product information only if new values are provided
         if (!string.IsNullOrWhiteSpace(request.Name))
@@ -60,9 +63,7 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, bool>
         // Update product categories only if new categories are provided
         if (request.CategoryIds != null && request.CategoryIds.Any())
         {
-            var existingCategories = await _unitOfWork.ProductCategoryRepository
-                .GetAllAsync(pc => pc.ProductId == product.Id);
-
+            var existingCategories = product.ProductCategories;
             // Remove categories that are not in the new list
             foreach (var existingCategory in existingCategories)
             {

@@ -7,13 +7,15 @@ using SilverCart.Domain.Entities.Auth;
 
 namespace Infrastructures;
 
-public sealed record RegisterUserCommand(string Email, string Password, string Phone, string FullName, RegisterUserAddress Address, bool IsGuardian) : IRequest<Guid>;
+public sealed record RegisterUserCommand(string Email, string Password, string Phone, string FullName, string Gender, RegisterUserAddress Address, bool IsGuardian) : IRequest<Guid>;
 public record RegisterUserAddress(string StreetAddress, string WardCode, int DistrictId, string ToDistrictName, string ToProvinceName) : IRequest<Guid>;
+
 public class RegisterUserHandler(IUnitOfWork unitOfWork, UserManager<BaseUser> userManager, ICurrentTime currentTime) : IRequestHandler<RegisterUserCommand, Guid>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly UserManager<BaseUser> _userManager = userManager;
     private readonly ICurrentTime _currentTime = currentTime;
+
     public async Task<Guid> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
         var checkMailExist = await _userManager.FindByEmailAsync(request.Email);
@@ -21,27 +23,52 @@ public class RegisterUserHandler(IUnitOfWork unitOfWork, UserManager<BaseUser> u
         {
             throw new AppExceptions("Email already exists");
         }
+
         var checkPhoneExist = await _unitOfWork.UserRepository.GetAllAsync(predicate: x => x.PhoneNumber == request.Phone);
         if (checkPhoneExist.Any())
         {
             throw new AppExceptions("Phone number already exists");
         }
-        var user = new BaseUser
-        {
-            FullName = request.FullName,
-            Email = request.Email,
-            PhoneNumber = request.Phone,
-            UserName = request.Email,
-            CreationDate = _currentTime.GetCurrentTime()
-        };
 
-        var address = new Address
+        var checkValidPhone = System.Text.RegularExpressions.Regex.IsMatch(request.Phone, @"^\d{10,15}$");
+        if (!checkValidPhone)
+        {
+            throw new AppExceptions("Invalid phone number format");
+        }
+
+        BaseUser user;
+        if (request.IsGuardian)
+        {
+            user = new GuardianUser
+            {
+                FullName = request.FullName,
+                Email = request.Email,
+                PhoneNumber = request.Phone,
+                UserName = request.Email,
+                Gender = request.Gender,
+                CreationDate = _currentTime.GetCurrentTime()
+            };
+        }
+        else
+        {
+            user = new CustomerUser
+            {
+                FullName = request.FullName,
+                Email = request.Email,
+                PhoneNumber = request.Phone,
+                UserName = request.Email,
+                Gender = request.Gender,
+                CreationDate = _currentTime.GetCurrentTime()
+            };
+        }
+
+        var address = new SavedAddress
         {
             StreetAddress = request.Address.StreetAddress,
             WardCode = request.Address.WardCode ?? "",
             DistrictId = request.Address.DistrictId,
-            ToDistrictName = request.Address.ToDistrictName ?? "",
-            ToProvinceName = request.Address.ToProvinceName ?? ""
+            DistrictName = request.Address.ToDistrictName ?? "",
+            ProvinceName = request.Address.ToProvinceName ?? ""
         };
         user.Addresses.Add(address);
 
@@ -51,31 +78,16 @@ public class RegisterUserHandler(IUnitOfWork unitOfWork, UserManager<BaseUser> u
             var errors = string.Join("; ", result.Errors.Select(e => e.Description));
             throw new AppExceptions(errors);
         }
+
+        var roleName = request.IsGuardian ? "Guardian" : "Customer";
+        var roleResult = await _userManager.AddToRoleAsync(user, roleName);
+        if (!roleResult.Succeeded)
+        {
+            var errors = string.Join("; ", roleResult.Errors.Select(e => e.Description));
+            throw new AppExceptions(errors);
+        }
+
         await _unitOfWork.SaveChangeAsync();
-        if (request.IsGuardian)
-        {
-            var roleResult = await _userManager.AddToRoleAsync(user, "Guardian");
-            if (!roleResult.Succeeded)
-            {
-                var errors = string.Join("; ", roleResult.Errors.Select(e => e.Description));
-                throw new AppExceptions(errors);
-            }
-            var guardianUser = new GuardianUser
-            {
-                Id = user.Id,
-                CreationDate = _currentTime.GetCurrentTime()
-            };
-            await _unitOfWork.GuardianUserRepository.AddAsync(guardianUser);
-        }
-        else
-        {
-            var roleResult = await _userManager.AddToRoleAsync(user, "Customer");
-            if (!roleResult.Succeeded)
-            {
-                var errors = string.Join("; ", roleResult.Errors.Select(e => e.Description));
-                throw new AppExceptions(errors);
-            }
-        }
         return user.Id;
     }
 }

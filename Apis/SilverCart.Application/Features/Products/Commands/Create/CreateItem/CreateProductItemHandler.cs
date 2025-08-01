@@ -18,11 +18,11 @@ public class CreateProductItemHandler : IRequestHandler<CreateProductItemCommand
     public async Task<CreateProductItemResponse> Handle(CreateProductItemCommand request,
         CancellationToken cancellationToken)
     {
-        // Check if variant exists
-        var variant = await _unitOfWork.ProductVariantRepository.GetByIdAsync(request.VariantId);
-        if (variant == null)
+        // Check if product exists
+        var product = await _unitOfWork.ProductRepository.GetByIdAsync(request.ProductId);
+        if (product == null)
         {
-            throw new ArgumentException($"Product variant with ID {request.VariantId} not found");
+            throw new ArgumentException($"Product with ID {request.ProductId} not found");
         }
 
         // Check if store exists
@@ -34,18 +34,18 @@ public class CreateProductItemHandler : IRequestHandler<CreateProductItemCommand
 
         var existingItem = await _unitOfWork.ProductItemRepository.GetAllAsync(
             predicate: item =>
-                item.SKU == request.SKU && item.VariantId == request.VariantId && item.StoreId == request.StoreId,
-            include: source => source.Include(item => item.Variant).ThenInclude(variant => variant.Product)
+                item.ProductName == request.ProductName && item.ProductId == request.ProductId && item.StoreId == request.StoreId,
+            include: source => source.Include(item => item.Product)
         );
         if (existingItem != null)
         {
-            throw new ArgumentException($"Product item with SKU {request.SKU} already exists");
+            throw new ArgumentException($"Product item with ProductName {request.ProductName} already exists");
         }
 
         var item = new ProductItem
         {
-            VariantId = request.VariantId,
-            SKU = request.SKU,
+            ProductId = request.ProductId,
+            ProductName = request.ProductName,
             OriginalPrice = request.OriginalPrice,
             DiscountedPrice = request.DiscountedPrice,
             Weight = request.Weight,
@@ -61,8 +61,8 @@ public class CreateProductItemHandler : IRequestHandler<CreateProductItemCommand
 
         return new CreateProductItemResponse(
             item.Id,
-            item.VariantId,
-            item.SKU,
+            item.ProductId,
+            item.ProductName,
             item.OriginalPrice,
             item.DiscountedPrice,
             item.Weight,

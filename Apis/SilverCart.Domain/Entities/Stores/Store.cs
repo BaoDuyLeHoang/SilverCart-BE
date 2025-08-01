@@ -1,4 +1,6 @@
-﻿namespace SilverCart.Domain.Entities.Stores;
+﻿using SilverCart.Domain.Entities.Products;
+
+namespace SilverCart.Domain.Entities.Stores;
 
 public class Store : BaseEntity
 {

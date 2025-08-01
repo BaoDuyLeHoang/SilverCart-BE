@@ -5,73 +5,86 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SilverCart.Application.Interfaces;
 using SilverCart.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SilverCart.Domain.Enums;
 
 namespace Infrastructures.Features.Orders.Queries.GetShopOrderItems
 {
-    public sealed record GetShopOrderItemsCommand(Guid? OrderItemsId, PagingRequest? PagingRequest, DateOnly? FromDate, DateOnly? ToDate) : IRequest<PagedResult<GetShopOrderItemsResponse>>;
-    public record GetShopOrderItemsResponse(Guid OrderItemsId, string OrderItemsName, int Quantity, double Price, DateTime CreatedAt, string Address, string CustomerName, string CustomerPhone);
-    public class GetShopOrderItemsQuery(IUnitOfWork unitOfWork, IClaimsService claimsService) : IRequestHandler<GetShopOrderItemsCommand, PagedResult<GetShopOrderItemsResponse>>
+    public sealed record GetShopOrderItemsCommand(Guid StoreId, Guid? OrderId, PagingRequest? PagingRequest, DateOnly? FromDate, DateOnly? ToDate, SilverCart.Domain.Enums.OrderStatusEnum? OrderStatus) : IRequest<PagedResult<GetShopOrderResponse>>;
+    public record GetShopOrderResponse(Guid Id, Guid OrderId, DateTime CreationDate, string OrderStatus, List<GetShopOrderDetailsResponse> OrderDetails);
+    public record GetShopOrderDetailsResponse(Guid Id, Guid ProductItemId, int Quantity, double Price, string OrderItemStatus, GetShopProductItemResponse ProductItem);
+    public record GetShopProductItemResponse(Guid Id, string ProductName, double OriginalPrice, double DiscountedPrice, int Stock, bool IsActive, List<GetProductItemsImagesResponse> ProductImages);
+    public record GetProductItemsImagesResponse(Guid Id, string ImagePath, string ImageName);
+
+    public class GetShopOrderItemsQuery(IUnitOfWork unitOfWork, IClaimsService claimsService) : IRequestHandler<GetShopOrderItemsCommand, PagedResult<GetShopOrderResponse>>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IClaimsService _claimsService = claimsService;
-        public async Task<PagedResult<GetShopOrderItemsResponse>> Handle(GetShopOrderItemsCommand request, CancellationToken cancellationToken)
+
+        public async Task<PagedResult<GetShopOrderResponse>> Handle(GetShopOrderItemsCommand request, CancellationToken cancellationToken)
         {
-            var currentShopUserId = _claimsService.CurrentUserId;
-            var currentShopUser = await _unitOfWork.StoreUserRepository.GetByIdAsync(currentShopUserId);
-            if (currentShopUser == null)
-                throw new AppExceptions("Shop user not found");
-
-            var currentShop = await _unitOfWork.StoreRepository.GetByIdAsync(currentShopUser.StoreId.Value);
-            if (currentShop == null)
-                throw new AppExceptions("Shop not found");
-
-            var orderItems = await _unitOfWork.OrderItemRepository.GetAllAsync(
-                predicate: x => x.Id == request.OrderItemsId && x.StoreProductItem.StoreId == currentShop.Id,
-                include: x => x.Include(x => x.Order)
-                                    .ThenInclude(x => x.Customer)
-                                        .ThenInclude(x => x.Addresses)
-                                .Include(x => x.StoreProductItem)
-                                    .ThenInclude(x => x.ProductItem)
-                                        .ThenInclude(x => x.ProductImages)
-                                .Include(x => x.StoreProductItem)
-                                    .ThenInclude(x => x.ProductItem)
-                                        .ThenInclude(x => x.Variant)
-                                            .ThenInclude(x => x.Product)
+            // Get orders that have order details with product items from the specified store
+            var orders = await _unitOfWork.OrderRepository.GetAllAsync(
+                predicate: x => x.OrderDetails.Any(od => od.ProductItem.StoreId == request.StoreId),
+                include: x => x.Include(x => x.OrderDetails.Where(od => od.ProductItem.StoreId == request.StoreId))
+                                .ThenInclude(od => od.ProductItem)
+                                    .ThenInclude(pi => pi.ProductImages)
             );
 
-            if (orderItems == null)
-                throw new AppExceptions("Order items not found");
+            var filteredOrders = orders.AsQueryable();
 
-            var filteredEntity = new OrderItem
+            if (request.OrderId.HasValue)
             {
-                Id = request.OrderItemsId.HasValue ? request.OrderItemsId.Value : Guid.Empty,
-            };
-
-            var filteredOrderItems = orderItems.AsQueryable().CustomFilterV1(filteredEntity);
-            if (request.FromDate.HasValue && request.ToDate.HasValue)
-            {
-                filteredOrderItems = filteredOrderItems.Where(x => x.Order.CreationDate >= request.FromDate.Value.ToDateTime(TimeOnly.MinValue) && x.Order.CreationDate <= request.ToDate.Value.ToDateTime(TimeOnly.MaxValue));
+                filteredOrders = filteredOrders.Where(x => x.Id == request.OrderId.Value);
             }
-            var mappedOrderItems = filteredOrderItems.Select(orderItem => new GetShopOrderItemsResponse(
-                orderItem.Id,
-                orderItem.StoreProductItem.ProductItem.Variant.Product.Name,
-                orderItem.Quantity,
-                orderItem.Price,
-                orderItem.Order.CreationDate.Value,
-                orderItem.Order.Customer.Addresses.FirstOrDefault().StreetAddress ?? "",
-                orderItem.Order.Customer.FullName ?? "",
-                orderItem.Order.Customer.PhoneNumber ?? ""
+
+            if (request.FromDate.HasValue)
+            {
+                filteredOrders = filteredOrders.Where(x => x.CreationDate >= request.FromDate.Value.ToDateTime(TimeOnly.MinValue));
+            }
+
+            if (request.ToDate.HasValue)
+            {
+                filteredOrders = filteredOrders.Where(x => x.CreationDate <= request.ToDate.Value.ToDateTime(TimeOnly.MaxValue));
+            }
+
+            if (request.OrderStatus.HasValue)
+            {
+                filteredOrders = filteredOrders.Where(x => x.OrderStatus == request.OrderStatus.Value);
+            }
+
+            var mappedOrders = filteredOrders.Select(order => new GetShopOrderResponse(
+                order.Id,
+                order.Id, // OrderId is the same as Id in this simplified structure
+                order.CreationDate.Value,
+                order.OrderStatus.ToString(),
+                order.OrderDetails.Where(od => od.ProductItem.StoreId == request.StoreId)
+                    .Select(orderDetail => new GetShopOrderDetailsResponse(
+                        orderDetail.Id,
+                        orderDetail.ProductItemId,
+                        orderDetail.Quantity,
+                        (double)orderDetail.Price,
+                        orderDetail.OrderItemStatus.ToString(),
+                        new GetShopProductItemResponse(
+                            orderDetail.ProductItem.Id,
+                            orderDetail.ProductItem.ProductName,
+                            (double)orderDetail.ProductItem.OriginalPrice,
+                            (double)orderDetail.ProductItem.DiscountedPrice,
+                            orderDetail.ProductItem.Stock.Quantity,
+                            orderDetail.ProductItem.IsActive,
+                            orderDetail.ProductItem.ProductImages.Select(
+                                img => new GetProductItemsImagesResponse(
+                                    img.Id,
+                                    img.ImagePath,
+                                    img.ImageName
+                                )
+                            ).ToList()
+                        )
+                    )).ToList()
             ));
 
             var (page, pageSize, sortType, sortField) = PaginationUtils.GetPaginationAndSortingValues(request.PagingRequest);
-            var sortedResult = PaginationHelper<GetShopOrderItemsResponse>.Sorting(sortType, mappedOrderItems, sortField);
-            var result = PaginationHelper<GetShopOrderItemsResponse>.Paging(sortedResult, page, pageSize);
-
+            var sortedResult = PaginationHelper<GetShopOrderResponse>.Sorting(sortType, mappedOrders, sortField);
+            var result = PaginationHelper<GetShopOrderResponse>.Paging(sortedResult, page, pageSize);
             return result;
         }
     }

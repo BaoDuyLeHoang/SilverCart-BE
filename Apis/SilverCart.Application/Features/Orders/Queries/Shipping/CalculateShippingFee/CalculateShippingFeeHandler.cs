@@ -34,7 +34,7 @@ public class CalculateShippingFeeHandler : IRequestHandler<CalculateShippingFeeQ
         var productItems = new List<ProductItem>();
         foreach (var item in request.ProductItems)
         {
-            var productItem = await _unitOfWork.ProductItemRepository.GetByIdAsync(item.ProductItemId, x => x.Variant);
+            var productItem = await _unitOfWork.ProductItemRepository.GetByIdAsync(item.ProductItemId, x => x.Product);
             AppExceptions.ThrowIfNotFound(productItem, "Product item not found");
             var product = await _unitOfWork.ProductItemRepository.GetProductByProductItemID(item.ProductItemId);
             productItem.ProductName = product.Name;
@@ -60,8 +60,8 @@ public class CalculateShippingFeeHandler : IRequestHandler<CalculateShippingFeeQ
 
         ShippingFeeResponse shippingFeeResponse = await _ghnService.CalculateShippingFee(new CalculateShippingFeeRequest
         {
-            FromDistrictId = fromAddress.DistrictId,
-            FromWardCode = fromAddress.WardCode,
+            FromDistrictId = fromAddress?.DistrictId ?? throw new AppExceptions("Cửa hàng không có địa chỉ"),
+            FromWardCode = fromAddress?.WardCode ?? throw new AppExceptions("Cửa hàng không có địa chỉ"),
             ToWardCode = toWardCode,
             ToDistrictId = toDistrictId,
             Weight = weight,

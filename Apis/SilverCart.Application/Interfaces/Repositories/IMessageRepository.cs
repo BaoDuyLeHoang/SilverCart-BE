@@ -1,13 +1,13 @@
 using SilverCart.Domain.Entities.Chat;
 
-namespace Infrastructures;
+namespace SilverCart.Application.Interfaces.Repositories;
 
 public interface IMessageRepository
 {
-    Task<List<Message>> GetMessagesByConversationIdAsync(Guid conversationId);
-    Task<List<Message>> GetMessagesByConversationIdBeforeAsync(Guid conversationId, DateTime? before, int limit = 20);
-    Task<List<Message>> GetMessagesAfterAsync(Guid conversationId, DateTime after, int limit = 20);
-    Task<List<Message>> GetUnreadMessagesAsync(Guid conversationId, Guid userId);
+    Task<List<MessageDto>> GetMessagesByConversationIdAsync(Guid conversationId);
+    Task<List<MessageDto>> GetMessagesByConversationIdBeforeAsync(Guid conversationId, DateTime? before, int limit = 20);
+    Task<List<MessageDto>> GetMessagesAfterAsync(Guid conversationId, DateTime after, int limit = 20);
+    Task<List<MessageDto>> GetUnreadMessagesAsync(Guid conversationId, Guid userId);
     Task<int> CountUnreadMessagesAsync(Guid conversationId, Guid userId);
     Task<Message?> GetByIdAsync(Guid messageId);
     Task AddMessageAsync(Message message);
@@ -15,4 +15,5 @@ public interface IMessageRepository
     Task RecallMessageAsync(Guid messageId, Guid userId);
     Task MarkAsReadAsync(Guid messageId, Guid userId);
     Task<bool> CanUserAccessMessageAsync(Guid messageId, Guid userId);
+    MessageDto ToDto(Message message);
 }

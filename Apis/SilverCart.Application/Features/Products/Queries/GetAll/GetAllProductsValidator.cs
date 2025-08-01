@@ -1,6 +1,7 @@
 using FluentValidation;
 using Infrastructures.Commons.Paginations;
 using Infrastructures.Features.Products.Queries.GetAll;
+using SilverCart.Domain.Enums;
 
 namespace SilverCart.Application.Features.Products.Queries.GetAll
 {
@@ -18,11 +19,15 @@ namespace SilverCart.Application.Features.Products.Queries.GetAll
                     .LessThanOrEqualTo(100).WithMessage("Kích thước trang không được vượt quá 100");
             });
 
-            When(x => !string.IsNullOrEmpty(x.ProductName), () =>
-            {
-                RuleFor(x => x.ProductName)
-                    .MaximumLength(200).WithMessage("Tên sản phẩm tìm kiếm không được vượt quá 200 ký tự");
-            });
+            RuleFor(x => x.Keyword)
+                .MaximumLength(255)
+                .When(x => !string.IsNullOrEmpty(x.Keyword))
+                .WithMessage("Từ khóa không được vượt quá 255 ký tự");
+
+            RuleFor(x => x.Id)
+                .NotEmpty()
+                .When(x => x.Id.HasValue)
+                .WithMessage("ID sản phẩm không được để trống");
         }
     }
 }

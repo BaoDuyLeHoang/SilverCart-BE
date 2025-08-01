@@ -19,6 +19,7 @@ namespace Infrastructures.Features.Consultation.Consultant.Create
        string Password,
        string Phone,
        string FullName,
+       string Gender,
        RegisterUserAddress Address,
        string Specialization,
        string? CertificationDocumentLink = null
@@ -45,23 +46,24 @@ namespace Infrastructures.Features.Consultation.Consultant.Create
             if (checkPhoneExist.Any())
                 throw new AppExceptions("Phone number already exists");
 
-            var consultantUser = new ConsultantUser
+            var consultantUser = new SilverCart.Domain.Entities.Auth.ConsultantUser
             {
                 FullName = request.FullName,
                 Email = request.Email,
                 PhoneNumber = request.Phone,
                 UserName = request.Email,
+                Gender = request.Gender,
                 CreationDate = _currentTime.GetCurrentTime(),
                 Specialization = request.Specialization,
             };
 
-            var address = new Address
+            var address = new SavedAddress
             {
                 StreetAddress = request.Address.StreetAddress,
                 WardCode = request.Address.WardCode ?? string.Empty,
                 DistrictId = request.Address.DistrictId,
-                ToDistrictName = request.Address.ToDistrictName ?? string.Empty,
-                ToProvinceName = request.Address.ToProvinceName ?? string.Empty
+                DistrictName = request.Address.ToDistrictName ?? string.Empty,
+                ProvinceName = request.Address.ToProvinceName ?? string.Empty
             };
             consultantUser.Addresses.Add(address);
 

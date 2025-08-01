@@ -2,6 +2,7 @@
 
 namespace SilverCart.Domain.Entities;
 
+
 public class UserPromotion : BaseEntity
 {
     // Navigation properties

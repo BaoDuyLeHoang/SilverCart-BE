@@ -1,61 +1,62 @@
+using Infrastructures.Commons.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using SilverCart.Domain.Entities;
 
 namespace Infrastructures;
 
 public sealed record GetOrderByIdQuery(Guid Id) : IRequest<GetOrderByIdResponse>;
-public record GetOrderByIdResponse(Guid Id, double TotalPrice, DateTime? CreatedDate, List<GetOrderItemsByIdResponse> OrderItems, string OrderStatus, string Address);
-public record GetOrderItemsByIdResponse(Guid Id, List<GetStoreProductItemsByIdResponse> StoreProductItems, int Quantity, double Price, string OrderItemsStatus);
-public record GetStoreProductItemsByIdResponse(Guid Id, string StoreName, string ProductName, string VariantName, List<GetProductItemsImagesResponse> ProductImages);
-public record GetProductItemsImagesResponse(Guid Id, string ImagePath, string ImageName);
+public record GetOrderByIdResponse(Guid Id, double TotalPrice, DateTime CreationDate, string OrderStatus, string Address, List<GetOrderDetailsResponse> OrderDetails);
+public record GetOrderDetailsResponse(Guid Id, Guid ProductItemId, int Quantity, double Price, string OrderItemStatus, GetProductItemResponse ProductItem);
+public record GetProductItemResponse(Guid Id, string ProductName, double OriginalPrice, double DiscountedPrice, int Stock, bool IsActive, List<GetProductItemsImagesResponse> ProductImages);
 public class GetOrderByIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetOrderByIdQuery, GetOrderByIdResponse>
 {
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
     public async Task<GetOrderByIdResponse> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
     {
-        var orders = await unitOfWork.OrderRepository.GetAllAsync(
+        var orders = await _unitOfWork.OrderRepository.GetAllAsync(
             predicate: x => x.Id == request.Id,
-            include: x => x.Include(x => x.OrderItems)
-                                .ThenInclude(x => x.StoreProductItem)
-                                    .ThenInclude(x => x.ProductItem)
-                                        .ThenInclude(x => x.ProductImages)
-                            .Include(x => x.OrderItems)
-                                .ThenInclude(x => x.StoreProductItem)
-                                    .ThenInclude(x => x.Store)
-                            .Include(x => x.OrderItems)
-                                .ThenInclude(x => x.StoreProductItem)
-                                    .ThenInclude(x => x.ProductItem)
-                                        .ThenInclude(x => x.Variant)
-                                            .ThenInclude(x => x.Product)
-                            .Include(x => x.Customer)
-                                .ThenInclude(x => x.Addresses)
+            include: source => source
+                .Include(x => x.OrderDetails)
+                    .ThenInclude(od => od.ProductItem)
+                        .ThenInclude(pi => pi.ProductImages)
+                .Include(x => x.DependentUser)
+                    .ThenInclude(x => x.Addresses)
         );
         var order = orders.FirstOrDefault();
-        if (order == null) return null!;
+        if (order == null)
+            throw new AppExceptions("Order not found");
 
-        return new GetOrderByIdResponse(
+        return new GetOrderByIdResponse
+        (
             Id: order.Id,
-            TotalPrice: order.TotalPrice,
-            CreatedDate: order.CreationDate,
-            OrderItems: order.OrderItems
-                .Select(x => new GetOrderItemsByIdResponse(
-                    x.Id,
-                    new List<GetStoreProductItemsByIdResponse> {
-                        new(
-                            x.StoreProductItem.Id,
-                            x.StoreProductItem.Store.Name,
-                            x.StoreProductItem.ProductItem.Variant.Product.Name,
-                            x.StoreProductItem.ProductItem.Variant.VariantName,
-                            x.StoreProductItem.ProductItem.ProductImages
-                                .Select(z => new GetProductItemsImagesResponse(z.Id, z.ImagePath, z.ImageName))
-                                .ToList()
-                        )
-                    },
-                    x.Quantity,
-                    x.Price,
-                    x.Status.ToString()))
-                .ToList(),
+            TotalPrice: (double)order.TotalPrice,
+            CreationDate: order.CreationDate.Value,
             OrderStatus: order.OrderStatus.ToString(),
-            Address: order.Customer.Addresses.FirstOrDefault()?.StreetAddress ?? ""
+            Address: order.DependentUser.Addresses.FirstOrDefault()?.StreetAddress ?? "",
+            OrderDetails: order.OrderDetails.Select(orderDetail => new GetOrderDetailsResponse
+            (
+                Id: orderDetail.Id,
+                ProductItemId: orderDetail.ProductItemId,
+                Quantity: orderDetail.Quantity,
+                Price: (double)orderDetail.Price,
+                OrderItemStatus: orderDetail.OrderItemStatus.ToString(),
+                ProductItem: new GetProductItemResponse
+                (
+                    Id: orderDetail.ProductItem.Id,
+                    ProductName: orderDetail.ProductItem.ProductName,
+                    OriginalPrice: (double)orderDetail.ProductItem.OriginalPrice,
+                    DiscountedPrice: (double)orderDetail.ProductItem.DiscountedPrice,
+                    Stock: orderDetail.ProductItem.Stock.Quantity,
+                    IsActive: orderDetail.ProductItem.IsActive,
+                    ProductImages: orderDetail.ProductItem.ProductImages.Select(img => new GetProductItemsImagesResponse
+                    (
+                        Id: img.Id,
+                        ImagePath: img.ImagePath,
+                        ImageName: img.ImageName
+                    )).ToList()
+                )
+            )).ToList()
         );
     }
 }

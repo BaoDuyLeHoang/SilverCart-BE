@@ -3,9 +3,9 @@ using MediatR;
 namespace Infrastructures.Features.Products.Commands.Create.CreateItem;
 
 public sealed record CreateProductItemCommand(
-    Guid VariantId,
+    Guid ProductId,
     Guid StoreId,
-    string SKU,
+    string ProductName,
     decimal OriginalPrice,
     decimal DiscountedPrice,
     int Weight,
@@ -15,8 +15,8 @@ public sealed record CreateProductItemCommand(
 
 public record CreateProductItemResponse(
     Guid Id,
-    Guid VariantId,
-    string SKU,
+    Guid ProductId,
+    string ProductName,
     decimal OriginalPrice,
     decimal DiscountedPrice,
     int Weight,

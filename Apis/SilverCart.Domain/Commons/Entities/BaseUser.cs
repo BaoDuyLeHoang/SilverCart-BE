@@ -10,6 +10,12 @@ namespace SilverCart.Domain.Entities
     {
         public string FullName { get; set; }
         public OTPData? OTP { get; set; }
+        public string Gender { get; set; } = "Other";
+        public string? RefreshToken { get; set; }
+        public string? ImageUrl { get; set; }
+        public virtual ICollection<SavedAddress> Addresses { get; set; } = new HashSet<SavedAddress>();
+        public virtual ICollection<ConversationMember> ConversationMemberships { get; set; } = new HashSet<ConversationMember>();
+
         public bool IsDeleted { get; set; }
         public DateTime? CreationDate { get; set; }
         public DateTime? ModificationDate { get; set; }
@@ -17,23 +23,6 @@ namespace SilverCart.Domain.Entities
         public Guid? CreatedById { get; set; }
         public Guid? ModificationById { get; set; }
         public Guid? DeleteById { get; set; }
-        public virtual ICollection<Conversation> ConversationsAsUser1 { get; set; } = new List<Conversation>();
-        public virtual ICollection<Conversation> ConversationsAsUser2 { get; set; } = new List<Conversation>();
-        public virtual ICollection<StoreUser> StoreUsers { get; set; } = new List<StoreUser>();
-        public ICollection<Address> Addresses { get; set; } = new List<Address>();
-        public string? RefreshToken { get; set; }
-    }
-    public class OTPData
-    {
-        public string Code { get; set; } = string.Empty;
-        public DateTime ExpirationTime { get; set; }
-        public bool IsUsed { get; set; } = false;
-
-        public static OTPData Init(string code, int days) => new OTPData()
-        {
-            Code = code,
-            ExpirationTime = DateTime.UtcNow.AddDays(days),
-            IsUsed = false
-        };
+        public bool IsHardDelete { get; set; } = false;
     }
 }

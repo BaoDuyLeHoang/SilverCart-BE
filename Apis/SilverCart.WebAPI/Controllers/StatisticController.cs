@@ -13,6 +13,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Swashbuckle.AspNetCore.Annotations;
+using Infrastructures.Features.Statistics.Queries.GetTotal.GetTotalTransactions;
 
 namespace WebAPI.Controllers
 {
@@ -68,6 +69,13 @@ namespace WebAPI.Controllers
         public async Task<ActionResult<GetCurrentStatisticQueryResponse>> GetCurrentStatistics()
         {
             var result = await _mediator.Send(new GetCurrentStatisticCommand());
+            return Ok(result);
+        }
+
+        [HttpGet("total-transactions")]
+        public async Task<ActionResult<List<GetTotalNumberOfTransactionsQuery>>> GetTotalTransactions([FromQuery] GetTotalNumberOfTransactionsQuery request)
+        {
+            var result = await _mediator.Send(request);
             return Ok(result);
         }
     }

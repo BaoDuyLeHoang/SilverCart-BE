@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Infrastructures.Commons.Exceptions;
+
 public class AppExceptions : Exception
 {
-    public List<string> Errors { get; }
-    public List<FieldError> FieldErrors { get; }
+    public ICollection<string> Errors { get; }
+    public ICollection<FieldError> FieldErrors { get; }
     public int StatusCode { get; } = 400;
 
     public AppExceptions() : base()
@@ -24,14 +26,21 @@ public class AppExceptions : Exception
         StatusCode = 400;
     }
 
-    public AppExceptions(List<string> errors) : base("One or more errors occurred.")
+    public AppExceptions(ICollection<string> errors) : base("One or more errors occurred.")
     {
         Errors = errors ?? new List<string>();
         FieldErrors = new List<FieldError>();
         StatusCode = 400;
     }
 
-    public AppExceptions(string message, List<string> errors) : base(message)
+    public AppExceptions(string message, int statusCode = 400) : base(message)
+    {
+        Errors = new List<string> { message };
+        FieldErrors = new List<FieldError>();
+        StatusCode = statusCode;
+    }
+
+    public AppExceptions(string message, ICollection<string> errors) : base(message)
     {
         Errors = errors ?? new List<string>();
         FieldErrors = new List<FieldError>();
@@ -45,12 +54,11 @@ public class AppExceptions : Exception
         StatusCode = 400;
     }
 
-    public AppExceptions(string message, List<string> errors, Exception innerException) : base(message, innerException)
+    public AppExceptions(string message, ICollection<string> errors, Exception innerException) : base(message, innerException)
     {
         Errors = errors ?? new List<string>();
         FieldErrors = new List<FieldError>();
         StatusCode = 400;
-
     }
 
     public AppExceptions(string message, List<FieldError> fieldErrors, int statusCode) : base(message)
@@ -66,10 +74,22 @@ public class AppExceptions : Exception
         FieldErrors = fieldErrors ?? new List<FieldError>();
     }
 
-    public AppExceptions(string message, List<FieldError> fieldErrors, Exception innerException) : base(message, innerException)
+    public AppExceptions(string message, List<FieldError> fieldErrors, Exception innerException) : base(message,
+        innerException)
     {
         Errors = new List<string>();
         FieldErrors = fieldErrors ?? new List<FieldError>();
         StatusCode = 400;
+    }
+    public static void ThrowIfNotFound([NotNull] object? value, string message)
+    {
+        if (value == null)
+            throw new AppExceptions(message, 404);
+    }
+
+    public static void ThrowIfTrue(bool condition, string message, int statusCode = 400)
+    {
+        if (condition)
+            throw new AppExceptions(message, statusCode);
     }
 }

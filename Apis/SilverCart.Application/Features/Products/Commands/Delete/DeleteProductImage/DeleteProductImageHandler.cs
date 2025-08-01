@@ -1,46 +1,62 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using Infrastructures.Commons.Exceptions;
+using Infrastructures.Interfaces.System;
+using Infrastructures.Interfaces.Entities;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SilverCart.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Infrastructures.Features.Products.Commands.Delete.DeleteProductImage
 {
-    public sealed record DeleteProductImageCommand(Guid ProductItemId, List<Guid> ImageIds) : IRequest<Guid>;
-    public class DeleteProductImageHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteProductImageCommand, Guid>
+    public class DeleteProductImageHandler(IUnitOfWork unitOfWork, IFirebaseFileService firebaseFileService) : IRequestHandler<DeleteProductImageCommand, bool>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
-        public async Task<Guid> Handle(DeleteProductImageCommand request, CancellationToken cancellationToken)
+        private readonly IFirebaseFileService _firebaseFileService = firebaseFileService;
+
+        public async Task<bool> Handle(DeleteProductImageCommand request, CancellationToken cancellationToken)
         {
-            var productItems = await _unitOfWork.ProductItemRepository.GetAllAsync(
-                predicate: x => x.Id == request.ProductItemId,
-                include: source => source.Include(x => x.ProductImages)
+            // Lấy ảnh cần xóa
+            var images = await _unitOfWork.ProductImageRepository.GetAllAsync(
+                predicate: x => x.Id == request.ImageId
             );
+            var image = images.FirstOrDefault();
 
-            var productItem = productItems.FirstOrDefault();
-
-            if (productItem == null)
-                throw new KeyNotFoundException($"Product with ID '{request.ProductItemId}' not found.");
-
-            foreach (var imageId in request.ImageIds)
+            if (image == null)
+                throw new AppExceptions($"Không tìm thấy ảnh với ID '{request.ImageId}'");
+            await _unitOfWork.BeginTransactionAsync();
+            try
             {
-                var productImage = productItem.ProductImages.FirstOrDefault(x => x.Id == imageId);
+                // Xóa file trên Firebase Storage
+                if (!string.IsNullOrEmpty(image.ImagePath))
+                {
+                    try
+                    {
+                        await _firebaseFileService.DeleteFileAsync(image.ImagePath);
+                    }
+                    catch
+                    {
+                        // Log lỗi nhưng vẫn tiếp tục xóa record trong DB
+                        // TODO: Add logging
+                    }
+                }
 
-                if (productImage != null)
-                {
-                    productImage.IsDeleted = true;
-                }
-                else
-                {
-                    throw new KeyNotFoundException($"Image with ID '{imageId}' not found for Product with ID '{request.ProductItemId}'.");
-                }
+                // Xóa record trong DB
+                _unitOfWork.ProductImageRepository.HardRemove(image);
+                await _unitOfWork.SaveChangeAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return true;
             }
-
-            await _unitOfWork.SaveChangeAsync();
-            return productItem.Id;
+            catch
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw;
+            }
         }
     }
 }

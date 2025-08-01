@@ -23,7 +23,7 @@ namespace Infrastructures.Features.Statistics.Queries.GetTopN.GetTopNProduct
             // Step 1: Get orders with all related data
             var orders = await _unitOfWork.OrderRepository.GetAllAsync(
                 predicate: p => p.CreationDate >= currentMonthStart && p.CreationDate <= DateTime.UtcNow,
-                include: p => p.Include(p => p.OrderDetails).ThenInclude(p => p.ProductItem).ThenInclude(p => p.Variant).ThenInclude(p => p.Product)
+                include: p => p.Include(p => p.OrderDetails).ThenInclude(p => p.ProductItem).ThenInclude(p => p.Product)
             );
 
             // Step 2: Process data in memory to avoid complex LINQ translation
@@ -33,9 +33,9 @@ namespace Infrastructures.Features.Statistics.Queries.GetTopN.GetTopNProduct
             {
                 foreach (var orderDetail in order.OrderDetails)
                 {
-                    if (orderDetail.ProductItem?.Variant?.Product != null)
+                    if (orderDetail.ProductItem?.Product != null)
                     {
-                        var productName = orderDetail.ProductItem.Variant.Product.Name;
+                        var productName = orderDetail.ProductItem.Product.Name;
                         var quantity = orderDetail.Quantity;
                         var revenue = orderDetail.ProductItem.OriginalPrice * quantity;
 

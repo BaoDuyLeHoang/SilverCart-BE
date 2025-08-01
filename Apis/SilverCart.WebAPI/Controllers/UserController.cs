@@ -1,56 +1,48 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
-using Infrastructures;
-using Infrastructures.Features.Users.Queries.GetAllUsers;
-using Infrastructures.Features.Users.Queries.GetDependantUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Infrastructures.Commons.Paginations;
+using Infrastructures.Features.Users.Queries.GetAllUsers;
+using Infrastructures.Features.Users.Queries.GetDependantUser;
+using Infrastructures.Features.Users.Queries.GetGuardianUser;
+using Infrastructures;
 
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : BaseController
+    public class UserController(IMediator mediator) : BaseController
     {
-        private readonly ILogger<UserController> _logger;
-        private readonly IMediator _mediator;
-
-        public UserController(ILogger<UserController> logger, IMediator mediator)
-        {
-            _logger = logger;
-            _mediator = mediator;
-        }
+        private readonly IMediator _mediator = mediator;
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers([FromQuery] GetAllUsersQuery request)
+        public async Task<ActionResult<PagedResult<GetAllUsersResponse>>> GetAllUsers([FromQuery] GetAllUsersQuery request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
         }
 
         [HttpGet("dependent-users")]
-        public async Task<IActionResult> GetDependentUsers([FromQuery] GetDependentUserQuery request)
+        public async Task<ActionResult<List<Infrastructures.Features.Users.Queries.GetDependantUser.GetDependentUserResponse>>> GetDependentUsers([FromQuery] GetDependentUserQuery request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
         }
 
         [HttpPost("update-profile")]
-        public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserProfileCommand command)
+        public async Task<ActionResult<Guid>> UpdateProfile([FromBody] UpdateUserProfileCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
         }
+
         [HttpGet("guardian-users")]
-        public async Task<IActionResult> GetGuardianUsers([FromQuery] GetGuardianUserQuery request)
+        public async Task<ActionResult<List<GetGuardianUserResponse>>> GetGuardianUsers([FromQuery] GetGuardianUserQuery request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
         }
-
     }
 }

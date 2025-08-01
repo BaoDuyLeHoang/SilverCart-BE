@@ -5,8 +5,10 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SilverCart.Application.Interfaces;
+using SilverCart.Application.Services.System;
 using SilverCart.Domain.Commons.Enums;
 using SilverCart.Domain.Entities;
+using SilverCart.Domain.Entities.Stores;
 using System;
 using System.Linq;
 using System.Threading;
@@ -14,74 +16,78 @@ using System.Threading.Tasks;
 
 namespace Infrastructures.Features.Stores.Commands.Create.CreateStore
 {
-    public class CreateStoreHandler(IUnitOfWork unitOfWork, IClaimsService claimsService, ICurrentTime currentTime, UserManager<BaseUser> userManager) : IRequestHandler<CreateStoreCommand, Guid>
+    public class CreateStoreHandler(IUnitOfWork unitOfWork, IClaimsService claimsService, ICurrentTime currentTime, UserManager<BaseUser> userManager, IGhnService ghnService) : IRequestHandler<CreateStoreCommand, Guid>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IClaimsService _claimsService = claimsService;
         private readonly ICurrentTime _currentTime = currentTime;
         private readonly UserManager<BaseUser> _userManager = userManager;
-        //private readonly IGhnService _ghnService = ghnService; , IGhnService ghnService
+        private readonly IGhnService _ghnService = ghnService;
         public async Task<Guid> Handle(CreateStoreCommand request, CancellationToken cancellationToken)
         {
             var currentUserId = _claimsService.CurrentUserId;
-            var currentUser = await _unitOfWork.UserRepository.GetByIdAsync(currentUserId);
-            if (currentUser == null) throw new AppExceptions("User not found");
+            var currentUser = await _unitOfWork.AdministratorUserRepository.GetByIdAsync(currentUserId);
+            if (currentUser == null)
+                throw new AppExceptions("Không tìm thấy người dùng");
 
-            var isOwnerOfAnyStore = await _unitOfWork.StoreUserRepository.GetAllAsync(x => x.Id == currentUserId);
-            if (isOwnerOfAnyStore.Any()) throw new AppExceptions("User already owns a store");
+            var transaction = await _unitOfWork.BeginTransactionAsync(cancellationToken);
 
-            //var shopId = await _ghnService.RegisterStoreAsync(new CreateStoreGhnRequest
-            //{
-            //    DistrictId = request.DistrictId,
-            //    WardCode = request.WardCode,
-            //    ShopName = request.StoreName,
-            //    ShopPhone = currentUser.PhoneNumber ?? throw new AppExceptions("User not have phone number"),
-            //    ShopAddress = request.StreetAddress
-            //});
-
+            // Create store entity
             var store = new Store
             {
                 Id = Guid.NewGuid(),
                 Name = request.StoreName,
-                Infomation = request.Information,
+                Description = request.Information,
                 AdditionalInfo = request.AdditionalInfo,
-                AvatarPath = request.AvatarPath ?? "",
-                CreationDate = _currentTime.GetCurrentTime(),
+                AvatarPath = request.AvatarPath ?? string.Empty,
+                Phone = currentUser.PhoneNumber,
+                CreationDate = _currentTime.GetCurrentTime()
             };
 
+            // Create address
             var address = new StoreAddress
             {
                 StreetAddress = request.StreetAddress,
                 WardCode = request.WardCode,
                 DistrictId = request.DistrictId,
-                FromDistrictName = request.DistrictName,
-                FromProvinceName = request.ProvinceName
+                WardName = request.WardName,
+                DistrictName = request.DistrictName,
+                ProvinceName = request.ProvinceName
             };
-
             store.StoreAddress = address;
 
-            var storeUser = new StoreUser
-            {
-                StoreId = store.Id,
-            };
+            // Assign store to current user
+            currentUser.Stores.Add(store);
+            _unitOfWork.AdministratorUserRepository.Update(currentUser);
 
+            // Save all
             await _unitOfWork.StoreRepository.AddAsync(store);
             await _unitOfWork.StoreAddressRepository.AddAsync(address);
-            await _unitOfWork.StoreUserRepository.AddAsync(storeUser);
+            await _unitOfWork.SaveChangeAsync(cancellationToken);
+            // Register store with GHN
+            var shopId = await _ghnService.RegisterStoreAsync(new CreateStoreGhnRequest
+            {
+                DistrictId = request.DistrictId,
+                WardCode = request.WardCode,
+                ShopName = request.StoreName,
+                ShopPhone = currentUser.PhoneNumber ?? throw new AppExceptions("Người dùng không có số điện thoại"),
+                ShopAddress = request.StreetAddress
+            });
+            store.GhnShopId = shopId;
+            await _unitOfWork.SaveChangeAsync(cancellationToken);
 
-            await _unitOfWork.SaveChangeAsync();
 
+            // Add StoreOwner role if not assigned
             var hasRole = await _userManager.IsInRoleAsync(currentUser, "StoreOwner");
             if (!hasRole)
             {
                 var addRoleResult = await _userManager.AddToRoleAsync(currentUser, "StoreOwner");
                 if (!addRoleResult.Succeeded)
-                {
                     throw new AppExceptions("Failed to assign StoreOwner role to user");
-                }
             }
+            await transaction.CommitAsync(cancellationToken);
+
             return store.Id;
         }
-
     }
 }

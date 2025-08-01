@@ -24,9 +24,9 @@ namespace WebAPI
         {
 
             services.AddControllers(options =>
-                {
-                    options.Filters.Add<ResponseMappingFilter>();
-                })
+            {
+                options.Filters.Add<ResponseMappingFilter>();
+            })
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
@@ -52,10 +52,10 @@ namespace WebAPI
             WebApplicationBuilder builder)
         {
             services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters

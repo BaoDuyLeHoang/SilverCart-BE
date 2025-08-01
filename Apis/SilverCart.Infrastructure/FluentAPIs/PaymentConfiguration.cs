@@ -63,11 +63,6 @@ namespace Infrastructures.FluentAPIs
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired(false);
 
-            builder.HasOne(ph => ph.Order)
-                .WithMany()
-                .HasForeignKey(ph => ph.OrderId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired(false);
 
             builder.HasOne(ph => ph.Promotion)
                 .WithMany()

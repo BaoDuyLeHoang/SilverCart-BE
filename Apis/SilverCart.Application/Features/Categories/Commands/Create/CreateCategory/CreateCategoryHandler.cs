@@ -1,6 +1,8 @@
+using Infrastructures.Commons.Exceptions;
 using MediatR;
 using SilverCart.Application.Interfaces;
 using SilverCart.Domain.Entities;
+using SilverCart.Domain.Entities.Categories;
 using SilverCart.Domain.Enums;
 
 namespace Infrastructures.Features.Categories.Commands.Create.CreateCategory
@@ -20,12 +22,12 @@ namespace Infrastructures.Features.Categories.Commands.Create.CreateCategory
         {
             var currentUserId = _claimsService.CurrentUserId;
             if (currentUserId == Guid.Empty)
-                throw new UnauthorizedAccessException("User not authenticated.");
+                throw new AppExceptions("User not authenticated.");
 
             var existedCategory = await _unitOfWork.CategoryRepository.GetAllAsync(x => x.Name == request.Name);
             if (existedCategory.Any())
             {
-                throw new Exception("Category already exists");
+                throw new AppExceptions("Category already exists");
             }
 
             if (request.ParentCategoryId.HasValue)
@@ -33,13 +35,12 @@ namespace Infrastructures.Features.Categories.Commands.Create.CreateCategory
                 var parentCategory = await _unitOfWork.CategoryRepository.GetByIdAsync(request.ParentCategoryId.Value);
                 if (parentCategory == null)
                 {
-                    throw new Exception("Parent category not found");
+                    throw new AppExceptions("Parent category not found");
                 }
             }
 
             var category = new Category
             {
-                Id = Guid.NewGuid(),
                 ParentCategoryId = request.ParentCategoryId,
                 Name = request.Name,
                 Description = request.Description,

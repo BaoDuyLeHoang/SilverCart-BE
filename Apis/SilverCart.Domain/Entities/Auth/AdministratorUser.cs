@@ -1,4 +1,4 @@
-﻿namespace SilverCart.Domain.Entities;
+﻿namespace SilverCart.Domain.Entities.Auth;
 
 public class AdministratorUser : BaseUser
 {
@@ -6,4 +6,5 @@ public class AdministratorUser : BaseUser
     public Guid? RoleId { get; set; }
     public virtual AdministratorRole? Role { get; set; } = null!;
     public ICollection<Report> Reports { get; set; } = new List<Report>();
+    public ICollection<Store> Stores { get; set; } = new List<Store>();
 }

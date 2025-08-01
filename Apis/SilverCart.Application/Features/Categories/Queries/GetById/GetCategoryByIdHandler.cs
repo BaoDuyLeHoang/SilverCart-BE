@@ -1,3 +1,4 @@
+using Infrastructures.Commons.Exceptions;
 using Infrastructures.Features.Categories.Queries.GetAll;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,7 @@ namespace Infrastructures.Features.Categories.Queries.GetById
 
             if (category == null)
             {
-                throw new Exception("Category not found");
+                throw new AppExceptions("Category not found");
             }
 
             return new GetAllCategoryResponse(
