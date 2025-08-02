@@ -7,6 +7,7 @@ using Infrastructures.Services.System;
 using Infrastructures.Commons.Exceptions;
 using SilverCart.Domain.Entities.Categories;
 using SilverCart.Domain.Entities.Products;
+using SilverCart.Application.Interfaces;
 
 namespace Infrastructures.Features.Products.Commands.Update.UpdateProduct;
 
@@ -18,16 +19,18 @@ public sealed record UpdateProductCommand(
     ProductTypeEnum? ProductType,
     List<Guid>? CategoryIds) : IRequest<bool>;
 
-public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, bool>
-{
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IClaimsService _claimsService;
-
-    public UpdateProductHandler(IUnitOfWork unitOfWork, IClaimsService claimsService)
+    public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, bool>
     {
-        _unitOfWork = unitOfWork;
-        _claimsService = claimsService;
-    }
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IClaimsService _claimsService;
+        private readonly ICurrentTime _currentTime;
+
+        public UpdateProductHandler(IUnitOfWork unitOfWork, IClaimsService claimsService, ICurrentTime currentTime)
+        {
+            _unitOfWork = unitOfWork;
+            _claimsService = claimsService;
+            _currentTime = currentTime;
+        }
 
     public async Task<bool> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
@@ -61,7 +64,7 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, bool>
         }
 
         // Update audit fields
-        product.ModificationDate = DateTime.UtcNow;
+        product.ModificationDate = _currentTime.GetCurrentTime();
         product.ModificationById = currentUserId;
 
         // Update product categories only if new categories are provided
@@ -87,8 +90,8 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, bool>
                 {
                     ProductId = product.Id,
                     CategoryId = categoryId,
-                    CreationDate = DateTime.UtcNow,
-                    ModificationDate = DateTime.UtcNow,
+                    CreationDate = _currentTime.GetCurrentTime(),
+                    ModificationDate = _currentTime.GetCurrentTime(),
                     CreatedById = currentUserId,
                     ModificationById = currentUserId
                 };

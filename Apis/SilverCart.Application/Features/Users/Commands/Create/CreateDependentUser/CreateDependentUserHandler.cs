@@ -57,7 +57,13 @@ public class CreateDependentUserHandler : IRequestHandler<CreateDependentUserCom
                 MonthlySpendingLimit = dependentUser.MonthlySpendingLimit,
                 ImageUrl = dependentUser.ImageUrl,
                 Email = null,
-                GuardianId = currentUserId
+                GuardianId = currentUserId,
+                // Set audit fields manually to ensure UTC DateTime
+                CreationDate = _currentTime.GetCurrentTime(),
+                ModificationDate = _currentTime.GetCurrentTime(),
+                CreatedById = currentUserId,
+                ModificationById = currentUserId,
+                IsDeleted = false
             };
 
             var tempPassword = "SilverCart2025@";

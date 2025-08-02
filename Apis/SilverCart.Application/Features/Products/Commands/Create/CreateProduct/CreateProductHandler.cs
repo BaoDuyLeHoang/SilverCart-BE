@@ -14,18 +14,20 @@ using System.Threading.Tasks;
 using SilverCart.Domain.Entities.Categories;
 using SilverCart.Domain.Entities.Auth;
 using SilverCart.Infrastructure.Commons;
+using SilverCart.Application.Interfaces;
 
 namespace Infrastructures.Features.Products.Commands.Create.CreateProduct
 {
     public sealed record CreateProductCommand(string Name, string Description, string VideoPath, ProductTypeEnum ProductType, List<Guid> CategoryIds, List<CreateProductItemsRequest> ProductItems) : IRequest<Guid>;
     public record CreateProductItemsRequest(int Stock, decimal OriginalPrice, int Weight, decimal DiscountedPrice, List<CreateProductItemsImages> ProductImages);
     public sealed record CreateProductItemsImages(string ImagePath, string ImageName);
-    public class CreateProductHandler(IUnitOfWork unitOfWork, IClaimsService claimsService, IMapper mapper, AppConfiguration appConfiguration) : IRequestHandler<CreateProductCommand, Guid>
+    public class CreateProductHandler(IUnitOfWork unitOfWork, IClaimsService claimsService, IMapper mapper, AppConfiguration appConfiguration, ICurrentTime currentTime) : IRequestHandler<CreateProductCommand, Guid>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IClaimsService _claimsService = claimsService;
         private readonly IMapper _mapper = mapper;
         private readonly StoreSettings _storeSettings = appConfiguration.StoreSettings;
+        private readonly ICurrentTime _currentTime = currentTime;
         public async Task<Guid> Handle(CreateProductCommand product, CancellationToken cancellationToken)
         {
             var currentUserId = _claimsService.CurrentUserId;
@@ -43,8 +45,8 @@ namespace Infrastructures.Features.Products.Commands.Create.CreateProduct
             var newProduct = _mapper.Map<Product>(product);
             newProduct.Id = Guid.NewGuid();
             newProduct.StoreId = _storeSettings.Id;
-            newProduct.CreationDate = DateTime.UtcNow;
-            newProduct.ModificationDate = DateTime.UtcNow;
+            newProduct.CreationDate = _currentTime.GetCurrentTime();
+            newProduct.ModificationDate = _currentTime.GetCurrentTime();
             newProduct.CreatedById = currentUserId;
             newProduct.ModificationById = currentUserId;
             newProduct.IsDeleted = false;
@@ -56,8 +58,8 @@ namespace Infrastructures.Features.Products.Commands.Create.CreateProduct
                     var mappedItem = _mapper.Map<ProductItem>(itemVM);
                     mappedItem.Id = Guid.NewGuid();
                     mappedItem.ProductId = newProduct.Id;
-                    mappedItem.CreationDate = DateTime.UtcNow;
-                    mappedItem.ModificationDate = DateTime.UtcNow;
+                    mappedItem.CreationDate = _currentTime.GetCurrentTime();
+                    mappedItem.ModificationDate = _currentTime.GetCurrentTime();
                     mappedItem.CreatedById = currentUserId;
                     mappedItem.ModificationById = currentUserId;
                     mappedItem.IsDeleted = false;
@@ -73,8 +75,8 @@ namespace Infrastructures.Features.Products.Commands.Create.CreateProduct
                         SoldQuantity = 0,
                         ReturnedQuantity = 0,
                         DamagedQuantity = 0,
-                        CreationDate = DateTime.UtcNow,
-                        ModificationDate = DateTime.UtcNow,
+                        CreationDate = _currentTime.GetCurrentTime(),
+                        ModificationDate = _currentTime.GetCurrentTime(),
                         CreatedById = currentUserId,
                         ModificationById = currentUserId,
                         IsDeleted = false
@@ -89,8 +91,8 @@ namespace Infrastructures.Features.Products.Commands.Create.CreateProduct
                         var mappedImage = _mapper.Map<ProductImage>(imageVM);
                         mappedImage.Id = Guid.NewGuid();
                         mappedImage.ProductItemId = mappedItem.Id;
-                        mappedImage.CreationDate = DateTime.UtcNow;
-                        mappedImage.ModificationDate = DateTime.UtcNow;
+                        mappedImage.CreationDate = _currentTime.GetCurrentTime();
+                        mappedImage.ModificationDate = _currentTime.GetCurrentTime();
                         mappedImage.CreatedById = currentUserId;
                         mappedImage.ModificationById = currentUserId;
                         mappedImage.IsDeleted = false;
@@ -110,8 +112,8 @@ namespace Infrastructures.Features.Products.Commands.Create.CreateProduct
                 {
                     ProductId = newProduct.Id,
                     CategoryId = category.Id,
-                    CreationDate = DateTime.UtcNow,
-                    ModificationDate = DateTime.UtcNow,
+                    CreationDate = _currentTime.GetCurrentTime(),
+                    ModificationDate = _currentTime.GetCurrentTime(),
                     CreatedById = currentUserId,
                     ModificationById = currentUserId
                 }).ToList();

@@ -7,8 +7,8 @@ namespace SilverCart.Application.Services
         private DateTime? _currentTime;
         public DateTime GetCurrentTime()
         {
-            //DateTime.UtcNow produce utc time, so we need to add 7 hours to get vietnam time
-            _currentTime ??= DateTime.UtcNow.AddHours(7);
+            // Trả về UTC time để tương thích với PostgreSQL
+            _currentTime ??= DateTime.UtcNow;
             return _currentTime.Value;
         }
     }
