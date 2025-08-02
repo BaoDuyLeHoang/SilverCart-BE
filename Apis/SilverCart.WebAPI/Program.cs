@@ -40,10 +40,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy("ChatPolicy", builder =>
     {
         builder
-            .WithOrigins("http://localhost:5001")
+            .AllowAnyOrigin()
             .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials();
+            .AllowAnyHeader();
     });
 });
 builder.Services.AddScoped<IStringeeService, StringeeService>();
