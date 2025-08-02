@@ -3,6 +3,7 @@ using System;
 using Infrastructures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructures.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250802091330_FixOrderRelationships")]
+    partial class FixOrderRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1353,7 +1356,7 @@ namespace Infrastructures.Migrations
                 {
                     b.HasBaseType("SilverCart.Domain.Entities.BaseEntity");
 
-                    b.Property<Guid>("CustomerId")
+                    b.Property<Guid?>("BaseUserId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("DistrictId")
@@ -1382,7 +1385,7 @@ namespace Infrastructures.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("BaseUserId");
 
                     b.ToTable("Addresses", (string)null);
                 });
@@ -1576,7 +1579,7 @@ namespace Infrastructures.Migrations
                             IsHardDelete = false,
                             AvatarPath = "/images/stores/store.jpg",
                             Description = "Cửa hàng độc lập chuyên cung cấp thiết bị y tế và thuốc cho người cao tuổi",
-                            GhnShopId = 197207,
+                            GhnShopId = 5732305,
                             IsGhnSynced = false,
                             Name = "Nhà thuốc Độc Lập",
                             Phone = "02812345678",
@@ -2409,19 +2412,15 @@ namespace Infrastructures.Migrations
 
             modelBuilder.Entity("SilverCart.Domain.Entities.SavedAddress", b =>
                 {
-                    b.HasOne("SilverCart.Domain.Entities.BaseUser", "Customer")
+                    b.HasOne("SilverCart.Domain.Entities.BaseUser", null)
                         .WithMany("Addresses")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BaseUserId");
 
                     b.HasOne("SilverCart.Domain.Entities.BaseEntity", null)
                         .WithOne()
                         .HasForeignKey("SilverCart.Domain.Entities.SavedAddress", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("SilverCart.Domain.Entities.Stocks.Stock", b =>

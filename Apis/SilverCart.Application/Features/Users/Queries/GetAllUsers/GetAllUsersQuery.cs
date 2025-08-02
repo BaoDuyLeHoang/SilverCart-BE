@@ -25,9 +25,10 @@ namespace Infrastructures.Features.Users.Queries.GetAllUsers
     // Inherited response for dependent users
     public record GetDependentUserResponse(Guid Id, string FullName, string Email, string Phone, string Role, DateTime CreationDate,
         DateTime? DateOfBirth, string? Relationship, string? MedicalNotes, decimal? MonthlySpendingLimit,
-        Guid? GuardianId, string? GuardianName) : GetBaseUserResponse(Id, FullName, Email, Phone, Role, CreationDate);
+        Guid? GuardianId, string? GuardianName) : GetCustomerUserResponse(Id, FullName, Email, Phone, Role, CreationDate);
 
-    public record GetGuardianUserResponse(Guid Id, string FullName, string Email, string Phone, string Role, DateTime CreationDate) : GetBaseUserResponse(Id, FullName, Email, Phone, Role, CreationDate);
+    public record GetCustomerUserResponse(Guid Id, string FullName, string Email, string Phone, string Role, DateTime CreationDate) : GetBaseUserResponse(Id, FullName, Email, Phone, Role, CreationDate);
+    public record GetGuardianUserResponse(Guid Id, string FullName, string Email, string Phone, string Role, DateTime CreationDate) : GetCustomerUserResponse(Id, FullName, Email, Phone, Role, CreationDate);
     public record GetConsultantUserResponse(Guid Id, string FullName, string Email, string Phone, string Role, DateTime CreationDate, string Specialization, string Biography, string AvatarPath, string ExpertiseArea) : GetBaseUserResponse(Id, FullName, Email, Phone, Role, CreationDate);
     public record GetStoreUserResponse(Guid Id, string FullName, string Email, string Phone, string Role, DateTime CreationDate, string StoreName, string StoreAddress, string StorePhone) : GetBaseUserResponse(Id, FullName, Email, Phone, Role, CreationDate);
     public record GetAdminUserResponse(Guid Id, string FullName, string Email, string Phone, string Role, DateTime CreationDate) : GetBaseUserResponse(Id, FullName, Email, Phone, Role, CreationDate);

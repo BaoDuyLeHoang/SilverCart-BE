@@ -53,11 +53,8 @@ namespace SilverCart.Application.Features.Users.Queries.GetStoreUser
                 predicate = x => x.StoreId == request.StoreId && x.Id == request.UserId;
             }
 
-            // Get store users with includes
-            var query = await _unitOfWork.StoreUserRepository.GetAllAsync(
-                predicate,
-                x => x.StoreUserRoles,
-                x => x.StoreUserRoles.Select(r => r.Role));
+            // Get store users
+            var query = await _unitOfWork.StoreUserRepository.GetAllAsync(predicate);
 
             // Apply additional filters
             if (!string.IsNullOrWhiteSpace(request.Keyword))
@@ -69,11 +66,8 @@ namespace SilverCart.Application.Features.Users.Queries.GetStoreUser
                     x.PhoneNumber.ToLower().Contains(keyword));
             }
 
-            if (!string.IsNullOrWhiteSpace(request.Role))
-            {
-                query = query.Where(x =>
-                    x.StoreUserRoles.Any(r => r.Role.Name.ToLower() == request.Role.ToLower()));
-            }
+            // Role filtering is not available since StoreUserRoles was removed
+            // TODO: Implement role filtering through a different mechanism if needed
 
             // Execute query and map to response
             var storeUsers = await query.ToListAsync(cancellationToken);
@@ -83,8 +77,7 @@ namespace SilverCart.Application.Features.Users.Queries.GetStoreUser
                 x.FullName,
                 x.Email,
                 x.PhoneNumber,
-                x.StoreUserRoles
-                    .FirstOrDefault(r => r.Role != null)?.Role.Name ?? "No Role"
+                "Store User" // Default role since StoreUserRoles was removed
             )).ToList();
         }
     }

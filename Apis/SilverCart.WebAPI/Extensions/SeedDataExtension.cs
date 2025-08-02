@@ -103,6 +103,12 @@ namespace WebAPI.Extensions
             var store = await dbContext.Stores.FirstOrDefaultAsync();
             AppExceptions.ThrowIfNotFound(store, "Không tìm thấy của hàng");
 
+            // Get StoreRoles for assignment
+            var shopOwnerRole = await dbContext.Set<StoreRole>().FirstOrDefaultAsync(r => r.Name == RoleEnum.ShopOwner.ToString());
+            var staffRole = await dbContext.Set<StoreRole>().FirstOrDefaultAsync(r => r.Name == RoleEnum.Staff.ToString());
+            AppExceptions.ThrowIfNotFound(shopOwnerRole, "Không tìm thấy vai trò ShopOwner");
+            AppExceptions.ThrowIfNotFound(staffRole, "Không tìm thấy vai trò Staff");
+
             // Create 5 Guardians (now inherit from CustomerUser)
             for (int i = 1; i <= 5; i++)
             {
@@ -206,8 +212,7 @@ namespace WebAPI.Extensions
                     EmailConfirmed = true,
                     PhoneNumber = $"0987654{i}30",
                     SecurityStamp = Guid.NewGuid().ToString(),
-                    Store = store,
-                    StoreUserRoles = new HashSet<StoreUserRole>()
+                    Store = store
                 };
 
                 var staffResult = await _userManager.CreateAsync(staffUser, defaultPassword);
@@ -264,8 +269,7 @@ namespace WebAPI.Extensions
                     Gender = "Other",
                     EmailConfirmed = true,
                     PhoneNumber = $"01234567{i}1",
-                    Store = store,
-                    StoreUserRoles = new HashSet<StoreUserRole>()
+                    Store = store
                 };
                 var result = await _userManager.CreateAsync(storeOwner, defaultPassword);
                 if (result.Succeeded)
@@ -285,8 +289,7 @@ namespace WebAPI.Extensions
                     Gender = "Other",
                     EmailConfirmed = true,
                     PhoneNumber = $"01234567{i}2",
-                    Store = store,
-                    StoreUserRoles = new HashSet<StoreUserRole>()
+                    Store = store
                 };
                 var result = await _userManager.CreateAsync(staffUser, defaultPassword);
                 if (result.Succeeded)

@@ -10,7 +10,6 @@ namespace Infrastructures.FluentAPIs
 {
     public class StoreConfiguration : IEntityTypeConfiguration<Store>,
         IEntityTypeConfiguration<StoreRole>,
-        IEntityTypeConfiguration<StoreUserRole>,
         IEntityTypeConfiguration<StoreAddress>
     {
         private static IConfiguration _configuration = new ConfigurationBuilder()
@@ -54,10 +53,7 @@ namespace Infrastructures.FluentAPIs
             builder.ToTable("StoreRoles");
         }
 
-        public void Configure(EntityTypeBuilder<StoreUserRole> builder)
-        {
-            builder.ToTable("StoreUserRoles");
-        }
+
 
         public void Configure(EntityTypeBuilder<StoreAddress> builder)
         {

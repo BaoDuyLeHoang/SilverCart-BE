@@ -24,7 +24,11 @@ public class CalculateShippingFeeHandler : IRequestHandler<CalculateShippingFeeQ
     public async Task<CalculateShippingFeeResponse> Handle(CalculateShippingFeeQuery request, CancellationToken cancellationToken)
     {
 
-        var fromAddress = await _unitOfWork.AddressRepository.GetStoreAddressByStoreIdAsync(request.OrderInfo.FormStoreId);
+        // Get the first product item to determine the store
+        var firstProductItem = await _unitOfWork.ProductItemRepository.GetByIdAsync(request.ProductItems.First().ProductItemId, x => x.Product);
+        AppExceptions.ThrowIfNotFound(firstProductItem, "Product item not found");
+        
+        var fromAddress = await _unitOfWork.AddressRepository.GetStoreAddressByStoreIdAsync(firstProductItem.Product.StoreId);
         var toAddress = await _unitOfWork.AddressRepository.GetByIdAsync(request.OrderInfo.ToAddressId);
         AppExceptions.ThrowIfNotFound(toAddress, "Address not found");
 

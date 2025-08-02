@@ -8,6 +8,7 @@ using Infrastructures.Features.Carts.Commands.DeleteCart;
 using Infrastructures.Features.Carts.Commands.GetCartItem;
 using Infrastructures.Features.Carts.Commands.UpdateCartItem;
 using Infrastructures.Features.Carts.Commands.RemoveCartItem;
+using Infrastructures.Features.Carts.Queries.GetMyCart;
 
 namespace WebAPI.Controllers;
 
@@ -36,6 +37,18 @@ public class CartController : BaseController
         return Ok(result);
     }
 
+
+    /// <summary>
+    /// Lấy thông tin giỏ hàng của người dùng hiện tại
+    /// </summary>
+    /// <returns>Thông tin giỏ hàng và danh sách items</returns>
+    [HttpGet("my-cart")]
+    [Authorize]
+    public async Task<ActionResult<GetMyCartResponse>> GetMyCart()
+    {
+        var result = await _mediator.Send(new GetMyCartQuery());
+        return Ok(result);
+    }
 
     /// <summary>
     /// Lấy thông tin giỏ hàng theo CartId

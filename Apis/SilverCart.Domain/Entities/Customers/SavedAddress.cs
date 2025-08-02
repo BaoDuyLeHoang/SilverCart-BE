@@ -18,4 +18,6 @@ public class SavedAddress : BaseEntity
     public string WardCode { get; set; } // "123456"
     public string WardName { get; set; } // Phường 1
     public string FullAddress => $"{StreetAddress}, {WardName}, {DistrictName}, {ProvinceName}";
+    
+  
 }

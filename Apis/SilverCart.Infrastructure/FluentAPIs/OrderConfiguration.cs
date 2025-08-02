@@ -16,9 +16,18 @@ namespace Infrastructures.FluentAPIs
                 .WithOne(od => od.Order)
                 .HasForeignKey(od => od.OrderId);
 
-            builder.HasOne(o => o.ConfirmUser);
-            builder.HasOne(o => o.OrderedUser);
-            builder.HasOne(o => o.RecieveUser);
+            builder.HasOne(o => o.ConfirmUser)
+                .WithMany()
+                .HasForeignKey(o => o.ConfirmUserId)
+                .IsRequired(false);
+            builder.HasOne(o => o.OrderedUser)
+                .WithMany()
+                .HasForeignKey(o => o.OrderedUserId)
+                .IsRequired(false);
+            builder.HasOne(o => o.RecieveUser)
+                .WithMany()
+                .HasForeignKey(o => o.RecieveUserId)
+                .IsRequired(false);
         }
 
         public void Configure(EntityTypeBuilder<OrderStatus> builder)

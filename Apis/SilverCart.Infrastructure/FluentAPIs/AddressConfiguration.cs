@@ -16,6 +16,7 @@ namespace Infrastructures.FluentAPIs
             builder.Property(a => a.DistrictId).IsRequired();
             builder.Property(a => a.DistrictName).IsRequired();
             builder.Property(a => a.ProvinceName).IsRequired();
+    
         }
 
         public void Configure(EntityTypeBuilder<StoreAddress> builder)

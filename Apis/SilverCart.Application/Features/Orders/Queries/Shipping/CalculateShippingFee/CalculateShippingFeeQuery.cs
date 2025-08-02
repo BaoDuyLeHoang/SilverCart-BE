@@ -11,7 +11,7 @@ public record CalculateShippingFeeQuery(
     Guid? UserPromotionId = null
     ) : IRequest<CalculateShippingFeeResponse>;
 public record CalculateShippingFeeItemCommand(Guid ProductItemId, int Quantity);
-public record CalculateShippingFeeInfoCommand(Guid FormStoreId, Guid ToAddressId, PaymentMethodEnum PaymentMethod);
+public record CalculateShippingFeeInfoCommand(Guid ToAddressId, PaymentMethodEnum PaymentMethod);
 
 public record CalculateShippingFeeResponse(
     decimal TotalPrice,

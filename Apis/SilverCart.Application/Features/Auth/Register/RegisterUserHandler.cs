@@ -7,8 +7,7 @@ using SilverCart.Domain.Entities.Auth;
 
 namespace Infrastructures;
 
-public sealed record RegisterUserCommand(string Email, string Password, string Phone, string FullName, string Gender, RegisterUserAddress Address, bool IsGuardian) : IRequest<Guid>;
-public record RegisterUserAddress(string StreetAddress, string WardCode, int DistrictId, string ToDistrictName, string ToProvinceName) : IRequest<Guid>;
+public sealed record RegisterUserCommand(string Email, string Password, string Phone, string FullName, string Gender, bool IsGuardian) : IRequest<Guid>;
 
 public class RegisterUserHandler(IUnitOfWork unitOfWork, UserManager<BaseUser> userManager, ICurrentTime currentTime) : IRequestHandler<RegisterUserCommand, Guid>
 {
@@ -60,18 +59,6 @@ public class RegisterUserHandler(IUnitOfWork unitOfWork, UserManager<BaseUser> u
                 Gender = request.Gender,
                 CreationDate = _currentTime.GetCurrentTime()
             };
-        }
-        if (request.Address != null)
-        {
-            var address = new SavedAddress
-            {
-                StreetAddress = request.Address.StreetAddress,
-                WardCode = request.Address.WardCode ?? "",
-                DistrictId = request.Address.DistrictId,
-                DistrictName = request.Address.ToDistrictName ?? "",
-                ProvinceName = request.Address.ToProvinceName ?? ""
-            };
-            user.Addresses.Add(address);
         }
         var result = await _userManager.CreateAsync(user, request.Password);
         if (!result.Succeeded)

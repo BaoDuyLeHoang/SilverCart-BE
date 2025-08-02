@@ -1,6 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
-
+set isForce=false
 REM Check if force parameter is provided
 if "%~1"=="/force" (
     set isForce=true
@@ -9,16 +9,10 @@ if "%~1"=="/force" (
     echo ⚠️ Dropping database (use /force to skip confirmation)
 )
 
-if("%~2" == "y") (
-    set env=Release
+if "%isForce%" == "true" (
+    dotnet ef database drop --project ./Apis/SilverCart.Infrastructure --startup-project ./Apis/SilverCart.WebAPI --force 
 ) else (
-    set env=Debug
-)
-
-if %isForce%==true (
-    dotnet ef database drop --project ./Apis/SilverCart.Infrastructure --startup-project ./Apis/SilverCart.WebAPI --force --yes -c %env%
-) else (
-    dotnet ef database drop --project ./Apis/SilverCart.Infrastructure --startup-project ./Apis/SilverCart.WebAPI -c %env%
+    dotnet ef database drop --project ./Apis/SilverCart.Infrastructure --startup-project ./Apis/SilverCart.WebAPI 
 )
 
 if %ERRORLEVEL% EQU 0 (
@@ -29,7 +23,7 @@ if %ERRORLEVEL% EQU 0 (
 )
 
 echo 🔄 Creating new database
-dotnet ef database update --project ./Apis/SilverCart.Infrastructure --startup-project ./Apis/SilverCart.WebAPI -c %env%
+dotnet ef database update --project ./Apis/SilverCart.Infrastructure --startup-project ./Apis/SilverCart.WebAPI 
 
 if %ERRORLEVEL% EQU 0 (
     echo ✅ Database reset completed successfully

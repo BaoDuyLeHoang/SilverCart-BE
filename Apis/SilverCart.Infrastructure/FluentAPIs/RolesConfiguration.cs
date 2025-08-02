@@ -8,8 +8,7 @@ using SilverCart.Domain.Enums;
 namespace Infrastructures.FluentAPIs;
 
 public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTypeConfiguration<AdministratorRole>,
-    IEntityTypeConfiguration<CustomerRole>, IEntityTypeConfiguration<StoreUserRole>,
-    IEntityTypeConfiguration<ConsultantRole>
+    IEntityTypeConfiguration<CustomerRole>, IEntityTypeConfiguration<ConsultantRole>
 {
     public void Configure(EntityTypeBuilder<StoreRole> builder)
     {
@@ -80,12 +79,7 @@ public class RolesConfiguration : IEntityTypeConfiguration<StoreRole>, IEntityTy
         );
     }
 
-    public void Configure(EntityTypeBuilder<StoreUserRole> builder)
-    {
-        builder.ToTable("StoreUserRoles");
 
-        builder.HasKey(x => new { x.UserId, x.RoleId });
-    }
 
     public void Configure(EntityTypeBuilder<ConsultantRole> builder)
     {

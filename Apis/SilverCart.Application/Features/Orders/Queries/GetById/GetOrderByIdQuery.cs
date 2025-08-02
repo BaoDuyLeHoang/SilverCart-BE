@@ -22,6 +22,9 @@ public class GetOrderByIdQueryHandler(IUnitOfWork unitOfWork, IClaimsService cla
             include: source => source
                 .Include(x => x.OrderDetails)
                     .ThenInclude(od => od.ProductItem)
+                        .ThenInclude(pi => pi.Stock)
+                .Include(x => x.OrderDetails)
+                    .ThenInclude(od => od.ProductItem)
                         .ThenInclude(pi => pi.ProductImages)
                 .Include(x => x.OrderedUser)
                     .ThenInclude(x => x.Addresses)
@@ -30,14 +33,14 @@ public class GetOrderByIdQueryHandler(IUnitOfWork unitOfWork, IClaimsService cla
         if (order == null)
             throw new AppExceptions("Đơn hàng không tồn tại");
 
-        var currentUserRole = _claimsService.CurrentRole;
+        var currentUserRole = _claimsService.CurrentRole ?? RoleEnum.Guardian;
         var isCustomerRole = currentUserRole == RoleEnum.Guardian || currentUserRole == RoleEnum.DependentUser;
 
         return new GetOrderByIdResponse
         (
             Id: order.Id,
             TotalPrice: (double)order.TotalPrice,
-            CreationDate: order.CreationDate.Value,
+            CreationDate: order.CreationDate ?? DateTime.UtcNow,
             OrderStatus: order.OrderStatus.ToString(),
             ToAddress: order.ToAddress,
             FromAddress: isCustomerRole ? null : order.FromAddress,
@@ -54,7 +57,7 @@ public class GetOrderByIdQueryHandler(IUnitOfWork unitOfWork, IClaimsService cla
                     ProductName: orderDetail.ProductItem.ProductName,
                     OriginalPrice: (double)orderDetail.ProductItem.OriginalPrice,
                     DiscountedPrice: (double)orderDetail.ProductItem.DiscountedPrice,
-                    Stock: orderDetail.ProductItem.Stock.Quantity,
+                    Stock: orderDetail.ProductItem.Stock?.Quantity ?? 0,
                     IsActive: orderDetail.ProductItem.IsActive,
                     ProductImages: orderDetail.ProductItem.ProductImages.Select(img => new GetProductItemsImagesResponse
                     (

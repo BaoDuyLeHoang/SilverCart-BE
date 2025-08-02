@@ -62,7 +62,8 @@ namespace Infrastructures
             services.AddSingleton<IStringeeService, StringeeService>();
 
 
-
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            services.AddAutoMapper(assemblies);
 
             return services;
         }

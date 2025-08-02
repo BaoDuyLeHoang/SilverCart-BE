@@ -43,7 +43,6 @@ namespace Infrastructures
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Store> Stores { get; set; }
         public DbSet<StoreUser> StoreUsers { get; set; }
-        public DbSet<StoreUserRole> StoreUserRoles { get; set; }
         public DbSet<SavedAddress> Addresses { get; set; }
         public DbSet<CustomerPaymentMethod> CustomerPaymentMethods { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
