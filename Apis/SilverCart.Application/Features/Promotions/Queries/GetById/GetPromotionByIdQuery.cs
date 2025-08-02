@@ -29,6 +29,11 @@ namespace Infrastructures.Features.Promotions.Queries.GetById
                 {
                     throw new KeyNotFoundException($"Promotion with ID {request.Id} not found.");
                 }
+                var productPromotions = promotion.ProductPromotions?.Select(pp => new ProductPromotionResponse(
+                   pp.ProductId,
+                   pp.Product.Name
+               )).ToList() ?? new();
+
                 return new GetPromotionByIdResponse(
                     promotion.Id,
                     promotion.Name,
@@ -42,7 +47,7 @@ namespace Infrastructures.Features.Promotions.Queries.GetById
                     promotion.MaximumQuantity,
                     promotion.MinimumPrice,
                     promotion.MaximumPrice,
-                    promotion.ProductPromotions.ToList()
+                    productPromotions
                 );
             }
         }

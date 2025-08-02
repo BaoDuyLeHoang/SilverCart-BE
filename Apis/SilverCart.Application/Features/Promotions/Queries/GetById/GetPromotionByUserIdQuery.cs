@@ -10,14 +10,11 @@ using System.Threading.Tasks;
 
 namespace Infrastructures.Features.Promotions.Queries.GetById
 {
-<<<<<<< HEAD
-    public sealed record GetPromotionByUserIdQuery(Guid? Id) : IRequest<GetPromotionByIdResponse>;
-    public record GetPromotionByIdResponse(Guid? Id, string Name, string Description, DateTime StartDate, DateTime EndDate, decimal DiscountAmount, string DiscountType, bool IsActive, int MinimumQuantity, int MaximumQuanitity, decimal MinimumPrice, decimal MaximumPrice, List<ProductPromotion> Product);
-=======
+
     public sealed record GetPromotionByUserIdQuery(Guid Id) : IRequest<GetPromotionByIdResponse>;
     public record GetPromotionByIdResponse(Guid? Id, string Name, string Description, DateTime StartDate, DateTime EndDate, decimal DiscountAmount, string DiscountType, bool IsActive, int MiximumQuantity, int MaximumQuanitity, decimal MinimumPrice, decimal MaximumPrice, List<ProductPromotionResponse> ProductPromotions);
-    public record ProductPromotionResponse(); 
->>>>>>> fc9d1f9ab862665cf993f6c886d7e3a55bbdfbb8
+    public record ProductPromotionResponse(Guid ProductId, string ProductName);
+
     public class GetPromotionByIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetPromotionByUserIdQuery, GetPromotionByIdResponse>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
@@ -28,6 +25,11 @@ namespace Infrastructures.Features.Promotions.Queries.GetById
             {
                 throw new KeyNotFoundException($"Không tìm thấy khuyến mãi với ID {request.Id}.");
             }
+            var productPromotions = userPromotion.Promotion.ProductPromotions?.Select(pp => new ProductPromotionResponse(
+               pp.ProductId,
+               pp.Product.Name
+           )).ToList() ?? new();
+
             return new GetPromotionByIdResponse(
                 userPromotion.Id,
                 userPromotion.Promotion.Name,
@@ -41,8 +43,9 @@ namespace Infrastructures.Features.Promotions.Queries.GetById
                 userPromotion.Promotion.MaximumQuantity,
                 userPromotion.Promotion.MinimumPrice,
                 userPromotion.Promotion.MaximumPrice,
-                userPromotion.Promotion.ProductPromotions.ToList()
+                productPromotions
             );
+
         }
     }
 }
