@@ -28,5 +28,23 @@ namespace Infrastructures.Repositories
                 .Where(pp => pp.PromotionId == promotionId)
                 .ToListAsync();
         }
+
+        public async Task AddAsync(ProductPromotion productPromotion)
+        {
+            await _context.ProductPromotions.AddAsync(productPromotion);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(ProductPromotion productPromotion)
+        {
+            _context.ProductPromotions.Update(productPromotion);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(ProductPromotion productPromotion)
+        {
+            _context.ProductPromotions.Remove(productPromotion);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace Infrastructures.Features.Promotions.Queries.GetAll
         string? Keyword,
         bool? IsActive = null
     ) : IRequest<PagedResult<GetAllPromotionsResponse>>;
-    public record GetAllPromotionsResponse(Guid? Id, string Name, string Description, DateTime StartDate, DateTime EndDate, decimal DiscountAmount, string DiscountType, bool IsActive, int MiximumQuantity, int MaximumQuanitity, decimal MinimumPrice, decimal MaximumPrice);
+    public record GetAllPromotionsResponse(Guid? Id, string Name, string Description, DateTime StartDate, DateTime EndDate, decimal DiscountAmount, string DiscountType, bool IsActive, int MinimumQuantity, int MaximumQuanitity, decimal MinimumPrice, decimal MaximumPrice);
     public class GetAllPromotionsQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetAllPromotionsQuery, PagedResult<GetAllPromotionsResponse>>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;

@@ -18,7 +18,7 @@ namespace Infrastructures.Features.Promotions.Queries.GetById
     namespace Infrastructures.Features.Promotions.Queries.GetById
     {
         public sealed record GetPromotionByIdQuery(Guid? Id) : IRequest<GetPromotionByIdQueryResponse>;
-        public record GetPromotionByIdQueryResponse(Guid? Id, string Name, string Description, DateTime StartDate, DateTime EndDate, decimal DiscountAmount, string DiscountType, bool IsActive, int MiximumQuantity, int MaximumQuanitity, decimal MinimumPrice, decimal MaximumPrice, List<ProductPromotion> Product);
+        public record GetPromotionByIdQueryResponse(Guid? Id, string Name, string Description, DateTime StartDate, DateTime EndDate, decimal DiscountAmount, string DiscountType, bool IsActive, int MinimumQuantity, int MaximumQuanitity, decimal MinimumPrice, decimal MaximumPrice, List<ProductPromotion> Product);
         public class GetPromotionByIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetPromotionByUserIdQuery, GetPromotionByIdResponse>
         {
             private readonly IUnitOfWork _unitOfWork = unitOfWork;
@@ -36,7 +36,7 @@ namespace Infrastructures.Features.Promotions.Queries.GetById
                     promotion.StartDate,
                     promotion.EndDate,
                     promotion.Discount,
-                    promotion.Discount.ToString(),
+                    promotion.DiscountType.ToString(),
                     promotion.IsActive,
                     promotion.MinimumQuantity,
                     promotion.MaximumQuantity,

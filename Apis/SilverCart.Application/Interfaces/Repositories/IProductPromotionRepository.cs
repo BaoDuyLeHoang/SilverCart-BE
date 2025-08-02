@@ -12,6 +12,9 @@ namespace Infrastructures.Interfaces.Repositories
     {
         public Task<List<ProductPromotion>> GetByProductIdAsync(Guid productId);
         public Task<List<ProductPromotion>> GetByPromotionIdAsync(Guid promotionId);
+        public Task AddAsync(ProductPromotion productPromotion);
+        public Task UpdateAsync(ProductPromotion productPromotion);
+        public Task DeleteAsync(ProductPromotion productPromotion);
 
     }
 }

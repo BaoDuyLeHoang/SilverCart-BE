@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Infrastructures.Features.Promotions.Queries.GetById
 {
     public sealed record GetPromotionByUserIdQuery(Guid? Id) : IRequest<GetPromotionByIdResponse>;
-    public record GetPromotionByIdResponse(Guid? Id, string Name, string Description, DateTime StartDate, DateTime EndDate, decimal DiscountAmount, string DiscountType, bool IsActive, int MiximumQuantity, int MaximumQuanitity, decimal MinimumPrice, decimal MaximumPrice, List<ProductPromotion> Product);
+    public record GetPromotionByIdResponse(Guid? Id, string Name, string Description, DateTime StartDate, DateTime EndDate, decimal DiscountAmount, string DiscountType, bool IsActive, int MinimumQuantity, int MaximumQuanitity, decimal MinimumPrice, decimal MaximumPrice, List<ProductPromotion> Product);
     public class GetPromotionByIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetPromotionByUserIdQuery, GetPromotionByIdResponse>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
@@ -28,7 +28,7 @@ namespace Infrastructures.Features.Promotions.Queries.GetById
                 userPromotion.Promotion.StartDate,
                 userPromotion.Promotion.EndDate,
                 userPromotion.Promotion.Discount,
-                userPromotion.Promotion.Discount.ToString(),
+                userPromotion.Promotion.DiscountType.ToString(),
                 userPromotion.Promotion.IsActive,
                 userPromotion.Promotion.MinimumQuantity,
                 userPromotion.Promotion.MaximumQuantity,
