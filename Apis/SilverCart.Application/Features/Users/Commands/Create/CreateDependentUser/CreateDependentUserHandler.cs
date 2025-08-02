@@ -12,7 +12,6 @@ public record CreateDependentUser(
     string Phone,
     string FullName,
     string Gender,
-    RegisterUserAddress Address,
     DateTime? DateOfBirth = null,
     string? Relationship = null,
     string? MedicalNotes = null,

@@ -1,6 +1,7 @@
 ﻿using Infrastructures.Features.Consultation.ConsultationReport.Update;
 using MediatR;
 using SilverCart.Application.Interfaces;
+using SilverCart.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,12 @@ namespace Infrastructures.Features.Consultation.Consultant.Update
         Guid ConsultantId,
         string? Email = null,
         string? Phone = null,
-        RegisterUserAddress? Address = null,
         string? Specialization = null,
-        string? CertificationDocumentLink = null
+        string? CertificationDocumentLink = null,
+        string? AvatarPath = null,
+        string? ExpertiseArea = null,
+        string? Biography = null,
+        string? StringeeAccessToken = null
     ) : IRequest<bool>;
     public class UpdateConsultantHandler(
         IUnitOfWork unitOfWork,
@@ -30,7 +34,7 @@ namespace Infrastructures.Features.Consultation.Consultant.Update
 
             if (consultant is null)
             {
-                throw new KeyNotFoundException($"Order item with ID '{request.ConsultantId}' not found.");
+                throw new KeyNotFoundException($"Người dùng với ID '{request.ConsultantId}' không tồn tại.");
             }
 
             _unitOfWork.ConsultantUserRepository.Update(consultant);

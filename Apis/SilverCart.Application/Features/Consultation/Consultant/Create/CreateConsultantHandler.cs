@@ -20,9 +20,12 @@ namespace Infrastructures.Features.Consultation.Consultant.Create
        string Phone,
        string FullName,
        string Gender,
-       RegisterUserAddress Address,
        string Specialization,
-       string? CertificationDocumentLink = null
+       string? CertificationDocumentLink = null,
+       string? AvatarPath = null,
+       string? ExpertiseArea = null,
+       string? Biography = null,
+       string? StringeeAccessToken = null
    ) : IRequest<Guid>;
     public class CreateConsultantHandler(
        IUnitOfWork unitOfWork,
@@ -57,15 +60,6 @@ namespace Infrastructures.Features.Consultation.Consultant.Create
                 Specialization = request.Specialization,
             };
 
-            var address = new SavedAddress
-            {
-                StreetAddress = request.Address.StreetAddress,
-                WardCode = request.Address.WardCode ?? string.Empty,
-                DistrictId = request.Address.DistrictId,
-                DistrictName = request.Address.ToDistrictName ?? string.Empty,
-                ProvinceName = request.Address.ToProvinceName ?? string.Empty
-            };
-            consultantUser.Addresses.Add(address);
 
             var createResult = await _userManager.CreateAsync(consultantUser, request.Password);
             if (!createResult.Succeeded)
