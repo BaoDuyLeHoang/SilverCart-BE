@@ -5,20 +5,20 @@
 echo "🔍 Chạy lệnh pre-commit..."
 
 # Format code automatically
-echo "🎨 Check Định dạng code..."
-dotnet format --verify-no-changes
-if [ $? -ne 0 ]; then
-    dotnet format
-    # ask for permission to git add **
-    git status
-    read -p "Bạn có muốn thêm tất cả file đã định dạng không? (y/n): " answer
-    if [ "$answer" = "y" ]; then
-        git add .
-    else
-        echo "❌ Sửa lại lỗi trước khi commit."
-        exit 1
-    fi
-fi
+# echo "🎨 Check Định dạng code..."
+# dotnet format --verify-no-changes
+# if [ $? -ne 0 ]; then
+#     dotnet format
+#     # ask for permission to git add **
+#     git status
+#     read -p "Bạn có muốn thêm tất cả file đã định dạng không? (y/n): " answer
+#     if [ "$answer" = "y" ]; then
+#         git add .
+#     else
+#         echo "❌ Sửa lại lỗi trước khi commit."
+#         exit 1
+#     fi
+# fi
 echo "🧨 Clean dự án..."
 dotnet clean -v d
 

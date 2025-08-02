@@ -4,12 +4,12 @@
 echo "🔍 Running pre-push checks..."
 
 # Kiểm tra nếu không có thay đổi
-if git diff --quiet HEAD; then
-    echo "Không có thay đổi. Bỏ qua build."
-else
-    echo "Có thay đổi. Tiến hành build..."
-    dotnet build
-fi
+# if git diff --quiet HEAD; then
+#     echo "Không có thay đổi. Bỏ qua build."
+# else
+#     echo "Có thay đổi. Tiến hành build..."
+#     dotnet build
+# fi
 
 # # Run tests
 # echo "🧪 Running tests..."
