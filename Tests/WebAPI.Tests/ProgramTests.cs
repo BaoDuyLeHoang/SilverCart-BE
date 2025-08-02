@@ -1,5 +1,4 @@
-﻿using Application.Interfaces;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Infrastructures;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
