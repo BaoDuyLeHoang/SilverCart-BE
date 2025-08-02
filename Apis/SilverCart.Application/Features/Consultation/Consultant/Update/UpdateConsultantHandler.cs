@@ -15,7 +15,8 @@ namespace Infrastructures.Features.Consultation.Consultant.Update
         string? Phone = null,
         RegisterUserAddress? Address = null,
         string? Specialization = null,
-        string? CertificationDocumentLink = null
+        string? Biography = null,
+        string? ExpertiseArea = null
     ) : IRequest<bool>;
     public class UpdateConsultantHandler(
         IUnitOfWork unitOfWork,
@@ -32,7 +33,12 @@ namespace Infrastructures.Features.Consultation.Consultant.Update
             {
                 throw new KeyNotFoundException($"Order item with ID '{request.ConsultantId}' not found.");
             }
-
+            consultant.Email = request.Email;
+            consultant.PhoneNumber = request.Phone;
+            consultant.Addresses = (ICollection<SilverCart.Domain.Entities.SavedAddress>)request.Address;
+            consultant.Specialization = request.Specialization;
+            consultant.Biography = request.Biography;
+            consultant.ExpertiseArea = request.ExpertiseArea;
             _unitOfWork.ConsultantUserRepository.Update(consultant);
             await _unitOfWork.SaveChangeAsync();
 
