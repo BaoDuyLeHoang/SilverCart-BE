@@ -4,6 +4,7 @@ using MediatR;
 using SilverCart.Application.Interfaces;
 using SilverCart.Domain.Entities;
 using SilverCart.Domain.Entities.Products;
+using SilverCart.Domain.Entities.Stocks;
 using SilverCart.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -35,14 +36,18 @@ namespace Infrastructures.Features.Products.Commands.Create.CreateProduct
             if (user is not StoreUser storeUser && user is not AdministratorUser administratorUser)
                 throw new AppExceptions("Người dùng không có quyền tạo sản phẩm.");
 
-
             var store = await _unitOfWork.StoreRepository.GetByIdAsync(_storeSettings.Id);
             if (store == null)
                 throw new AppExceptions("Không tìm thấy cửa hàng.");
 
             var newProduct = _mapper.Map<Product>(product);
             newProduct.Id = Guid.NewGuid();
-            var itemMappings = new List<(ProductItem Item, CreateProductItemsRequest ItemVM)>();
+            newProduct.StoreId = _storeSettings.Id;
+            newProduct.CreationDate = DateTime.UtcNow;
+            newProduct.ModificationDate = DateTime.UtcNow;
+            newProduct.CreatedById = currentUserId;
+            newProduct.ModificationById = currentUserId;
+            newProduct.IsDeleted = false;
 
             if (product.ProductItems is { Count: > 0 })
             {
@@ -51,16 +56,46 @@ namespace Infrastructures.Features.Products.Commands.Create.CreateProduct
                     var mappedItem = _mapper.Map<ProductItem>(itemVM);
                     mappedItem.Id = Guid.NewGuid();
                     mappedItem.ProductId = newProduct.Id;
+                    mappedItem.CreationDate = DateTime.UtcNow;
+                    mappedItem.ModificationDate = DateTime.UtcNow;
+                    mappedItem.CreatedById = currentUserId;
+                    mappedItem.ModificationById = currentUserId;
+                    mappedItem.IsDeleted = false;
+                    
+                    // Tạo Stock cho ProductItem
+                    var stock = new Stock
+                    {
+                        Id = Guid.NewGuid(),
+                        ProductItemId = mappedItem.Id,
+                        Quantity = itemVM.Stock,
+                        AvailableQuantity = itemVM.Stock,
+                        ReservedQuantity = 0,
+                        SoldQuantity = 0,
+                        ReturnedQuantity = 0,
+                        DamagedQuantity = 0,
+                        CreationDate = DateTime.UtcNow,
+                        ModificationDate = DateTime.UtcNow,
+                        CreatedById = currentUserId,
+                        ModificationById = currentUserId,
+                        IsDeleted = false
+                    };
+                    
+                    mappedItem.StockId = stock.Id;
+                    mappedItem.Stock = stock;
+                    
                     mappedItem.ProductImages = itemVM.ProductImages?.Select(imageVM =>
                     {
                         if (imageVM == null) return null!;
                         var mappedImage = _mapper.Map<ProductImage>(imageVM);
                         mappedImage.Id = Guid.NewGuid();
                         mappedImage.ProductItemId = mappedItem.Id;
+                        mappedImage.CreationDate = DateTime.UtcNow;
+                        mappedImage.ModificationDate = DateTime.UtcNow;
+                        mappedImage.CreatedById = currentUserId;
+                        mappedImage.ModificationById = currentUserId;
+                        mappedImage.IsDeleted = false;
                         return mappedImage;
                     }).ToList() ?? new List<ProductImage>();
-
-                    itemMappings.Add((mappedItem, itemVM));
 
                     return mappedItem;
                 }).ToList();
@@ -74,12 +109,16 @@ namespace Infrastructures.Features.Products.Commands.Create.CreateProduct
                 newProduct.ProductCategories = categories.Select(category => new ProductCategory
                 {
                     ProductId = newProduct.Id,
-                    CategoryId = category.Id
+                    CategoryId = category.Id,
+                    CreationDate = DateTime.UtcNow,
+                    ModificationDate = DateTime.UtcNow,
+                    CreatedById = currentUserId,
+                    ModificationById = currentUserId
                 }).ToList();
             }
 
             await _unitOfWork.ProductRepository.AddAsync(newProduct);
-            await _unitOfWork.SaveChangeAsync();
+            await _unitOfWork.SaveChangeAsync(cancellationToken);
             return newProduct.Id;
         }
     }

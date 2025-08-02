@@ -60,6 +60,10 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, bool>
             product.ProductType = request.ProductType.Value;
         }
 
+        // Update audit fields
+        product.ModificationDate = DateTime.UtcNow;
+        product.ModificationById = currentUserId;
+
         // Update product categories only if new categories are provided
         if (request.CategoryIds != null && request.CategoryIds.Any())
         {
@@ -82,14 +86,18 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, bool>
                 var productCategory = new ProductCategory
                 {
                     ProductId = product.Id,
-                    CategoryId = categoryId
+                    CategoryId = categoryId,
+                    CreationDate = DateTime.UtcNow,
+                    ModificationDate = DateTime.UtcNow,
+                    CreatedById = currentUserId,
+                    ModificationById = currentUserId
                 };
                 await _unitOfWork.ProductCategoryRepository.AddAsync(productCategory);
             }
         }
 
         _unitOfWork.ProductRepository.Update(product);
-        var result = await _unitOfWork.SaveChangeAsync() > 0;
+        var result = await _unitOfWork.SaveChangeAsync(cancellationToken) > 0;
 
         return result;
     }

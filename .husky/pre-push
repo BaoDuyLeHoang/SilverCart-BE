@@ -8,7 +8,7 @@ echo "🔍 Running pre-push checks..."
 #     echo "Không có thay đổi. Bỏ qua build."
 # else
 #     echo "Có thay đổi. Tiến hành build..."
-#     dotnet build
+    dotnet build
 # fi
 
 # # Run tests

@@ -50,7 +50,7 @@ namespace Infrastructures.Mappers
                 .ForMember(dest => dest.Length, opt => opt.Ignore())
                 .ForMember(dest => dest.Width, opt => opt.Ignore())
                 .ForMember(dest => dest.Height, opt => opt.Ignore())
-                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Stock.ToString()));
+                .ForMember(dest => dest.ProductName, opt => opt.Ignore());
 
             // CreateProductItemsImages -> ProductImage mapping
             CreateMap<CreateProductItemsImages, ProductImage>()
