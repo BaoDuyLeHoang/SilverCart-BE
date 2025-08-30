@@ -1,10 +1,16 @@
 ﻿using AutoMapper;
-using BEAPI.Dtos.Auth;
+using AutoMapper.QueryableExtensions;
+using BEAPI.Dtos.Common;
+using BEAPI.Dtos.Elder;
+using BEAPI.Dtos.User;
 using BEAPI.Entities;
 using BEAPI.Exceptions;
+using BEAPI.Helper;
+using BEAPI.Model;
 using BEAPI.Repositories;
 using BEAPI.Services.IServices;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using QRCoder;
 
 namespace BEAPI.Services
@@ -14,11 +20,26 @@ namespace BEAPI.Services
         private readonly IRepository<User> _userRepo;
         private readonly IMapper _mapper;
         private readonly IJwtService _jwtService;
-        public UserService(IRepository<User> userRepo, IMapper mapper, IJwtService jwtService)
+        private readonly IRepository<District> _districtRepo;
+        private readonly IRepository<Ward> _warRepo;
+        private readonly IRepository<Province> _provineRepo;
+        private readonly string _baseUrl;
+
+        public UserService(IOptions<AppSettings> options,
+            IRepository<District> districtRepo,
+            IRepository<Ward> warRepo,
+            IRepository<Province> provineRepo,
+            IRepository<User> userRepo,
+            IMapper mapper,
+            IJwtService jwtService)
         {
             _userRepo = userRepo;
             _mapper = mapper;
             _jwtService = jwtService;
+            _baseUrl = options.Value.BaseUrl;
+            _districtRepo = districtRepo;
+            _warRepo = warRepo;
+            _provineRepo = provineRepo;
         }
 
         public async Task CreateElder(ElderRegisterDto elderRegisterDto, Guid userId)
@@ -39,8 +60,118 @@ namespace BEAPI.Services
             user.Age = age;
             user.GuardianId = userId;
 
+            if (elderRegisterDto.Addresses.Count != 0)
+            {
+                var addresses = _mapper.Map<List<Address>>(elderRegisterDto.Addresses);
+
+                var provinceIds = await _provineRepo.Get().Select(p => p.ProvinceID).ToListAsync();
+                var districtIds = await _districtRepo.Get().Select(d => d.DistrictID).ToListAsync();
+                var wardCodes = await _warRepo.Get().Select(w => w.WardCode).ToListAsync();
+
+                foreach (var address in addresses)
+                {
+                    if (!provinceIds.Contains(address.ProvinceID))
+                        throw new Exception($"ProvinceID {address.ProvinceID} does not exist");
+
+                    if (!districtIds.Contains(address.DistrictID))
+                        throw new Exception($"DistrictID {address.DistrictID} does not exist");
+
+                    if (!wardCodes.Contains(address.WardCode))
+                        throw new Exception($"WardCode {address.WardCode} does not exist");
+
+                    address.User = user;
+                }
+            }
+
+            if (elderRegisterDto.CategoryValueIds.Count > 0)
+            {
+                user.UserCategories = elderRegisterDto.CategoryValueIds
+                    .Select(catId => new UserCategoryValue
+                    {
+                        Id = Guid.NewGuid(),
+                        ValueId = GuidHelper.ParseOrThrow(catId, nameof(catId)),
+                        User = user
+                    }).ToList();
+            }
+
             await _userRepo.AddAsync(user);
             await _userRepo.SaveChangesAsync();
+        }
+
+        public async Task CreateUserAsync(UserCreateDto dto)
+        {
+            if (await _userRepo.Get().AnyAsync(u => u.Email == dto.Email || u.UserName == dto.UserName || u.PhoneNumber == dto.PhoneNumber))
+                throw new Exception("Email, username or Phonenumber have been already.");
+
+            var user = new User
+            {
+                FullName = dto.FullName,
+                Email = dto.Email,
+                UserName = dto.UserName,
+                PhoneNumber = dto.PhoneNumber,
+                RoleId = GuidHelper.ParseOrThrow(dto.RoleId, nameof(dto.RoleId)),
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+                IsVerified = false
+            };
+
+            await _userRepo.AddAsync(user);
+            await _userRepo.SaveChangesAsync();
+        }
+
+        public async Task BanOrUnbanUserAsync(string userId)
+        {
+            var guidUser = GuidHelper.ParseOrThrow(userId, nameof(userId));
+
+            var user = await _userRepo.Get()
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(u => u.Id == guidUser)
+                ?? throw new Exception("User not found");
+
+            if (user.Role?.Name == "Admin")
+                throw new Exception("You cannot ban an Admin user.");
+
+            if (user.IsDeleted)
+                throw new Exception("User is already banned.");
+
+            user.IsDeleted = !user.IsDeleted;
+            await _userRepo.SaveChangesAsync();
+        }
+
+        public async Task<PagedResult<UserListDto>> FilterUsersAsync(UserFilterDto request)
+        {
+            var query = _userRepo.Get().Include(u => u.Role).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(request.SearchTerm))
+            {
+                query = query.Where(u =>
+                    u.FullName.Contains(request.SearchTerm) ||
+                    u.UserName.Contains(request.SearchTerm) ||
+                    u.Email.Contains(request.SearchTerm) || 
+                    u.PhoneNumber.Contains(request.SearchTerm));
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.RoleId))
+            {
+                var roleIdGuid = GuidHelper.ParseOrThrow(request.RoleId, nameof(request.RoleId));
+                query = query.Where(u => u.RoleId == roleIdGuid);
+            }
+
+            var totalItems = await query.CountAsync();
+            var items = await query
+                .OrderByDescending(u => u.CreationDate)
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .ProjectTo<UserListDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return new PagedResult<UserListDto>
+            {
+                Items = items,
+                TotalItems = totalItems,
+                Page = request.Page,
+                PageSize = request.PageSize
+            };
+
         }
 
         public async Task<(string Token, string QrBase64)> GenerateElderLoginQrAsync(Guid elderId)
@@ -48,7 +179,7 @@ namespace BEAPI.Services
             var elder = await _userRepo.Get().FirstOrDefaultAsync(u => u.Id == elderId && u.Role.Name == "Elder") ?? throw new Exception(ExceptionConstant.ElderNotFound);
             var token = _jwtService.GenerateToken(elder, expiresInMinutes: 2);
 
-            var qrUrl = $"https://localhost:7264/api/auth/qr-login?token={token}";
+            var qrUrl = $"{_baseUrl}/api/auth/qr-login?token={token}";
 
             using var qrGenerator = new QRCodeGenerator();
             using var qrCodeData = qrGenerator.CreateQrCode(qrUrl, QRCodeGenerator.ECCLevel.Q);
@@ -69,5 +200,7 @@ namespace BEAPI.Services
             var elder = await _userRepo.Get().Include(x => x.Role).FirstOrDefaultAsync(x => x.Id == Guid.Parse(elderId));
             return elder == null ? throw new Exception(ExceptionConstant.ElderNotFound) : _jwtService.GenerateToken(elder, null);
         }
+
+
     }
 }

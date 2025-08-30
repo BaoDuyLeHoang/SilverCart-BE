@@ -1,6 +1,7 @@
 ﻿using BEAPI.Constants;
 using BEAPI.Dtos.Auth;
 using BEAPI.Dtos.Common;
+using BEAPI.Dtos.User;
 using BEAPI.Exceptions;
 using BEAPI.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
@@ -20,34 +21,22 @@ namespace BEAPI.Controllers
         }
 
 
-        [Authorize(Roles ="User")]
         [HttpPost("[action]")]
-        public async Task<IActionResult> CreateElder([FromBody] ElderRegisterDto dto)
+        public async Task<IActionResult> CreateUser([FromBody] UserCreateDto request)
         {
-            var res = new ResponseDto();
-            var userId = User.FindFirst("UserId")?.Value;
-            if (userId == null) {
-                res.Message = ExceptionConstant.UserIdMissing;
-                return BadRequest(res);
-            }
             try
             {
-                await _userService.CreateElder(dto,Guid.Parse(userId.ToString()));
-                res.Message = MessageConstants.RegisterSuccess;
-                return StatusCode(StatusCodes.Status201Created, res);
+                await _userService.CreateUserAsync(request);
+                return Ok(new ResponseDto { Message = "The user has been created successfully." });
             }
             catch (Exception ex)
             {
-                res.Message = ex.Message;
-                if (ex.Message == ExceptionConstant.UserAlreadyExists)
-                    return Conflict(res);
-
-                return BadRequest(res);
+                return BadRequest(new ResponseDto { Message = ex.Message });
             }
         }
 
         [HttpPost("[action]")]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = UserContanst.UserRole)]
         public async Task<IActionResult> GenerateQr([FromBody] Guid elderId)
         {
             try
@@ -73,6 +62,48 @@ namespace BEAPI.Controllers
                 });
             }
         }
+
+        [HttpPut("{userId}/[action]")]
+        public async Task<IActionResult> BanOrUnbanUser(string userId)
+        {
+            try
+            {
+                await _userService.BanOrUnbanUserAsync(userId);
+                return Ok(new ResponseDto
+                {
+                    Message = "User status updated successfully.",
+                    Data = null
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseDto
+                {
+                    Message = ex.Message,
+                    Data = null
+                });
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> SearchUsers([FromBody] UserFilterDto request)
+        {
+
+            try
+            {
+                var result = await _userService.FilterUsersAsync(request);
+                return Ok(new ResponseDto { Data = result, Message = "Filter successful" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseDto
+                {
+                    Message = ex.Message,
+                    Data = null
+                });
+            }
+        }
+
 
         [HttpPost("[action]")]
         public async Task<IActionResult> QrLogin([FromQuery] string token)

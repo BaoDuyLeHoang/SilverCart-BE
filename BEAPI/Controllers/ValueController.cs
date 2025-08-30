@@ -22,6 +22,7 @@ namespace BEAPI.Controllers
             _valueService = valueService;
         }
 
+
         [Authorize(Roles = "Admin")]
         [HttpPost("[action]")]
         public async Task<IActionResult> CreateListOfValue([FromBody] ListOfValueCreateDto dto)
@@ -36,7 +37,7 @@ namespace BEAPI.Controllers
             catch (Exception ex)
             {
                 res.Message = ex.Message;
-                if(ex.Message == ExceptionConstant.ListOfValueAlreadyExists)
+                if (ex.Message == ExceptionConstant.ListOfValueAlreadyExists)
                 {
                     return Conflict(res);
                 }
@@ -175,7 +176,7 @@ namespace BEAPI.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> CreateValue ([FromBody] ValueCreateDto dto)
+        public async Task<IActionResult> CreateValue([FromBody] ValueCreateDto dto)
         {
             try
             {
@@ -197,7 +198,7 @@ namespace BEAPI.Controllers
         {
             try
             {
-                 await _valueService.Update(dto);
+                await _valueService.Update(dto);
                 return Ok(new ResponseDto
                 {
                     Message = "Value updated successfully",
@@ -224,6 +225,7 @@ namespace BEAPI.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
 
     }
 }

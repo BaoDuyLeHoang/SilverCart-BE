@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BEAPI.Entities.Enum;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Numerics;
 
 namespace BEAPI.Entities
 {
@@ -10,15 +13,22 @@ namespace BEAPI.Entities
     {
         [MaxLength(255)]
         public string FullName { get; set; } = string.Empty;
-        public Guid? OTPId { get; set; }
+        public string? OtpCode { get; set; }
+        public DateTimeOffset? OtpExpiredAt { get; set; }
+        public bool IsOtpUsed { get; set; } = false;
+        public bool IsVerified { get; set; } = false;
         public string? RefreshToken { get; set; }
         [MaxLength(256)]
         public string? UserName { get; set; }
         [MaxLength(256)]
         public string? Email { get; set; }
         [MaxLength(20)]
-        public string? Avatar { get; set; } 
-        public string? Gender { get; set; }
+        public string? Avatar { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal? Spendlimit { get; set; }
+        public string? EmergencyPhoneNumber { get; set; }
+        public Gender? Gender { get; set; }
+        public string? RelationShip { get; set; }
         public int Age { get; set; }
         [MaxLength(2000)]
         public string? Description { get; set; }
@@ -32,5 +42,6 @@ namespace BEAPI.Entities
         public virtual List<Address> Addresses { get; set; } = new List<Address>();
         public virtual List<Cart> Carts { get; set; } = new List<Cart>();
         public virtual List<PaymentHistory> PaymentHistory { get; set; } = new List<PaymentHistory>();
+        public virtual List<UserCategoryValue> UserCategories { get; set; } = new List<UserCategoryValue>();
     }
 }

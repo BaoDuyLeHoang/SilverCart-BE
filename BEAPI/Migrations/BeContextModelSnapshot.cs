@@ -40,10 +40,6 @@ namespace BEAPI.Migrations
                     b.Property<DateTimeOffset?>("DeletionDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("DistrictID")
                         .HasColumnType("int");
 
@@ -60,8 +56,9 @@ namespace BEAPI.Migrations
                     b.Property<DateTimeOffset?>("ModificationDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProvinceID")
                         .HasColumnType("int");
@@ -83,16 +80,15 @@ namespace BEAPI.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("WardCode")
-                        .HasColumnType("bigint");
+                    b.Property<string>("WardCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WardName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
 
                     b.HasIndex("UserId");
 
@@ -260,6 +256,70 @@ namespace BEAPI.Migrations
                     b.ToTable("Districts");
                 });
 
+            modelBuilder.Entity("BEAPI.Entities.Feedback", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AdminId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("CreationDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("DeleteById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("DeletionDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificationById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("ModificationDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("Feedbacks");
+                });
+
             modelBuilder.Entity("BEAPI.Entities.ListOfValue", b =>
                 {
                     b.Property<Guid>("Id")
@@ -300,9 +360,50 @@ namespace BEAPI.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("ListOfValues");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("e83fdb81-1ca6-49da-bd91-f42ce99fd8ee"),
+                            CreationDate = new DateTimeOffset(new DateTime(2025, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            IsDeleted = false,
+                            Label = "Loại sản phẩm",
+                            Note = "CATEGORY",
+                            Type = 0
+                        },
+                        new
+                        {
+                            Id = new Guid("a23f89a1-2c34-4b2d-9876-08dcb9a3abcd"),
+                            CreationDate = new DateTimeOffset(new DateTime(2025, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            IsDeleted = false,
+                            Label = "Thương hiệu",
+                            Note = "BRAND",
+                            Type = 2
+                        },
+                        new
+                        {
+                            Id = new Guid("c47fabcd-77f2-4f55-8322-08dcb9a3cdef"),
+                            CreationDate = new DateTimeOffset(new DateTime(2025, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            IsDeleted = false,
+                            Label = "Mối quan hệ",
+                            Note = "RELATIONSHIP",
+                            Type = 3
+                        },
+                        new
+                        {
+                            Id = new Guid("e12abcde-1234-4567-89ab-08dcb9a3cdef"),
+                            CreationDate = new DateTimeOffset(new DateTime(2025, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            IsDeleted = false,
+                            Label = "Loại bệnh án",
+                            Note = "MEDICAL_REPORT_TYPE",
+                            Type = 4
+                        });
                 });
 
             modelBuilder.Entity("BEAPI.Entities.Order", b =>
@@ -326,7 +427,14 @@ namespace BEAPI.Migrations
                     b.Property<DateTimeOffset?>("DeletionDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid>("ElderId")
+                    b.Property<int>("DistrictID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DistrictName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ElderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
@@ -344,13 +452,36 @@ namespace BEAPI.Migrations
                     b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProvinceID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProvinceName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
+                    b.Property<string>("StreetAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("WardCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WardName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -620,7 +751,7 @@ namespace BEAPI.Migrations
                     b.Property<DateTimeOffset?>("ModificationDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid>("ProductVariantId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("RowVersion")
@@ -634,7 +765,7 @@ namespace BEAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductVariantId");
 
                     b.ToTable("ProductImages");
                 });
@@ -789,6 +920,61 @@ namespace BEAPI.Migrations
                     b.ToTable("Provinces");
                 });
 
+            modelBuilder.Entity("BEAPI.Entities.Report", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ConsultantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("CreationDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("DeleteById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("DeletionDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificationById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("ModificationDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConsultantId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reports");
+                });
+
             modelBuilder.Entity("BEAPI.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -834,7 +1020,7 @@ namespace BEAPI.Migrations
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             IsDeleted = false,
-                            Name = "User"
+                            Name = "Guardian"
                         },
                         new
                         {
@@ -847,6 +1033,24 @@ namespace BEAPI.Migrations
                             Id = new Guid("33333333-3333-3333-3333-333333333333"),
                             IsDeleted = false,
                             Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("44444444-4444-4444-4444-444444444444"),
+                            IsDeleted = false,
+                            Name = "Consultant"
+                        },
+                        new
+                        {
+                            Id = new Guid("55555555-5555-5555-5555-555555555555"),
+                            IsDeleted = false,
+                            Name = "ShopManager"
+                        },
+                        new
+                        {
+                            Id = new Guid("66666666-6666-6666-6666-666666666666"),
+                            IsDeleted = false,
+                            Name = "Staff"
                         });
                 });
 
@@ -886,18 +1090,27 @@ namespace BEAPI.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("EmergencyPhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Gender")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("GuardianId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsOtpUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsVerified")
                         .HasColumnType("bit");
 
                     b.Property<Guid?>("ModificationById")
@@ -906,8 +1119,11 @@ namespace BEAPI.Migrations
                     b.Property<DateTimeOffset?>("ModificationDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid?>("OTPId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("OtpCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("OtpExpiredAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -918,6 +1134,9 @@ namespace BEAPI.Migrations
                     b.Property<string>("RefreshToken")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("RelationShip")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid?>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
@@ -925,6 +1144,9 @@ namespace BEAPI.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
+
+                    b.Property<decimal?>("Spendlimit")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
@@ -958,8 +1180,10 @@ namespace BEAPI.Migrations
                             CreationDate = new DateTimeOffset(new DateTime(2025, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "vana@example.com",
                             FullName = "Nguyen Van A",
-                            Gender = "Male",
+                            Gender = 0,
                             IsDeleted = false,
+                            IsOtpUsed = false,
+                            IsVerified = true,
                             PasswordHash = "$2a$11$X9X4SPGxvVdQGQKkJkGZbOGXfHP4L7lqMZtYxQz4WPrGz7G6oUu0K",
                             PhoneNumber = "0901234567",
                             RoleId = new Guid("11111111-1111-1111-1111-111111111111"),
@@ -972,9 +1196,11 @@ namespace BEAPI.Migrations
                             CreationDate = new DateTimeOffset(new DateTime(2025, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "thib@example.com",
                             FullName = "Tran Thi B",
-                            Gender = "Female",
+                            Gender = 0,
                             GuardianId = new Guid("11111111-1111-1111-1111-111111111111"),
                             IsDeleted = false,
+                            IsOtpUsed = false,
+                            IsVerified = true,
                             PasswordHash = "$2a$11$X9X4SPGxvVdQGQKkJkGZbOGXfHP4L7lqMZtYxQz4WPrGz7G6oUu0K",
                             PhoneNumber = "0909876543",
                             RoleId = new Guid("22222222-2222-2222-2222-222222222222"),
@@ -987,13 +1213,62 @@ namespace BEAPI.Migrations
                             CreationDate = new DateTimeOffset(new DateTime(2025, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Email = "admin@example.com",
                             FullName = "Admin System",
-                            Gender = "Male",
+                            Gender = 0,
                             IsDeleted = false,
+                            IsOtpUsed = false,
+                            IsVerified = true,
                             PasswordHash = "$2a$11$X9X4SPGxvVdQGQKkJkGZbOGXfHP4L7lqMZtYxQz4WPrGz7G6oUu0K",
                             PhoneNumber = "0912345678",
                             RoleId = new Guid("33333333-3333-3333-3333-333333333333"),
                             UserName = "admin1"
                         });
+                });
+
+            modelBuilder.Entity("BEAPI.Entities.UserCategoryValue", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("CreationDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("DeleteById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("DeletionDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificationById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("ModificationDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ValueId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("ValueId");
+
+                    b.ToTable("UserCategoryValue");
                 });
 
             modelBuilder.Entity("BEAPI.Entities.Value", b =>
@@ -1046,6 +1321,9 @@ namespace BEAPI.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ChildListOfValueId");
@@ -1053,6 +1331,51 @@ namespace BEAPI.Migrations
                     b.HasIndex("ListOfValueId");
 
                     b.ToTable("Values");
+                });
+
+            modelBuilder.Entity("BEAPI.Entities.Wallet", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("CreationDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("DeleteById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("DeletionDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificationById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("ModificationDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Wallets");
                 });
 
             modelBuilder.Entity("BEAPI.Entities.Ward", b =>
@@ -1107,19 +1430,11 @@ namespace BEAPI.Migrations
 
             modelBuilder.Entity("BEAPI.Entities.Address", b =>
                 {
-                    b.HasOne("BEAPI.Entities.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BEAPI.Entities.User", "User")
                         .WithMany("Addresses")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Order");
 
                     b.Navigation("User");
                 });
@@ -1160,6 +1475,25 @@ namespace BEAPI.Migrations
                     b.Navigation("ProductVariant");
                 });
 
+            modelBuilder.Entity("BEAPI.Entities.Feedback", b =>
+                {
+                    b.HasOne("BEAPI.Entities.User", "Admin")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BEAPI.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Admin");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("BEAPI.Entities.Order", b =>
                 {
                     b.HasOne("BEAPI.Entities.User", "Customer")
@@ -1171,8 +1505,7 @@ namespace BEAPI.Migrations
                     b.HasOne("BEAPI.Entities.User", "Elder")
                         .WithMany()
                         .HasForeignKey("ElderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Customer");
 
@@ -1242,13 +1575,13 @@ namespace BEAPI.Migrations
 
             modelBuilder.Entity("BEAPI.Entities.ProductImage", b =>
                 {
-                    b.HasOne("BEAPI.Entities.Product", "Product")
+                    b.HasOne("BEAPI.Entities.ProductVariant", "ProductVariant")
                         .WithMany("ProductImages")
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("ProductVariantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Product");
+                    b.Navigation("ProductVariant");
                 });
 
             modelBuilder.Entity("BEAPI.Entities.ProductVariant", b =>
@@ -1281,6 +1614,25 @@ namespace BEAPI.Migrations
                     b.Navigation("Value");
                 });
 
+            modelBuilder.Entity("BEAPI.Entities.Report", b =>
+                {
+                    b.HasOne("BEAPI.Entities.User", "Consultant")
+                        .WithMany()
+                        .HasForeignKey("ConsultantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BEAPI.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Consultant");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("BEAPI.Entities.User", b =>
                 {
                     b.HasOne("BEAPI.Entities.User", "Guardian")
@@ -1294,6 +1646,25 @@ namespace BEAPI.Migrations
                     b.Navigation("Guardian");
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("BEAPI.Entities.UserCategoryValue", b =>
+                {
+                    b.HasOne("BEAPI.Entities.User", "User")
+                        .WithMany("UserCategories")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BEAPI.Entities.Value", "Value")
+                        .WithMany()
+                        .HasForeignKey("ValueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("Value");
                 });
 
             modelBuilder.Entity("BEAPI.Entities.Value", b =>
@@ -1312,6 +1683,17 @@ namespace BEAPI.Migrations
                     b.Navigation("ChildListOfValue");
 
                     b.Navigation("ListOfValue");
+                });
+
+            modelBuilder.Entity("BEAPI.Entities.Wallet", b =>
+                {
+                    b.HasOne("BEAPI.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BEAPI.Entities.Cart", b =>
@@ -1333,13 +1715,13 @@ namespace BEAPI.Migrations
                 {
                     b.Navigation("ProductCategoryValues");
 
-                    b.Navigation("ProductImages");
-
                     b.Navigation("ProductVariants");
                 });
 
             modelBuilder.Entity("BEAPI.Entities.ProductVariant", b =>
                 {
+                    b.Navigation("ProductImages");
+
                     b.Navigation("ProductVariantValues");
                 });
 
@@ -1355,6 +1737,8 @@ namespace BEAPI.Migrations
                     b.Navigation("Carts");
 
                     b.Navigation("PaymentHistory");
+
+                    b.Navigation("UserCategories");
                 });
 
             modelBuilder.Entity("BEAPI.Entities.Value", b =>

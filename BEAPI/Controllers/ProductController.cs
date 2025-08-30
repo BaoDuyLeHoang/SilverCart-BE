@@ -108,6 +108,7 @@ namespace BEAPI.Controllers
             }
         }
 
+        //[Authorize(Roles = "Admin")]
         [HttpPost("[action]")]
         public async Task<IActionResult> Search([FromBody] ProductSearchDto dto)
         {
@@ -117,7 +118,7 @@ namespace BEAPI.Controllers
 
                 return Ok(new ResponseDto
                 {
-                    Message = "Lấy danh sách sản phẩm thành công",
+                    Message = "Product list retrieved successfully.",
                     Data = result
                 });
             }
@@ -130,6 +131,30 @@ namespace BEAPI.Controllers
                 });
             }
         }
-    }
 
+        [HttpPost("[action]")]
+        public async Task<IActionResult> SearchProductActive([FromBody] ProductSearchDto dto)
+        {
+            try
+            {
+                var result = await _service.SearchProductActiveAsync(dto);
+
+                return Ok(new ResponseDto
+                {
+                    Message = "Product list retrieved successfully.",
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseDto
+                {
+                    Message = ex.Message,
+                    Data = null
+                });
+            }
+        }
+
+
+    }
 }
