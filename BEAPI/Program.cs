@@ -1,8 +1,11 @@
 ﻿using BEAPI.Database;
 using BEAPI.Extension;
+using BEAPI.Hubs;
+using BEAPI.Middleware;
 using BEAPI.Model;
 using BEAPI.Services;
 using BEAPI.Services.IServices;
+using BEAPI.Services.Shipping;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -28,12 +31,32 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Add SignalR
+builder.Services.AddSignalR();
+
 builder.Services.Configure<EmailSettings>(
     builder.Configuration.GetSection("EmailSettings"));
 builder.Services.Configure<AppSettings>(
     builder.Configuration.GetSection("AppSettings"));
 builder.Services.Configure<VnPaySettings>(builder.Configuration.GetSection("VNPAY"));
 builder.Services.AddDbContext<BeContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddHttpClient<GhnClient>();
+builder.Services.AddSingleton(sp =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    return new GhnOptions
+    {
+        BaseUrl = cfg["GHN:BaseUrl"],
+        Token = cfg["GHN:Token"],
+        ShopId = int.Parse(cfg["GHN:ShopId"] ?? "0"),
+        FromDistrictId = int.Parse(cfg["GHN:FromDistrictId"] ?? "0"),
+        FromWardCode = cfg["GHN:FromWardCode"]!,
+        FromName = cfg["GHN:FromName"]!,
+        FromPhone = cfg["GHN:FromPhone"]!,
+        FromAddress = cfg["GHN:FromAddress"]!
+    };
+});
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -106,7 +129,13 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseAutoSignalR();
+
+app.UseUserActivityTracking();
+
 app.MapControllers();
+
+app.MapHub<UserOnlineHub>("/hubs/useronline");
 
 app.Run();
 

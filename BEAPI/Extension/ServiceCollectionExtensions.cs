@@ -2,9 +2,10 @@
 using BEAPI.Repositories;
 using BEAPI.Services;
 using BEAPI.Services.IServices;
+using BEAPI.Services.Shipping;
 
 namespace BEAPI.Extension
-{ 
+{
     public static class ServiceCollectionExtensions
     {
         public static void Register(this IServiceCollection services)
@@ -30,8 +31,14 @@ namespace BEAPI.Extension
             services.AddScoped<IRelationShipService, RelationShipService>();
             services.AddScoped<IElderService, ElderService>();
             services.AddScoped<IMedicalReportService, MedicalReportService>();
+            services.AddScoped<IReportService, ReportService>();
+            services.AddScoped<IFeedbackService, FeedbackService>();
+            services.AddScoped<IPromotionService, PromotionService>();
+            services.AddScoped<IWalletService, WalletService>();
+            services.AddScoped<IPaymentHistoryService, PaymentHistoryService>();
+            services.AddScoped<ShippingService>();
             services.AddScoped<VNPayService>();
+            services.AddScoped<IUserConnectionService, UserConnectionService>();
         }
     }
 }
-    
