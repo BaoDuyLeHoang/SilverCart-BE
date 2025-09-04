@@ -1,6 +1,5 @@
 ﻿using BEAPI.Entities.Enum;
 using System.ComponentModel.DataAnnotations.Schema;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace BEAPI.Entities
 {
@@ -20,9 +19,21 @@ namespace BEAPI.Entities
         public int DistrictID { get; set; }
         public string DistrictName { get; set; } = string.Empty;
         public int ProvinceID { get; set; }
+        public int Discount { get; set; }
         public string ProvinceName { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
 
         public virtual List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+
+        public List<OrderShipmentEvent> ShipmentEvents { get; set; } = new();
+
+        // ====== GHN Shipping fields ======
+        public string? ShippingProvider { get; set; } // "GHN"
+        public int? ShippingServiceId { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal? ShippingFee { get; set; }
+        public string? ShippingCode { get; set; }      // GHN order_code
+        public string? ShippingStatus { get; set; }    // delivering, delivered, ...
+        public DateTimeOffset? ExpectedDeliveryTime { get; set; }
     }
 }

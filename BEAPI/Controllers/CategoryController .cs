@@ -1,7 +1,6 @@
 ﻿using BEAPI.Dtos.Category;
 using BEAPI.Dtos.Common;
 using BEAPI.Dtos.Value;
-using BEAPI.Services;
 using BEAPI.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,6 +44,28 @@ namespace BEAPI.Controllers
             try
             {
                 var rs = await _categoryService.GetListCategory();
+                return Ok(new ResponseDto
+                {
+                    Message = "Category getlist successfully",
+                    Data = rs
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseDto
+                {
+                    Data = null,
+                    Message = ex.Message
+                });
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetRootListValueCategory()
+        {
+            try
+            {
+                var rs = await _categoryService.GetRootListValueCategory();
                 return Ok(new ResponseDto
                 {
                     Message = "Category getlist successfully",
@@ -132,6 +153,27 @@ namespace BEAPI.Controllers
             try
             {
                 await _categoryService.CreateListCategory(dtos);
+                return Ok(new ResponseDto
+                {
+                    Message = "Category created successfully"
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseDto
+                {
+                    Data = null,
+                    Message = ex.Message
+                });
+            }
+        }
+        
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CreateListSubCategory([FromBody] CreateSubCategoryValueDto dtos)
+        {
+            try
+            {
+                await _categoryService.CreateListSubCategory(dtos);
                 return Ok(new ResponseDto
                 {
                     Message = "Category created successfully"

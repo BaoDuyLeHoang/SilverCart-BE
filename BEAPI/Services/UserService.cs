@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using BEAPI.Dtos.Addreess;
+using BEAPI.Dtos.Category;
 using BEAPI.Dtos.Common;
 using BEAPI.Dtos.Elder;
+using BEAPI.Dtos.Promotion;
 using BEAPI.Dtos.User;
 using BEAPI.Entities;
 using BEAPI.Exceptions;
@@ -23,12 +26,14 @@ namespace BEAPI.Services
         private readonly IRepository<District> _districtRepo;
         private readonly IRepository<Ward> _warRepo;
         private readonly IRepository<Province> _provineRepo;
+        private readonly IRepository<Wallet> _walletRepo;
         private readonly string _baseUrl;
 
         public UserService(IOptions<AppSettings> options,
             IRepository<District> districtRepo,
             IRepository<Ward> warRepo,
             IRepository<Province> provineRepo,
+            IRepository<Wallet> walletRepo,
             IRepository<User> userRepo,
             IMapper mapper,
             IJwtService jwtService)
@@ -40,6 +45,7 @@ namespace BEAPI.Services
             _districtRepo = districtRepo;
             _warRepo = warRepo;
             _provineRepo = provineRepo;
+            _walletRepo = walletRepo;
         }
 
         public async Task CreateElder(ElderRegisterDto elderRegisterDto, Guid userId)
@@ -58,6 +64,7 @@ namespace BEAPI.Services
 
             var user = _mapper.Map<User>(elderRegisterDto);
             user.Age = age;
+            user.IsVerified = true;
             user.GuardianId = userId;
 
             if (elderRegisterDto.Addresses.Count != 0)
@@ -96,6 +103,11 @@ namespace BEAPI.Services
 
             await _userRepo.AddAsync(user);
             await _userRepo.SaveChangesAsync();
+
+            // Create wallet immediately for the new user
+            var wallet = new Wallet { UserId = user.Id, Amount = 0 };
+            await _walletRepo.AddAsync(wallet);
+            await _walletRepo.SaveChangesAsync();
         }
 
         public async Task CreateUserAsync(UserCreateDto dto)
@@ -111,10 +123,27 @@ namespace BEAPI.Services
                 PhoneNumber = dto.PhoneNumber,
                 RoleId = GuidHelper.ParseOrThrow(dto.RoleId, nameof(dto.RoleId)),
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                IsVerified = false
+                IsVerified = true
             };
 
             await _userRepo.AddAsync(user);
+            await _userRepo.SaveChangesAsync();
+        }
+
+        public async Task UpdateUserAsync(UserUpdateDto dto)
+        {
+            var userId = GuidHelper.ParseOrThrow(dto.Id, nameof(dto.Id));
+            var user = await _userRepo.Get().Include(u => u.Role).FirstOrDefaultAsync(u => u.Id == userId)
+                ?? throw new Exception("User not found");
+
+            if (user.Role?.Name == "Elder")
+                throw new Exception("Cannot update Elder with this endpoint");
+
+            if (!string.IsNullOrWhiteSpace(dto.FullName)) user.FullName = dto.FullName;
+            if (!string.IsNullOrWhiteSpace(dto.PhoneNumber)) user.PhoneNumber = dto.PhoneNumber;
+            if (!string.IsNullOrWhiteSpace(dto.Avatar)) user.Avatar = dto.Avatar;
+            if (!string.IsNullOrWhiteSpace(dto.Description)) user.Description = dto.Description;
+
             await _userRepo.SaveChangesAsync();
         }
 
@@ -177,15 +206,17 @@ namespace BEAPI.Services
         public async Task<(string Token, string QrBase64)> GenerateElderLoginQrAsync(Guid elderId)
         {
             var elder = await _userRepo.Get().FirstOrDefaultAsync(u => u.Id == elderId && u.Role.Name == "Elder") ?? throw new Exception(ExceptionConstant.ElderNotFound);
-            var token = _jwtService.GenerateToken(elder, expiresInMinutes: 2);
+            var tokens = _jwtService.GenerateToken(elder, expiresInMinutes: 2);
 
-            var qrUrl = $"{_baseUrl}/api/auth/qr-login?token={token}";
+            var qrUrl = $"{_baseUrl}/api/auth/qr-login?token={tokens}";
 
             using var qrGenerator = new QRCodeGenerator();
             using var qrCodeData = qrGenerator.CreateQrCode(qrUrl, QRCodeGenerator.ECCLevel.Q);
             using var qrCode = new PngByteQRCode(qrCodeData);
             var qrBytes = qrCode.GetGraphic(20);
             var qrBase64 = Convert.ToBase64String(qrBytes);
+
+            var token = await LoginByQrAsync(tokens);
 
             return (token, $"data:image/png;base64,{qrBase64}");
         }
@@ -201,6 +232,41 @@ namespace BEAPI.Services
             return elder == null ? throw new Exception(ExceptionConstant.ElderNotFound) : _jwtService.GenerateToken(elder, null);
         }
 
+        public async Task<UserDetailDto> GetDetailAsync(Guid id)
+        {
+            var user = await _userRepo.Get()
+                .Include(u => u.Role)
+                .Include(u => u.Addresses)
+                .Include(u => u.Carts)
+                .Include(u => u.PaymentHistory)
+                .Include(u => u.UserCategories).ThenInclude(uc => uc.Value)
+                .Include(u => u.UserPromotions).ThenInclude(up => up.Promotion)
+                .FirstOrDefaultAsync(u => u.Id == id)
+                ?? throw new Exception("User not found");
 
+            var dto = _mapper.Map<UserDetailDto>(user);
+
+            dto.Addresses = _mapper.Map<List<AddressDto>>(user.Addresses);
+
+            dto.CategoryValues = user.UserCategories
+                    .Select(uc => new CategoryValueDto
+                    {
+                        Id = uc.Value.Id.ToString(),
+                        Code = uc.Value.Code,
+                        Description = uc.Value.Description,
+                        Label = uc.Value.Label,
+                        Type = uc.Value.Type,
+                        ChildrenId = uc.Value.ChildListOfValueId?.ToString(),
+                        ChildrentLabel = uc.Value.ChildListOfValue?.Label
+                    })
+                    .ToList();
+
+            dto.UserPromotions = user.UserPromotions
+                .OrderByDescending(up => up.CreationDate)
+                .Select(up => _mapper.Map<UserPromotionItemDto>(up))
+                .ToList();
+
+            return dto;
+        }
     }
 }

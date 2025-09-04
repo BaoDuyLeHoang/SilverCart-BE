@@ -7,7 +7,7 @@ namespace BEAPI.Dtos.Product
         public string Id { get; set; } = string.Empty;
         public string? Name { get; set; }
         public string? Brand { get; set; }
-        public string? Descriotion { get; set; }
+        public string? Description { get; set; }
         public string? VideoPath { get; set; }
         public string? Weight { get; set; }
         public string? Height { get; set; }

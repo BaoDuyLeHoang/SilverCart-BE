@@ -1,6 +1,5 @@
 ﻿using BEAPI.Dtos.Common;
 using BEAPI.Dtos.Product;
-using BEAPI.Services;
 using BEAPI.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -108,6 +107,28 @@ namespace BEAPI.Controllers
             }
         }
 
+        [HttpGet("[action]/{productId}")]
+        public async Task<IActionResult> GetWithStylesById(string productId)
+        {
+            try
+            {
+                var result = await _service.GetWithStylesById(productId);
+                return Ok(new ResponseDto
+                {
+                    Message = "Get product successfully",
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseDto
+                {
+                    Message = ex.Message,
+                    Data = null
+                });
+            }
+        }
+
         //[Authorize(Roles = "Admin")]
         [HttpPost("[action]")]
         public async Task<IActionResult> Search([FromBody] ProductSearchDto dto)
@@ -154,7 +175,6 @@ namespace BEAPI.Controllers
                 });
             }
         }
-
-
     }
+
 }
