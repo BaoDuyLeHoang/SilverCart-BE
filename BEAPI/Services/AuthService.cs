@@ -14,14 +14,16 @@ namespace BEAPI.Services
         private readonly IRepository<User> _userRepo;
         private readonly IMapper _mapper;
         private readonly IJwtService _jwtService;
+        private readonly IRepository<Wallet> _walletRepo;
         private readonly IOtpService _otpService;
 
-        public AuthService(IRepository<User> userRepo, IOtpService otpService, IMapper mapper, IJwtService jwtService)
+        public AuthService(IRepository<User> userRepo, IOtpService otpService, IMapper mapper, IJwtService jwtService, IRepository<Wallet> walletRepo)
         {
             _userRepo = userRepo;
             _mapper = mapper;
             _jwtService = jwtService;
             _otpService = otpService;
+            _walletRepo = walletRepo;
         }
 
         public async Task RegisterAsync(RegisterDto registerDto)
@@ -34,6 +36,11 @@ namespace BEAPI.Services
             var user = _mapper.Map<User>(registerDto);
             await _userRepo.AddAsync(user);
             await _userRepo.SaveChangesAsync();
+
+            // Create wallet immediately for the new user
+            var wallet = new Wallet { UserId = user.Id, Amount = 0 };
+            await _walletRepo.AddAsync(wallet);
+            await _walletRepo.SaveChangesAsync();
         }
 
         public async Task<User> FindUserByEmailOrPhoneAsync(string emailOrPhone)
@@ -44,7 +51,7 @@ namespace BEAPI.Services
             return user == null ? throw new KeyNotFoundException("User not found") : user;
         }
 
-        public async Task<string> LoginAsync(LoginDto dto)
+        public async Task<(string Token, User User)> LoginAsync(LoginDto dto)
         {
             var user = await _userRepo.Get().Include(x => x.Role).FirstOrDefaultAsync(u => u.UserName == dto.UserName || u.Email == dto.UserName) ?? throw new KeyNotFoundException("User not found");
             if (!user.IsVerified)
@@ -55,14 +62,15 @@ namespace BEAPI.Services
             if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
                 throw new Exception(ExceptionConstant.InvalidCredentials);
 
-            return _jwtService.GenerateToken(user, null);
+            var token = _jwtService.GenerateToken(user, null);
+            return (token, user);
         }
 
         public async Task ResetPasswordAsync(ResetPasswordDto request)
         {
             var user = await _userRepo.Get()
                 .FirstOrDefaultAsync(u => u.OtpCode == request.Otp)
-                ?? throw new Exception("OTP không hợp lệ.");
+                ?? throw new Exception("OTP invalid.");
 
             await _otpService.VerifyOtpAsync(user, request.Otp);
 
@@ -75,7 +83,7 @@ namespace BEAPI.Services
         {
             var user = await _userRepo.Get()
                 .FirstOrDefaultAsync(u => u.OtpCode == otp)
-                ?? throw new Exception("OTP không hợp lệ.");
+                ?? throw new Exception("OTP invalid.");
 
             await _otpService.VerifyUserAsync(user, otp);
 

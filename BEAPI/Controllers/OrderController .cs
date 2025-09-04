@@ -2,6 +2,7 @@
 using BEAPI.Dtos.Order;
 using BEAPI.Helper;
 using BEAPI.PaymentService.VnPay;
+using BEAPI.Services;
 using BEAPI.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -14,11 +15,13 @@ namespace BEAPI.Controllers
     {
         private readonly IOrderService _service;
         private readonly VNPayService _vnPayService;
+        private readonly IWalletService _walletService;
 
-        public OrderController(IOrderService service, VNPayService vnPayService)
+        public OrderController(IOrderService service, VNPayService vnPayService, IWalletService walletService)
         {
             _service = service;
             _vnPayService = vnPayService;
+            _walletService = walletService;
         }
 
         [HttpPost("[action]")]
@@ -44,7 +47,7 @@ namespace BEAPI.Controllers
             {
                 var vnpayData = Request.Query;
                 var vnp_ResponseCode = vnpayData["vnp_ResponseCode"];
-                var vnp_OrderInfo = vnpayData["vnp_OrderInfo"];
+                var vnp_OrderInfo = vnpayData["vnp_OrderInfo"]; 
                 var orderInfoDecoded = WebUtility.UrlDecode(vnp_OrderInfo);
 
                 var infoDict = orderInfoDecoded.Split(';', StringSplitOptions.RemoveEmptyEntries)
@@ -52,43 +55,78 @@ namespace BEAPI.Controllers
                     .Where(x => x.Length == 2)
                     .ToDictionary(x => x[0], x => x[1]);
 
-                var cartId = infoDict.GetValueOrDefault("CartId");
-                var addressId = infoDict.GetValueOrDefault("AddressId");
-                var note = infoDict.GetValueOrDefault("Note");
-                var dto = new OrderCreateDto
+                var type = infoDict.GetValueOrDefault("Type");
+                var status = vnp_ResponseCode == "00" ? "success" : (vnp_ResponseCode == "24" ? "cancel" : "fail");
+                if (string.Equals(type, "WalletTopUp", StringComparison.OrdinalIgnoreCase))
                 {
-                    CartId = cartId,
-                    AddressId = addressId,
-                    Note = note
-                };
+                    var userIdStr = infoDict.GetValueOrDefault("UserId");
+                    var amountStr = infoDict.GetValueOrDefault("Amount");
+                    var userId = GuidHelper.ParseOrThrow(userIdStr, nameof(userIdStr));
+                    _ = decimal.TryParse(amountStr, out var amount);
 
-                await _service.CreateOrderAsync(dto, vnp_ResponseCode == "00");
-
-                if (vnp_ResponseCode == "00")
-                {
+                    if (status == "success")
+                    {
+                        await _walletService.TopUp(userId, amount);
+                    }
+                    var deepLink = $"silvercart://payment/callback?status={status}";
                     return Content($@"
             <html>
-                <head><meta charset='UTF-8'></head>
+                <head>
+                    <meta charset='UTF-8'>
+                    <meta http-equiv='refresh' content='0;url={deepLink}'>
+                    <script>window.location.href='{deepLink}';</script>
+                </head>
                 <body>
-                    <h2>🎉 Thanh toán thành công!</h2>
-                    <p>Mã giao dịch: {cartId}</p>
-                    <a href='http://localhost:3000/'>Quay lại cửa hàng</a>
+                    <p>Redirecting...</p>
+                    <a href='{deepLink}'>Tap here if not redirected</a>
                 </body>
             </html>", "text/html");
                 }
-                return Content($@"
+                else
+                {
+                    var cartId = infoDict.GetValueOrDefault("CartId");
+                    var addressId = infoDict.GetValueOrDefault("AddressId");
+                    var note = infoDict.GetValueOrDefault("Note");
+                    var dto = new OrderCreateDto
+                    {
+                        CartId = cartId,
+                        AddressId = addressId,
+                        Note = note
+                    };
+
+                    await _service.CreateOrderAsync(dto, status == "success");
+                    var deepLink = $"silvercart://payment/callback?status={status}";
+                    return Content($@"
             <html>
-                <head><meta charset='UTF-8'></head>
+                <head>
+                    <meta charset='UTF-8'>
+                    <meta http-equiv='refresh' content='0;url={deepLink}'>
+                    <script>window.location.href='{deepLink}';</script>
+                </head>
                 <body>
-                    <h2>❌ Thanh toán thất bại!</h2>
-                    <p>Mã lỗi: {vnp_ResponseCode}</p>
-                    <a href='http://localhost:3000/'>Thử lại</a>
+                    <p>Redirecting...</p>
+                    <a href='{deepLink}'>Tap here if not redirected</a>
                 </body>
             </html>", "text/html");
+                }
             }
             catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CheckoutByWallet([FromBody] OrderCreateDto dto)
+        {
+            try
+            {
+                await _service.CreateOrderByWalletAsync(dto);
+                return Ok(new { message = "Checkout by wallet successful", data = $"silvercart://payment/callback?status=success" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message , data= $"silvercart://payment/callback?status=fail" });
             }
         }
 
@@ -99,6 +137,22 @@ namespace BEAPI.Controllers
             {
                 var userId = User.GetUserId();
                 var orders = await _service.GetOrdersByCustomerIdAsync(userId);
+                return Ok(new { message = "Get order successfully", data = orders });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetOrdersByElder()
+        {
+            try
+            {
+                var userId = User.GetUserId();
+                var orders = await _service.GetOrdersByElderIdAsync(userId);
                 return Ok(new { message = "Get order successfully", data = orders });
             }
             catch (Exception ex)
@@ -121,5 +175,83 @@ namespace BEAPI.Controllers
             }
         }
 
+        [HttpGet("[action]/{id}")]
+        public async Task<IActionResult> GetById(string id)
+        {
+            try
+            {
+                var order = await _service.GetOrderByIdAsync(id);
+                return Ok(new { message = "Get order successfully", data = order });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("[action]/{userId:guid}")]
+        public async Task<IActionResult> GetUserStatistic(Guid userId)
+        {
+            try
+            {
+                var result = await _service.UserStatistic(userId);
+                return Ok(new ResponseDto
+                {
+                    Message = "Get order statistic successfully",
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseDto
+                {
+                    Message = ex.Message
+                });
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetElderBudgetStatistic(
+       [FromQuery] Guid customerId,
+       [FromQuery] DateTime fromDate,
+       [FromQuery] DateTime toDate,
+       CancellationToken ct)
+        {
+            try
+            {
+                var result = await _service.ElderBudgetStatistic(customerId, fromDate, toDate);
+
+                return Ok(new ResponseDto
+                {
+                    Message = "Get elder budget statistic successfully",
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseDto
+                {
+                    Message = ex.Message
+                });
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CancelOrder([FromBody] CancelOrderDto dto)
+        {
+            try
+            {
+                
+                var result = await _service.CancelOrderAsync(dto);
+                return Ok(new { 
+                    message = "Order cancelled successfully", 
+                    data = result 
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

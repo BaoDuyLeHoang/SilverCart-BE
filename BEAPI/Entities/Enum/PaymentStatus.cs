@@ -2,9 +2,9 @@
 {
     public enum PaymentStatus
     {
-        Pending,
-        Completed,
-        Failed,
-        Refunded
+        TopUp,     // Nạp tiền
+        Paid,      // Thanh toán
+        Refund,    // Hoàn tiền
+        Withdraw   // Rút tiền
     }
 }

@@ -1,8 +1,8 @@
 ﻿using BEAPI.Constants;
-using BEAPI.Dtos.Auth;
 using BEAPI.Dtos.Common;
+using BEAPI.Dtos.Elder;
 using BEAPI.Dtos.User;
-using BEAPI.Exceptions;
+using BEAPI.Helper;
 using BEAPI.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +20,6 @@ namespace BEAPI.Controllers
             _userService = userService;
         }
 
-
         [HttpPost("[action]")]
         public async Task<IActionResult> CreateUser([FromBody] UserCreateDto request)
         {
@@ -36,12 +35,12 @@ namespace BEAPI.Controllers
         }
 
         [HttpPost("[action]")]
-        [Authorize(Roles = UserContanst.UserRole)]
-        public async Task<IActionResult> GenerateQr([FromBody] Guid elderId)
+        //[Authorize(Roles = UserContanst.UserRole)]
+        public async Task<IActionResult> GenerateQr([FromBody] ElderQrDto dto)
         {
             try
             {
-                var result = await _userService.GenerateElderLoginQrAsync(elderId);
+                var result = await _userService.GenerateElderLoginQrAsync(GuidHelper.ParseOrThrow(dto.ElderId));
                 var response = new ResponseDto
                 {
                     Message = "QR code generated successfully",
@@ -88,7 +87,7 @@ namespace BEAPI.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> SearchUsers([FromBody] UserFilterDto request)
         {
-
+            
             try
             {
                 var result = await _userService.FilterUsersAsync(request);
@@ -123,6 +122,50 @@ namespace BEAPI.Controllers
             catch (Exception ex)
             {
                 return Unauthorized(new ResponseDto
+                {
+                    Message = ex.Message,
+                    Data = null
+                });
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetDetail(Guid id)
+        {
+            try
+            {
+                var rs = await _userService.GetDetailAsync(id);
+                return Ok(new ResponseDto
+                {
+                    Message = "Get user detail successfully",
+                    Data = rs
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseDto
+                {
+                    Message = ex.Message,
+                    Data = null
+                });
+            }
+        }
+
+        [HttpPut("[action]")]
+        public async Task<IActionResult> Update([FromBody] UserUpdateDto dto)
+        {
+            try
+            {
+                await _userService.UpdateUserAsync(dto);
+                return Ok(new ResponseDto
+                {
+                    Message = "User updated successfully",
+                    Data = null
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseDto
                 {
                     Message = ex.Message,
                     Data = null

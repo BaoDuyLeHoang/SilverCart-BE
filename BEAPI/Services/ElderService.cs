@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using BEAPI.Database;
+using BEAPI.Dtos.Addreess;
+using BEAPI.Dtos.Category;
 using BEAPI.Dtos.Elder;
 using BEAPI.Entities;
 using BEAPI.Helper;
@@ -16,9 +18,10 @@ namespace BEAPI.Services
         private readonly IRepository<District> _districtRepo;
         private readonly IRepository<Ward> _warRepo;
         private readonly IRepository<Province> _provineRepo;
+        private readonly IRepository<UserCategoryValue> _userCateValueRepo;
         private readonly IMapper _mapper;
 
-        public ElderService(IMapper mapper, IRepository<User> repository, IRepository<Address> addressRepo, IRepository<District> districtRepo, IRepository<Ward> warRepo, IRepository<Province> provineRepo)
+        public ElderService(IMapper mapper, IRepository<UserCategoryValue> userCateValueRepo, IRepository<User> repository, IRepository<Address> addressRepo, IRepository<District> districtRepo, IRepository<Ward> warRepo, IRepository<Province> provineRepo)
         {
             _mapper = mapper;
             _repository = repository;
@@ -26,6 +29,7 @@ namespace BEAPI.Services
             _districtRepo = districtRepo;
             _warRepo = warRepo;
             _provineRepo = provineRepo;
+            _userCateValueRepo = userCateValueRepo;
         }
 
         public async Task<List<ElderDto>> GetElderByCusId(string cusId)
@@ -36,12 +40,75 @@ namespace BEAPI.Services
             return _mapper.Map<List<ElderDto>>(list);
         }
 
+        public async Task UpdateElderAdressAsync(List<UpdateAddressDto> addressesDto, string userId) {
+            var user = await _repository.Get().Where(x => x.Id == GuidHelper.ParseOrThrow(userId, nameof(userId)))
+                .FirstOrDefaultAsync()
+                ?? throw new Exception("User not found");
+            var listAddress = await _addressRepo.Get().Where(x => x.UserId == user.Id).ToListAsync();
+            if (listAddress.Count > 0)
+            {
+                _addressRepo.DeleteRange(listAddress);
+            }
+
+            if (addressesDto.Count != 0)
+            {
+                var addresses = _mapper.Map<List<Address>>(addressesDto);
+
+                var provinceIds = await _provineRepo.Get().Select(p => p.ProvinceID).ToListAsync();
+                var districtIds = await _districtRepo.Get().Select(d => d.DistrictID).ToListAsync();
+                var wardCodes = await _warRepo.Get().Select(w => w.WardCode).ToListAsync();
+
+                foreach (var address in addresses)
+                {
+                    if (!provinceIds.Contains(address.ProvinceID))
+                        throw new Exception($"ProvinceID {address.ProvinceID} does not exist");
+
+                    if (!districtIds.Contains(address.DistrictID))
+                        throw new Exception($"DistrictID {address.DistrictID} does not exist");
+
+                    if (!wardCodes.Contains(address.WardCode))
+                        throw new Exception($"WardCode {address.WardCode} does not exist");
+
+                    address.User = user;
+                }
+                await _addressRepo.AddRangeAsync(addresses);
+            }
+
+            await _addressRepo.SaveChangesAsync();
+        }
+
+        public async Task UpdateElderCategory( List<UpdateCategoryElderDto> updateCategoryElderDtos , Guid elderId)
+        {
+            var user = await _repository.Get()
+                .FirstOrDefaultAsync(u => u.Id == elderId)
+                ?? throw new Exception("User not found");
+            var listCate = await _userCateValueRepo.Get().Where(x => x.UserId == elderId).ToListAsync();
+            
+            if (listCate.Count > 0)
+            {
+                _userCateValueRepo.DeleteRange(listCate);
+            }
+
+            if (updateCategoryElderDtos.Count > 0)
+            {
+                var categoryValues = updateCategoryElderDtos
+                    .Select(x => new UserCategoryValue
+                    {
+                        Id = Guid.NewGuid(),
+                        ValueId = x.CategoryId,
+                        User = user
+                    }).ToList();
+                await _userCateValueRepo.AddRangeAsync(categoryValues);
+            }
+
+            await _userCateValueRepo.SaveChangesAsync();
+        }
+
         public async Task UpdateElderAsync(ElderUpdateDto dto)
         {
             var userId = GuidHelper.ParseOrThrow(dto.Id, nameof(dto.Id));
 
             var user = await _repository.Get()
-                .Include(u => u.Addresses)  
                 .FirstOrDefaultAsync(u => u.Id == userId)
                 ?? throw new Exception("User not found");
 
@@ -57,52 +124,17 @@ namespace BEAPI.Services
                     ? "Invalid BirthDate (must be at least 45 years old)"
                     : "Age cannot exceed 120 years");
 
-            _mapper.Map(dto, user);
+            user.FullName = dto.FullName?.Trim() ?? user.FullName;
+            user.UserName = dto.UserName?.Trim() ?? user.UserName;
+            user.Description = dto.Description;
+            user.BirthDate = dto.BirthDate;
+            user.Avatar = dto.Avatar;
+            user.EmergencyPhoneNumber = dto.EmergencyPhoneNumber;
+            user.RelationShip = dto.RelationShip;
+            user.Gender = dto.Gender;
+            user.Spendlimit = dto.Spendlimit;
+            user.Age = age;
 
-            if (user.Addresses.Any())
-            {
-                _addressRepo.DeleteRange(user.Addresses);
-                user.Addresses.Clear();
-            }
-
-            user.UserCategories.Clear();
-
-            foreach (var catId in dto.CategoryValueIds)
-            {
-                user.UserCategories.Add(new UserCategoryValue
-                {
-                    Id = Guid.NewGuid(),
-                    UserId = user.Id,
-                    ValueId = GuidHelper.ParseOrThrow(catId, nameof(catId)),
-                });
-            }
-
-            if (dto.Addresses != null && dto.Addresses.Any())
-            {
-                var newAddresses = _mapper.Map<List<Address>>(dto.Addresses);
-
-                var provinceIds = await _provineRepo.Get().Select(p => p.ProvinceID).ToListAsync();
-                var districtIds = await _districtRepo.Get().Select(d => d.DistrictID).ToListAsync();
-                var wardCodes = await _warRepo.Get().Select(w => w.WardCode).ToListAsync();
-
-                foreach (var address in newAddresses)
-                {
-                    if (!provinceIds.Contains(address.ProvinceID))
-                        throw new Exception($"ProvinceID {address.ProvinceID} does not exist");
-
-                    if (!districtIds.Contains(address.DistrictID))
-                        throw new Exception($"DistrictID {address.DistrictID} does not exist");
-
-                    if (!wardCodes.Contains(address.WardCode))
-                        throw new Exception($"WardCode {address.WardCode} does not exist");
-
-                    address.UserId = user.Id;
-                }
-
-                user.Addresses = newAddresses;
-            }
-
-            _repository.Update(user);
             await _repository.SaveChangesAsync();
         }
 
