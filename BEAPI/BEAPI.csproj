@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Midleware\**" />
+    <Content Remove="Midleware\**" />
+    <EmbeddedResource Remove="Midleware\**" />
+    <None Remove="Midleware\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.*" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.*" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
@@ -30,7 +37,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Midleware\" />
+    <Folder Include="Dtos\Agora\" />
+    <Folder Include="Dtos\Shipping\" />
+    <Folder Include="Dtos\Transaction\" />
   </ItemGroup>
 
 </Project>
