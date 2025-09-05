@@ -17,7 +17,7 @@ namespace BEAPI.Services
             _userRepository = userRepository;
         }
 
-        public async Task ConnectAsync(Guid userId, string channelName, string type, string token, Guid? prodcutId, Guid? consultant = null)
+        public async Task ConnectAsync(Guid userId, string channelName, string type, string token,Guid? prodcutId, Guid? consultant = null)
         {
             if (consultant == null)
             {

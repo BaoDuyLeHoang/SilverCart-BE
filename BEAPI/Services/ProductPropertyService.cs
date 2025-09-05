@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using BEAPI.Dtos.Category;
 using BEAPI.Dtos.ListOfValue;
 using BEAPI.Dtos.Value;
 using BEAPI.Entities;
+using BEAPI.Entities.Enum;
 using BEAPI.Repositories;
 using BEAPI.Services.IServices;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +46,28 @@ namespace BEAPI.Services
             await _repository.SaveChangesAsync();
         }
 
+        public async Task AddValuesByListOfValuesIdAsync(List<ValueCreateOnlyDto> values, Guid id)
+        {
+            var listEntity = await _repository.Get()
+                .Include(x => x.Values)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (listEntity == null)
+                throw new Exception("ProductProperty not found");
+
+            var newValues = values.Select(val => new Value
+            {
+                Code = val.Code,
+                Label = val.Label,
+                Description = val.Description,
+                Type = Entities.Enum.MyValueType.ProductProperty,
+                ListOfValue = listEntity
+            }).ToList();
+
+            listEntity.Values.AddRange(newValues);
+            await _repository.SaveChangesAsync();
+        }
+
         public async Task<List<ListOfValueDto>> GetListProductProperty()
         {
             var list = await _repository.Get().Include(x => x.Values).Where(x => x.Type == Entities.Enum.MyValueType.ProductProperty).ToListAsync();
@@ -56,6 +80,40 @@ namespace BEAPI.Services
             var list = await _valueRepo.Get().Where(x => x.Type == Entities.Enum.MyValueType.ProductProperty).ToListAsync();
 
             return _mapper.Map<List<ValueDto>>(list);
+        }
+
+        public async Task DeactivateOrActiveProductPropertyAsync(Guid valueId)
+        {
+            var value = await _valueRepo.Get()
+                .FirstOrDefaultAsync(v => v.Id == valueId && v.Type == MyValueType.ProductProperty);
+
+            if (value == null)
+            {
+                throw new Exception("ProductProperty not found");
+            }
+
+            value.IsDeleted = !value.IsDeleted;
+
+            _valueRepo.Update(value);
+            await _valueRepo.SaveChangesAsync();
+        }
+
+        public async Task EditProductPropertyAsync(UpdateCategoryValueDto dto)
+        {
+            var value = await _valueRepo.Get()
+                .FirstOrDefaultAsync(v => v.Id == dto.Id && v.Type == MyValueType.ProductProperty);
+
+            if (value == null)
+            {
+                throw new Exception("ProductProperty not found");
+            }
+
+            value.Code = dto.Code;
+            value.Label = dto.Label;
+            value.Description = dto.Description;
+
+            _valueRepo.Update(value);
+            await _valueRepo.SaveChangesAsync();
         }
     }
 }

@@ -11,12 +11,16 @@ namespace BEAPI.Services
     public class ReportService : IReportService
     {
         private readonly IRepository<Report> _repo;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
+        private readonly IRepository<User> _userRepo;
 
-        public ReportService(IRepository<Report> repo, IMapper mapper)
+        public ReportService(IRepository<User> userRepo, IUserService userService, IRepository<Report> repo, IMapper mapper)
         {
             _repo = repo;
             _mapper = mapper;
+            _userService = userService;
+            _userRepo = userRepo;
         }
 
         public async Task<List<ReportDto>> GetAllAsync()
@@ -97,6 +101,8 @@ namespace BEAPI.Services
         public async Task CreateAsync(ReportCreateDto dto)
         {
             var report = _mapper.Map<Report>(dto);
+           var elder = await _userRepo.Get().FirstAsync(x => x.Id == report.UserId);
+            await _userService.SendNotificationToUserAsync((Guid)elder.GuardianId, "Silver Cart", "Có một báo cáo tư vấn mới");
             await _repo.AddAsync(report);
             await _repo.SaveChangesAsync();
         }
