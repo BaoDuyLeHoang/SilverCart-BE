@@ -17,6 +17,7 @@ namespace BEAPI.Entities
         public DateTimeOffset? OtpExpiredAt { get; set; }
         public bool IsOtpUsed { get; set; } = false;
         public bool IsVerified { get; set; } = false;
+        public string? DeviceId { get; set; }
         public string? RefreshToken { get; set; }
         [MaxLength(256)]
         public string? UserName { get; set; }
@@ -29,6 +30,7 @@ namespace BEAPI.Entities
         public string? EmergencyPhoneNumber { get; set; }
         public Gender? Gender { get; set; }
         public string? RelationShip { get; set; }
+        public PresenceStatus PresenceStatus { get; set; } = PresenceStatus.Offline;
         public int Age { get; set; }
         [MaxLength(2000)]
         public string? Description { get; set; }

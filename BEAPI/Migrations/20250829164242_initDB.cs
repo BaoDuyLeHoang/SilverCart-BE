@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BEAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class i : Migration
+    public partial class initDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -256,6 +256,7 @@ namespace BEAPI.Migrations
                     OtpExpiredAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     IsOtpUsed = table.Column<bool>(type: "bit", nullable: false),
                     IsVerified = table.Column<bool>(type: "bit", nullable: false),
+                    DeviceId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -264,6 +265,7 @@ namespace BEAPI.Migrations
                     EmergencyPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Gender = table.Column<int>(type: "int", nullable: true),
                     RelationShip = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PresenceStatus = table.Column<int>(type: "int", nullable: false),
                     Age = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
                     BirthDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
@@ -708,6 +710,38 @@ namespace BEAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WithdrawRequests",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BankName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BankAccountNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AccountHolder = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreationDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    ModificationDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    DeletionDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedById = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ModificationById = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeleteById = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WithdrawRequests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WithdrawRequests_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CartItems",
                 columns: table => new
                 {
@@ -871,12 +905,12 @@ namespace BEAPI.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Age", "Avatar", "BirthDate", "CreatedById", "CreationDate", "DeleteById", "DeletionDate", "Description", "Email", "EmergencyPhoneNumber", "FullName", "Gender", "GuardianId", "IsDeleted", "IsOtpUsed", "IsVerified", "ModificationById", "ModificationDate", "OtpCode", "OtpExpiredAt", "PasswordHash", "PhoneNumber", "RefreshToken", "RelationShip", "RewardPoint", "RoleId", "Spendlimit", "UserName" },
+                columns: new[] { "Id", "Age", "Avatar", "BirthDate", "CreatedById", "CreationDate", "DeleteById", "DeletionDate", "Description", "DeviceId", "Email", "EmergencyPhoneNumber", "FullName", "Gender", "GuardianId", "IsDeleted", "IsOtpUsed", "IsVerified", "ModificationById", "ModificationDate", "OtpCode", "OtpExpiredAt", "PasswordHash", "PhoneNumber", "PresenceStatus", "RefreshToken", "RelationShip", "RewardPoint", "RoleId", "Spendlimit", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("11111111-1111-1111-1111-111111111111"), 25, null, null, null, new DateTimeOffset(new DateTime(2025, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, null, "vana@example.com", null, "Nguyen Van A", 0, null, false, false, true, null, null, null, null, "$2a$11$X9X4SPGxvVdQGQKkJkGZbOGXfHP4L7lqMZtYxQz4WPrGz7G6oUu0K", "0901234567", null, null, 0, new Guid("11111111-1111-1111-1111-111111111111"), null, "nguyenvana" },
-                    { new Guid("33333333-3333-3333-3333-333333333333"), 35, null, null, null, new DateTimeOffset(new DateTime(2025, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, null, "admin@example.com", null, "Admin System", 0, null, false, false, true, null, null, null, null, "$2a$11$X9X4SPGxvVdQGQKkJkGZbOGXfHP4L7lqMZtYxQz4WPrGz7G6oUu0K", "0912345678", null, null, 0, new Guid("33333333-3333-3333-3333-333333333333"), null, "admin1" },
-                    { new Guid("22222222-2222-2222-2222-222222222222"), 30, null, null, null, new DateTimeOffset(new DateTime(2025, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, null, "thib@example.com", null, "Tran Thi B", 0, new Guid("11111111-1111-1111-1111-111111111111"), false, false, true, null, null, null, null, "$2a$11$X9X4SPGxvVdQGQKkJkGZbOGXfHP4L7lqMZtYxQz4WPrGz7G6oUu0K", "0909876543", null, null, 0, new Guid("22222222-2222-2222-2222-222222222222"), null, "tranthib" }
+                    { new Guid("11111111-1111-1111-1111-111111111111"), 25, null, null, null, new DateTimeOffset(new DateTime(2025, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, null, null, "vana@example.com", null, "Nguyen Van A", 0, null, false, false, true, null, null, null, null, "$2a$11$X9X4SPGxvVdQGQKkJkGZbOGXfHP4L7lqMZtYxQz4WPrGz7G6oUu0K", "0901234567", 1, null, null, 0, new Guid("11111111-1111-1111-1111-111111111111"), null, "nguyenvana" },
+                    { new Guid("33333333-3333-3333-3333-333333333333"), 35, null, null, null, new DateTimeOffset(new DateTime(2025, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, null, null, "admin@example.com", null, "Admin System", 0, null, false, false, true, null, null, null, null, "$2a$11$X9X4SPGxvVdQGQKkJkGZbOGXfHP4L7lqMZtYxQz4WPrGz7G6oUu0K", "0912345678", 1, null, null, 0, new Guid("33333333-3333-3333-3333-333333333333"), null, "admin1" },
+                    { new Guid("22222222-2222-2222-2222-222222222222"), 30, null, null, null, new DateTimeOffset(new DateTime(2025, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, null, null, "thib@example.com", null, "Tran Thi B", 0, new Guid("11111111-1111-1111-1111-111111111111"), false, false, true, null, null, null, null, "$2a$11$X9X4SPGxvVdQGQKkJkGZbOGXfHP4L7lqMZtYxQz4WPrGz7G6oUu0K", "0909876543", 1, null, null, 0, new Guid("22222222-2222-2222-2222-222222222222"), null, "tranthib" }
                 });
 
             migrationBuilder.InsertData(
@@ -1074,6 +1108,11 @@ namespace BEAPI.Migrations
                 name: "IX_Wallets_UserId",
                 table: "Wallets",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WithdrawRequests_UserId",
+                table: "WithdrawRequests",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -1129,6 +1168,9 @@ namespace BEAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Wards");
+
+            migrationBuilder.DropTable(
+                name: "WithdrawRequests");
 
             migrationBuilder.DropTable(
                 name: "Carts");

@@ -105,11 +105,11 @@ namespace BEAPI.Controllers
 
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> QrLogin([FromQuery] string token)
+        public async Task<IActionResult> QrLogin([FromQuery] string token, [FromQuery] string? deviceId)
         {
             try
             {
-                var newToken = await _userService.LoginByQrAsync(token);
+                var newToken = await _userService.LoginByQrAsync(token, deviceId);
 
                 var response = new ResponseDto
                 {
@@ -128,7 +128,6 @@ namespace BEAPI.Controllers
                 });
             }
         }
-
         [HttpGet("[action]")]
         public async Task<IActionResult> GetDetail(Guid id)
         {

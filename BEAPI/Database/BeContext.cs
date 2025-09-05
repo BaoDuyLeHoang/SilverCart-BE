@@ -26,11 +26,28 @@ namespace BEAPI.Database
         public DbSet<Report> Reports { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Wallet> Wallets { get; set; }
+        public DbSet<UserConnection> UserConnections { get; set; }
+        public DbSet<OrderShipmentEvent> OrderShipmentEvents { get; set; }
+        public DbSet<WithdrawRequest> WithdrawRequests { get; set; }
+        public DbSet<Review> Reviews { get; set; }
         public BeContext(DbContextOptions<BeContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+
             base.OnModelCreating(modelBuilder);
+            // Disable RowVersion for Wallet entity only
+            modelBuilder.Entity<Wallet>()
+                .Ignore(w => w.RowVersion);
+            modelBuilder.Entity<User>()
+                .Property(u => u.Avatar)
+                .HasMaxLength(2048);
+            modelBuilder.Entity<OrderShipmentEvent>()
+                .HasOne(e => e.Order)
+                .WithMany(o => o.ShipmentEvents)
+                .HasForeignKey(e => e.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.Elder)
                 .WithMany()
@@ -63,7 +80,7 @@ namespace BEAPI.Database
 
             modelBuilder.Entity<PaymentHistory>()
                 .HasOne(ph => ph.User)
-                .WithMany()
+                .WithMany(u => u.PaymentHistory)
                 .HasForeignKey(ph => ph.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -80,23 +97,33 @@ namespace BEAPI.Database
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Feedback>()
-               .HasOne(r => r.User)
-               .WithMany()
-               .HasForeignKey(r => r.UserId)
-               .OnDelete(DeleteBehavior.Restrict);
+                 .HasOne(r => r.User)
+                 .WithMany()                     
+                 .HasForeignKey(r => r.UserId)
+                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Feedback>()
                 .HasOne(r => r.Admin)
-                .WithMany()
-                .HasForeignKey(r => r.UserId)
+                .WithMany()                    
+                .HasForeignKey(r => r.AdminId) 
                 .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<UserPromotion>()
+                .HasOne(up => up.User).WithMany(u => u.UserPromotions).HasForeignKey(up => up.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserPromotion>()
+                .HasOne(up => up.Promotion).WithMany(p => p.UserPromotions).HasForeignKey(up => up.PromotionId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Promotion>().HasIndex(p => p.IsActive);
 
             modelBuilder.Entity<Role>().HasData(
                  new Role { Id = Guid.Parse("11111111-1111-1111-1111-111111111111"), Name = "Guardian" },
                  new Role { Id = Guid.Parse("22222222-2222-2222-2222-222222222222"), Name = "Elder" },
                  new Role { Id = Guid.Parse("33333333-3333-3333-3333-333333333333"), Name = "Admin" },
                  new Role { Id = Guid.Parse("44444444-4444-4444-4444-444444444444"), Name = "Consultant" },
-                 new Role { Id = Guid.Parse("55555555-5555-5555-5555-555555555555"), Name = "ShopManager" },
                  new Role { Id = Guid.Parse("66666666-6666-6666-6666-666666666666"), Name = "Staff" }
             );
 
@@ -145,6 +172,26 @@ namespace BEAPI.Database
                     CreationDate = DateTimeOffset.Parse("2025-08-02T00:00:00Z")
                 }
             );
+            modelBuilder.Entity<Wallet>().HasData(
+                new Wallet
+                {
+                    Id = Guid.Parse("77777777-7777-7777-7777-777777777001"),
+                    UserId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                    Amount = 0
+                },
+                new Wallet
+                {
+                    Id = Guid.Parse("77777777-7777-7777-7777-777777777002"),
+                    UserId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+                    Amount = 0
+                },
+                new Wallet
+                {
+                    Id = Guid.Parse("77777777-7777-7777-7777-777777777003"),
+                    UserId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
+                    Amount = 0
+                }
+            );
             modelBuilder.Entity<ListOfValue>().HasData(
                 new ListOfValue
                 {
@@ -169,7 +216,7 @@ namespace BEAPI.Database
                     Note = "RELATIONSHIP",
                     Type = MyValueType.Relationship,
                     CreationDate = DateTimeOffset.Parse("2025-08-02T00:00:00Z")
-                }, new ListOfValue
+                },new ListOfValue
                 {
                     Id = Guid.Parse("e12abcde-1234-4567-89ab-08dcb9a3cdef"),
                     Label = "Loại bệnh án",

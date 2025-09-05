@@ -7,6 +7,7 @@ using BEAPI.Dtos.Elder;
 using BEAPI.Dtos.Promotion;
 using BEAPI.Dtos.User;
 using BEAPI.Entities;
+using BEAPI.Entities.Enum;
 using BEAPI.Exceptions;
 using BEAPI.Helper;
 using BEAPI.Model;
@@ -112,8 +113,23 @@ namespace BEAPI.Services
 
         public async Task CreateUserAsync(UserCreateDto dto)
         {
-            if (await _userRepo.Get().AnyAsync(u => u.Email == dto.Email || u.UserName == dto.UserName || u.PhoneNumber == dto.PhoneNumber))
-                throw new Exception("Email, username or Phonenumber have been already.");
+            var existingUser = await _userRepo.Get()
+                .Where(u => u.Email == dto.Email
+                         || u.UserName == dto.UserName
+                         || u.PhoneNumber == dto.PhoneNumber)
+                .FirstOrDefaultAsync();
+
+            if (existingUser != null)
+            {
+                if (existingUser.Email == dto.Email)
+                    throw new Exception("Email has already been registered.");
+
+                if (existingUser.UserName == dto.UserName)
+                    throw new Exception("Username has already been taken.");
+
+                if (existingUser.PhoneNumber == dto.PhoneNumber)
+                    throw new Exception("Phone number has already been used.");
+            }
 
             var user = new User
             {
@@ -130,6 +146,22 @@ namespace BEAPI.Services
             await _userRepo.SaveChangesAsync();
         }
 
+        public async Task ChangePresenceStatusAsync(string userId, PresenceStatus newStatus)
+        {
+            var guidUser = GuidHelper.ParseOrThrow(userId, nameof(userId));
+
+            var user = await _userRepo.Get()
+                .FirstOrDefaultAsync(u => u.Id == guidUser)
+                ?? throw new Exception("User not found");
+
+            if (user.Role?.Name == "Admin" && newStatus == PresenceStatus.Offline)
+                throw new Exception("You cannot force Admin user offline.");
+
+            user.PresenceStatus = newStatus;
+
+            await _userRepo.SaveChangesAsync();
+        }
+
         public async Task UpdateUserAsync(UserUpdateDto dto)
         {
             var userId = GuidHelper.ParseOrThrow(dto.Id, nameof(dto.Id));
@@ -139,6 +171,16 @@ namespace BEAPI.Services
             if (user.Role?.Name == "Elder")
                 throw new Exception("Cannot update Elder with this endpoint");
 
+            var existingUser = await _userRepo.Get()
+               .Where(u => u.PhoneNumber == dto.PhoneNumber)
+               .FirstOrDefaultAsync();
+
+            if (existingUser != null)
+            {
+                if (existingUser.PhoneNumber == dto.PhoneNumber)
+                    throw new Exception("Phone number has already been used.");
+            }
+
             if (!string.IsNullOrWhiteSpace(dto.FullName)) user.FullName = dto.FullName;
             if (!string.IsNullOrWhiteSpace(dto.PhoneNumber)) user.PhoneNumber = dto.PhoneNumber;
             if (!string.IsNullOrWhiteSpace(dto.Avatar)) user.Avatar = dto.Avatar;
@@ -146,6 +188,8 @@ namespace BEAPI.Services
 
             await _userRepo.SaveChangesAsync();
         }
+
+
 
         public async Task BanOrUnbanUserAsync(string userId)
         {
@@ -175,7 +219,7 @@ namespace BEAPI.Services
                 query = query.Where(u =>
                     u.FullName.Contains(request.SearchTerm) ||
                     u.UserName.Contains(request.SearchTerm) ||
-                    u.Email.Contains(request.SearchTerm) || 
+                    u.Email.Contains(request.SearchTerm) ||
                     u.PhoneNumber.Contains(request.SearchTerm));
             }
 
@@ -216,12 +260,12 @@ namespace BEAPI.Services
             var qrBytes = qrCode.GetGraphic(20);
             var qrBase64 = Convert.ToBase64String(qrBytes);
 
-            var token = await LoginByQrAsync(tokens);
+            var token = await LoginByQrAsync(tokens, null);
 
             return (token, $"data:image/png;base64,{qrBase64}");
         }
 
-        public async Task<string> LoginByQrAsync(string token)
+        public async Task<string> LoginByQrAsync(string token, string? deviceId)
         {
             var principal = _jwtService.ValidateToken(token) ?? throw new Exception("Invalid or expired token");
             var elderId = principal.FindFirst("UserId")?.Value;
@@ -229,9 +273,18 @@ namespace BEAPI.Services
                 throw new Exception("Invalid token data");
 
             var elder = await _userRepo.Get().Include(x => x.Role).FirstOrDefaultAsync(x => x.Id == Guid.Parse(elderId));
+            elder.DeviceId = deviceId;
+            await _userRepo.SaveChangesAsync();
             return elder == null ? throw new Exception(ExceptionConstant.ElderNotFound) : _jwtService.GenerateToken(elder, null);
         }
 
+        public async Task<PresenceStatus> GetConsutantStatus(Guid id)
+        {
+            var user = await _userRepo.Get()
+             .FirstOrDefaultAsync(u => u.Id == id)
+             ?? throw new Exception("User not found");
+            return user.PresenceStatus;
+        }
         public async Task<UserDetailDto> GetDetailAsync(Guid id)
         {
             var user = await _userRepo.Get()
@@ -268,5 +321,23 @@ namespace BEAPI.Services
 
             return dto;
         }
+
+        public async Task SendNotificationToUserAsync(Guid userId, string title, string body)
+        {
+            var user = await _userRepo.Get()
+                .Where(x => x.Id == userId)
+                .Select(x => new { x.Id, x.DeviceId })
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+                throw new Exception("User not found");
+
+            if (string.IsNullOrWhiteSpace(user.DeviceId))
+                throw new Exception("User does not have a registered device.");
+
+            await FirebaseNotificationService.SendNotificationAsync(user.DeviceId, title, body);
+        }
+
+
     }
 }
