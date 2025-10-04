@@ -26,6 +26,7 @@ namespace BEAPI.Controllers
             _hubContext = hubContext;
         }
 
+
         [HttpPost("[action]")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto request)
         {
@@ -74,7 +75,7 @@ namespace BEAPI.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
-            var response = new ResponseDto();
+            var response = new ResponseDto(); 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -120,13 +121,14 @@ namespace BEAPI.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-
             var response = new ResponseDto();
             try
             {
-                var token = await _authService.LoginAsync(dto);
+                var (token, user) = await _authService.LoginAsync(dto);
                 response.Data = token;
                 response.Message = MessageConstants.LoginSuccess;
+
+                await AutoConnectUserToSignalR(user);
 
                 return Ok(response);
             }
@@ -205,7 +207,7 @@ namespace BEAPI.Controllers
                 if (UserOnlineHub.IsUserOnline(userId))
                 {
                     UserOnlineHub.RemoveUserFromOnlineList(userId);
-
+                    
                     await _hubContext.Clients.All.SendAsync("UserOffline", userId, userName);
 
                     Console.WriteLine($"Auto-disconnected user {userName} ({userId}) from SignalR after logout");

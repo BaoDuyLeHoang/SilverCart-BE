@@ -189,7 +189,7 @@ namespace BEAPI.Services
             await _userRepo.SaveChangesAsync();
         }
 
-
+       
 
         public async Task BanOrUnbanUserAsync(string userId)
         {
@@ -219,7 +219,7 @@ namespace BEAPI.Services
                 query = query.Where(u =>
                     u.FullName.Contains(request.SearchTerm) ||
                     u.UserName.Contains(request.SearchTerm) ||
-                    u.Email.Contains(request.SearchTerm) ||
+                    u.Email.Contains(request.SearchTerm) || 
                     u.PhoneNumber.Contains(request.SearchTerm));
             }
 

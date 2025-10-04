@@ -84,5 +84,82 @@ namespace BEAPI.Controllers
                 });
             }
         }
+
+        [HttpPut("[action]")]
+        public async Task<IActionResult> DeActivateOrActiveProductProperty([FromQuery] Guid valueId)
+        {
+            try
+            {
+                await _productPropertySerivce.DeactivateOrActiveProductPropertyAsync(valueId);
+                return Ok(new ResponseDto
+                {
+                    Message = "ProductProperty Deactivate Or Active successfully",
+                    Data = null,
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseDto
+                {
+                    Data = null,
+                    Message = ex.Message
+                });
+            }
+        }
+
+        [HttpPut("[action]")]
+        public async Task<IActionResult> EditProductProperty([FromBody] UpdateCategoryValueDto updateCategoryValueDto)
+        {
+            try
+            {
+                await _productPropertySerivce.EditProductPropertyAsync(updateCategoryValueDto);
+                return Ok(new ResponseDto
+                {
+                    Message = "ProductProperty Edit successfully",
+                    Data = null,
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseDto
+                {
+                    Data = null,
+                    Message = ex.Message
+                });
+            }
+        }
+
+        [HttpPost("{id}/[action]")]
+        public async Task<IActionResult> AddValues(Guid id, [FromBody] List<ValueCreateOnlyDto> values)
+        {
+            try
+            {
+                if (values == null || values.Count == 0)
+                {
+                    return BadRequest(new ResponseDto
+                    {
+                        Data = null,
+                        Message = "Values list is empty."
+                    });
+                }
+
+                await _productPropertySerivce.AddValuesByListOfValuesIdAsync(values, id);
+
+                return Ok(new ResponseDto
+                {
+                    Message = "Values added successfully",
+                    Data = null
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseDto
+                {
+                    Data = null,
+                    Message = ex.Message
+                });
+            }
+        }
+
     }
 }

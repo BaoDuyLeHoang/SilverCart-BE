@@ -20,7 +20,8 @@ namespace BEAPI.Controllers
         {
             try
             {
-                await _service.ConnectAsync(dto.UserId, dto.ChannelName, dto.Type, dto.Token, dto.Consultant);
+                //await _service.ConnectAsync(dto.UserId, dto.ChannelName, dto.Type, dto.Token, dto.ProductId, dto.Consultant);
+                await _service.ConnectAsync(dto.UserId, dto.ChannelName, dto.Type, dto.Token, null, dto.Consultant);
                 return Ok(new ResponseDto { Message = "Connected", Data = null });
             }
             catch (Exception ex)
@@ -35,6 +36,34 @@ namespace BEAPI.Controllers
             try
             {
                 await _service.DisconnectAsync(consultantId);
+                return Ok(new ResponseDto { Message = "Disconnected" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseDto { Message = ex.Message });
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> UserDisconnect([FromQuery] Guid userId)
+        {
+            try
+            {
+                await _service.UserDisconnectAsync(userId);
+                return Ok(new ResponseDto { Message = "Disconnected" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseDto { Message = ex.Message });
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> UserAcceptAsync([FromQuery] Guid userId)
+        {
+            try
+            {
+                await _service.UserAcceptAsync(userId);
                 return Ok(new ResponseDto { Message = "Disconnected" });
             }
             catch (Exception ex)

@@ -4,8 +4,10 @@ using BEAPI.Dtos.Order;
 using BEAPI.Entities;
 using BEAPI.Entities.Enum;
 using BEAPI.Helper;
+using BEAPI.PaymentService.VnPay;
 using BEAPI.Repositories;
 using BEAPI.Services.IServices;
+using BEAPI.Services.Shipping;
 using Microsoft.EntityFrameworkCore;
 
 namespace BEAPI.Services
@@ -19,6 +21,8 @@ namespace BEAPI.Services
         private readonly IRepository<Cart> _cartRepo;
         private readonly IRepository<Address> _addressRepo;
         private readonly IRepository<Wallet> _walletRepo;
+        private readonly ShippingService _shipService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
         public OrderService(IRepository<Order> orderRepo,
@@ -28,6 +32,8 @@ namespace BEAPI.Services
                             IRepository<PaymentHistory> paymentHistoryRepo,
                             IRepository<UserPromotion> userPromotionRepo,
                             IRepository<Wallet> walletRepo,
+                            ShippingService shipService,
+                            IUserService userService,
                             IMapper mapper)
         {
             _orderRepo = orderRepo;
@@ -38,6 +44,8 @@ namespace BEAPI.Services
             _addressRepo = addressRepo;
             _userPromotionRepo = userPromotionRepo;
             _walletRepo = walletRepo;
+            _shipService = shipService;
+            _userService = userService;
         }
 
         public async Task CreateOrderAsync(OrderCreateDto dto, bool isPaid)
@@ -55,6 +63,8 @@ namespace BEAPI.Services
             var cart = await GetPendingCartAsync(dto.CartId);
             var userPromotion = await ValidateAndGetPromotionAsync(dto.UserPromotionId, cart.CustomerId);
 
+            var(serviceId, serviceTypeId, fee) = await _shipService.RecalcAndSaveFeeDefaultAsync(GuidHelper.ParseOrThrow(dto.AddressId, "AddressId"));
+
             var orderDetails = BuildOrderDetails(cart);
             var address = await GetDefaultAddressAsync();
 
@@ -62,7 +72,7 @@ namespace BEAPI.Services
             var itemDiscountAmount = CalculateItemDiscount(orderDetails);
             var promoDiscountAmount = CalculatePromotionDiscount(userPromotion?.Promotion, subTotal - itemDiscountAmount);
 
-            var total = subTotal - itemDiscountAmount - promoDiscountAmount;
+            var total = subTotal - itemDiscountAmount - promoDiscountAmount + fee;
             if (total < 0) total = 0;
 
             string paymentMethod;
@@ -101,6 +111,7 @@ namespace BEAPI.Services
                 StreetAddress = address.StreetAddress,
                 ProvinceID = address.ProvinceID,
                 ProvinceName = address.ProvinceName,
+                ShippingFee = fee,
                 Discount = userPromotion?.Promotion?.DiscountPercent ?? 0
             };
 
@@ -283,7 +294,7 @@ namespace BEAPI.Services
                 TotalPrice = order.TotalPrice,
                 Discount = order.Discount,
                 OrderStatus = order.OrderStatus.ToString(),
-                PhoneNumber = order.Customer?.PhoneNumber ?? string.Empty,
+                PhoneNumber = order.PhoneNumber ?? string.Empty,
                 StreetAddress = order.StreetAddress ?? string.Empty,
                 WardName = order.WardName ?? string.Empty,
                 DistrictName = order.DistrictName ?? string.Empty,
@@ -320,6 +331,7 @@ namespace BEAPI.Services
             var query = _orderRepo.Get()
                 .Include(o => o.OrderDetails)
                 .Include(o => o.Elder)
+                .Include(o => o.Customer)
                 .AsQueryable();
 
             if (request.OrderStatus.HasValue)
@@ -424,11 +436,10 @@ namespace BEAPI.Services
 
             var cancellableStatuses = new[] 
             { 
-                OrderStatus.Created, 
-                OrderStatus.Paid
+                OrderStatus.Delivered
             };
 
-            if (!cancellableStatuses.Contains(order.OrderStatus))
+            if (cancellableStatuses.Contains(order.OrderStatus))
             {
                 throw new Exception($"Order cannot be cancelled in current status: {order.OrderStatus}. Only orders in 'Created' or 'Paid' status can be cancelled.");
             }
@@ -452,6 +463,16 @@ namespace BEAPI.Services
                      _walletRepo.Update(wallet);
                     isRefunded = true;
                 }
+
+                var adminWallet = await _walletRepo.Get()
+                    .FirstOrDefaultAsync(x => x.UserId == GuidHelper.ParseOrThrow("33333333-3333-3333-3333-333333333333","id"));
+
+                if (adminWallet != null)
+                {
+                    adminWallet.Amount -= order.TotalPrice;
+                    _walletRepo.Update(adminWallet);
+                    isRefunded = true;
+                }
             }
 
             _orderRepo.Update(order);
@@ -461,9 +482,10 @@ namespace BEAPI.Services
                 UserId = order.CustomerId,
                 Amount = order.TotalPrice,
                 PaymentMenthod = "WALLET",
-                PaymentStatus = PaymentStatus.Refund
+                PaymentStatus = PaymentStatus.Refund,
+                OrderId = GuidHelper.ParseOrThrow(dto.OrderId, "id")
             };
-
+            await _userService.SendNotificationToUserAsync(order.CustomerId, "Silver Cart", "Đơn hàng của bạn đã được hủy và hoàn tiền");
             await _paymentHistoryRepo.AddAsync(payment);
             await _orderRepo.SaveChangesAsync();
             return new CancelOrderResponseDto

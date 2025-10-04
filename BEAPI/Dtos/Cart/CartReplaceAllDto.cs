@@ -1,4 +1,6 @@
-﻿namespace BEAPI.Dtos.Cart
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BEAPI.Dtos.Cart
 {
     public class CartReplaceAllDto
     {

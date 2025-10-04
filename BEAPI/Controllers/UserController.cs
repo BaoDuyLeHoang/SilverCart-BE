@@ -2,9 +2,10 @@
 using BEAPI.Dtos.Common;
 using BEAPI.Dtos.Elder;
 using BEAPI.Dtos.User;
+using BEAPI.Entities;
+using BEAPI.Entities.Enum;
 using BEAPI.Helper;
 using BEAPI.Services.IServices;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BEAPI.Controllers
@@ -128,6 +129,7 @@ namespace BEAPI.Controllers
                 });
             }
         }
+
         [HttpGet("[action]")]
         public async Task<IActionResult> GetDetail(Guid id)
         {
@@ -150,12 +152,56 @@ namespace BEAPI.Controllers
             }
         }
 
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetConsutantStatus(Guid id)
+        {
+            try
+            {
+                var rs = await _userService.GetConsutantStatus(id);
+                return Ok(new ResponseDto
+                {
+                    Message = "Get user detail successfully",
+                    Data = rs
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseDto
+                {
+                    Message = ex.Message,
+                    Data = null
+                });
+            }
+        }
+
         [HttpPut("[action]")]
         public async Task<IActionResult> Update([FromBody] UserUpdateDto dto)
         {
             try
             {
                 await _userService.UpdateUserAsync(dto);
+                return Ok(new ResponseDto
+                {
+                    Message = "User updated successfully",
+                    Data = null
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseDto
+                {
+                    Message = ex.Message,
+                    Data = null
+                });
+            }
+        }
+
+        [HttpPut("[action]/{userId}/{newStatus}")]
+        public async Task<IActionResult> ChangePresenceStatusAsync(string userId, PresenceStatus newStatus)
+        {
+            try
+            {
+                await _userService.ChangePresenceStatusAsync(userId,newStatus);
                 return Ok(new ResponseDto
                 {
                     Message = "User updated successfully",
