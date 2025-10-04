@@ -10,9 +10,9 @@ namespace BEAPI.Services
     public class WalletService : IWalletService
     {
         private readonly IRepository<Wallet> _repository;
-        private readonly IRepository<PaymentHistory> _paymentRepo;
+        private readonly IRepository<Transaction> _paymentRepo;
 
-        public WalletService(IRepository<Wallet> repository, IRepository<PaymentHistory> paymentRepo)
+        public WalletService(IRepository<Wallet> repository, IRepository<Transaction> paymentRepo)
         {
             _repository = repository;
             _paymentRepo = paymentRepo;
@@ -39,7 +39,7 @@ namespace BEAPI.Services
 
             wallet.Amount += amount;
             _repository.Update(wallet);
-            var payment = new PaymentHistory
+            var payment = new Transaction
             {
                 UserId = userId,
                 Amount = amount,
@@ -62,10 +62,10 @@ namespace BEAPI.Services
             var wallet = await _repository.Get().FirstOrDefaultAsync(w => w.UserId == userId, ct)
                 ?? throw new Exception("Wallet not found");
 
-                    if (wallet.Amount < amount)
-                    {
-                        throw new Exception("Insufficient balance");
-                    }
+            if (wallet.Amount < amount)
+            {
+                throw new Exception("Insufficient balance");
+            }
 
             wallet.Amount -= amount;
             _repository.Update(wallet);

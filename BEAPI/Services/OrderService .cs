@@ -16,7 +16,7 @@ namespace BEAPI.Services
     {
         private readonly IRepository<Order> _orderRepo;
         private readonly IRepository<UserPromotion> _userPromotionRepo;
-        private readonly IRepository<PaymentHistory> _paymentHistoryRepo;
+        private readonly IRepository<Transaction> _paymentHistoryRepo;
         private readonly IRepository<User> _userRepo;
         private readonly IRepository<Cart> _cartRepo;
         private readonly IRepository<Address> _addressRepo;
@@ -29,7 +29,7 @@ namespace BEAPI.Services
                             IRepository<User> userRepo,
                             IRepository<Cart> cartRepo,
                             IRepository<Address> addressRepo,
-                            IRepository<PaymentHistory> paymentHistoryRepo,
+                            IRepository<Transaction> paymentHistoryRepo,
                             IRepository<UserPromotion> userPromotionRepo,
                             IRepository<Wallet> walletRepo,
                             ShippingService shipService,
@@ -63,7 +63,7 @@ namespace BEAPI.Services
             var cart = await GetPendingCartAsync(dto.CartId);
             var userPromotion = await ValidateAndGetPromotionAsync(dto.UserPromotionId, cart.CustomerId);
 
-            var(serviceId, serviceTypeId, fee) = await _shipService.RecalcAndSaveFeeDefaultAsync(GuidHelper.ParseOrThrow(dto.AddressId, "AddressId"));
+            var (serviceId, serviceTypeId, fee) = await _shipService.RecalcAndSaveFeeDefaultAsync(GuidHelper.ParseOrThrow(dto.AddressId, "AddressId"));
 
             var orderDetails = BuildOrderDetails(cart);
             var address = await GetDefaultAddressAsync();
@@ -122,7 +122,7 @@ namespace BEAPI.Services
             {
                 DeductStockFromCart(cart);
 
-                var payment = new PaymentHistory
+                var payment = new Transaction
                 {
                     Amount = total,
                     OrderId = order.Id,
@@ -434,8 +434,8 @@ namespace BEAPI.Services
                 throw new Exception("Order not found");
             }
 
-            var cancellableStatuses = new[] 
-            { 
+            var cancellableStatuses = new[]
+            {
                 OrderStatus.Delivered
             };
 
@@ -448,8 +448,8 @@ namespace BEAPI.Services
             var isRefunded = false;
 
             order.OrderStatus = OrderStatus.Canceled;
-            order.Note = string.IsNullOrEmpty(order.Note) 
-                ? $"Cancelled: {dto.CancelReason}" 
+            order.Note = string.IsNullOrEmpty(order.Note)
+                ? $"Cancelled: {dto.CancelReason}"
                 : $"{order.Note} | Cancelled: {dto.CancelReason}";
 
             if (previousStatus == OrderStatus.Paid)
@@ -460,12 +460,12 @@ namespace BEAPI.Services
                 if (wallet != null)
                 {
                     wallet.Amount += order.TotalPrice;
-                     _walletRepo.Update(wallet);
+                    _walletRepo.Update(wallet);
                     isRefunded = true;
                 }
 
                 var adminWallet = await _walletRepo.Get()
-                    .FirstOrDefaultAsync(x => x.UserId == GuidHelper.ParseOrThrow("33333333-3333-3333-3333-333333333333","id"));
+                    .FirstOrDefaultAsync(x => x.UserId == GuidHelper.ParseOrThrow("33333333-3333-3333-3333-333333333333", "id"));
 
                 if (adminWallet != null)
                 {
@@ -477,7 +477,7 @@ namespace BEAPI.Services
 
             _orderRepo.Update(order);
 
-            var payment = new PaymentHistory
+            var payment = new Transaction
             {
                 UserId = order.CustomerId,
                 Amount = order.TotalPrice,
