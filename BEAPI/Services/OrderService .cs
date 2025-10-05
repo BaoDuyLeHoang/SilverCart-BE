@@ -164,7 +164,8 @@ namespace BEAPI.Services
                 .Include(x => x.Items)
                     .ThenInclude(x => x.ProductVariant)
                         .ThenInclude(x => x.Product)
-                .FirstOrDefaultAsync(u => u.Id == id && u.Status == CartStatus.Pending)
+                .Where(u => u.Id == id && (u.ElderId == null || u.Status == CartStatus.Pending))
+                .FirstOrDefaultAsync()
                 ?? throw new Exception("Cart not found or not in pending status");
         }
 
@@ -248,6 +249,9 @@ namespace BEAPI.Services
             var orders = await _orderRepo.Get()
                 .Where(o => o.CustomerId == customerId)
                 .Include(o => o.OrderDetails)
+                .Include(o => o.Elder)
+                .Include(o => o.Customer)
+                .Include(o => o.Transactions)
                 .ToListAsync();
 
             return _mapper.Map<List<OrderDto>>(orders);
@@ -260,6 +264,9 @@ namespace BEAPI.Services
             var orders = await _orderRepo.Get()
                 .Where(o => o.ElderId == elderId)
                 .Include(o => o.OrderDetails)
+                .Include(o => o.Elder)
+                .Include(o => o.Customer)
+                .Include(o => o.Transactions)
                 .ToListAsync();
 
             return _mapper.Map<List<OrderDto>>(orders);
@@ -281,6 +288,7 @@ namespace BEAPI.Services
                           .ThenInclude(pv => pv.ProductVariantValues)
                               .ThenInclude(pvv => pvv.Value)
                   .Include(o => o.Elder)
+                  .Include(o => o.Transactions)
                   .Include(o => o.Customer)
                   .FirstOrDefaultAsync(o => o.Id == id);
 
@@ -303,6 +311,7 @@ namespace BEAPI.Services
                 ShippingCode = order.ShippingCode,
                 ExpectedDeliveryTime = order.ExpectedDeliveryTime,
                 CustomerName = order.Customer?.FullName ?? string.Empty,
+                PaymentMethod = order.Transactions.FirstOrDefault()?.PaymentMenthod,
                 CreationDate = order.CreationDate,
                 ElderName = order.Elder?.FullName ?? string.Empty,
                 OrderDetails = order.OrderDetails.Select(od => new OrderDetailDto

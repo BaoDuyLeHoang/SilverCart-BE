@@ -3,6 +3,210 @@
   "WorkspaceRootPath": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\enum\\orderstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\enum\\orderstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\services\\orderservice .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\services\\orderservice .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\dtos\\order\\orderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\dtos\\order\\orderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\services\\elderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\services\\elderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\database\\becontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\database\\becontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\services\\cartservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\services\\cartservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\services\\brandservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\services\\brandservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\controllers\\shippingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\controllers\\shippingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\ordershipmentevent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\ordershipmentevent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\dtos\\user\\userdetaildto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\dtos\\user\\userdetaildto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\services\\iservices\\irelationshipservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\services\\iservices\\irelationshipservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\dtos\\elder\\elderupdatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\dtos\\elder\\elderupdatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\dtos\\elder\\elderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\dtos\\elder\\elderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\migrations\\becontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\migrations\\becontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\migrations\\20250920035512_seeddb.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\migrations\\20250920035512_seeddb.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\enum\\myvaluetype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\enum\\myvaluetype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\controllers\\relationshipcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\controllers\\relationshipcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\services\\relationshipservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\services\\relationshipservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\dtos\\elder\\elderregisterdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\dtos\\elder\\elderregisterdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\extension\\servicecollectionextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\extension\\servicecollectionextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\migrations\\20250829164242_initdb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\migrations\\20250829164242_initdb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\migrations\\20250829164242_initdb.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\migrations\\20250829164242_initdb.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\migrations\\20250831124431_addproduct.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\migrations\\20250831124431_addproduct.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\migrations\\20250901111426_review.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\migrations\\20250901111426_review.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\migrations\\20250902161805_update.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\migrations\\20250902161805_update.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\migrations\\20250920033106_renamepaymenthistorytotransaction.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\migrations\\20250920033106_renamepaymenthistorytotransaction.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\enum\\carttype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\enum\\carttype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\services\\valueservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\services\\valueservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\enum\\feedbackstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\enum\\feedbackstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\enum\\gender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\enum\\gender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\enum\\paymentstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\enum\\paymentstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\enum\\presencestatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\enum\\presencestatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\enum\\userstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\enum\\userstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\mappingprofile\\userprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\mappingprofile\\userprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\listofvalue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\listofvalue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\controllers\\eldercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\controllers\\eldercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\controllers\\valuecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\controllers\\valuecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\baseenity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\baseenity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\cart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\cart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\ientity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\ientity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\district.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\district.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\cartitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\cartitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\enum\\cartstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\enum\\cartstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\appdbsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\appdbsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\address.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\address.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\entities\\value.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\entities\\value.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\controllers\\appdbsettingscontroller .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\controllers\\appdbsettingscontroller .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\services\\withdrawrequestservice .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\services\\withdrawrequestservice .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
@@ -13,10 +217,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\model\\vnpaysettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -43,20 +243,8 @@
       "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\paymentservice\\vnpay\\vnpaylib.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\services\\withdrawrequestservice .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\services\\withdrawrequestservice .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\services\\walletservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\services\\walletservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\database\\becontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\database\\becontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\services\\orderservice .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\services\\orderservice .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\services\\paymenthistoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -65,18 +253,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\controllers\\paymenthistorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\controllers\\paymenthistorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\controllers\\appdbsettingscontroller .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\controllers\\appdbsettingscontroller .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\controllers\\eldercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\controllers\\eldercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\extension\\servicecollectionextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|solutionrelative:beapi\\extension\\servicecollectionextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EF0706E6-DF89-4A26-ADC9-6D083E3F7082}|BEAPI\\BEAPI.csproj|d:\\sep_workspace\\src_code\\backup_src_code\\main_stage\\beapi\\beapi.csproj.backup.tmp||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
@@ -90,7 +266,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 16,
+          "SelectedChildIndex": 12,
           "Children": [
             {
               "$type": "Bookmark",
@@ -130,59 +306,306 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "CartService.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\CartService.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Services\\CartService.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\CartService.cs",
+              "RelativeToolTip": "BEAPI\\Services\\CartService.cs",
+              "ViewState": "AgIAAE8AAAAAAAAAAAAwwHgBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:56:30.507Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "BeContext.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Database\\BeContext.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Database\\BeContext.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Database\\BeContext.cs",
+              "RelativeToolTip": "BEAPI\\Database\\BeContext.cs",
+              "ViewState": "AgIAAMcAAAAAAAAAAAAMwNkAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-04T15:46:25.345Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "ElderService.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\ElderService.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Services\\ElderService.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\ElderService.cs",
+              "RelativeToolTip": "BEAPI\\Services\\ElderService.cs",
+              "ViewState": "AgIAAHgAAAAAAAAAAAAMwIcAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:12:58.703Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "OrderService .cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\OrderService .cs",
+              "RelativeDocumentMoniker": "BEAPI\\Services\\OrderService .cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\OrderService .cs",
+              "RelativeToolTip": "BEAPI\\Services\\OrderService .cs",
+              "ViewState": "AgIAAL0BAAAAAAAAAAAIwDkBAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-04T15:46:26.587Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "OrderDto.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Dtos\\Order\\OrderDto.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Dtos\\Order\\OrderDto.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Dtos\\Order\\OrderDto.cs",
+              "RelativeToolTip": "BEAPI\\Dtos\\Order\\OrderDto.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAxwBkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T03:07:14.045Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "BrandService.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\BrandService.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Services\\BrandService.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\BrandService.cs",
+              "RelativeToolTip": "BEAPI\\Services\\BrandService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:58:16.782Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Order.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Order.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\Order.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Order.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\Order.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAA1wCcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T03:06:34.077Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "RelationShipController.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Controllers\\RelationShipController.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Controllers\\RelationShipController.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Controllers\\RelationShipController.cs",
+              "RelativeToolTip": "BEAPI\\Controllers\\RelationShipController.cs",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAqwCkAAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:35:04.359Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ShippingController.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Controllers\\ShippingController.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Controllers\\ShippingController.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Controllers\\ShippingController.cs",
+              "RelativeToolTip": "BEAPI\\Controllers\\ShippingController.cs",
+              "ViewState": "AgIAAEQAAAAAAAAAAAAgwFcAAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:34:58.418Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "ServiceCollectionExtensions.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Extension\\ServiceCollectionExtensions.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Extension\\ServiceCollectionExtensions.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Extension\\ServiceCollectionExtensions.cs",
+              "RelativeToolTip": "BEAPI\\Extension\\ServiceCollectionExtensions.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAMwB4AAABBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-30T00:12:11.771Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "20250829164242_initDB.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Migrations\\20250829164242_initDB.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Migrations\\20250829164242_initDB.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Migrations\\20250829164242_initDB.cs",
+              "RelativeToolTip": "BEAPI\\Migrations\\20250829164242_initDB.cs",
+              "ViewState": "AgIAAIUDAAAAAAAAAAAMwIsDAACbAQAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:44:08.757Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "20250829164242_initDB.Designer.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Migrations\\20250829164242_initDB.Designer.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Migrations\\20250829164242_initDB.Designer.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Migrations\\20250829164242_initDB.Designer.cs",
+              "RelativeToolTip": "BEAPI\\Migrations\\20250829164242_initDB.Designer.cs",
+              "ViewState": "AgIAAPgEAAAAAAAAAAAMwAkFAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:44:27.712Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "20250831124431_addproduct.Designer.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Migrations\\20250831124431_addproduct.Designer.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Migrations\\20250831124431_addproduct.Designer.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Migrations\\20250831124431_addproduct.Designer.cs",
+              "RelativeToolTip": "BEAPI\\Migrations\\20250831124431_addproduct.Designer.cs",
+              "ViewState": "AgIAAPsEAAAAAAAAAAAMwAwFAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:44:34.307Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "20250901111426_Review.Designer.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Migrations\\20250901111426_Review.Designer.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Migrations\\20250901111426_Review.Designer.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Migrations\\20250901111426_Review.Designer.cs",
+              "RelativeToolTip": "BEAPI\\Migrations\\20250901111426_Review.Designer.cs",
+              "ViewState": "AgIAACwFAAAAAAAAAAAMwD0FAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:44:43.79Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "20250902161805_update.Designer.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Migrations\\20250902161805_update.Designer.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Migrations\\20250902161805_update.Designer.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Migrations\\20250902161805_update.Designer.cs",
+              "RelativeToolTip": "BEAPI\\Migrations\\20250902161805_update.Designer.cs",
+              "ViewState": "AgIAACwFAAAAAAAAAAAMwD0FAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:44:50.027Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "20250920033106_RenamePaymentHistoryToTransaction.Designer.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Migrations\\20250920033106_RenamePaymentHistoryToTransaction.Designer.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Migrations\\20250920033106_RenamePaymentHistoryToTransaction.Designer.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Migrations\\20250920033106_RenamePaymentHistoryToTransaction.Designer.cs",
+              "RelativeToolTip": "BEAPI\\Migrations\\20250920033106_RenamePaymentHistoryToTransaction.Designer.cs",
+              "ViewState": "AgIAALcBAAAAAAAAAAAMwMMBAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:44:53.415Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "ValueService.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\ValueService.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Services\\ValueService.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\ValueService.cs",
+              "RelativeToolTip": "BEAPI\\Services\\ValueService.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAASwCkAAABOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T01:49:05.185Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "ElderController.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Controllers\\ElderController.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Controllers\\ElderController.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Controllers\\ElderController.cs",
+              "RelativeToolTip": "BEAPI\\Controllers\\ElderController.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAQwCgAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T07:22:24.243Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
               "Title": "UserService.cs",
               "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\UserService.cs",
               "RelativeDocumentMoniker": "BEAPI\\Services\\UserService.cs",
               "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\UserService.cs",
               "RelativeToolTip": "BEAPI\\Services\\UserService.cs",
-              "ViewState": "AgIAAOEAAAAAAAAAAAAwwAEBAABiAAAAAAAAAA==",
+              "ViewState": "AgIAACMAAAAAAAAAAAD4vzQAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-04T15:50:49.022Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "AppSettings.cs",
-              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Model\\AppSettings.cs",
-              "RelativeDocumentMoniker": "BEAPI\\Model\\AppSettings.cs",
-              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Model\\AppSettings.cs",
-              "RelativeToolTip": "BEAPI\\Model\\AppSettings.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 39,
+              "Title": "ValueController.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Controllers\\ValueController.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Controllers\\ValueController.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Controllers\\ValueController.cs",
+              "RelativeToolTip": "BEAPI\\Controllers\\ValueController.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-04T15:50:35.449Z",
+              "WhenOpened": "2025-10-05T01:54:17.165Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "VnPayRequest.cs",
-              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\PaymentService\\VnPay\\VnPayRequest.cs",
-              "RelativeDocumentMoniker": "BEAPI\\PaymentService\\VnPay\\VnPayRequest.cs",
-              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\PaymentService\\VnPay\\VnPayRequest.cs",
-              "RelativeToolTip": "BEAPI\\PaymentService\\VnPay\\VnPayRequest.cs",
+              "DocumentIndex": 46,
+              "Title": "AppDbSettings.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\AppDbSettings.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\AppDbSettings.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\AppDbSettings.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\AppDbSettings.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-04T15:49:55.245Z",
+              "WhenOpened": "2025-10-05T01:46:32.91Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "VNPayService.cs",
-              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\PaymentService\\VnPay\\VNPayService.cs",
-              "RelativeDocumentMoniker": "BEAPI\\PaymentService\\VnPay\\VNPayService.cs",
-              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\PaymentService\\VnPay\\VNPayService.cs",
-              "RelativeToolTip": "BEAPI\\PaymentService\\VnPay\\VNPayService.cs",
+              "DocumentIndex": 47,
+              "Title": "Address.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Address.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\Address.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Address.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\Address.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-04T15:49:52.58Z",
+              "WhenOpened": "2025-10-05T01:46:12.251Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 48,
+              "Title": "Value.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Value.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\Value.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Value.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\Value.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T01:46:00.696Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 59,
               "Title": "VnPayLib.cs",
               "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\PaymentService\\VnPay\\VnPayLib.cs",
               "RelativeDocumentMoniker": "BEAPI\\PaymentService\\VnPay\\VnPayLib.cs",
@@ -195,7 +618,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 53,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Program.cs",
               "RelativeDocumentMoniker": "BEAPI\\Program.cs",
@@ -208,12 +631,12 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 52,
               "Title": "appsettings.Development.json",
               "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\appsettings.Development.json",
               "RelativeDocumentMoniker": "BEAPI\\appsettings.Development.json",
-              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\appsettings.Development.json*",
-              "RelativeToolTip": "BEAPI\\appsettings.Development.json*",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\appsettings.Development.json",
+              "RelativeToolTip": "BEAPI\\appsettings.Development.json",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2025-09-05T03:25:05.297Z",
@@ -221,12 +644,12 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 51,
               "Title": "appsettings.json",
               "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\appsettings.json",
               "RelativeDocumentMoniker": "BEAPI\\appsettings.json",
-              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\appsettings.json*",
-              "RelativeToolTip": "BEAPI\\appsettings.json*",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\appsettings.json",
+              "RelativeToolTip": "BEAPI\\appsettings.json",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2025-09-05T03:24:37.828Z",
@@ -234,7 +657,72 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 50,
+              "Title": "WithdrawRequestService .cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\WithdrawRequestService .cs",
+              "RelativeDocumentMoniker": "BEAPI\\Services\\WithdrawRequestService .cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\WithdrawRequestService .cs",
+              "RelativeToolTip": "BEAPI\\Services\\WithdrawRequestService .cs",
+              "ViewState": "AgIAAE4AAAAAAAAAAAAUwIgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-04T15:48:07.425Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 56,
+              "Title": "AppSettings.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Model\\AppSettings.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Model\\AppSettings.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Model\\AppSettings.cs",
+              "RelativeToolTip": "BEAPI\\Model\\AppSettings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-04T15:50:35.449Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 49,
+              "Title": "AppDbSettingsController .cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Controllers\\AppDbSettingsController .cs",
+              "RelativeDocumentMoniker": "BEAPI\\Controllers\\AppDbSettingsController .cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Controllers\\AppDbSettingsController .cs",
+              "RelativeToolTip": "BEAPI\\Controllers\\AppDbSettingsController .cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-04T15:40:33.388Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 58,
+              "Title": "VNPayService.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\PaymentService\\VnPay\\VNPayService.cs",
+              "RelativeDocumentMoniker": "BEAPI\\PaymentService\\VnPay\\VNPayService.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\PaymentService\\VnPay\\VNPayService.cs",
+              "RelativeToolTip": "BEAPI\\PaymentService\\VnPay\\VNPayService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-04T15:49:52.58Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 57,
+              "Title": "VnPayRequest.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\PaymentService\\VnPay\\VnPayRequest.cs",
+              "RelativeDocumentMoniker": "BEAPI\\PaymentService\\VnPay\\VnPayRequest.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\PaymentService\\VnPay\\VnPayRequest.cs",
+              "RelativeToolTip": "BEAPI\\PaymentService\\VnPay\\VnPayRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-04T15:49:55.245Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 55,
               "Title": "EmailSettings.cs",
               "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Model\\EmailSettings.cs",
               "RelativeDocumentMoniker": "BEAPI\\Model\\EmailSettings.cs",
@@ -247,7 +735,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 54,
               "Title": "VnPaySettings.cs",
               "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Model\\VnPaySettings.cs",
               "RelativeDocumentMoniker": "BEAPI\\Model\\VnPaySettings.cs",
@@ -260,20 +748,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "WithdrawRequestService .cs",
-              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\WithdrawRequestService .cs",
-              "RelativeDocumentMoniker": "BEAPI\\Services\\WithdrawRequestService .cs",
-              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\WithdrawRequestService .cs",
-              "RelativeToolTip": "BEAPI\\Services\\WithdrawRequestService .cs",
-              "ViewState": "AgIAAGgAAAAAAAAAAAAcwIgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-04T15:48:07.425Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 60,
               "Title": "WalletService.cs",
               "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\WalletService.cs",
               "RelativeDocumentMoniker": "BEAPI\\Services\\WalletService.cs",
@@ -286,33 +761,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "OrderService .cs",
-              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\OrderService .cs",
-              "RelativeDocumentMoniker": "BEAPI\\Services\\OrderService .cs",
-              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\OrderService .cs",
-              "RelativeToolTip": "BEAPI\\Services\\OrderService .cs",
-              "ViewState": "AgIAAJkBAAAAAAAAAAAUwPcBAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-04T15:46:26.587Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "BeContext.cs",
-              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Database\\BeContext.cs",
-              "RelativeDocumentMoniker": "BEAPI\\Database\\BeContext.cs",
-              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Database\\BeContext.cs",
-              "RelativeToolTip": "BEAPI\\Database\\BeContext.cs",
-              "ViewState": "AgIAAGoAAAAAAAAAAAAcwPgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-04T15:46:25.345Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 61,
               "Title": "PaymentHistoryService.cs",
               "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\PaymentHistoryService.cs",
               "RelativeDocumentMoniker": "BEAPI\\Services\\PaymentHistoryService.cs",
@@ -325,7 +774,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 62,
               "Title": "PaymentHistoryController.cs",
               "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Controllers\\PaymentHistoryController.cs",
               "RelativeDocumentMoniker": "BEAPI\\Controllers\\PaymentHistoryController.cs",
@@ -338,44 +787,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "AppDbSettingsController .cs",
-              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Controllers\\AppDbSettingsController .cs",
-              "RelativeDocumentMoniker": "BEAPI\\Controllers\\AppDbSettingsController .cs",
-              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Controllers\\AppDbSettingsController .cs",
-              "RelativeToolTip": "BEAPI\\Controllers\\AppDbSettingsController .cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-04T15:40:33.388Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "ElderController.cs",
-              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Controllers\\ElderController.cs",
-              "RelativeDocumentMoniker": "BEAPI\\Controllers\\ElderController.cs",
-              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Controllers\\ElderController.cs",
-              "RelativeToolTip": "BEAPI\\Controllers\\ElderController.cs",
-              "ViewState": "AgIAABkAAAAAAAAAAAAQwAsAAAATAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-01T07:22:24.243Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "ServiceCollectionExtensions.cs",
-              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Extension\\ServiceCollectionExtensions.cs",
-              "RelativeDocumentMoniker": "BEAPI\\Extension\\ServiceCollectionExtensions.cs",
-              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Extension\\ServiceCollectionExtensions.cs",
-              "RelativeToolTip": "BEAPI\\Extension\\ServiceCollectionExtensions.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-30T00:12:11.771Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 63,
               "Title": "BEAPI.csproj.Backup.tmp",
               "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\BEAPI.csproj.Backup.tmp",
               "RelativeDocumentMoniker": "BEAPI\\BEAPI.csproj.Backup.tmp",
@@ -388,12 +800,350 @@
           ]
         },
         {
-          "DockedWidth": 173,
-          "SelectedChildIndex": -1,
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "UserDetailDto.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Dtos\\User\\UserDetailDto.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Dtos\\User\\UserDetailDto.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Dtos\\User\\UserDetailDto.cs",
+              "RelativeToolTip": "BEAPI\\Dtos\\User\\UserDetailDto.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAA0wBcAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:45:59.069Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "IRelationShipService.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\IServices\\IRelationShipService.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Services\\IServices\\IRelationShipService.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\IServices\\IRelationShipService.cs",
+              "RelativeToolTip": "BEAPI\\Services\\IServices\\IRelationShipService.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAuwAcAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:45:46.468Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "OrderStatus.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Enum\\OrderStatus.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\Enum\\OrderStatus.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Enum\\OrderStatus.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\Enum\\OrderStatus.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:32:27.703Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "OrderShipmentEvent.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\OrderShipmentEvent.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\OrderShipmentEvent.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\OrderShipmentEvent.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\OrderShipmentEvent.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:50:28.953Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ElderUpdateDto.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Dtos\\Elder\\ElderUpdateDto.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Dtos\\Elder\\ElderUpdateDto.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Dtos\\Elder\\ElderUpdateDto.cs",
+              "RelativeToolTip": "BEAPI\\Dtos\\Elder\\ElderUpdateDto.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAuwBIAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:45:44.572Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ElderDto.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Dtos\\Elder\\ElderDto.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Dtos\\Elder\\ElderDto.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Dtos\\Elder\\ElderDto.cs",
+              "RelativeToolTip": "BEAPI\\Dtos\\Elder\\ElderDto.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAuwA4AAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:45:43.376Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "BeContextModelSnapshot.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Migrations\\BeContextModelSnapshot.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Migrations\\BeContextModelSnapshot.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Migrations\\BeContextModelSnapshot.cs",
+              "RelativeToolTip": "BEAPI\\Migrations\\BeContextModelSnapshot.cs",
+              "ViewState": "AgIAAGYFAAAAAAAAAAAMwHcFAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:45:40.623Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "20250920035512_seedDB.Designer.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Migrations\\20250920035512_seedDB.Designer.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Migrations\\20250920035512_seedDB.Designer.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Migrations\\20250920035512_seedDB.Designer.cs",
+              "RelativeToolTip": "BEAPI\\Migrations\\20250920035512_seedDB.Designer.cs",
+              "ViewState": "AgIAAGkFAAAAAAAAAAAMwHoFAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:45:39.292Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "CartType.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Enum\\CartType.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\Enum\\CartType.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Enum\\CartType.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\Enum\\CartType.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:32:32.132Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "MyValueType.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Enum\\MyValueType.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\Enum\\MyValueType.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Enum\\MyValueType.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\Enum\\MyValueType.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T01:51:12.049Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "RelationShipService.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\RelationShipService.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Services\\RelationShipService.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Services\\RelationShipService.cs",
+              "RelativeToolTip": "BEAPI\\Services\\RelationShipService.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAD4vykAAABsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:30:54.198Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "ElderRegisterDto.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Dtos\\Elder\\ElderRegisterDto.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Dtos\\Elder\\ElderRegisterDto.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Dtos\\Elder\\ElderRegisterDto.cs",
+              "RelativeToolTip": "BEAPI\\Dtos\\Elder\\ElderRegisterDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwBIAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:09:23.506Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "User.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\User.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\User.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\User.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\User.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAA1wB8AAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:12:11.9Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "FeedbackStatus.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Enum\\FeedbackStatus.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\Enum\\FeedbackStatus.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Enum\\FeedbackStatus.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\Enum\\FeedbackStatus.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:32:30.742Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "Gender.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Enum\\Gender.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\Enum\\Gender.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Enum\\Gender.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\Enum\\Gender.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:32:29.75Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "PaymentStatus.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Enum\\PaymentStatus.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\Enum\\PaymentStatus.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Enum\\PaymentStatus.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\Enum\\PaymentStatus.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:32:25.816Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "PresenceStatus.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Enum\\PresenceStatus.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\Enum\\PresenceStatus.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Enum\\PresenceStatus.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\Enum\\PresenceStatus.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:32:23.912Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "UserStatus.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Enum\\UserStatus.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\Enum\\UserStatus.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Enum\\UserStatus.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\Enum\\UserStatus.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:32:20.608Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "UserProfile.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\MappingProfile\\UserProfile.cs",
+              "RelativeDocumentMoniker": "BEAPI\\MappingProfile\\UserProfile.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\MappingProfile\\UserProfile.cs",
+              "RelativeToolTip": "BEAPI\\MappingProfile\\UserProfile.cs",
+              "ViewState": "AgIAADIAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T02:32:08.968Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "BaseEnity.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\BaseEnity.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\BaseEnity.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\BaseEnity.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\BaseEnity.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T01:46:36.787Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "Cart.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Cart.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\Cart.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Cart.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\Cart.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T01:46:55.625Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "ListOfValue.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\ListOfValue.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\ListOfValue.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\ListOfValue.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\ListOfValue.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T01:48:42.147Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 42,
+              "Title": "IEntity.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\IEntity.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\IEntity.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\IEntity.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\IEntity.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T01:48:40.515Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
+              "Title": "District.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\District.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\District.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\District.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\District.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T01:48:36.353Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "CartItem.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\CartItem.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\CartItem.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\CartItem.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\CartItem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T01:47:50.185Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 45,
+              "Title": "CartStatus.cs",
+              "DocumentMoniker": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Enum\\CartStatus.cs",
+              "RelativeDocumentMoniker": "BEAPI\\Entities\\Enum\\CartStatus.cs",
+              "ToolTip": "D:\\SEP_WORKSPACE\\SRC_CODE\\Backup_Src_Code\\Main_Stage\\BEAPI\\Entities\\Enum\\CartStatus.cs",
+              "RelativeToolTip": "BEAPI\\Entities\\Enum\\CartStatus.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-05T01:47:24.961Z",
+              "EditorCaption": ""
             }
           ]
         }

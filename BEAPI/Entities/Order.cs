@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BEAPI.Entities
 {
-    public class Order: BaseEntity
+    public class Order : BaseEntity
     {
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalPrice { get; set; }
@@ -24,7 +24,7 @@ namespace BEAPI.Entities
         public string PhoneNumber { get; set; } = string.Empty;
 
         public virtual List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
-
+        public virtual List<Transaction> Transactions { get; set; } = new();
         public List<OrderShipmentEvent> ShipmentEvents { get; set; } = new();
 
         // ====== GHN Shipping fields ======

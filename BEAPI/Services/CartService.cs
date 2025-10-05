@@ -14,7 +14,7 @@ namespace BEAPI.Services
         private readonly IRepository<Cart> _cartRepo;
         private readonly IRepository<CartItem> _cartItemRepo;
         private readonly IRepository<User> _userRepo;
-        private readonly  IRepository<ProductVariant> _productVariantRepo;
+        private readonly IRepository<ProductVariant> _productVariantRepo;
         private readonly IMapper _mapper;
 
         public CartService(IRepository<Cart> cartRepo, IMapper mapper, IRepository<CartItem> cartItemRepo, IRepository<User> userRepo, IRepository<ProductVariant> productVariantRepo)
@@ -30,8 +30,8 @@ namespace BEAPI.Services
         {
             var cartId = GuidHelper.ParseOrThrow(id, "cartId");
 
-            var cart = await _cartRepo.Get().FirstOrDefaultAsync(x => x.Id == cartId) ?? throw new Exception("Cart not found");
-            if(cart.Items.Count == 0)
+            var cart = await _cartRepo.Get().Include(x => x.Items).FirstOrDefaultAsync(x => x.Id == cartId) ?? throw new Exception("Cart not found");
+            if (cart.Items.Count == 0)
             {
                 throw new Exception("Không thể tạo yêu cầu với giỏ hàng trống");
             }
@@ -272,7 +272,8 @@ namespace BEAPI.Services
                 if (customer.GuardianId == null)
                 {
                     cart.CustomerId = customerId;
-                }else
+                }
+                else
                 {
                     cart.ElderId = customerId;
                     cart.CustomerId = (Guid)customer.GuardianId;
